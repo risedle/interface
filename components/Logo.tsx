@@ -19,13 +19,13 @@ type LogoProps = {};
  */
 const Logo: FunctionComponent<LogoProps> = ({}) => {
     return (
-        <Fragment>
+        <div className="inline-block align-middle">
             <Link href="/">
                 <a className="inline-block transform active:scale-95 transition duration-300 ease-in-out">
                     <Image src={RisedleLogo} />
                 </a>
             </Link>
-        </Fragment>
+        </div>
     );
 };
 
