@@ -29,7 +29,7 @@ const Menu: FunctionComponent<MenuProps> = ({}) => {
                         Invest
                     </a>
                 </Link>
-                <Link href="/earn">
+                <Link href="/lend">
                     <a
                         className={classNames}
                         style={{ fontSize: "15px", lineHeight: "21px" }}
