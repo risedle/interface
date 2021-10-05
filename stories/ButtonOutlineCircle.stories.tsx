@@ -1,0 +1,19 @@
+import { Meta, Story } from "@storybook/react";
+
+import ButtonOutlineCircle from "../components/ButtonOutlineCircle";
+
+// PNG files
+import ThreeDots from "../public/three-dots.png";
+
+export default {
+    component: ButtonOutlineCircle,
+    title: "Risedle/Buttons/ButtonOutlineCircle",
+} as Meta;
+
+const Template: Story<{
+    icon: StaticImageData;
+}> = (args) => <ButtonOutlineCircle icon={args.icon} />;
+
+//Each story then reuses that template
+export const Default = Template.bind({});
+Default.args = { icon: ThreeDots };
