@@ -32,7 +32,7 @@ const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({}) => {
     console.log(account);
     if (isAccountConnected) {
         return (
-            <div className="flex flex-row gap gap-x-4">
+            <div className="flex flex-row gap gap-x-2">
                 <div>
                     <ButtonBlueSecondary>
                         {shortAccountAddress}
