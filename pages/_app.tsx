@@ -1,7 +1,28 @@
 import "tailwindcss/tailwind.css";
-import type { AppProps } from "next/app";
+import "../styles/globals.css";
 
-function MyApp({ Component, pageProps }: AppProps) {
-    return <Component {...pageProps} />;
+import type { AppProps } from "next/app";
+import { DAppProvider, ChainId } from "@usedapp/core";
+
+function RisedleApp({ Component, pageProps }: AppProps) {
+    // Get the rinkeby URL from .env file
+    let rinkebyURL = "";
+    if (process.env.NEXT_PUBLIC_ALCHEMY_RINKEBY_URL) {
+        rinkebyURL = process.env.NEXT_PUBLIC_ALCHEMY_RINKEBY_URL;
+    }
+    const config = {
+        readOnlyChainId: ChainId.Rinkeby,
+        readOnlyUrls: {
+            [ChainId.Rinkeby]: rinkebyURL,
+        },
+    };
+    console.log("DEBUG: rinkebyURL", rinkebyURL);
+
+    // Simulate inside app page
+    return (
+        <DAppProvider config={config}>
+            <Component {...pageProps} />;
+        </DAppProvider>
+    );
 }
-export default MyApp;
+export default RisedleApp;
