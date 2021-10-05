@@ -37,7 +37,7 @@ const ButtonOutlineCircle: FunctionComponent<ButtonOutlineCircleProps> = ({
             onClick={onClick}
             style={{ height: "40px", width: "40px" }}
         >
-            <Image src={icon} />
+            <Image src={icon} alt="" />
         </button>
     );
 };

@@ -23,7 +23,7 @@ type DetailCardProps = {
 const DetailCard: FunctionComponent<DetailCardProps> = ({ items }) => {
     const list = items.map((item) => {
         return (
-            <div>
+            <div key={item.title}>
                 <p className="text-sm font-semibold text-grey m-0 leading-normal">
                     {item.title}
                 </p>

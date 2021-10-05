@@ -36,7 +36,7 @@ const DetailHeader: FunctionComponent<DetailHeaderProps> = ({
     return (
         <div className="flex flex-col mx-auto" style={{ width: "480px" }}>
             <div className="text-center">
-                <Image src={image} className="inline-block" />
+                <Image src={image} className="inline-block" alt={title} />
             </div>
             <div className="text-center -mt-6">
                 <h1 className="text-white font-extrabold text-4xl m-0 leading-normal">
