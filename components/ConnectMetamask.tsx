@@ -28,8 +28,6 @@ const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({}) => {
         shortAccountAddress = shortenAddress(account);
     }
 
-    console.log(active);
-    console.log(account);
     if (isAccountConnected) {
         return (
             <div className="flex flex-row gap gap-x-2">
