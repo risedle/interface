@@ -10,14 +10,20 @@ module.exports = {
                 inter: ["'Inter'", "sans-serif"],
             },
             colors: {
-                grey: {
-                    DEFAULT: "#808080",
+                blue: {
+                    DEFAULT: "#2D81FF",
                 },
+            },
+            opacity: {
+                95: ".95",
             },
         },
     },
     variants: {
-        extend: {},
+        extend: {
+            opacity: ["hover"],
+            scale: ["active"],
+        },
     },
     plugins: [],
 };
