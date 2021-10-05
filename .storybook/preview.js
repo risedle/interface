@@ -22,4 +22,5 @@ export const parameters = {
         default: "black",
         values: [{ name: "black", value: "#000000" }],
     },
+    layout: "fullscreen",
 };
