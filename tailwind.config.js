@@ -13,8 +13,12 @@ module.exports = {
                 blue: {
                     DEFAULT: "#2D81FF",
                 },
+                grey: {
+                    DEFAULT: "#888888",
+                },
             },
             opacity: {
+                8: ".08",
                 95: ".95",
             },
         },
