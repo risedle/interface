@@ -28,7 +28,6 @@ const Template: Story<{}> = () => {
             <DAppProvider config={config}>
                 <ConnectMetamask />
             </DAppProvider>
-            ;
         </Fragment>
     );
 };
