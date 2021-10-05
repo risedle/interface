@@ -15,6 +15,7 @@ module.exports = {
                 },
                 grey: {
                     DEFAULT: "#888888",
+                    100: "#121212",
                 },
             },
             opacity: {
