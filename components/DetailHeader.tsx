@@ -34,7 +34,7 @@ const DetailHeader: FunctionComponent<DetailHeaderProps> = ({
     rightPath,
 }) => {
     return (
-        <div className="flex flex-col" style={{ maxWidth: "480px" }}>
+        <div className="flex flex-col mx-auto" style={{ width: "480px" }}>
             <div className="text-center">
                 <Image src={image} className="inline-block" />
             </div>
