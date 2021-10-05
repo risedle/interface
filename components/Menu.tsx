@@ -20,7 +20,7 @@ const Menu: FunctionComponent<MenuProps> = ({}) => {
     const classNames = [text, hover, transition].join(" ");
     return (
         <Fragment>
-            <div className="flex flex-row gap gap-x-6">
+            <div className="flex flex-row gap gap-x-6 items-center">
                 <Link href="/">
                     <a
                         className={classNames}
