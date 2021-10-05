@@ -7,8 +7,8 @@ import { DAppProvider, ChainId } from "@usedapp/core";
 function RisedleApp({ Component, pageProps }: AppProps) {
     // Get the rinkeby URL from .env file
     let rinkebyURL = "";
-    if (process.env.NEXT_PUBLIC_ALCHEMY_RINKEBY_URL) {
-        rinkebyURL = process.env.NEXT_PUBLIC_ALCHEMY_RINKEBY_URL;
+    if (process.env.NEXT_PUBLIC_RINKEBY_URL) {
+        rinkebyURL = process.env.NEXT_PUBLIC_RINKEBY_URL;
     }
     const config = {
         readOnlyChainId: ChainId.Rinkeby,
@@ -16,7 +16,6 @@ function RisedleApp({ Component, pageProps }: AppProps) {
             [ChainId.Rinkeby]: rinkebyURL,
         },
     };
-    console.log("DEBUG: rinkebyURL", rinkebyURL);
 
     // Simulate inside app page
     return (
