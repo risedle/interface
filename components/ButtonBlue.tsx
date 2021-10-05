@@ -16,12 +16,6 @@ const ButtonBlue: FunctionComponent<ButtonBlueProps> = ({
     onClick,
     children,
 }) => {
-    // If primary the background is white, otherwise it's black
-    // const bg = isPrimary ? "bg-white text-black" : "bg-black text-white";
-    // const border =
-    //     isBorderless && !isPrimary
-    //         ? "ring-1 ring-black ring-inset"
-    //         : "ring-1 ring-white ring-inset";
     const tailwind = [
         "text-white",
         "font-extrabold",
