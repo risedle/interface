@@ -34,7 +34,7 @@ const Menu: FunctionComponent<MenuProps> = ({}) => {
                         className={classNames}
                         style={{ fontSize: "15px", lineHeight: "21px" }}
                     >
-                        Earn
+                        Lend
                     </a>
                 </Link>
             </div>
