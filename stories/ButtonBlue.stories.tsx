@@ -4,7 +4,7 @@ import ButtonBlue from "../components/ButtonBlue";
 
 export default {
     component: ButtonBlue,
-    title: "Risedle/Components/ButtonBlue",
+    title: "Risedle/Buttons/ButtonBlue",
 } as Meta;
 
 const Template: Story<{

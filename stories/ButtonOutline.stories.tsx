@@ -4,7 +4,7 @@ import ButtonOutline from "../components/ButtonOutline";
 
 export default {
     component: ButtonOutline,
-    title: "Risedle/Components/ButtonOutline",
+    title: "Risedle/Buttons/ButtonOutline",
 } as Meta;
 
 const Template: Story<{
