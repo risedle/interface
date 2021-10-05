@@ -15,24 +15,22 @@ import ThreeDots from "../public/three-dots.png";
  * NavigationProps is a React Component properties that passed to React
  * Component Button
  */
-type NavigationProps = {};
+type NavigationProps = {
+    activeMenu?: string;
+};
 
 /**
  * Navigation is just yet another react component
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const Navigation: FunctionComponent<NavigationProps> = ({}) => {
-    const text = "font-inter font-extrabold text-white text-opacity-50";
-    const hover = "hover:text-opacity-100";
-    const transition = "transition duration-300 ease-in-out";
-    const classNames = [text, hover, transition].join(" ");
+const Navigation: FunctionComponent<NavigationProps> = ({ activeMenu }) => {
     return (
         <div className="flex flex-row p-4">
             <div className="flex-1">
                 <Logo />
             </div>
-            <Menu />
+            <Menu active={activeMenu} />
             <div className="flex-1 flex flex-row gap gap-x-2 justify-end">
                 <div>
                     <ButtonGrey>Rinkeby</ButtonGrey>

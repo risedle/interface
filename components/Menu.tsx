@@ -5,23 +5,40 @@ import Link from "next/link";
  * MenuProps is a React Component properties that passed to React
  * Component Button
  */
-type MenuProps = {};
+type MenuProps = {
+    active?: string;
+};
 
 /**
  * Menu is just yet another react component
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const Menu: FunctionComponent<MenuProps> = ({}) => {
-    const text = "font-inter font-extrabold text-white text-opacity-50";
+const Menu: FunctionComponent<MenuProps> = ({ active }) => {
+    const text = "font-inter font-extrabold text-white";
     const hover = "hover:text-opacity-100";
     const transition = "transition duration-300 ease-in-out";
     const classNames = [text, hover, transition].join(" ");
+
+    // Mark the active menu
+    let investClassNames = classNames;
+    let lendClassNames = classNames;
+    if (active === "invest") {
+        investClassNames += " text-opacity-100";
+    } else {
+        investClassNames += " text-opacity-50";
+    }
+    if (active === "lend") {
+        lendClassNames += " text-opacity-100";
+    } else {
+        lendClassNames += " text-opacity-50";
+    }
+
     return (
         <div className="flex flex-row gap gap-x-6 items-center">
             <Link href="/">
                 <a
-                    className={classNames}
+                    className={investClassNames}
                     style={{ fontSize: "15px", lineHeight: "21px" }}
                 >
                     Invest
@@ -29,7 +46,7 @@ const Menu: FunctionComponent<MenuProps> = ({}) => {
             </Link>
             <Link href="/lend">
                 <a
-                    className={classNames}
+                    className={lendClassNames}
                     style={{ fontSize: "15px", lineHeight: "21px" }}
                 >
                     Lend
