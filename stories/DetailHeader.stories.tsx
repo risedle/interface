@@ -11,7 +11,7 @@ export default {
 } as Meta;
 
 const Template: Story<{
-    image: StaticImageData;
+    image: string;
     title: string;
     subTitle: string;
     leftTitle: string;
@@ -33,7 +33,7 @@ const Template: Story<{
 //Each story then reuses that template
 export const Default = Template.bind({});
 Default.args = {
-    image: USDC_ICON,
+    image: USDC_ICON.src,
     title: "Earn 56.75% APY",
     subTitle: "TVL 10,000.00 USDC",
     leftTitle: "Deposit",

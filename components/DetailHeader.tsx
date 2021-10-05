@@ -1,6 +1,4 @@
 import type { FunctionComponent } from "react";
-import Image from "next/image";
-import Link from "next/link";
 
 // Import components
 import ButtonBlueLink from "./ButtonBlueLink";
@@ -10,7 +8,7 @@ import ButtonBlueLink from "./ButtonBlueLink";
  * Component Button
  */
 type DetailHeaderProps = {
-    image: StaticImageData;
+    image: string;
     title: string;
     subTitle: string;
     leftTitle: string;
@@ -36,7 +34,7 @@ const DetailHeader: FunctionComponent<DetailHeaderProps> = ({
     return (
         <div className="flex flex-col mx-auto" style={{ width: "480px" }}>
             <div className="text-center">
-                <Image src={image} className="inline-block" alt={title} />
+                <img src={image} className="inline-block" alt={title} />
             </div>
             <div className="text-center -mt-6">
                 <h1 className="text-white font-extrabold text-4xl m-0 leading-normal">

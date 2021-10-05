@@ -1,5 +1,4 @@
 import type { FunctionComponent } from "react";
-import { Fragment } from "react";
 
 // Import all components
 import Logo from "./Logo";
@@ -39,7 +38,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({ activeMenu }) => {
                     <ConnectMetamask />
                 </div>
                 <div>
-                    <ButtonOutlineCircle icon={ThreeDots} />
+                    <ButtonOutlineCircle icon={ThreeDots.src} />
                 </div>
             </div>
         </div>

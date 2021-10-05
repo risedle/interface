@@ -45,7 +45,7 @@ const Lend: NextPage = () => {
             <Navigation activeMenu="lend" />
             <div className="mt-8 gap gap-y-8 flex flex-col">
                 <DetailHeader
-                    image={USDC_ICON}
+                    image={USDC_ICON.src}
                     title="Earn 56.75% APY"
                     subTitle="TVL 10,000.00 USDC"
                     leftTitle="Deposit"

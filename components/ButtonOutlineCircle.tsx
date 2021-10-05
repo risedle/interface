@@ -1,12 +1,11 @@
 import type { FunctionComponent } from "react";
-import Image from "next/image";
 
 /**
  * ButtonOutlineCircleProps is a React Component properties that passed to React
  * Component Button
  */
 type ButtonOutlineCircleProps = {
-    icon: StaticImageData;
+    icon: string;
     onClick?: () => void;
 };
 
@@ -37,7 +36,7 @@ const ButtonOutlineCircle: FunctionComponent<ButtonOutlineCircleProps> = ({
             onClick={onClick}
             style={{ height: "40px", width: "40px" }}
         >
-            <Image src={icon} alt="" />
+            <img src={icon} alt="" />
         </button>
     );
 };

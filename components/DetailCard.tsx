@@ -1,5 +1,4 @@
 import type { FunctionComponent } from "react";
-import Image from "next/image";
 
 // Represents pair of title and value to displayed
 export type DetailCardListItem = {

@@ -1,6 +1,4 @@
 import type { FunctionComponent } from "react";
-import { Fragment } from "react";
-import Image from "next/image";
 import Link from "next/link";
 
 // Import SVG Logo
@@ -22,7 +20,7 @@ const Logo: FunctionComponent<LogoProps> = ({}) => {
         <div className="inline-block align-middle">
             <Link href="/">
                 <a className="inline-block transform active:scale-95 transition duration-300 ease-in-out">
-                    <Image src={RisedleLogo} />
+                    <img src={RisedleLogo} alt="Risedle" />
                 </a>
             </Link>
         </div>

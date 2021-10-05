@@ -11,9 +11,9 @@ export default {
 } as Meta;
 
 const Template: Story<{
-    icon: StaticImageData;
+    icon: string;
 }> = (args) => <ButtonOutlineCircle icon={args.icon} />;
 
 //Each story then reuses that template
 export const Default = Template.bind({});
-Default.args = { icon: ThreeDots };
+Default.args = { icon: ThreeDots.src };
