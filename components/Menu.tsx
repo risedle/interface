@@ -1,5 +1,4 @@
 import type { FunctionComponent } from "react";
-import { Fragment } from "react";
 import Link from "next/link";
 
 /**
@@ -19,26 +18,24 @@ const Menu: FunctionComponent<MenuProps> = ({}) => {
     const transition = "transition duration-300 ease-in-out";
     const classNames = [text, hover, transition].join(" ");
     return (
-        <Fragment>
-            <div className="flex flex-row gap gap-x-6 items-center">
-                <Link href="/">
-                    <a
-                        className={classNames}
-                        style={{ fontSize: "15px", lineHeight: "21px" }}
-                    >
-                        Invest
-                    </a>
-                </Link>
-                <Link href="/lend">
-                    <a
-                        className={classNames}
-                        style={{ fontSize: "15px", lineHeight: "21px" }}
-                    >
-                        Lend
-                    </a>
-                </Link>
-            </div>
-        </Fragment>
+        <div className="flex flex-row gap gap-x-6 items-center">
+            <Link href="/">
+                <a
+                    className={classNames}
+                    style={{ fontSize: "15px", lineHeight: "21px" }}
+                >
+                    Invest
+                </a>
+            </Link>
+            <Link href="/lend">
+                <a
+                    className={classNames}
+                    style={{ fontSize: "15px", lineHeight: "21px" }}
+                >
+                    Lend
+                </a>
+            </Link>
+        </div>
     );
 };
 
