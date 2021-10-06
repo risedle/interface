@@ -4,7 +4,6 @@ import Head from "next/head";
 // Import the useDapp
 import { useContractCalls, useTokenBalance, useEthers } from "@usedapp/core";
 import { utils } from "ethers";
-import { Contract } from "@ethersproject/contracts";
 
 // Import components
 import Favicon from "../../components/Favicon";
@@ -16,9 +15,13 @@ import DetailCard from "../../components/DetailCard";
 import USDC_ICON from "../../public/USDC_ICON.png";
 
 // Import ABIs
-import RisedleVaultABI from "../../abis/RisedleVaultABI.json";
-const vaultInterface = new utils.Interface(RisedleVaultABI);
-const vaultContractAddress = "0x84917B264a8b50B0dA6A6e6a2bC422F02001Bf98";
+const vaultInterface = new utils.Interface([
+    "function getSupplyRatePerSecondInEther() view returns (uint256)",
+    "function totalOutstandingDebt() view returns (uint256)",
+    "function getTotalAvailableCash() view returns (uint256)",
+    "function getExchangeRateInEther() view returns (uint256)",
+]);
+const vaultContractAddress = "0xECDC27a6214E3BC4715af5cB5706E03259e7A1f8";
 
 const Lend: NextPage = () => {
     // Setup hooks
@@ -47,7 +50,7 @@ const Lend: NextPage = () => {
         {
             abi: vaultInterface,
             address: vaultContractAddress,
-            method: "getCurrentExchangeRateInEther",
+            method: "getExchangeRateInEther",
             args: [],
         },
     ]);
