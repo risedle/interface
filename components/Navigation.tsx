@@ -16,6 +16,9 @@ import ThreeDots from "../public/three-dots.png";
  */
 type NavigationProps = {
     activeMenu?: string;
+    account: string | null | undefined;
+    activateBrowserWallet: () => void;
+    deactivate: () => void;
 };
 
 /**
@@ -23,7 +26,12 @@ type NavigationProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const Navigation: FunctionComponent<NavigationProps> = ({ activeMenu }) => {
+const Navigation: FunctionComponent<NavigationProps> = ({
+    activeMenu,
+    account,
+    activateBrowserWallet,
+    deactivate,
+}) => {
     return (
         <div className="flex flex-row p-4">
             <div className="flex-1">
@@ -35,7 +43,11 @@ const Navigation: FunctionComponent<NavigationProps> = ({ activeMenu }) => {
                     <ButtonGrey>Kovan</ButtonGrey>
                 </div>
                 <div>
-                    <ConnectMetamask />
+                    <ConnectMetamask
+                        account={account}
+                        activateBrowserWallet={activateBrowserWallet}
+                        deactivate={deactivate}
+                    />
                 </div>
                 <div>
                     <ButtonOutlineCircle icon={ThreeDots.src} />

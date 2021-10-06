@@ -25,9 +25,8 @@ const Template: Story<{}> = () => {
     // Simulate inside app page
     return (
         <Fragment>
-            <DAppProvider config={config}>
-                <Navigation />
-            </DAppProvider>
+            {/* TODO(bayu): Implement Navigation for storybook */}
+            <DAppProvider config={config}>{/* <Navigation /> */}</DAppProvider>
         </Fragment>
     );
 };

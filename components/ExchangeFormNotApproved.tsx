@@ -83,12 +83,12 @@ const ExchangeFormNotApproved: FunctionComponent<ExchangeFormNotApprovedProps> =
                         </div>
                     </div>
 
-                    <p className="text-grey font-extrabold">
+                    <p className="text-grey font-extrabold mt-4">
                         You will receive{" "}
                         <span className="text-white">0 {formOutputToken}</span>
                     </p>
                 </div>
-                <div className="mt-8">
+                <div className="mt-8 text-right">
                     <ButtonBlueSecondary
                         onClick={() => {
                             onClickApprove();

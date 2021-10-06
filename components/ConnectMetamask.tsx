@@ -2,7 +2,7 @@ import type { FunctionComponent } from "react";
 import { Fragment } from "react";
 
 // React useDapp
-import { useEthers, shortenAddress } from "@usedapp/core";
+import { shortenAddress } from "@usedapp/core";
 
 // Import button
 import ButtonOutline from "./ButtonOutline";
@@ -12,15 +12,22 @@ import ButtonBlueSecondary from "./ButtonBlueSecondary";
  * ConnectMetamaskProps is a React Component properties that passed to React
  * Component Button
  */
-type ConnectMetamaskProps = {};
+type ConnectMetamaskProps = {
+    account: string | null | undefined;
+    activateBrowserWallet: () => void;
+    deactivate: () => void;
+};
 
 /**
  * ConnectMetamask is just yet another react component
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({}) => {
-    const { activateBrowserWallet, active, account, deactivate } = useEthers();
+const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({
+    account,
+    activateBrowserWallet,
+    deactivate,
+}) => {
     let isAccountConnected = false;
     let shortAccountAddress = "NOT_CONNECTED";
     if (account) {
@@ -37,11 +44,7 @@ const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({}) => {
                     </ButtonBlueSecondary>
                 </div>
                 <div>
-                    <ButtonOutline
-                        onClick={async () => {
-                            await deactivate();
-                        }}
-                    >
+                    <ButtonOutline onClick={deactivate}>
                         Disconnect
                     </ButtonOutline>
                 </div>
@@ -50,11 +53,7 @@ const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({}) => {
     } else {
         return (
             <Fragment>
-                <ButtonOutline
-                    onClick={() => {
-                        activateBrowserWallet();
-                    }}
-                >
+                <ButtonOutline onClick={activateBrowserWallet}>
                     Connect wallet
                 </ButtonOutline>
             </Fragment>

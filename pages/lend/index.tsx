@@ -25,7 +25,7 @@ const vaultContractAddress = "0xECDC27a6214E3BC4715af5cB5706E03259e7A1f8";
 
 const Lend: NextPage = () => {
     // Setup hooks
-    const { account } = useEthers();
+    const { account, activateBrowserWallet, deactivate } = useEthers();
 
     // Read data from chain
     const results = useContractCalls([
@@ -61,25 +61,25 @@ const Lend: NextPage = () => {
         currentExchangeRateInEtherResult,
     ] = results;
 
-    console.log("DEBUG: supplyRateResult", supplyRateResult);
-    console.log(
-        "DEBUG: totalOutstandingDebtResult",
-        totalOutstandingDebtResult
-    );
-    console.log("DEBUG: totalAvailableCashResult", totalAvailableCashResult);
+    // console.log("DEBUG: supplyRateResult", supplyRateResult);
+    // console.log(
+    //     "DEBUG: totalOutstandingDebtResult",
+    //     totalOutstandingDebtResult
+    // );
+    // console.log("DEBUG: totalAvailableCashResult", totalAvailableCashResult);
 
     // Get supply APY
     let supplyRatePerSecond = 0;
     if (supplyRateResult) {
         supplyRatePerSecond = supplyRateResult[0] / 1e18;
     }
-    console.log("DEBUG: supplyRatePerSecond", supplyRatePerSecond);
+    // console.log("DEBUG: supplyRatePerSecond", supplyRatePerSecond);
     const secondsPerDay = 86400;
     const daysPerYear = 365;
     const supplyAPY =
         (Math.pow(supplyRatePerSecond * secondsPerDay + 1, daysPerYear) - 1) *
         100;
-    console.log("DEBUG: supplyAPY", supplyAPY);
+    // console.log("DEBUG: supplyAPY", supplyAPY);
     const APY = `${supplyAPY.toFixed(2)}%`;
 
     // Get total TVL
@@ -91,34 +91,34 @@ const Lend: NextPage = () => {
     if (totalAvailableCashResult) {
         totalAvailableCash = totalAvailableCashResult[0] / 1e6;
     }
-    console.log("DEBUG: totalOutstandingDebt", totalOutstandingDebt);
-    console.log("DEBUG: totalAvailableCash", totalAvailableCash);
+    // console.log("DEBUG: totalOutstandingDebt", totalOutstandingDebt);
+    // console.log("DEBUG: totalAvailableCash", totalAvailableCash);
     const TVL = totalOutstandingDebt + totalAvailableCash;
-    console.log("DEBUG: TVL", TVL);
+    // console.log("DEBUG: TVL", TVL);
     let dollarUSLocale = Intl.NumberFormat("en-US");
 
     // Get user vault token balance
     // TODO (bayu): Get decimals from contract
     let balance: any = 0.0;
     let balanceResult: any = useTokenBalance(vaultContractAddress, account);
-    console.log("DEBUG: balanceResult", balanceResult);
+    // console.log("DEBUG: balanceResult", balanceResult);
     if (balanceResult) {
         balance = balanceResult / 1e6; // TODO use decimals here from conttract
     }
-    console.log("DEBUG: balance", balance);
+    // console.log("DEBUG: balance", balance);
 
     // The the total value
     let currentExchangeRate = 1.0;
     if (currentExchangeRateInEtherResult) {
         currentExchangeRate = currentExchangeRateInEtherResult[0] / 1e18;
     }
-    console.log(
-        "DEBUG: currentExchangeRateInEtherResult",
-        currentExchangeRateInEtherResult
-    );
-    console.log("DEBUG: currentExchangeRate", currentExchangeRate);
+    // console.log(
+    //     "DEBUG: currentExchangeRateInEtherResult",
+    //     currentExchangeRateInEtherResult
+    // );
+    // console.log("DEBUG: currentExchangeRate", currentExchangeRate);
     const totalValueVaultToken = balance * currentExchangeRate;
-    console.log("DEBUG: totalValueVaultToken", totalValueVaultToken);
+    // console.log("DEBUG: totalValueVaultToken", totalValueVaultToken);
 
     // Display the value
     const cardItems = [
@@ -142,7 +142,12 @@ const Lend: NextPage = () => {
                 />
             </Head>
             <Favicon />
-            <Navigation activeMenu="lend" />
+            <Navigation
+                activeMenu="lend"
+                account={account}
+                activateBrowserWallet={activateBrowserWallet}
+                deactivate={deactivate}
+            />
             <div className="mt-8 gap gap-y-8 flex flex-col">
                 <DetailHeader
                     image={USDC_ICON.src}

@@ -1,5 +1,6 @@
 import type { FunctionComponent } from "react";
 import Link from "next/link";
+import React, { useState } from "react";
 
 // Import components
 import ButtonBlue from "./ButtonBlue";
@@ -24,7 +25,7 @@ type ExchangeFormApprovedProps = {
     formInputToken: string;
     formOutputToken: string;
     formSubmitTitle: string;
-    onClickSubmit: () => void;
+    onClickSubmit: (amount: string) => void;
 };
 
 /**
@@ -44,6 +45,9 @@ const ExchangeFormApproved: FunctionComponent<ExchangeFormApprovedProps> = ({
     formSubmitTitle,
     onClickSubmit,
 }) => {
+    // Input states
+    const [depositAmount, setDepositAmount] = useState("0");
+
     return (
         <div className="mx-auto" style={{ width: "480px" }}>
             <div>
@@ -71,9 +75,10 @@ const ExchangeFormApproved: FunctionComponent<ExchangeFormApprovedProps> = ({
                 >
                     <div className="w-10/12">
                         <input
-                            type="number"
+                            type="text"
                             className="w-full focus:outline-none font-extrabold text-grey bg-black"
                             placeholder={formPlaceholder}
+                            onChange={(e) => setDepositAmount(e.target.value)}
                         />
                     </div>
                     <div className="w-2/12 font-extrabold text-grey bg-black text-right">
@@ -81,15 +86,16 @@ const ExchangeFormApproved: FunctionComponent<ExchangeFormApprovedProps> = ({
                     </div>
                 </div>
 
-                <p className="text-grey font-extrabold">
+                <p className="text-grey font-extrabold mt-4">
                     You will receive{" "}
-                    <span className="text-white">0 {formOutputToken}</span>
+                    <span className="text-white">{formOutputToken}</span> in
+                    exchange.
                 </p>
             </div>
-            <div className="mt-8">
+            <div className="mt-8 text-right">
                 <ButtonBlue
                     onClick={() => {
-                        onClickSubmit();
+                        onClickSubmit(depositAmount);
                     }}
                 >
                     {formSubmitTitle}

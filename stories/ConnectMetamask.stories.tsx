@@ -26,7 +26,7 @@ const Template: Story<{}> = () => {
     return (
         <Fragment>
             <DAppProvider config={config}>
-                <ConnectMetamask />
+                {/* <ConnectMetamask /> */}
             </DAppProvider>
         </Fragment>
     );
