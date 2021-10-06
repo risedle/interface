@@ -5,15 +5,15 @@ import type { AppProps } from "next/app";
 import { DAppProvider, ChainId } from "@usedapp/core";
 
 function RisedleApp({ Component, pageProps }: AppProps) {
-    // Get the rinkeby URL from .env file
-    let rinkebyURL = "";
-    if (process.env.NEXT_PUBLIC_RINKEBY_URL) {
-        rinkebyURL = process.env.NEXT_PUBLIC_RINKEBY_URL;
+    // Get the Kovan URL from .env file
+    let kovanURL = "";
+    if (process.env.NEXT_PUBLIC_KOVAN_URL) {
+        kovanURL = process.env.NEXT_PUBLIC_KOVAN_URL;
     }
     const config = {
-        readOnlyChainId: ChainId.Rinkeby,
+        readOnlyChainId: ChainId.Kovan,
         readOnlyUrls: {
-            [ChainId.Rinkeby]: rinkebyURL,
+            [ChainId.Kovan]: kovanURL,
         },
     };
 
