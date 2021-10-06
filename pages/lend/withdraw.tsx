@@ -39,10 +39,10 @@ const vaultUnderlyingTokenContractInterface = new utils.Interface([
 const vaultUnderlyingTokenContractAddress =
     "0x64249d73AF4C3ABC7A9704Bf02188fa36d0B1Ed9";
 
-const LendDeposit: NextPage = () => {
+const LendWithdraw: NextPage = () => {
     // 1. Check wether the account is connected or not
     // 2. If not, display the connect wallet prompt
-    // 3. If connected, check the allowance
+    // 3. If connected, check the allowance of vault token
     // 4. If there is no allowance, display the approval form
     //    4.1 If user send approve, then display transaction progress
     //    4.2 Show transaction completed in 2s, then display the deposit form
@@ -51,69 +51,63 @@ const LendDeposit: NextPage = () => {
     // Read data from chain
     const results = useContractCalls([
         {
-            abi: vaultUnderlyingTokenContractInterface,
-            address: vaultUnderlyingTokenContractAddress,
+            abi: RisedleVault.interface,
+            address: RisedleVault.address,
             method: "decimals",
             args: [],
         },
         {
-            abi: vaultUnderlyingTokenContractInterface,
-            address: vaultUnderlyingTokenContractAddress,
+            abi: RisedleVault.interface,
+            address: RisedleVault.address,
             method: "symbol",
             args: [],
         },
     ]);
-    const [underlyingTokenDecimalResult, underlyingTokenSymbolResult] = results;
+    const [tokenDecimalResult, tokenSymbolResult] = results;
     // TODO(bayu): Handle when the token decimal is not exists
     let underlyingTokenDecimal = 18;
-    if (underlyingTokenDecimalResult) {
-        underlyingTokenDecimal = underlyingTokenDecimalResult[0];
+    if (tokenDecimalResult) {
+        underlyingTokenDecimal = tokenDecimalResult[0];
     }
     let underlyingTokenSymbol = "USDC";
-    if (underlyingTokenSymbolResult) {
-        underlyingTokenSymbol = underlyingTokenSymbolResult[0];
+    if (tokenSymbolResult) {
+        underlyingTokenSymbol = tokenSymbolResult[0];
     }
-    console.log(
-        "DEBBUG: underlyingTokenDecimalResult",
-        underlyingTokenDecimalResult
-    );
-    console.log(
-        "DEBBUG: underlyingTokenSymbolResult",
-        underlyingTokenSymbolResult
-    );
+    console.log("DEBBUG: tokenDecimalResult", tokenDecimalResult);
+    console.log("DEBBUG: tokenSymbolResult", tokenSymbolResult);
 
     // Setup hooks
-    const { activateBrowserWallet, active, account, deactivate } = useEthers();
+    const { activateBrowserWallet, account, deactivate } = useEthers();
+
+    // Check the allowance of vault token
     const allowance = useTokenAllowance(
-        vaultUnderlyingTokenContractAddress,
+        RisedleVault.address,
         account,
         RisedleVault.address
     );
-    const vaultUnderlyingTokenContract = new Contract(
-        vaultUnderlyingTokenContractAddress,
-        vaultUnderlyingTokenContractInterface
-    );
+
+    // Create the vault contract object
     const vaultContract = new Contract(
         RisedleVault.address,
         RisedleVault.interface
     );
-    const approval = useContractFunction(
-        vaultUnderlyingTokenContract,
-        "approve",
-        {
-            transactionName: "Approve",
-        }
-    );
-    const deposit = useContractFunction(vaultContract, "mint", {
-        transactionName: "Mint",
+
+    // Approval function
+    const approval = useContractFunction(vaultContract, "approve", {
+        transactionName: "Approve",
+    });
+
+    // Main actions
+    const redeem = useContractFunction(vaultContract, "burn", {
+        transactionName: "Burn",
     });
 
     // Setup states
     let [isApprovalInProgress, setIsApprovalInProgress] = useState(false);
     let [isApprovalCompleted, setIsApprovalCompleted] = useState(false);
-    let [isDepositInProgress, setIsDepositInProgress] = useState(false);
-    let [isDepositCompleted, setIsDepositCompleted] = useState(false);
-    let [depositAmount, setDepositAmount] = useState("0");
+    let [isRedeemInProgress, setIsRedeemInProgress] = useState(false);
+    let [isRedeemCompleted, setIsRedeemCompleted] = useState(false);
+    let [redeemAmount, setRedeemAmount] = useState("0");
 
     // Get approval transaction link
     let approvalTransactionLink = "";
@@ -125,37 +119,35 @@ const LendDeposit: NextPage = () => {
         }
     }
 
-    // Get deposit transaction link
-    let depositTransactionLink = "";
-    if (deposit.state.transaction?.hash) {
-        const transactionHash = deposit.state.transaction?.hash;
+    // Get redeem transaction link
+    let redeemTransactionLink = "";
+    if (redeem.state.transaction?.hash) {
+        const transactionHash = redeem.state.transaction?.hash;
         const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
         if (link) {
-            depositTransactionLink = link;
+            redeemTransactionLink = link;
         }
     }
 
     // Get minted amount
-    let mintedAmount = "0";
-    if (deposit.events) {
+    let redeemedAmount = "0";
+    if (redeem.events) {
         // Get the SupplyAdded event
-        const event = deposit.events.filter((log) => log.name == "SupplyAdded");
-        const mintedAmountBigNumber = event[0].args.mintedAmount;
-        mintedAmount = utils.formatUnits(
-            mintedAmountBigNumber,
+        const event = redeem.events.filter(
+            (log) => log.name == "SupplyRemoved"
+        );
+        const redeemedAmountBigNumber = event[0].args.redeemedAmount;
+        redeemedAmount = utils.formatUnits(
+            redeemedAmountBigNumber,
             underlyingTokenDecimal
         );
     }
-
-    console.log("DEBUG: approval", approval);
-    console.log("DEBUG: deposit", deposit);
-
-    console.log("DEBUG: Allowance", allowance);
 
     const mainDisplay = (
         account: string | null | undefined,
         allowance: BigNumber | undefined
     ) => {
+        // If there is no account connected then display the prompt
         if (!account) {
             return (
                 <div className="mt-16">
@@ -198,11 +190,11 @@ const LendDeposit: NextPage = () => {
         }
 
         // If deposit in progress, display the spinner
-        if (isDepositInProgress) {
+        if (isRedeemInProgress) {
             return (
                 <div className="mt-16">
                     <TransactionInProgress
-                        title={`Depositing ${depositAmount} ${underlyingTokenSymbol}`}
+                        title={`Redeeming ${redeemAmount} ${underlyingTokenSymbol}`}
                         subTitle="It may take a few minutes"
                         transactionLink={approvalTransactionLink}
                     />
@@ -211,19 +203,19 @@ const LendDeposit: NextPage = () => {
         }
 
         // If deposit is completed, display completed transaction in 20s
-        if (isDepositCompleted) {
+        if (isRedeemCompleted) {
             // TODO (bayu): Get the minted amount
             // Turn of after 20s
             setTimeout(function () {
-                setIsDepositCompleted(false);
+                setIsRedeemCompleted(false);
             }, 20 * 1000); // 20s
 
             return (
                 <div className="mt-16">
                     <TransactionIsCompleted
-                        title="Deposit completed"
-                        subTitle={`You have received ${mintedAmount} rvUSDC`}
-                        transactionLink={depositTransactionLink}
+                        title="Withdrawal completed"
+                        subTitle={`You have received ${redeemedAmount} USDC`}
+                        transactionLink={redeemTransactionLink}
                     />
                 </div>
             );
@@ -238,12 +230,12 @@ const LendDeposit: NextPage = () => {
                         <ExchangeFormNotApproved
                             backTitle="← Go back to lend"
                             backURL="/lend"
-                            title="Deposit USDC"
-                            subTitle="Earn variable interest rate instantly."
-                            formTitle="Deposit amount"
-                            formPlaceholder="Enter deposit amount"
-                            formInputToken="USDC"
-                            formOutputToken="rvUSDC"
+                            title="Redeem rvUSDC"
+                            subTitle="Burn rvUSDC to receive USDC."
+                            formTitle="Redeem amount"
+                            formPlaceholder="Enter redeem amount"
+                            formInputToken="rvUSDC"
+                            formOutputToken="USDC"
                             onClickApprove={async () => {
                                 // Display spinner
                                 setIsApprovalInProgress(true);
@@ -269,34 +261,42 @@ const LendDeposit: NextPage = () => {
                         <ExchangeFormApproved
                             backTitle="← Go back to lend"
                             backURL="/lend"
-                            title="Deposit USDC"
-                            subTitle="Earn variable interest rate instantly."
-                            formTitle="Deposit amount"
-                            formPlaceholder="Enter deposit amount"
-                            formInputToken="USDC"
-                            formOutputToken="rvUSDC"
-                            formSubmitTitle="Deposit"
+                            title="Redeem rvUSDC"
+                            subTitle="Burn rvUSDC to receive USDC."
+                            formTitle="Redeem amount"
+                            formPlaceholder="Enter redeem amount"
+                            formInputToken="rvUSDC"
+                            formOutputToken="USDC"
+                            formSubmitTitle="Redeem"
                             onClickSubmit={async (amount) => {
                                 // Set deposit amount for the spinbar
-                                setDepositAmount(amount);
+                                setRedeemAmount(amount);
 
                                 // Show the spinner
-                                setIsDepositInProgress(true);
+                                setIsRedeemInProgress(true);
 
                                 // Parse units
-                                const depositAmount = utils.parseUnits(
+                                const redeemAmountParsed = utils.parseUnits(
                                     amount,
                                     underlyingTokenDecimal
                                 );
 
                                 // Send tx
-                                await deposit.send(depositAmount);
+
+                                console.log("========== amount", amount);
+                                console.log(
+                                    "========== redeemAmountParsed",
+                                    redeemAmountParsed
+                                );
+                                await redeem.send(redeemAmountParsed);
+
+                                console.log("========== DEBUG HELLO");
 
                                 // Turn of the spinner
-                                setIsDepositInProgress(false);
+                                setIsRedeemInProgress(false);
 
                                 // Display the receipt
-                                setIsDepositCompleted(true);
+                                setIsRedeemCompleted(true);
                             }}
                         />
                     </div>
@@ -312,7 +312,7 @@ const LendDeposit: NextPage = () => {
     return (
         <div>
             <Head>
-                <title>Deposit USDC | Risedle Protocol</title>
+                <title>Withdraw USDC | Risedle Protocol</title>
                 <meta
                     name="description"
                     content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol"
@@ -329,4 +329,4 @@ const LendDeposit: NextPage = () => {
     );
 };
 
-export default LendDeposit;
+export default LendWithdraw;

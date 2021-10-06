@@ -26,6 +26,7 @@ const Template: Story<{}> = () => {
     return (
         <Fragment>
             <DAppProvider config={config}>
+                {/* TODO(bayu): Implement connect metamask for storybook */}
                 {/* <ConnectMetamask /> */}
             </DAppProvider>
         </Fragment>
