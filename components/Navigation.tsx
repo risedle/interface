@@ -32,7 +32,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({ activeMenu }) => {
             <Menu active={activeMenu} />
             <div className="flex-1 flex flex-row gap gap-x-2 justify-end">
                 <div>
-                    <ButtonGrey>Rinkeby</ButtonGrey>
+                    <ButtonGrey>Kovan</ButtonGrey>
                 </div>
                 <div>
                     <ConnectMetamask />
