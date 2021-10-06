@@ -96,8 +96,8 @@ const Lend: NextPage = () => {
 
     // Get user vault token balance
     // TODO (bayu): Get decimals from contract
-    let balance = 0;
-    let balanceResult = useTokenBalance(vaultContractAddress, account);
+    let balance: any = 0.0;
+    let balanceResult: any = useTokenBalance(vaultContractAddress, account);
     console.log("DEBUG: balanceResult", balanceResult);
     if (balanceResult) {
         balance = balanceResult / 1e6; // TODO use decimals here from conttract
