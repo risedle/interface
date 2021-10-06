@@ -2,10 +2,10 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 // Import components
-import Lend from "./lend";
+import Invest from "./invest";
 
 const Home: NextPage = () => {
-    return <Lend />;
+    return <Invest />;
 };
 
 export default Home;
