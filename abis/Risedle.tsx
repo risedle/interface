@@ -1,7 +1,7 @@
 import { utils } from "ethers";
 
-const VAULT = "0x95a3797a5713C3b3Cf06e8D44DD5039e770179Af";
-const ETHRISE = "0x8750BC5571991CC97901227EcB52fafF47E3D6D3";
+const VAULT = "0xEACd893F4fb9034b19405437c500D6f3EC547931";
+const ETHRISE = "0xE289714E219e67b8E4558E9De3f3969C993d924e";
 const INTERFACE = new utils.Interface([
     // Read only
     "function getSupplyRatePerSecondInEther() view returns (uint256)",
@@ -11,6 +11,7 @@ const INTERFACE = new utils.Interface([
     "function decimals() external view returns (uint8)",
     "function symbol() external view returns (string)",
     "function getETFInfo(address etf) external view returns (address token, address collateral, uint8 collateralDecimals, address feed, uint256 initialPrice, uint256 feeInEther, uint256 totalCollateral, uint256 totalPendingFees, uint24 uniswapV3PoolFee)",
+    "function getETFNAV(address etf) external view returns (uint256 etfNAV)",
 
     // Write
     "function mint(uint256 amount) external",
