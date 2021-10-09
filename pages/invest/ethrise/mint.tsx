@@ -4,6 +4,7 @@ import React, { useState } from "react";
 
 // Import the useDapp
 import {
+    useContractCalls,
     useEthers,
     useTokenAllowance,
     useContractFunction,
@@ -14,19 +15,19 @@ import {
 import { utils, constants, BigNumber, Contract } from "ethers";
 
 // Import components
-import Favicon from "../../components/Favicon";
-import Navigation from "../../components/Navigation";
-import ConnectWalletPrompt from "../../components/ConnectWalletPrompt";
-import ExchangeFormNotApproved from "../../components/ExchangeFormNotApproved";
-import ExchangeFormApproved from "../../components/ExchangeFormAprroved";
-import TransactionInProgress from "../../components/TransactionInProgress";
-import TransactionIsCompleted from "../../components/TransactionIsCompleted";
+import Favicon from "../../../components/Favicon";
+import Navigation from "../../../components/Navigation";
+import ConnectWalletPrompt from "../../../components/ConnectWalletPrompt";
+import ExchangeFormNotApproved from "../../../components/ExchangeFormNotApproved";
+import ExchangeFormApproved from "../../../components/ExchangeFormAprroved";
+import TransactionInProgress from "../../../components/TransactionInProgress";
+import TransactionIsCompleted from "../../../components/TransactionIsCompleted";
 
 // Contract interface
-import Risedle from "../../abis/Risedle";
-import USDC from "../../abis/USDC";
+import Risedle from "../../../abis/Risedle";
+import WETH from "../../../abis/WETH";
 
-const LendDeposit: NextPage = () => {
+const MintETHRISE: NextPage = () => {
     // 1. Check wether the account is connected or not
     // 2. If not, display the connect wallet prompt
     // 3. If connected, check the allowance
@@ -35,84 +36,77 @@ const LendDeposit: NextPage = () => {
     //    4.2 Show transaction completed in 2s, then display the deposit form
     // 5. Otherwise user connected and ready to deposit
 
-    // Read data from chain
-
     // Setup hooks
     const { activateBrowserWallet, account, deactivate } = useEthers();
     console.debug("Risedle: account", account);
 
-    // Check USDC allowance
-    const allowance = useTokenAllowance(USDC.address, account, Risedle.address);
-    console.debug("Risedle: USDC Address", USDC.address);
-    console.debug("Risedle: USDC Allowance", allowance);
+    // Check WETH allowance
+    const allowance = useTokenAllowance(WETH.address, account, Risedle.address);
+    console.debug("Risedle: allowance", allowance);
 
-    // Get USDC balance
-    let usdcBalance = "0";
-    const usdcBalanceBigNum = useTokenBalance(USDC.address, account);
-    if (usdcBalanceBigNum) {
-        usdcBalance = utils.formatUnits(usdcBalanceBigNum, 6);
+    // Get WETH balance
+    let wethBalance = "0";
+    const wethBalanceBigNum = useTokenBalance(WETH.address, account);
+    if (wethBalanceBigNum) {
+        wethBalance = utils.formatUnits(wethBalanceBigNum, 18);
         // Rounding down
-        usdcBalance = (Math.floor(parseFloat(usdcBalance) * 100) / 100).toFixed(
+        wethBalance = (Math.floor(parseFloat(wethBalance) * 100) / 100).toFixed(
             2
         );
     }
-    console.debug("Risedle: USDC Balance", usdcBalance);
 
-    // Create the USDC contract and function that we use
-    const usdcContract = new Contract(USDC.address, USDC.interface);
-    const usdcApproval = useContractFunction(usdcContract, "approve", {
+    // Create the WETH contract and function that we use
+    const wethContract = new Contract(WETH.address, WETH.interface);
+    const wethApproval = useContractFunction(wethContract, "approve", {
         transactionName: "Approve",
     });
+    console.debug("Risedle: WETH.address", WETH.address);
 
-    // Setup states for the approval
+    // Setup states for approval
     let [isApprovalInProgress, setIsApprovalInProgress] = useState(false);
     let [isApprovalCompleted, setIsApprovalCompleted] = useState(false);
 
-    // Get approval transaction link
-    let usdcApprovalTransactionLink = "";
-    if (usdcApproval.state.transaction?.hash) {
-        const transactionHash = usdcApproval.state.transaction?.hash;
+    // Get the approval transaction link
+    let approvalTransactionLink = "";
+    if (wethApproval.state.transaction?.hash) {
+        const transactionHash = wethApproval.state.transaction?.hash;
         const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
         if (link) {
-            usdcApprovalTransactionLink = link;
+            approvalTransactionLink = link;
         }
     }
 
     // Create the Risedle contract and function that we use
     const risedleContract = new Contract(Risedle.address, Risedle.interface);
-    const risedleLendDeposit = useContractFunction(
-        risedleContract,
-        "mint(uint256)",
-        {
-            transactionName: "Mint",
-        }
-    );
+    const risedleETHRISEMint = useContractFunction(risedleContract, "invest", {
+        transactionName: "Invest",
+    });
+    console.debug("Risedle: Risedle.address", Risedle.address);
 
-    // Setup states for the deposit process
-    let [isDepositInProgress, setIsDepositInProgress] = useState(false);
-    let [isDepositCompleted, setIsDepositCompleted] = useState(false);
-    let [depositAmount, setDepositAmount] = useState("0");
+    // Setup states for mint process
+    let [isMintInProgress, setIsMintInProgress] = useState(false);
+    let [isMintCompleted, setIsMintCompleted] = useState(false);
+    let [mintWETHAmount, setMintWETHAmount] = useState("0");
 
-    // Get deposit transaction link
-    let risedleDeositTransactionLink = "";
-    if (risedleLendDeposit.state.transaction?.hash) {
-        const transactionHash = risedleLendDeposit.state.transaction?.hash;
+    // Get mint transaction link
+    let mintTransactionLink = "";
+    if (risedleETHRISEMint.state.transaction?.hash) {
+        const transactionHash = risedleETHRISEMint.state.transaction?.hash;
         const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
         if (link) {
-            risedleDeositTransactionLink = link;
+            mintTransactionLink = link;
         }
     }
 
-    // If deposit success, get minted amount
-    // TODO(bayu): Handle error
+    // Get minted amount
     let mintedAmount = "0";
-    if (risedleLendDeposit.events) {
+    if (risedleETHRISEMint.events) {
         // Get the SupplyAdded event
-        const event = risedleLendDeposit.events.filter(
-            (log) => log.name == "SupplyAdded"
+        const event = risedleETHRISEMint.events.filter(
+            (log) => log.name == "ETFMinted"
         );
-        const mintedAmountBigNumber = event[0].args.mintedAmount;
-        mintedAmount = utils.formatUnits(mintedAmountBigNumber, 6);
+        const mintedAmountBigNumber = event[0].args.amount;
+        mintedAmount = utils.formatUnits(mintedAmountBigNumber, 18);
     }
 
     const mainDisplay = (
@@ -136,7 +130,7 @@ const LendDeposit: NextPage = () => {
                     <TransactionInProgress
                         title="Approving ..."
                         subTitle="It may take a few minutes"
-                        transactionLink={usdcApprovalTransactionLink}
+                        transactionLink={approvalTransactionLink}
                     />
                 </div>
             );
@@ -152,8 +146,8 @@ const LendDeposit: NextPage = () => {
                 <div className="mt-16">
                     <TransactionIsCompleted
                         title="Approval completed"
-                        subTitle="Now you can continue to deposit"
-                        transactionLink={usdcApprovalTransactionLink}
+                        subTitle="Now you can continue to mint"
+                        transactionLink={approvalTransactionLink}
                         onClose={onClose}
                     />
                 </div>
@@ -161,30 +155,30 @@ const LendDeposit: NextPage = () => {
         }
 
         // If deposit in progress, display the spinner
-        if (isDepositInProgress) {
+        if (isMintInProgress) {
             return (
                 <div className="mt-16">
                     <TransactionInProgress
-                        title={`Depositing ${depositAmount} USDC`}
+                        title={`Converting ${mintWETHAmount} WETH to ETHRISE`}
                         subTitle="It may take a few minutes"
-                        transactionLink={risedleDeositTransactionLink}
+                        transactionLink={mintTransactionLink}
                     />
                 </div>
             );
         }
 
         // If deposit is completed, display completed transaction in 20s
-        if (isDepositCompleted) {
+        if (isMintCompleted) {
             const onClose = () => {
-                setIsDepositCompleted(false);
+                setIsMintCompleted(false);
             };
 
             return (
                 <div className="mt-16">
                     <TransactionIsCompleted
-                        title="Deposit completed"
-                        subTitle={`You have received ${mintedAmount} rvUSDC`}
-                        transactionLink={risedleDeositTransactionLink}
+                        title="Mint completed"
+                        subTitle={`You have received ${mintedAmount} ETHRISE`}
+                        transactionLink={mintTransactionLink}
                         onClose={onClose}
                     />
                 </div>
@@ -198,21 +192,21 @@ const LendDeposit: NextPage = () => {
                 return (
                     <div className="mt-16">
                         <ExchangeFormNotApproved
-                            backTitle="← Go back to lend"
-                            backURL="/lend"
-                            title="Deposit USDC"
-                            subTitle="Earn variable interest rate instantly."
-                            formTitle="Deposit amount"
+                            backTitle="← Go back to ETHRISE"
+                            backURL="/invest/ethrise"
+                            title="Mint ETHRISE"
+                            subTitle="Deposit WETH and receive ETHRISE in exchange."
+                            formTitle="Mint amount"
                             formPlaceholder="Enter deposit amount"
-                            formInputToken="USDC"
-                            formInputTokenBalance={usdcBalance}
-                            formOutputToken="rvUSDC"
+                            formInputToken="WETH"
+                            formInputTokenBalance={wethBalance}
+                            formOutputToken="ETHRISE"
                             onClickApprove={async () => {
                                 // Display spinner
                                 setIsApprovalInProgress(true);
 
                                 // Send the tx
-                                await usdcApproval.send(
+                                await wethApproval.send(
                                     Risedle.address,
                                     constants.MaxUint256
                                 );
@@ -230,37 +224,54 @@ const LendDeposit: NextPage = () => {
                 return (
                     <div className="mt-16">
                         <ExchangeFormApproved
-                            backTitle="← Go back to lend"
-                            backURL="/lend"
-                            title="Deposit USDC"
-                            subTitle="Earn variable interest rate instantly."
+                            backTitle="← Go back to ETHRISE"
+                            backURL="/invest/ethrise"
+                            title="Mint ETHRISE"
+                            subTitle="Deposit WETH and receive ETHRISE in exchange."
                             formTitle="Deposit amount"
                             formPlaceholder="Enter deposit amount"
-                            formInputToken="USDC"
-                            formInputTokenBalance={usdcBalance}
-                            formOutputToken="rvUSDC"
-                            formSubmitTitle="Deposit"
+                            formInputToken="WETH"
+                            formInputTokenBalance={wethBalance}
+                            formOutputToken="ETHRISE"
+                            formSubmitTitle="Mint"
                             onClickSubmit={async (amount) => {
                                 // Set deposit amount for the spinbar
-                                setDepositAmount(amount);
+                                setMintWETHAmount(amount);
+                                console.debug("Risedle: weth amount", amount);
 
                                 // Show the spinner
-                                setIsDepositInProgress(true);
+                                setIsMintInProgress(true);
 
                                 // Parse units
                                 const depositAmount = utils.parseUnits(
                                     amount,
-                                    6
+                                    18
+                                );
+                                console.debug(
+                                    "Risedle: depositAmount",
+                                    depositAmount
                                 );
 
-                                // Send tx
-                                await risedleLendDeposit.send(depositAmount);
+                                // TODO: Handle error transaction
+                                console.debug(
+                                    "Risedle: ETHRISE Address",
+                                    Risedle.ethrise
+                                );
+                                await risedleETHRISEMint.send(
+                                    Risedle.ethrise,
+                                    depositAmount
+                                );
+                                console.debug(
+                                    "Risedle: risedleETHRISEMint",
+                                    risedleETHRISEMint
+                                );
+                                console.debug("Risedle: WHYY?");
 
                                 // Turn of the spinner
-                                setIsDepositInProgress(false);
+                                setIsMintInProgress(false);
 
                                 // Display the receipt
-                                setIsDepositCompleted(true);
+                                setIsMintCompleted(true);
                             }}
                         />
                     </div>
@@ -275,7 +286,7 @@ const LendDeposit: NextPage = () => {
     return (
         <div>
             <Head>
-                <title>Deposit USDC | Risedle Protocol</title>
+                <title>Mint ETHRISE | Risedle Protocol</title>
                 <meta
                     name="description"
                     content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol"
@@ -292,4 +303,4 @@ const LendDeposit: NextPage = () => {
     );
 };
 
-export default LendDeposit;
+export default MintETHRISE;

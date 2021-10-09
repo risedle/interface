@@ -15,6 +15,7 @@ const Template: Story<{
     formTitle: string;
     formPlaceholder: string;
     formInputToken: string;
+    formInputTokenBalance: string;
     formOutputToken: string;
     onClickApprove: () => void;
 }> = (args) => (
@@ -26,6 +27,7 @@ const Template: Story<{
         formTitle={args.formTitle}
         formPlaceholder={args.formPlaceholder}
         formInputToken={args.formInputToken}
+        formInputTokenBalance={args.formInputTokenBalance}
         formOutputToken={args.formOutputToken}
         onClickApprove={args.onClickApprove}
     />
@@ -45,6 +47,7 @@ Default.args = {
     formTitle: "Deposit amount",
     formPlaceholder: "Enter deposit amount",
     formInputToken: "USDC",
+    formInputTokenBalance: "100",
     formOutputToken: "rvUSDC",
     onClickApprove: approve,
 };

@@ -15,13 +15,7 @@ import DetailCard from "../../components/DetailCard";
 import USDC_ICON from "../../public/USDC_ICON.png";
 
 // Import ABIs
-const vaultInterface = new utils.Interface([
-    "function getSupplyRatePerSecondInEther() view returns (uint256)",
-    "function totalOutstandingDebt() view returns (uint256)",
-    "function getTotalAvailableCash() view returns (uint256)",
-    "function getExchangeRateInEther() view returns (uint256)",
-]);
-const vaultContractAddress = "0xECDC27a6214E3BC4715af5cB5706E03259e7A1f8";
+import Risedle from "../../abis/Risedle";
 
 const Lend: NextPage = () => {
     // Setup hooks
@@ -30,26 +24,26 @@ const Lend: NextPage = () => {
     // Read data from chain
     const results = useContractCalls([
         {
-            abi: vaultInterface,
-            address: vaultContractAddress,
+            abi: Risedle.interface,
+            address: Risedle.address,
             method: "getSupplyRatePerSecondInEther",
             args: [],
         },
         {
-            abi: vaultInterface,
-            address: vaultContractAddress,
+            abi: Risedle.interface,
+            address: Risedle.address,
             method: "totalOutstandingDebt",
             args: [],
         },
         {
-            abi: vaultInterface,
-            address: vaultContractAddress,
+            abi: Risedle.interface,
+            address: Risedle.address,
             method: "getTotalAvailableCash",
             args: [],
         },
         {
-            abi: vaultInterface,
-            address: vaultContractAddress,
+            abi: Risedle.interface,
+            address: Risedle.address,
             method: "getExchangeRateInEther",
             args: [],
         },
@@ -100,7 +94,7 @@ const Lend: NextPage = () => {
     // Get user vault token balance
     // TODO (bayu): Get decimals from contract
     let balance: any = 0.0;
-    let balanceResult: any = useTokenBalance(vaultContractAddress, account);
+    let balanceResult: any = useTokenBalance(Risedle.address, account);
     // console.log("DEBUG: balanceResult", balanceResult);
     if (balanceResult) {
         balance = balanceResult / 1e6; // TODO use decimals here from conttract

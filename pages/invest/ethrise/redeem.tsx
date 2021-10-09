@@ -4,8 +4,9 @@ import React, { useState } from "react";
 
 // Import the useDapp
 import {
-    useTokenAllowance,
+    useContractCalls,
     useEthers,
+    useTokenAllowance,
     useContractFunction,
     getExplorerTransactionLink,
     ChainId,
@@ -14,21 +15,22 @@ import {
 import { utils, constants, BigNumber, Contract } from "ethers";
 
 // Import components
-import Favicon from "../../components/Favicon";
-import Navigation from "../../components/Navigation";
-import ConnectWalletPrompt from "../../components/ConnectWalletPrompt";
-import ExchangeFormNotApproved from "../../components/ExchangeFormNotApproved";
-import ExchangeFormApproved from "../../components/ExchangeFormAprroved";
-import TransactionInProgress from "../../components/TransactionInProgress";
-import TransactionIsCompleted from "../../components/TransactionIsCompleted";
+import Favicon from "../../../components/Favicon";
+import Navigation from "../../../components/Navigation";
+import ConnectWalletPrompt from "../../../components/ConnectWalletPrompt";
+import ExchangeFormNotApproved from "../../../components/ExchangeFormNotApproved";
+import ExchangeFormApproved from "../../../components/ExchangeFormAprroved";
+import TransactionInProgress from "../../../components/TransactionInProgress";
+import TransactionIsCompleted from "../../../components/TransactionIsCompleted";
 
 // Contract interface
-import Risedle from "../../abis/Risedle";
+import Risedle from "../../../abis/Risedle";
+import ERC20 from "../../../abis/ERC20";
 
-const LendWithdraw: NextPage = () => {
+const RedeemETHRISE: NextPage = () => {
     // 1. Check wether the account is connected or not
     // 2. If not, display the connect wallet prompt
-    // 3. If connected, check the allowance of vault token
+    // 3. If connected, check the allowance
     // 4. If there is no allowance, display the approval form
     //    4.1 If user send approve, then display transaction progress
     //    4.2 Show transaction completed in 2s, then display the deposit form
@@ -38,92 +40,83 @@ const LendWithdraw: NextPage = () => {
     const { activateBrowserWallet, account, deactivate } = useEthers();
     console.debug("Risedle: account", account);
 
-    // Check vault token allowance
+    // Check ETHRISE allowance
     const allowance = useTokenAllowance(
-        Risedle.address,
+        Risedle.ethrise,
         account,
         Risedle.address
     );
-    console.debug("Risedle: rvUSDC Address", Risedle.address);
-    console.debug("Risedle: rvUSDC Allowance", allowance);
+    console.debug("Risedle: allowance", allowance);
 
-    // Get rvUSDC balance
-    let rvUSDCBalance = "0";
-    const rvUSDCBalanceBigNum = useTokenBalance(Risedle.address, account);
-    if (rvUSDCBalanceBigNum) {
-        rvUSDCBalance = utils.formatUnits(rvUSDCBalanceBigNum, 6);
+    // Get ETHRISE balance
+    let ethriseBalance = "0";
+    const ethriseBalanceBigNum = useTokenBalance(Risedle.ethrise, account);
+    if (ethriseBalanceBigNum) {
+        ethriseBalance = utils.formatUnits(ethriseBalanceBigNum, 18);
         // Rounding down
-        rvUSDCBalance = (
-            Math.floor(parseFloat(rvUSDCBalance) * 100) / 100
+        ethriseBalance = (
+            Math.floor(parseFloat(ethriseBalance) * 100) / 100
         ).toFixed(2);
     }
-    console.debug("Risedle: USDC Balance", rvUSDCBalance);
 
-    // Create Risedle vault token contract and function that we uses
-    const risedleContract = new Contract(Risedle.address, Risedle.interface);
-    const risedleVaultTokenApproval = useContractFunction(
-        risedleContract,
-        "approve",
-        {
-            transactionName: "Approve",
-        }
-    );
+    // Create the WETH contract and function that we use
+    const ethriseContract = new Contract(Risedle.ethrise, ERC20.interface);
+    const ethriseApproval = useContractFunction(ethriseContract, "approve", {
+        transactionName: "Approve",
+    });
+    console.debug("Risedle: Risedle.ethrise", Risedle.ethrise);
 
-    // Setup states for vault token approval
+    // Setup states for approval
     let [isApprovalInProgress, setIsApprovalInProgress] = useState(false);
     let [isApprovalCompleted, setIsApprovalCompleted] = useState(false);
 
-    // Get approval transaction link
+    // Get the approval transaction link
     let approvalTransactionLink = "";
-    if (risedleVaultTokenApproval.state.transaction?.hash) {
-        const transactionHash =
-            risedleVaultTokenApproval.state.transaction?.hash;
+    if (ethriseApproval.state.transaction?.hash) {
+        const transactionHash = ethriseApproval.state.transaction?.hash;
         const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
         if (link) {
             approvalTransactionLink = link;
         }
     }
 
-    // Use redeem function
-    const risedleRedeemUSDC = useContractFunction(
-        risedleContract,
-        "burn(uint256)",
-        {
-            transactionName: "Burn",
-        }
-    );
+    // Create the Risedle contract and function that we use
+    const risedleContract = new Contract(Risedle.address, Risedle.interface);
+    const risedleRedeem = useContractFunction(risedleContract, "redeem", {
+        transactionName: "Redeem",
+    });
+    console.debug("Risedle: Risedle.address", Risedle.address);
 
-    // Setup states for redeem process
+    // Setup states for mint process
     let [isRedeemInProgress, setIsRedeemInProgress] = useState(false);
     let [isRedeemCompleted, setIsRedeemCompleted] = useState(false);
-    let [redeemAmount, setRedeemAmount] = useState("0");
+    let [burnedETHRISEAmount, setBurnedETHRISEAmount] = useState("0");
 
-    // Get redeem transaction link
-    let redeemTransactionLink = "";
-    if (risedleRedeemUSDC.state.transaction?.hash) {
-        const transactionHash = risedleRedeemUSDC.state.transaction?.hash;
+    // Get mint transaction link
+    let mintTransactionLink = "";
+    if (risedleRedeem.state.transaction?.hash) {
+        const transactionHash = risedleRedeem.state.transaction?.hash;
         const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
         if (link) {
-            redeemTransactionLink = link;
+            mintTransactionLink = link;
         }
     }
 
     // Get minted amount
     let redeemedAmount = "0";
-    if (risedleRedeemUSDC.events) {
+    if (risedleRedeem.events) {
         // Get the SupplyAdded event
-        const event = risedleRedeemUSDC.events.filter(
-            (log) => log.name == "SupplyRemoved"
+        const event = risedleRedeem.events.filter(
+            (log) => log.name == "ETFBurned"
         );
-        const redeemedAmountBigNumber = event[0].args.redeemedAmount;
-        redeemedAmount = utils.formatUnits(redeemedAmountBigNumber, 6);
+        const redeemedAmountBigNumber = event[0].args.amount;
+        redeemedAmount = utils.formatUnits(redeemedAmountBigNumber, 18);
     }
 
     const mainDisplay = (
         account: string | null | undefined,
         allowance: BigNumber | undefined
     ) => {
-        // If there is no account connected then display the prompt
         if (!account) {
             return (
                 <div className="mt-16">
@@ -157,7 +150,7 @@ const LendWithdraw: NextPage = () => {
                 <div className="mt-16">
                     <TransactionIsCompleted
                         title="Approval completed"
-                        subTitle="Now you can continue to withdraw"
+                        subTitle="Now you can continue to mint"
                         transactionLink={approvalTransactionLink}
                         onClose={onClose}
                     />
@@ -170,9 +163,9 @@ const LendWithdraw: NextPage = () => {
             return (
                 <div className="mt-16">
                     <TransactionInProgress
-                        title={`Redeeming ${redeemAmount} rvUSDC`}
+                        title={`Redeeming ${burnedETHRISEAmount} ETHRISE`}
                         subTitle="It may take a few minutes"
-                        transactionLink={approvalTransactionLink}
+                        transactionLink={mintTransactionLink}
                     />
                 </div>
             );
@@ -187,9 +180,9 @@ const LendWithdraw: NextPage = () => {
             return (
                 <div className="mt-16">
                     <TransactionIsCompleted
-                        title="Withdrawal completed"
-                        subTitle={`You have received ${redeemedAmount} USDC`}
-                        transactionLink={redeemTransactionLink}
+                        title="Redeem completed"
+                        subTitle={`You have received ${redeemedAmount} WETH`}
+                        transactionLink={mintTransactionLink}
                         onClose={onClose}
                     />
                 </div>
@@ -203,21 +196,21 @@ const LendWithdraw: NextPage = () => {
                 return (
                     <div className="mt-16">
                         <ExchangeFormNotApproved
-                            backTitle="← Go back to lend"
-                            backURL="/lend"
-                            title="Withdraw USDC"
-                            subTitle="Burn rvUSDC to receive USDC."
+                            backTitle="← Go back to ETHRISE"
+                            backURL="/invest/ethrise"
+                            title="Redeem ETHRISE"
+                            subTitle="Burn ETHRISE to receive WETH in exchange."
                             formTitle="Redeem amount"
                             formPlaceholder="Enter redeem amount"
-                            formInputToken="rvUSDC"
-                            formInputTokenBalance={rvUSDCBalance}
-                            formOutputToken="USDC"
+                            formInputToken="ETHRISE"
+                            formInputTokenBalance={ethriseBalance}
+                            formOutputToken="WETH"
                             onClickApprove={async () => {
                                 // Display spinner
                                 setIsApprovalInProgress(true);
 
                                 // Send the tx
-                                await risedleVaultTokenApproval.send(
+                                await ethriseApproval.send(
                                     Risedle.address,
                                     constants.MaxUint256
                                 );
@@ -235,33 +228,48 @@ const LendWithdraw: NextPage = () => {
                 return (
                     <div className="mt-16">
                         <ExchangeFormApproved
-                            backTitle="← Go back to lend"
-                            backURL="/lend"
-                            title="Withdraw USDC"
-                            subTitle="Burn rvUSDC to receive USDC."
+                            backTitle="← Go back to ETHRISE"
+                            backURL="/invest/ethrise"
+                            title="Redeem ETHRISE"
+                            subTitle="Burn ETHRISE to receive WETH in exchange."
                             formTitle="Redeem amount"
                             formPlaceholder="Enter redeem amount"
-                            formInputToken="rvUSDC"
-                            formInputTokenBalance={rvUSDCBalance}
-                            formOutputToken="USDC"
+                            formInputToken="ETHRISE"
+                            formInputTokenBalance={ethriseBalance}
+                            formOutputToken="WETH"
                             formSubmitTitle="Redeem"
                             onClickSubmit={async (amount) => {
                                 // Set deposit amount for the spinbar
-                                setRedeemAmount(amount);
+                                setBurnedETHRISEAmount(amount);
+                                console.debug("Risedle: weth amount", amount);
 
                                 // Show the spinner
                                 setIsRedeemInProgress(true);
 
                                 // Parse units
-                                const redeemAmountParsed = utils.parseUnits(
+                                const redeemAmount = utils.parseUnits(
                                     amount,
-                                    6
+                                    18
+                                );
+                                console.debug(
+                                    "Risedle: redeemAmount",
+                                    redeemAmount
                                 );
 
-                                // Send tx
-                                await risedleRedeemUSDC.send(
-                                    redeemAmountParsed
+                                // TODO: Handle error transaction
+                                console.debug(
+                                    "Risedle: ETHRISE Address",
+                                    Risedle.ethrise
                                 );
+                                await risedleRedeem.send(
+                                    Risedle.ethrise,
+                                    redeemAmount
+                                );
+                                console.debug(
+                                    "Risedle: risedleRedeem",
+                                    risedleRedeem
+                                );
+                                console.debug("Risedle: WHYY?");
 
                                 // Turn of the spinner
                                 setIsRedeemInProgress(false);
@@ -282,7 +290,7 @@ const LendWithdraw: NextPage = () => {
     return (
         <div>
             <Head>
-                <title>Withdraw USDC | Risedle Protocol</title>
+                <title>Redeem ETHRISE | Risedle Protocol</title>
                 <meta
                     name="description"
                     content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol"
@@ -299,4 +307,4 @@ const LendWithdraw: NextPage = () => {
     );
 };
 
-export default LendWithdraw;
+export default RedeemETHRISE;

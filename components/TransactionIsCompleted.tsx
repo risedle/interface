@@ -1,4 +1,5 @@
 import type { FunctionComponent } from "react";
+import ButtonBlue from "./ButtonBlue";
 
 // Import button
 import ButtonGreyLink from "./ButtonGreyLink";
@@ -11,6 +12,7 @@ type TransactionIsCompletedProps = {
     title: string;
     subTitle: string;
     transactionLink: string;
+    onClose: () => void;
 };
 
 /**
@@ -19,7 +21,7 @@ type TransactionIsCompletedProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const TransactionIsCompleted: FunctionComponent<TransactionIsCompletedProps> =
-    ({ title, subTitle, transactionLink }) => {
+    ({ title, subTitle, transactionLink, onClose }) => {
         return (
             <div className="mx-auto text-center" style={{ width: "480px" }}>
                 <div className="inline-block items-center">
@@ -55,10 +57,15 @@ const TransactionIsCompleted: FunctionComponent<TransactionIsCompletedProps> =
                     </p>
                 </div>
                 <div className="mt-8">
-                    <ButtonGreyLink
-                        title="See transaction on explorer"
-                        url={transactionLink}
-                    />
+                    <span className="mr-4">
+                        <ButtonGreyLink
+                            title="See transaction on explorer"
+                            url={transactionLink}
+                        />
+                    </span>
+                    <span>
+                        <ButtonBlue onClick={onClose}>Close</ButtonBlue>
+                    </span>
                 </div>
             </div>
         );

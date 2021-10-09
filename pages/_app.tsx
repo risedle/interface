@@ -11,6 +11,7 @@ function RisedleApp({ Component, pageProps }: AppProps) {
         kovanURL = process.env.NEXT_PUBLIC_KOVAN_URL;
     }
     const config = {
+        supportedChains: [ChainId.Kovan],
         readOnlyChainId: ChainId.Kovan,
         readOnlyUrls: {
             [ChainId.Kovan]: kovanURL,

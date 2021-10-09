@@ -23,6 +23,7 @@ type ExchangeFormApprovedProps = {
     formTitle: string;
     formPlaceholder: string;
     formInputToken: string;
+    formInputTokenBalance: string;
     formOutputToken: string;
     formSubmitTitle: string;
     onClickSubmit: (amount: string) => void;
@@ -41,6 +42,7 @@ const ExchangeFormApproved: FunctionComponent<ExchangeFormApprovedProps> = ({
     formTitle,
     formPlaceholder,
     formInputToken,
+    formInputTokenBalance,
     formOutputToken,
     formSubmitTitle,
     onClickSubmit,
@@ -87,9 +89,10 @@ const ExchangeFormApproved: FunctionComponent<ExchangeFormApprovedProps> = ({
                 </div>
 
                 <p className="text-grey font-extrabold mt-4">
-                    You will receive{" "}
-                    <span className="text-white">{formOutputToken}</span> in
-                    exchange.
+                    <span>Balance </span>
+                    <span className="text-white">
+                        {formInputTokenBalance} {formInputToken}
+                    </span>
                 </p>
             </div>
             <div className="mt-8 text-right">

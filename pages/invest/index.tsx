@@ -12,7 +12,6 @@ import Navigation from "../../components/Navigation";
 import ETFCard from "../../components/ETFCard";
 
 // Import abis
-import WETH from "../../abis/WETH";
 import Risedle from "../../abis/Risedle";
 import AUMLoading from "../../components/AUMLoading";
 import AUMLoaded from "../../components/AUMLoaded";
@@ -34,15 +33,14 @@ const Invest: NextPage = () => {
             method: "getETFInfo",
             args: [Risedle.ethrise],
         },
+        {
+            abi: Risedle.interface,
+            address: Risedle.address,
+            method: "getETFNAV",
+            args: [Risedle.ethrise],
+        },
     ]);
-    const [etfInfoResult] = results;
-    let ethTotalCollateral = "0";
-    if (etfInfoResult) {
-        // @ts-ignore
-        ethTotalCollateral = formatUnits(etfInfoResult.totalCollateral, 18);
-
-        console.log("ethTotalCollateral", ethTotalCollateral);
-    }
+    const [etfInfoResult, ethriseNAVResult] = results;
 
     // Total AUM
     let AUM: string | undefined = undefined;
@@ -69,8 +67,21 @@ const Invest: NextPage = () => {
         return <AUMLoading />;
     };
 
-    // TODO: Get on-chain data NAV price
-    // TODO: Get total AUM
+    // Get NAV data
+    let ethriseNAV: string = "- USDC";
+    if (ethriseNAVResult) {
+        const nav = formatUnits(
+            // @ts-ignore
+            ethriseNAVResult.etfNAV,
+            6
+        );
+        // @ts-ignore
+        console.log("DEBUG: ethriseNAVResult.etfNAV", ethriseNAVResult.etfNAV);
+        const navFloat = parseFloat(nav);
+        console.log("DEBUG: navFloat", navFloat);
+        let dollarUSLocale = Intl.NumberFormat("en-US");
+        ethriseNAV = `${dollarUSLocale.format(navFloat)} USDC`;
+    }
 
     return (
         <div>
@@ -100,15 +111,15 @@ const Invest: NextPage = () => {
                         title="ETHRISE"
                         subTitle="ETH 2x Leverage Risedle"
                         etfURL="/invest/ethrise"
-                        navPrice="100 USDC"
-                        change30d="+24%"
+                        navPrice={ethriseNAV}
+                        change30d="--%"
                     />
                     <ETFCard
                         title="BTCRISE"
                         subTitle="BTC 2x Leverage Risedle"
-                        etfURL="/invest/btcrise"
-                        navPrice="100 USDC"
-                        change30d="+24%"
+                        etfURL="/invest"
+                        navPrice="-- USDC"
+                        change30d="-- %"
                     />
                 </div>
             </div>

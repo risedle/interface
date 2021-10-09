@@ -22,6 +22,7 @@ type ExchangeFormNotApprovedProps = {
     formTitle: string;
     formPlaceholder: string;
     formInputToken: string;
+    formInputTokenBalance: string;
     formOutputToken: string;
     onClickApprove: () => void;
 };
@@ -40,7 +41,7 @@ const ExchangeFormNotApproved: FunctionComponent<ExchangeFormNotApprovedProps> =
         formTitle,
         formPlaceholder,
         formInputToken,
-        formOutputToken,
+        formInputTokenBalance,
         onClickApprove,
     }) => {
         return (
@@ -84,8 +85,10 @@ const ExchangeFormNotApproved: FunctionComponent<ExchangeFormNotApprovedProps> =
                     </div>
 
                     <p className="text-grey font-extrabold mt-4">
-                        You will receive{" "}
-                        <span className="text-white">0 {formOutputToken}</span>
+                        <span>Balance </span>
+                        <span className="text-white">
+                            {formInputTokenBalance} {formInputToken}
+                        </span>
                     </p>
                 </div>
                 <div className="mt-8 text-right">

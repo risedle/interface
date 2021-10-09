@@ -1,7 +1,7 @@
 import { utils } from "ethers";
 
-const VAULT = "0xEACd893F4fb9034b19405437c500D6f3EC547931";
-const ETHRISE = "0xE289714E219e67b8E4558E9De3f3969C993d924e";
+const VAULT = "0x4576Df8E6C99d7Bb71Aa9E843BfbE9111D5ff256";
+const ETHRISE = "0xB1Bd881Ef4eF1975f7b19b23da52558708C4FDdB";
 const INTERFACE = new utils.Interface([
     // Read only
     "function getSupplyRatePerSecondInEther() view returns (uint256)",
@@ -16,6 +16,8 @@ const INTERFACE = new utils.Interface([
     // Write
     "function mint(uint256 amount) external",
     "function burn(uint256 amount) external",
+    "function invest(address etf, uint256 amount) external",
+    "function redeem(address etf, uint256 amount) external",
     "function approve(address spender, uint256 amount) external",
 
     // Events
@@ -24,6 +26,8 @@ const INTERFACE = new utils.Interface([
     "event SupplyRemoved(address indexed account, uint256 amount, uint256 ExchangeRateInEther, uint256 redeemedAmount)",
     "event Approval(address indexed owner, address indexed spender, uint256 value)",
     "event Transfer(address indexed from, address indexed to, uint256 value)",
+    "event ETFMinted(address indexed investor, address indexed etf, uint256 amount)",
+    "event ETFBurned(address indexed investor, address indexed etf, uint256 amount)",
 ]);
 
 export default {
