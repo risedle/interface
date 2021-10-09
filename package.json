@@ -11,6 +11,7 @@
         "build-storybook": "build-storybook"
     },
     "dependencies": {
+        "@usedapp/coingecko": "0.3.24",
         "@usedapp/core": "0.5.2",
         "next": "11.1.2",
         "react": "17.0.2",
