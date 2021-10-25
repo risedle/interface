@@ -1,11 +1,12 @@
 import { utils } from "ethers";
 
-const VAULT = "0x4576Df8E6C99d7Bb71Aa9E843BfbE9111D5ff256";
-const ETHRISE = "0xB1Bd881Ef4eF1975f7b19b23da52558708C4FDdB";
+const VAULT = "0xf0A7C769ed7F8aF25cC282f9C56554e8A79036cf";
+const ETHRISE = "0xf5DfA11102a7Fe490b25D58bdcB3C769f7fD5BF7";
+
 const INTERFACE = new utils.Interface([
     // Read only
     "function getSupplyRatePerSecondInEther() view returns (uint256)",
-    "function totalOutstandingDebt() view returns (uint256)",
+    "function vaultTotalOutstandingDebt() view returns (uint256)",
     "function getTotalAvailableCash() view returns (uint256)",
     "function getExchangeRateInEther() view returns (uint256)",
     "function decimals() external view returns (uint8)",
@@ -14,16 +15,16 @@ const INTERFACE = new utils.Interface([
     "function getETFNAV(address etf) external view returns (uint256 etfNAV)",
 
     // Write
-    "function mint(uint256 amount) external",
-    "function burn(uint256 amount) external",
+    "function addSupply(uint256 amount) external",
+    "function removeSupply(uint256 amount) external",
     "function invest(address etf, uint256 amount) external",
     "function redeem(address etf, uint256 amount) external",
     "function approve(address spender, uint256 amount) external",
 
     // Events
     "event InterestAccrued (uint256 previousTimestamp, uint256 currentTimestamp, uint256 previousTotalOutstandingDebt, uint256 previoustotalPendingFees, uint256 borrowRatePerSecondInEther, uint256 elapsedSeconds, uint256 interestAmount, uint256 totalOutstandingDebt, uint256 totalPendingFees)",
-    "event SupplyAdded(address indexed account, uint256 amount, uint256 ExchangeRateInEther, uint256 mintedAmount)",
-    "event SupplyRemoved(address indexed account, uint256 amount, uint256 ExchangeRateInEther, uint256 redeemedAmount)",
+    "event VaultSupplyAdded(address indexed account, uint256 amount, uint256 ExchangeRateInEther, uint256 mintedAmount)",
+    "event VaultSupplyRemoved(address indexed account, uint256 amount, uint256 ExchangeRateInEther, uint256 redeemedAmount)",
     "event Approval(address indexed owner, address indexed spender, uint256 value)",
     "event Transfer(address indexed from, address indexed to, uint256 value)",
     "event ETFMinted(address indexed investor, address indexed etf, uint256 amount)",
