@@ -12,7 +12,7 @@ import Navigation from "../../components/Navigation";
 import ETFCard from "../../components/ETFCard";
 
 // Import abis
-import Risedle from "../../abis/Risedle";
+import RisedleMarket from "../../abis/RisedleMarket";
 import AUMLoading from "../../components/AUMLoading";
 import AUMLoaded from "../../components/AUMLoaded";
 
@@ -28,16 +28,16 @@ const Invest: NextPage = () => {
     // Read data from chain
     const results = useContractCalls([
         {
-            abi: Risedle.interface,
-            address: Risedle.address,
+            abi: RisedleMarket.interface,
+            address: RisedleMarket.address,
             method: "getETFInfo",
-            args: [Risedle.ethrise],
+            args: [RisedleMarket.ethrise],
         },
         {
-            abi: Risedle.interface,
-            address: Risedle.address,
+            abi: RisedleMarket.interface,
+            address: RisedleMarket.address,
             method: "getETFNAV",
-            args: [Risedle.ethrise],
+            args: [RisedleMarket.ethrise],
         },
     ]);
     const [etfInfoResult, ethriseNAVResult] = results;
@@ -102,7 +102,7 @@ const Invest: NextPage = () => {
             <div className="mx-auto mt-16" style={{ width: "480px" }}>
                 <div>
                     <h1 className="text-white font-extrabold text-4xl m-0 leading-normal">
-                        Leveraged ETFs
+                        Leveraged Tokens
                     </h1>
                     {displayAUM()}
                 </div>

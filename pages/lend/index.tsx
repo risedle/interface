@@ -15,7 +15,7 @@ import DetailCard from "../../components/DetailCard";
 import USDC_ICON from "../../public/USDC_ICON.png";
 
 // Import ABIs
-import Risedle from "../../abis/Risedle";
+import RisedleMarket from "../../abis/RisedleMarket";
 
 const Lend: NextPage = () => {
     // Setup hooks
@@ -24,26 +24,26 @@ const Lend: NextPage = () => {
     // Read data from chain
     const results = useContractCalls([
         {
-            abi: Risedle.interface,
-            address: Risedle.address,
+            abi: RisedleMarket.interface,
+            address: RisedleMarket.address,
             method: "getSupplyRatePerSecondInEther",
             args: [],
         },
         {
-            abi: Risedle.interface,
-            address: Risedle.address,
-            method: "totalOutstandingDebt",
+            abi: RisedleMarket.interface,
+            address: RisedleMarket.address,
+            method: "vaultTotalOutstandingDebt",
             args: [],
         },
         {
-            abi: Risedle.interface,
-            address: Risedle.address,
+            abi: RisedleMarket.interface,
+            address: RisedleMarket.address,
             method: "getTotalAvailableCash",
             args: [],
         },
         {
-            abi: Risedle.interface,
-            address: Risedle.address,
+            abi: RisedleMarket.interface,
+            address: RisedleMarket.address,
             method: "getExchangeRateInEther",
             args: [],
         },
@@ -94,7 +94,7 @@ const Lend: NextPage = () => {
     // Get user vault token balance
     // TODO (bayu): Get decimals from contract
     let balance: any = 0.0;
-    let balanceResult: any = useTokenBalance(Risedle.address, account);
+    let balanceResult: any = useTokenBalance(RisedleMarket.address, account);
     // console.log("DEBUG: balanceResult", balanceResult);
     if (balanceResult) {
         balance = balanceResult / 1e6; // TODO use decimals here from conttract

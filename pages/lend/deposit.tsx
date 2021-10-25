@@ -23,8 +23,8 @@ import TransactionInProgress from "../../components/TransactionInProgress";
 import TransactionIsCompleted from "../../components/TransactionIsCompleted";
 
 // Contract interface
-import Risedle from "../../abis/Risedle";
-import USDC from "../../abis/USDC";
+import RisedleMarket from "../../abis/RisedleMarket";
+import ERC20 from "../../abis/ERC20";
 
 const LendDeposit: NextPage = () => {
     // 1. Check wether the account is connected or not
@@ -42,13 +42,17 @@ const LendDeposit: NextPage = () => {
     console.debug("Risedle: account", account);
 
     // Check USDC allowance
-    const allowance = useTokenAllowance(USDC.address, account, Risedle.address);
-    console.debug("Risedle: USDC Address", USDC.address);
+    const allowance = useTokenAllowance(
+        ERC20.usdc,
+        account,
+        RisedleMarket.address
+    );
+    console.debug("Risedle: USDC Address", ERC20.usdc);
     console.debug("Risedle: USDC Allowance", allowance);
 
     // Get USDC balance
     let usdcBalance = "0";
-    const usdcBalanceBigNum = useTokenBalance(USDC.address, account);
+    const usdcBalanceBigNum = useTokenBalance(ERC20.usdc, account);
     if (usdcBalanceBigNum) {
         usdcBalance = utils.formatUnits(usdcBalanceBigNum, 6);
         // Rounding down
@@ -59,7 +63,7 @@ const LendDeposit: NextPage = () => {
     console.debug("Risedle: USDC Balance", usdcBalance);
 
     // Create the USDC contract and function that we use
-    const usdcContract = new Contract(USDC.address, USDC.interface);
+    const usdcContract = new Contract(ERC20.usdc, ERC20.interface);
     const usdcApproval = useContractFunction(usdcContract, "approve", {
         transactionName: "Approve",
     });
@@ -79,12 +83,15 @@ const LendDeposit: NextPage = () => {
     }
 
     // Create the Risedle contract and function that we use
-    const risedleContract = new Contract(Risedle.address, Risedle.interface);
+    const risedleContract = new Contract(
+        RisedleMarket.address,
+        RisedleMarket.interface
+    );
     const risedleLendDeposit = useContractFunction(
         risedleContract,
-        "mint(uint256)",
+        "addSupply(uint256)",
         {
-            transactionName: "Mint",
+            transactionName: "AddSupply",
         }
     );
 
@@ -109,7 +116,7 @@ const LendDeposit: NextPage = () => {
     if (risedleLendDeposit.events) {
         // Get the SupplyAdded event
         const event = risedleLendDeposit.events.filter(
-            (log) => log.name == "SupplyAdded"
+            (log) => log.name == "VaultSupplyAdded"
         );
         const mintedAmountBigNumber = event[0].args.mintedAmount;
         mintedAmount = utils.formatUnits(mintedAmountBigNumber, 6);
@@ -213,7 +220,7 @@ const LendDeposit: NextPage = () => {
 
                                 // Send the tx
                                 await usdcApproval.send(
-                                    Risedle.address,
+                                    RisedleMarket.address,
                                     constants.MaxUint256
                                 );
 

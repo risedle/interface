@@ -9,7 +9,7 @@ import { formatUnits } from "@ethersproject/units";
 import Favicon from "../../../components/Favicon";
 import Navigation from "../../../components/Navigation";
 import DetailHeader from "../../../components/DetailHeader";
-import Risedle from "../../../abis/Risedle";
+import RisedleMarket from "../../../abis/RisedleMarket";
 
 // PNG files
 import ETHRISE_ICON from "../../../public/ETHRISE_ICON.png";
@@ -21,10 +21,10 @@ const ETHRISE: NextPage = () => {
     // Read data from chain
     const results = useContractCalls([
         {
-            abi: Risedle.interface,
-            address: Risedle.address,
+            abi: RisedleMarket.interface,
+            address: RisedleMarket.address,
             method: "getETFNAV",
-            args: [Risedle.ethrise],
+            args: [RisedleMarket.ethrise],
         },
     ]);
     const [ethriseNAVResult] = results;

@@ -23,7 +23,7 @@ import TransactionInProgress from "../../components/TransactionInProgress";
 import TransactionIsCompleted from "../../components/TransactionIsCompleted";
 
 // Contract interface
-import Risedle from "../../abis/Risedle";
+import RisedleMarket from "../../abis/RisedleMarket";
 
 const LendWithdraw: NextPage = () => {
     // 1. Check wether the account is connected or not
@@ -40,16 +40,16 @@ const LendWithdraw: NextPage = () => {
 
     // Check vault token allowance
     const allowance = useTokenAllowance(
-        Risedle.address,
+        RisedleMarket.address,
         account,
-        Risedle.address
+        RisedleMarket.address
     );
-    console.debug("Risedle: rvUSDC Address", Risedle.address);
+    console.debug("Risedle: rvUSDC Address", RisedleMarket.address);
     console.debug("Risedle: rvUSDC Allowance", allowance);
 
     // Get rvUSDC balance
     let rvUSDCBalance = "0";
-    const rvUSDCBalanceBigNum = useTokenBalance(Risedle.address, account);
+    const rvUSDCBalanceBigNum = useTokenBalance(RisedleMarket.address, account);
     if (rvUSDCBalanceBigNum) {
         rvUSDCBalance = utils.formatUnits(rvUSDCBalanceBigNum, 6);
         // Rounding down
@@ -60,7 +60,10 @@ const LendWithdraw: NextPage = () => {
     console.debug("Risedle: USDC Balance", rvUSDCBalance);
 
     // Create Risedle vault token contract and function that we uses
-    const risedleContract = new Contract(Risedle.address, Risedle.interface);
+    const risedleContract = new Contract(
+        RisedleMarket.address,
+        RisedleMarket.interface
+    );
     const risedleVaultTokenApproval = useContractFunction(
         risedleContract,
         "approve",
@@ -87,9 +90,9 @@ const LendWithdraw: NextPage = () => {
     // Use redeem function
     const risedleRedeemUSDC = useContractFunction(
         risedleContract,
-        "burn(uint256)",
+        "removeSupply(uint256)",
         {
-            transactionName: "Burn",
+            transactionName: "RemoveSupply",
         }
     );
 
@@ -113,7 +116,7 @@ const LendWithdraw: NextPage = () => {
     if (risedleRedeemUSDC.events) {
         // Get the SupplyAdded event
         const event = risedleRedeemUSDC.events.filter(
-            (log) => log.name == "SupplyRemoved"
+            (log) => log.name == "VaultSupplyRemoved"
         );
         const redeemedAmountBigNumber = event[0].args.redeemedAmount;
         redeemedAmount = utils.formatUnits(redeemedAmountBigNumber, 6);
@@ -218,7 +221,7 @@ const LendWithdraw: NextPage = () => {
 
                                 // Send the tx
                                 await risedleVaultTokenApproval.send(
-                                    Risedle.address,
+                                    RisedleMarket.address,
                                     constants.MaxUint256
                                 );
 

@@ -24,8 +24,8 @@ import TransactionInProgress from "../../../components/TransactionInProgress";
 import TransactionIsCompleted from "../../../components/TransactionIsCompleted";
 
 // Contract interface
-import Risedle from "../../../abis/Risedle";
-import WETH from "../../../abis/WETH";
+import RisedleMarket from "../../../abis/RisedleMarket";
+import ERC20 from "../../../abis/ERC20";
 
 const MintETHRISE: NextPage = () => {
     // 1. Check wether the account is connected or not
@@ -41,12 +41,16 @@ const MintETHRISE: NextPage = () => {
     console.debug("Risedle: account", account);
 
     // Check WETH allowance
-    const allowance = useTokenAllowance(WETH.address, account, Risedle.address);
+    const allowance = useTokenAllowance(
+        ERC20.weth,
+        account,
+        RisedleMarket.address
+    );
     console.debug("Risedle: allowance", allowance);
 
     // Get WETH balance
     let wethBalance = "0";
-    const wethBalanceBigNum = useTokenBalance(WETH.address, account);
+    const wethBalanceBigNum = useTokenBalance(ERC20.weth, account);
     if (wethBalanceBigNum) {
         wethBalance = utils.formatUnits(wethBalanceBigNum, 18);
         // Rounding down
@@ -56,11 +60,11 @@ const MintETHRISE: NextPage = () => {
     }
 
     // Create the WETH contract and function that we use
-    const wethContract = new Contract(WETH.address, WETH.interface);
+    const wethContract = new Contract(ERC20.weth, ERC20.interface);
     const wethApproval = useContractFunction(wethContract, "approve", {
         transactionName: "Approve",
     });
-    console.debug("Risedle: WETH.address", WETH.address);
+    console.debug("Risedle: ERC20.weth", ERC20.weth);
 
     // Setup states for approval
     let [isApprovalInProgress, setIsApprovalInProgress] = useState(false);
@@ -77,11 +81,14 @@ const MintETHRISE: NextPage = () => {
     }
 
     // Create the Risedle contract and function that we use
-    const risedleContract = new Contract(Risedle.address, Risedle.interface);
+    const risedleContract = new Contract(
+        RisedleMarket.address,
+        RisedleMarket.interface
+    );
     const risedleETHRISEMint = useContractFunction(risedleContract, "invest", {
         transactionName: "Invest",
     });
-    console.debug("Risedle: Risedle.address", Risedle.address);
+    console.debug("Risedle: RisedleMarket.address", RisedleMarket.address);
 
     // Setup states for mint process
     let [isMintInProgress, setIsMintInProgress] = useState(false);
@@ -207,7 +214,7 @@ const MintETHRISE: NextPage = () => {
 
                                 // Send the tx
                                 await wethApproval.send(
-                                    Risedle.address,
+                                    RisedleMarket.address,
                                     constants.MaxUint256
                                 );
 
@@ -255,10 +262,10 @@ const MintETHRISE: NextPage = () => {
                                 // TODO: Handle error transaction
                                 console.debug(
                                     "Risedle: ETHRISE Address",
-                                    Risedle.ethrise
+                                    RisedleMarket.ethrise
                                 );
                                 await risedleETHRISEMint.send(
-                                    Risedle.ethrise,
+                                    RisedleMarket.ethrise,
                                     depositAmount
                                 );
                                 console.debug(
