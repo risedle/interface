@@ -1,7 +1,7 @@
 import { utils } from "ethers";
 
-const VAULT = "0xf0A7C769ed7F8aF25cC282f9C56554e8A79036cf";
-const ETHRISE = "0xf5DfA11102a7Fe490b25D58bdcB3C769f7fD5BF7";
+const VAULT = "0x58ecc53FFCE4ddD88B5e94F10b37844d9D7c9b1B";
+const ETHRISE = "0xA6eA51038FD62DC8a9F0FB0B7C41A10c9F62A56b";
 
 const INTERFACE = new utils.Interface([
     // Read only
