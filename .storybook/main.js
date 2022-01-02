@@ -8,4 +8,5 @@ module.exports = {
         "@storybook/addon-essentials",
         "@storybook/addon-postcss",
     ],
+    framework: "@storybook/react",
 };

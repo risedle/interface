@@ -7,8 +7,8 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "storybook": "start-storybook -p 6006",
-        "build-storybook": "build-storybook"
+        "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
+        "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook"
     },
     "dependencies": {
         "@usedapp/coingecko": "^0.3.24",
@@ -20,15 +20,16 @@
     "devDependencies": {
         "@babel/core": "^7.15.5",
         "@storybook/addon-actions": "^6.4.9",
-        "@storybook/addon-essentials": "^6.1.21",
-        "@storybook/addon-links": "^6.3.9",
+        "@storybook/addon-essentials": "^6.4.9",
+        "@storybook/addon-links": "^6.4.9",
         "@storybook/addon-postcss": "^2.0.0",
-        "@storybook/react": "^3.4.12",
+        "@storybook/react": "^6.4.9",
         "@types/react": "^17.0.27",
         "autoprefixer": "^10.3.7",
         "babel-loader": "^8.2.3",
         "eslint": "^7.32.0",
         "eslint-config-next": "^11.1.2",
+        "eslint-plugin-storybook": "^0.5.5",
         "postcss": "^8.3.9",
         "prettier": "^2.4.1",
         "tailwindcss": "^2.2.16",
