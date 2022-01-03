@@ -4,7 +4,7 @@ import type { FunctionComponent } from "react";
 import Logo from "./Logo";
 import Menu from "./Menu";
 import ButtonGrey from "./ButtonGrey";
-import ConnectMetamask from "./ConnectMetamask";
+import ConnectWallet from "./ConnectWallet";
 import ButtonOutlineCircle from "./ButtonOutlineCircle";
 
 // PNG files
@@ -17,7 +17,6 @@ import ThreeDots from "../public/three-dots.png";
 type NavigationProps = {
     activeMenu?: string;
     account: string | null | undefined;
-    activateBrowserWallet: () => void;
     deactivate: () => void;
 };
 
@@ -29,7 +28,6 @@ type NavigationProps = {
 const Navigation: FunctionComponent<NavigationProps> = ({
     activeMenu,
     account,
-    activateBrowserWallet,
     deactivate,
 }) => {
     return (
@@ -43,9 +41,8 @@ const Navigation: FunctionComponent<NavigationProps> = ({
                     <ButtonGrey>Kovan</ButtonGrey>
                 </div>
                 <div>
-                    <ConnectMetamask
+                    <ConnectWallet
                         account={account}
-                        activateBrowserWallet={activateBrowserWallet}
                         deactivate={deactivate}
                     />
                 </div>

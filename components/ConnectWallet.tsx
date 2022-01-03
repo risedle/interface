@@ -1,5 +1,6 @@
 import type { FunctionComponent } from "react";
 import { Fragment } from "react";
+import Link from "next/link";
 
 // React useDapp
 import { shortenAddress } from "@usedapp/core";
@@ -12,9 +13,8 @@ import ButtonBlueSecondary from "./ButtonBlueSecondary";
  * ConnectMetamaskProps is a React Component properties that passed to React
  * Component Button
  */
-type ConnectMetamaskProps = {
+type ConnectWalletProps = {
     account: string | null | undefined;
-    activateBrowserWallet: () => void;
     deactivate: () => void;
 };
 
@@ -23,9 +23,8 @@ type ConnectMetamaskProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({
+const ConnectWallet: FunctionComponent<ConnectWalletProps> = ({
     account,
-    activateBrowserWallet,
     deactivate,
 }) => {
     let isAccountConnected = false;
@@ -53,12 +52,16 @@ const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({
     } else {
         return (
             <Fragment>
-                <ButtonOutline onClick={activateBrowserWallet}>
-                    Connect wallet
-                </ButtonOutline>
+                <Link href="/connect">
+                    <a>
+                        <ButtonOutline>
+                            Connect wallet
+                        </ButtonOutline>
+                    </a>
+                </Link>
             </Fragment>
         );
     }
 };
 
-export default ConnectMetamask;
+export default ConnectWallet;

@@ -38,7 +38,7 @@ const LendDeposit: NextPage = () => {
     // Read data from chain
 
     // Setup hooks
-    const { activateBrowserWallet, account, deactivate } = useEthers();
+    const { activateBrowserWallet, account, deactivate, activate } = useEthers();
     console.debug("Risedle: account", account);
 
     // Check USDC allowance
@@ -131,6 +131,7 @@ const LendDeposit: NextPage = () => {
                 <div className="mt-16">
                     <ConnectWalletPrompt
                         activateBrowserWallet={activateBrowserWallet}
+                        activate={activate}
                     />
                 </div>
             );
@@ -291,7 +292,6 @@ const LendDeposit: NextPage = () => {
             <Favicon />
             <Navigation
                 account={account}
-                activateBrowserWallet={activateBrowserWallet}
                 deactivate={deactivate}
             />
             {mainDisplay(account, allowance)}

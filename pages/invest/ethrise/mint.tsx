@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // Import the useDapp
 import {
@@ -37,8 +37,12 @@ const MintETHRISE: NextPage = () => {
     // 5. Otherwise user connected and ready to deposit
 
     // Setup hooks
-    const { activateBrowserWallet, account, deactivate } = useEthers();
+    const { activateBrowserWallet, account, deactivate, activate, active } = useEthers();
     console.debug("Risedle: account", account);
+
+    useEffect(() => {
+        console.log(account);
+    }, [active])
 
     // Check WETH allowance
     const allowance = useTokenAllowance(
@@ -125,6 +129,7 @@ const MintETHRISE: NextPage = () => {
                 <div className="mt-16">
                     <ConnectWalletPrompt
                         activateBrowserWallet={activateBrowserWallet}
+                        activate={activate}
                     />
                 </div>
             );
@@ -302,7 +307,6 @@ const MintETHRISE: NextPage = () => {
             <Favicon />
             <Navigation
                 account={account}
-                activateBrowserWallet={activateBrowserWallet}
                 deactivate={deactivate}
             />
             {mainDisplay(account, allowance)}
