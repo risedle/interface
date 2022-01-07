@@ -1,5 +1,10 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useEffect } from "react";
+
+// Import WalletConnect connector
+import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 // useDapp
 import { useEthers, useContractCalls } from "@usedapp/core";
@@ -18,7 +23,42 @@ import AUMLoaded from "../../components/AUMLoaded";
 
 const Invest: NextPage = () => {
     // Setup hooks
-    const { account, activateBrowserWallet, deactivate } = useEthers();
+    const { account, deactivate, activate, connector, error, library } = useEthers();
+
+    // Get the Kovan URL from .env file
+    let kovanURL = "";
+    if (process.env.NEXT_PUBLIC_KOVAN_URL) {
+        kovanURL = process.env.NEXT_PUBLIC_KOVAN_URL;
+    }
+
+    // Setup Wallet Connect Configuration
+    const walletconnect = new WalletConnectConnector({
+        rpc: {
+            42: kovanURL
+        },
+        bridge: "https://bridge.walletconnect.org",
+        qrcode: true, 
+        supportedChainIds: [42],
+        chainId: 42
+    })
+
+    // Activate WalletConnect
+    const connectWalletConnect = async() => {
+        await activate(walletconnect);
+    }
+    console.log(connector)
+    console.log(library)
+
+    // Automatically connect to WalletConnect on page refresh (if already authenticated)
+    useEffect(() => {
+        if(localStorage.getItem('walletconnect')){
+            setTimeout(() => {
+                connectWalletConnect()
+            }, 1); 
+        }
+    }, [])
+
+    console.log(library?.provider)
 
     // Get ethereum price
     const etherPrice = useCoingeckoPrice("ethereum", "usd");
@@ -96,8 +136,7 @@ const Invest: NextPage = () => {
             <Navigation
                 activeMenu="invest"
                 account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
+                deactivate={async() => deactivate()}
             />
             <div className="mx-auto mt-16" style={{ width: "480px" }}>
                 <div>

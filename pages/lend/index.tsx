@@ -19,7 +19,7 @@ import RisedleMarket from "../../abis/RisedleMarket";
 
 const Lend: NextPage = () => {
     // Setup hooks
-    const { account, activateBrowserWallet, deactivate } = useEthers();
+    const { account, deactivate } = useEthers();
 
     // Read data from chain
     const results = useContractCalls([
@@ -139,8 +139,7 @@ const Lend: NextPage = () => {
             <Navigation
                 activeMenu="lend"
                 account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
+                deactivate={async() => deactivate()}
             />
             <div className="mt-8 gap gap-y-8 flex flex-col">
                 <DetailHeader

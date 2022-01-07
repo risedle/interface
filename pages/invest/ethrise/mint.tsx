@@ -2,6 +2,12 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import React, { useState, useEffect } from "react";
 
+// Import WalletConnect Connector
+import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
+
+// Import SVG Logo
+import RisedleLogo from '../../../public/logo.svg';
+
 // Import the useDapp
 import {
     useContractCalls,
@@ -37,12 +43,42 @@ const MintETHRISE: NextPage = () => {
     // 5. Otherwise user connected and ready to deposit
 
     // Setup hooks
-    const { activateBrowserWallet, account, deactivate, activate, active } = useEthers();
+    const { activateBrowserWallet, account, deactivate, activate, library, connector } = useEthers();
     console.debug("Risedle: account", account);
 
+    // Get the Kovan URL from .env file
+    let kovanURL = "";
+    if (process.env.NEXT_PUBLIC_KOVAN_URL) {
+        kovanURL = process.env.NEXT_PUBLIC_KOVAN_URL;
+    }
+
+    console.log(library)
+
+    // Setup WalletConnect Configuration
+    const walletconnect = new WalletConnectConnector({
+        rpc: {
+            42: kovanURL
+        },
+        qrcode: true, 
+        supportedChainIds: [42],
+        chainId: 42,
+    })
+
+    // Activate WalletConnect
+    const connectWalletConnect = async() => {
+        await activate(walletconnect, undefined, true).catch((error) => {
+            console.log(error)
+        });
+    }
+
+    // Automatically connect to WalletConnect on page refresh (if already authenticated)
     useEffect(() => {
-        console.log(account);
-    }, [active])
+        if(localStorage.getItem('walletconnect')){
+            setTimeout(() => {
+                connectWalletConnect()
+            }, 1); 
+        }
+    }, [])
 
     // Check WETH allowance
     const allowance = useTokenAllowance(
@@ -129,7 +165,7 @@ const MintETHRISE: NextPage = () => {
                 <div className="mt-16">
                     <ConnectWalletPrompt
                         activateBrowserWallet={activateBrowserWallet}
-                        activate={activate}
+                        activateWalletConnect={connectWalletConnect}
                     />
                 </div>
             );
@@ -293,6 +329,9 @@ const MintETHRISE: NextPage = () => {
 
         // TODO (bayu): If we reach here, there is something wrong.
         // Display error here
+
+        // console.log("account:", account)
+        // console.log("allowance:", allowance)
     };
 
     return (
@@ -307,7 +346,7 @@ const MintETHRISE: NextPage = () => {
             <Favicon />
             <Navigation
                 account={account}
-                deactivate={deactivate}
+                deactivate={async() => deactivate()}
             />
             {mainDisplay(account, allowance)}
         </div>

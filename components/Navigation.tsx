@@ -17,7 +17,7 @@ import ThreeDots from "../public/three-dots.png";
 type NavigationProps = {
     activeMenu?: string;
     account: string | null | undefined;
-    deactivate: () => void;
+    deactivate: () => Promise<void>;
 };
 
 /**

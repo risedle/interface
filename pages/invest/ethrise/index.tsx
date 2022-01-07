@@ -16,7 +16,7 @@ import ETHRISE_ICON from "../../../public/ETHRISE_ICON.png";
 
 const ETHRISE: NextPage = () => {
     // Setup hooks
-    const { account, activateBrowserWallet, deactivate } = useEthers();
+    const { account, deactivate } = useEthers();
 
     // Read data from chain
     const results = useContractCalls([
@@ -57,8 +57,7 @@ const ETHRISE: NextPage = () => {
             <Navigation
                 activeMenu="ETHRISE"
                 account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
+                deactivate={async() => deactivate()}
             />
             <div className="mt-8 gap gap-y-8 flex flex-col">
                 <DetailHeader

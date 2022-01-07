@@ -1,6 +1,9 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+// Import wallet connect connector
+import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
 
 // Import the useDapp
 import {
@@ -35,8 +38,42 @@ const LendWithdraw: NextPage = () => {
     // 5. Otherwise user connected and ready to deposit
 
     // Setup hooks
-    const { activateBrowserWallet, account, deactivate } = useEthers();
+    const { activateBrowserWallet, account, deactivate, activate } = useEthers();
     console.debug("Risedle: account", account);
+
+    // Get the Kovan URL from .env file
+    let kovanURL = "";
+    if (process.env.NEXT_PUBLIC_KOVAN_URL) {
+        kovanURL = process.env.NEXT_PUBLIC_KOVAN_URL;
+    }
+
+    // Setup Wallet Connect Configuration
+    const walletconnect = new WalletConnectConnector({
+        rpc: {
+            42: kovanURL
+        },
+        bridge: "https://bridge.walletconnect.org",
+        qrcode: true, 
+        supportedChainIds: [42],
+        chainId: 42
+    })
+
+    // Activate WalletConnect
+    const connectWalletConnect = async() => {
+        await activate(walletconnect, undefined, true).catch((error) => {
+            console.log(error)
+        });
+    }
+
+    // Automatically connect to WalletConnect on page refresh (if already authenticated)
+    useEffect(() => {
+        console.log(localStorage.getItem('walletconnect'))
+        if(localStorage.getItem('walletconnect')){
+            setTimeout(() => {
+                connectWalletConnect()
+            }, 1); 
+        }
+    }, [])
 
     // Check vault token allowance
     const allowance = useTokenAllowance(
@@ -132,6 +169,7 @@ const LendWithdraw: NextPage = () => {
                 <div className="mt-16">
                     <ConnectWalletPrompt
                         activateBrowserWallet={activateBrowserWallet}
+                        activateWalletConnect={connectWalletConnect}
                     />
                 </div>
             );
@@ -294,8 +332,7 @@ const LendWithdraw: NextPage = () => {
             <Favicon />
             <Navigation
                 account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
+                deactivate={async() => deactivate()}
             />
             {mainDisplay(account, allowance)}
         </div>
