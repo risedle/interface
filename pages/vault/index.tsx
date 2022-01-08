@@ -17,7 +17,7 @@ import USDC_ICON from "../../public/USDC_ICON.png";
 // Import ABIs
 import RisedleMarket from "../../abis/RisedleMarket";
 
-const Lend: NextPage = () => {
+const Vault: NextPage = () => {
     // Setup hooks
     const { account, activateBrowserWallet, deactivate } = useEthers();
 
@@ -148,9 +148,9 @@ const Lend: NextPage = () => {
                     title={`Earn ${APY} APY`}
                     subTitle={`TVL ${dollarUSLocale.format(TVL)} USDC`}
                     leftTitle="Deposit"
-                    leftPath="/lend/deposit"
+                    leftPath="/vault/deposit"
                     rightTitle="Withdraw"
-                    rightPath="/lend/withdraw"
+                    rightPath="/vault/withdraw"
                 />
                 <DetailCard items={cardItems} />
             </div>
@@ -158,4 +158,4 @@ const Lend: NextPage = () => {
     );
 };
 
-export default Lend;
+export default Vault;

@@ -16,7 +16,7 @@ import RisedleMarket from "../../abis/RisedleMarket";
 import AUMLoading from "../../components/AUMLoading";
 import AUMLoaded from "../../components/AUMLoaded";
 
-const Invest: NextPage = () => {
+const Products: NextPage = () => {
     // Setup hooks
     const { account, activateBrowserWallet, deactivate } = useEthers();
 
@@ -110,14 +110,14 @@ const Invest: NextPage = () => {
                     <ETFCard
                         title="ETHRISE"
                         subTitle="ETH 2x Leverage Risedle"
-                        etfURL="/invest/ethrise"
+                        etfURL="/products/ethrise"
                         navPrice={ethriseNAV}
                         change30d="--%"
                     />
                     <ETFCard
                         title="BTCRISE"
                         subTitle="BTC 2x Leverage Risedle"
-                        etfURL="/invest"
+                        etfURL="/products"
                         navPrice="-- USDC"
                         change30d="-- %"
                     />
@@ -127,4 +127,4 @@ const Invest: NextPage = () => {
     );
 };
 
-export default Invest;
+export default Products;
