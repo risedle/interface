@@ -66,9 +66,9 @@ const ETHRISE: NextPage = () => {
                     title="ETHRISE"
                     subTitle="Enjoy increased leverage with no liquidations for your ETH"
                     leftTitle="Mint"
-                    leftPath="/invest/ethrise/mint"
+                    leftPath="/products/ethrise/mint"
                     rightTitle="Redeem"
-                    rightPath="/invest/ethrise/redeem"
+                    rightPath="/products/ethrise/redeem"
                 />
                 <div
                     className="flex flex-col bg-gradient-to-t from-grey-100 rounded-2xl p-6 gap gap-y-4 mx-auto"
