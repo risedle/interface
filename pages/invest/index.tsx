@@ -93,12 +93,7 @@ const Invest: NextPage = () => {
                 />
             </Head>
             <Favicon />
-            <Navigation
-                activeMenu="invest"
-                account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
-            />
+            <Navigation activeMenu="invest" />
             <div className="mx-auto mt-16" style={{ width: "480px" }}>
                 <div>
                     <h1 className="text-white font-extrabold text-4xl m-0 leading-normal">

@@ -54,12 +54,7 @@ const ETHRISE: NextPage = () => {
                 />
             </Head>
             <Favicon />
-            <Navigation
-                activeMenu="ETHRISE"
-                account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
-            />
+            <Navigation activeMenu="ETHRISE" />
             <div className="mt-8 gap gap-y-8 flex flex-col">
                 <DetailHeader
                     image={ETHRISE_ICON.src}

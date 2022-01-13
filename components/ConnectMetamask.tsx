@@ -1,8 +1,8 @@
-import type { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { Fragment } from "react";
 
 // React useDapp
-import { shortenAddress } from "@usedapp/core";
+import { shortenAddress, useEthers } from "@usedapp/core";
 
 // Import button
 import ButtonOutline from "./ButtonOutline";
@@ -13,9 +13,9 @@ import ButtonBlueSecondary from "./ButtonBlueSecondary";
  * Component Button
  */
 type ConnectMetamaskProps = {
-    account: string | null | undefined;
-    activateBrowserWallet: () => void;
-    deactivate: () => void;
+    account?: string | null | undefined;
+    activateBrowserWallet?: () => void;
+    deactivate?: () => void;
 };
 
 /**
@@ -23,24 +23,30 @@ type ConnectMetamaskProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({
-    account,
-    activateBrowserWallet,
-    deactivate,
-}) => {
-    let isAccountConnected = false;
-    let shortAccountAddress = "NOT_CONNECTED";
-    if (account) {
-        isAccountConnected = true;
-        shortAccountAddress = shortenAddress(account);
-    }
+const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({}) => {
+    const { active, account, deactivate, activateBrowserWallet } = useEthers();
+    const [detectedLogged, setDetectedLogged] = useState(false);
+    const checkCorrectNetwork = async () => {
+        const data = await window.ethereum.request({
+            method: "eth_requestAccounts",
+        });
+        if (data.length > 0) {
+            setDetectedLogged(true);
+        }
+    };
 
-    if (isAccountConnected) {
+    useEffect(() => {
+        checkCorrectNetwork();
+    }, []);
+
+    if (account || detectedLogged) {
         return (
             <div className="flex flex-row gap gap-x-2">
                 <div>
                     <ButtonBlueSecondary>
-                        {shortAccountAddress}
+                        {account
+                            ? shortenAddress(account)
+                            : "Change your network"}
                     </ButtonBlueSecondary>
                 </div>
                 <div>

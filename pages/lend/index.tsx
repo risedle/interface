@@ -136,12 +136,7 @@ const Lend: NextPage = () => {
                 />
             </Head>
             <Favicon />
-            <Navigation
-                activeMenu="lend"
-                account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
-            />
+            <Navigation activeMenu="lend" />
             <div className="mt-8 gap gap-y-8 flex flex-col">
                 <DetailHeader
                     image={USDC_ICON.src}

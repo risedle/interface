@@ -292,11 +292,7 @@ const LendWithdraw: NextPage = () => {
                 />
             </Head>
             <Favicon />
-            <Navigation
-                account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
-            />
+            <Navigation />
             {mainDisplay(account, allowance)}
         </div>
     );
