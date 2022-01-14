@@ -2,10 +2,10 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 // Import components
-import Invest from "./invest";
+import Products from "./products";
 
 const Home: NextPage = () => {
-    return <Invest />;
+    return <Products />;
 };
 
 export default Home;
