@@ -19,6 +19,7 @@ module.exports = {
                 },
                 gray: {
                     light: {
+                        1: "#FCFCFC",
                         2: "#F8F8F8",
                         5: "#E8E8E8",
                         12: "#171717",
