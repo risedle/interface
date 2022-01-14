@@ -19,7 +19,7 @@ type NavigationProps = {};
 const Navigation: FunctionComponent<NavigationProps> = ({}) => {
     return (
         <div className="flex flex-row p-4 items-center">
-            <div className="basis-1/2">
+            <div className="basis-4/12">
                 <Link href="/">
                     <a>
                         <Logo />
@@ -29,7 +29,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                     </a>
                 </Link>
             </div>
-            <div className="basis-1/2 flex flex-row-reverse text-right">
+            <div className="basis-8/12 flex flex-row-reverse text-right">
                 <div className="ml-2">
                     <ButtonLaunchBasic />
                 </div>
