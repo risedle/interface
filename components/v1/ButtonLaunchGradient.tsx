@@ -16,7 +16,7 @@ const ButtonLaunchGradient: FunctionComponent<ButtonLaunchGradientProps> =
         return (
             <Link href="/app">
                 <a
-                    className="font-inter text-sm font-bold py-3 px-12 rounded-full leading-none inline-block"
+                    className="font-inter text-sm sm:text-base md:text-lg font-bold py-3 px-12 rounded-full leading-none inline-block"
                     style={{
                         background:
                             "radial-gradient(91.36% 358.74% at 12.29% 100%, #C9BBFF 0%, #B2ECFF 30.08%, #FFC1F9 60.28%, #FFF5C1 100%)",

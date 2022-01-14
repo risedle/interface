@@ -16,14 +16,17 @@ type HeroProps = {};
  */
 const Hero: FunctionComponent<HeroProps> = ({}) => {
     return (
-        <div className="flex flex-col px-4 text-center py-32">
+        <div
+            className="flex flex-col px-4 text-center justify-center overflow-hidden relative max-w-screen-md m-auto"
+            style={{ height: "679px" }}
+        >
             <div>
-                <p className="text-xs font-semibold text-gray-light-10 dark:text-gray-dark-10 uppercase text-center mb-4 tracking-widest">
+                <p className="text-xs sm:text-sm md:text-base font-semibold text-gray-light-10 dark:text-gray-dark-10 uppercase text-center mb-4 tracking-widest">
                     Introducing, Risedle
                 </p>
             </div>
             <div>
-                <h1 className="text-3xl font-bold m-0 text-gray-light-12 dark:text-gray-dark-12 mb-6">
+                <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold m-0 text-gray-light-12 dark:text-gray-dark-12 mb-6">
                     Permissionless{" "}
                     <span
                         className="bg-clip-text text-transparent"
@@ -38,7 +41,7 @@ const Hero: FunctionComponent<HeroProps> = ({}) => {
                 </h1>
             </div>
             <div>
-                <h2 className="text-gray-light-10 dark:text-gray-dark-10 text-base mb-10">
+                <h2 className="text-base sm:text-2xl md:text-3xl text-gray-light-10 dark:text-gray-dark-10 mb-10">
                     A simple way to get leveraged exposure to a variety of
                     tokens without risk of liquidation and earn high yield by
                     lending a token.
@@ -53,7 +56,7 @@ const Hero: FunctionComponent<HeroProps> = ({}) => {
                 viewBox="0 0 679 679"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="-z-50 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 stroke-gray-light-12 dark:stroke-white"
+                className="-z-50 absolute left-1/2 -translate-x-1/2  stroke-gray-light-12 dark:stroke-white object-cover overflow-clip"
             >
                 <g opacity="0.5">
                     <circle opacity="0.1" cx="339.499" cy="339.5" r="130.173" />

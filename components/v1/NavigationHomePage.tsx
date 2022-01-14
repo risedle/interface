@@ -31,10 +31,10 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
             </div>
             <div className="basis-8/12 flex flex-row-reverse text-right">
                 <div className="ml-2">
-                    <ButtonLaunchBasic />
+                    <ButtonThemeSwitcher />
                 </div>
                 <div>
-                    <ButtonThemeSwitcher />
+                    <ButtonLaunchBasic />
                 </div>
             </div>
         </div>
