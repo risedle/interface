@@ -19,7 +19,14 @@ module.exports = {
                 },
                 gray: {
                     light: {
+                        2: "#F8F8F8",
+                        5: "#E8E8E8",
                         12: "#171717",
+                    },
+                    dark: {
+                        2: "#1C1C1C",
+                        5: "#2E2E2E",
+                        12: "#EDEDED",
                     },
                 },
             },
