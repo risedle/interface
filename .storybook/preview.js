@@ -1,3 +1,5 @@
+import { INITIAL_VIEWPORTS } from "@storybook/addon-viewport";
+
 // Import tailwind in storybook preview
 import "tailwindcss/tailwind.css";
 
@@ -11,6 +13,9 @@ Object.defineProperty(NextImage, "default", {
 });
 
 export const parameters = {
+    viewport: {
+        viewports: INITIAL_VIEWPORTS,
+    },
     actions: { argTypesRegex: "^on[A-Z].*" },
     controls: {
         matchers: {
