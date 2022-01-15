@@ -1,5 +1,4 @@
 import type { FunctionComponent } from "react";
-import Link from "next/link";
 
 // Import components
 import ButtonLaunchGradient from "./ButtonLaunchGradient";
@@ -16,54 +15,51 @@ type HeroProps = {};
  */
 const Hero: FunctionComponent<HeroProps> = ({}) => {
     return (
-        <div
-            className="flex flex-col px-4 text-center justify-center overflow-hidden relative max-w-screen-md m-auto"
-            style={{ height: "679px" }}
-        >
-            <div>
-                <p className="text-xs sm:text-sm md:text-base font-semibold text-gray-light-10 dark:text-gray-dark-10 uppercase text-center mb-4 tracking-widest">
-                    Introducing, Risedle
-                </p>
-            </div>
-            <div>
-                <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold m-0 text-gray-light-12 dark:text-gray-dark-12 mb-6">
-                    Permissionless{" "}
-                    <span
-                        className="bg-clip-text text-transparent"
-                        style={{
-                            backgroundImage:
-                                "radial-gradient(91.36% 358.74% at 12.29% 100%, #9D85FF 0%, #7AD4F0 30.08%, #F554E5 60.28%, #E7CF55 100%)",
-                        }}
-                    >
-                        Leveraged
-                    </span>{" "}
-                    Token Market Protocol
-                </h1>
-            </div>
-            <div>
-                <h2 className="text-base sm:text-2xl md:text-3xl text-gray-light-10 dark:text-gray-dark-10 mb-10">
-                    A simple way to get leveraged exposure to a variety of
-                    tokens without risk of liquidation and earn high yield by
-                    lending a token.
-                </h2>
-            </div>
-            <div>
-                <ButtonLaunchGradient />
+        <div className="relative w-full justify-center overflow-hidden">
+            <div className="flex flex-col px-4 text-center max-w-screen-md m-auto align-middle py-32">
+                <div>
+                    <p className="text-xs sm:text-sm md:text-base font-semibold text-gray-light-10 dark:text-gray-dark-10 uppercase text-center mb-4 tracking-widest">
+                        Introducing, Risedle
+                    </p>
+                </div>
+                <div>
+                    <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold m-0 text-gray-light-12 dark:text-gray-dark-12 mb-6">
+                        Permissionless{" "}
+                        <span
+                            className="bg-clip-text text-transparent"
+                            style={{
+                                backgroundImage:
+                                    "radial-gradient(91.36% 358.74% at 12.29% 100%, #9D85FF 0%, #7AD4F0 30.08%, #F554E5 60.28%, #E7CF55 100%)",
+                            }}
+                        >
+                            Leveraged
+                        </span>{" "}
+                        Token Market Protocol
+                    </h1>
+                </div>
+                <div className="max-w-lg mx-auto">
+                    <h2 className="text-base text-gray-light-10 dark:text-gray-dark-10 mb-10 ">
+                        A simple way to get leveraged exposure to a variety of
+                        tokens without risk of liquidation and earn high yield
+                        by lending a token.
+                    </h2>
+                </div>
+                <div>
+                    <ButtonLaunchGradient />
+                </div>
             </div>
             <svg
-                width="679"
-                height="679"
-                viewBox="0 0 679 679"
+                width="100%"
+                viewBox="0 0 1159 1027"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="-z-50 absolute left-1/2 -translate-x-1/2  stroke-gray-light-12 dark:stroke-white object-cover overflow-clip"
+                className="-z-50 absolute top-0 md:-top-1/4 left-1/2 -translate-x-1/2  stroke-gray-light-12 dark:stroke-white max-w-screen-xl"
+                style={{ minWidth: "619px" }}
             >
-                <g opacity="0.5">
-                    <circle opacity="0.1" cx="339.499" cy="339.5" r="130.173" />
-                    <circle opacity="0.1" cx="339.5" cy="339.5" r="175.19" />
-                    <circle opacity="0.05" cx="339.5" cy="339.5" r="227.709" />
-                    <circle opacity="0.1" cx="339.5" cy="339.5" r="339" />
-                </g>
+                <circle opacity="0.1" cx="579.5" cy="447.5" r="222.549" />
+                <circle opacity="0.1" cx="579.5" cy="447.5" r="299.389" />
+                <circle opacity="0.05" cx="579.5" cy="447.5" r="389.035" />
+                <circle opacity="0.1" cx="579.5" cy="447.5" r="579" />
             </svg>
         </div>
     );
