@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react";
 
-import Navigation from "../../components/v1/NavigationHomePage";
+import Navigation from "../../../components/v1/HomePage/Navigation";
 
 export default {
     component: Navigation,

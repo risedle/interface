@@ -1,6 +1,6 @@
 import React from "react";
 
-import SubHero from "../../components/v1/SubHero";
+import SubHero from "../../../components/v1/HomePage/SubHero";
 
 export default {
     component: SubHero,

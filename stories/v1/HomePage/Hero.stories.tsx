@@ -1,6 +1,6 @@
 import React from "react";
 
-import Hero from "../../components/v1/Hero";
+import Hero from "../../../components/v1/HomePage/Hero";
 
 export default {
     component: Hero,
