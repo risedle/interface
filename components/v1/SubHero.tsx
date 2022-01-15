@@ -1418,7 +1418,7 @@ const SubHero: FunctionComponent<SubHeroProps> = ({}) => {
                         y2="312"
                         gradientUnits="userSpaceOnUse"
                     >
-                        <stop stop-opacity="0" />
+                        <stop stopOpacity="0" />
                         <stop offset="1" />
                     </linearGradient>
                 </defs>
