@@ -35,6 +35,22 @@ module.exports = {
                         12: "#EDEDED",
                     },
                 },
+                violet: {
+                    light: {
+                        3: "#F5F2FF",
+                    },
+                    dark: {
+                        2: "#1C172B",
+                    },
+                },
+                blue: {
+                    light: {
+                        3: "#EDF6FF",
+                    },
+                    dark: {
+                        2: "#0F1B2D",
+                    },
+                },
             },
             opacity: {
                 8: ".08",
