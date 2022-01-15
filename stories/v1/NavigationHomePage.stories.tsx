@@ -4,7 +4,7 @@ import Navigation from "../../components/v1/NavigationHomePage";
 
 export default {
     component: Navigation,
-    title: "Risedle V1/Navigation/Home Page",
+    title: "Risedle V1/Home Page/Navigation",
 } as Meta;
 
 const Template: Story<{}> = () => {
