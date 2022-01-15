@@ -400,39 +400,36 @@ const FeatureCardOneColumn: FunctionComponent<FeatureCardOneColumnProps> =
                                     gradientUnits="userSpaceOnUse"
                                     gradientTransform="translate(-4.00001 147.857) rotate(46.5376) scale(207.055 159.018)"
                                 >
-                                    <stop stop-color="white" />
+                                    <stop stopColor="white" />
                                     <stop
                                         offset="0.144436"
-                                        stop-color="#FFDEFC"
+                                        stopColor="#FFDEFC"
                                     />
                                     <stop
                                         offset="0.193304"
-                                        stop-color="#FFFDEE"
+                                        stopColor="#FFFDEE"
                                     />
                                     <stop
                                         offset="0.195836"
-                                        stop-color="#FDF7DF"
+                                        stopColor="#FDF7DF"
                                     />
                                     <stop
                                         offset="0.392662"
-                                        stop-color="#FFF4FE"
+                                        stopColor="#FFF4FE"
                                     />
                                     <stop
                                         offset="0.421805"
-                                        stop-color="#FFDEFC"
+                                        stopColor="#FFDEFC"
                                     />
                                     <stop
                                         offset="0.510216"
-                                        stop-color="#BAF3FF"
+                                        stopColor="#BAF3FF"
                                     />
                                     <stop
                                         offset="0.554709"
-                                        stop-color="#E6FAFF"
+                                        stopColor="#E6FAFF"
                                     />
-                                    <stop
-                                        offset="0.635733"
-                                        stop-color="white"
-                                    />
+                                    <stop offset="0.635733" stopColor="white" />
                                 </radialGradient>
                                 <radialGradient
                                     id="paint1_radial_479_19186"
@@ -442,39 +439,36 @@ const FeatureCardOneColumn: FunctionComponent<FeatureCardOneColumnProps> =
                                     gradientUnits="userSpaceOnUse"
                                     gradientTransform="translate(-4.00001 147.857) rotate(46.5376) scale(207.055 159.018)"
                                 >
-                                    <stop stop-color="white" />
+                                    <stop stopColor="white" />
                                     <stop
                                         offset="0.144436"
-                                        stop-color="#FFDEFC"
+                                        stopColor="#FFDEFC"
                                     />
                                     <stop
                                         offset="0.193304"
-                                        stop-color="#FFFDEE"
+                                        stopColor="#FFFDEE"
                                     />
                                     <stop
                                         offset="0.195836"
-                                        stop-color="#FDF7DF"
+                                        stopColor="#FDF7DF"
                                     />
                                     <stop
                                         offset="0.392662"
-                                        stop-color="#FFF4FE"
+                                        stopColor="#FFF4FE"
                                     />
                                     <stop
                                         offset="0.421805"
-                                        stop-color="#FFDEFC"
+                                        stopColor="#FFDEFC"
                                     />
                                     <stop
                                         offset="0.510216"
-                                        stop-color="#BAF3FF"
+                                        stopColor="#BAF3FF"
                                     />
                                     <stop
                                         offset="0.554709"
-                                        stop-color="#E6FAFF"
+                                        stopColor="#E6FAFF"
                                     />
-                                    <stop
-                                        offset="0.635733"
-                                        stop-color="white"
-                                    />
+                                    <stop offset="0.635733" stopColor="white" />
                                 </radialGradient>
                                 <radialGradient
                                     id="paint2_radial_479_19186"
@@ -484,39 +478,36 @@ const FeatureCardOneColumn: FunctionComponent<FeatureCardOneColumnProps> =
                                     gradientUnits="userSpaceOnUse"
                                     gradientTransform="translate(236 147.857) rotate(46.5376) scale(207.055 159.018)"
                                 >
-                                    <stop stop-color="white" />
+                                    <stop stopColor="white" />
                                     <stop
                                         offset="0.144436"
-                                        stop-color="#FFDEFC"
+                                        stopColor="#FFDEFC"
                                     />
                                     <stop
                                         offset="0.193304"
-                                        stop-color="#FFFDEE"
+                                        stopColor="#FFFDEE"
                                     />
                                     <stop
                                         offset="0.195836"
-                                        stop-color="#FDF7DF"
+                                        stopColor="#FDF7DF"
                                     />
                                     <stop
                                         offset="0.392662"
-                                        stop-color="#FFF4FE"
+                                        stopColor="#FFF4FE"
                                     />
                                     <stop
                                         offset="0.421805"
-                                        stop-color="#FFDEFC"
+                                        stopColor="#FFDEFC"
                                     />
                                     <stop
                                         offset="0.510216"
-                                        stop-color="#BAF3FF"
+                                        stopColor="#BAF3FF"
                                     />
                                     <stop
                                         offset="0.554709"
-                                        stop-color="#E6FAFF"
+                                        stopColor="#E6FAFF"
                                     />
-                                    <stop
-                                        offset="0.635733"
-                                        stop-color="white"
-                                    />
+                                    <stop offset="0.635733" stopColor="white" />
                                 </radialGradient>
                                 <radialGradient
                                     id="paint3_radial_479_19186"
@@ -526,39 +517,36 @@ const FeatureCardOneColumn: FunctionComponent<FeatureCardOneColumnProps> =
                                     gradientUnits="userSpaceOnUse"
                                     gradientTransform="translate(236 147.857) rotate(46.5376) scale(207.055 159.018)"
                                 >
-                                    <stop stop-color="white" />
+                                    <stop stopColor="white" />
                                     <stop
                                         offset="0.144436"
-                                        stop-color="#FFDEFC"
+                                        stopColor="#FFDEFC"
                                     />
                                     <stop
                                         offset="0.193304"
-                                        stop-color="#FFFDEE"
+                                        stopColor="#FFFDEE"
                                     />
                                     <stop
                                         offset="0.195836"
-                                        stop-color="#FDF7DF"
+                                        stopColor="#FDF7DF"
                                     />
                                     <stop
                                         offset="0.392662"
-                                        stop-color="#FFF4FE"
+                                        stopColor="#FFF4FE"
                                     />
                                     <stop
                                         offset="0.421805"
-                                        stop-color="#FFDEFC"
+                                        stopColor="#FFDEFC"
                                     />
                                     <stop
                                         offset="0.510216"
-                                        stop-color="#BAF3FF"
+                                        stopColor="#BAF3FF"
                                     />
                                     <stop
                                         offset="0.554709"
-                                        stop-color="#E6FAFF"
+                                        stopColor="#E6FAFF"
                                     />
-                                    <stop
-                                        offset="0.635733"
-                                        stop-color="white"
-                                    />
+                                    <stop offset="0.635733" stopColor="white" />
                                 </radialGradient>
                                 <clipPath id="clip0_479_19186">
                                     <rect

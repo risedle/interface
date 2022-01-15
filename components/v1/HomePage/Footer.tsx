@@ -17,7 +17,7 @@ type FooterProps = {};
  */
 const Footer: FunctionComponent<FooterProps> = ({}) => {
     return (
-        <div className="flex flex-col sm:flex-row w-full border-t border-gray-light-3 dark:border-gray-dark-3">
+        <div className="flex flex-col sm:flex-row w-full border-t border-gray-light-3 dark:border-gray-dark-3 pb-8">
             <div className="px-4 mt-6 sm:my-6 flex-none sm:self-center">
                 <Link href="/">
                     <a>

@@ -21,7 +21,7 @@ function RisedleApp({ Component, pageProps }: AppProps) {
     // Simulate inside app page
     return (
         <DAppProvider config={config}>
-            <Component {...pageProps} />;
+            <Component {...pageProps} />
         </DAppProvider>
     );
 }

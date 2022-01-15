@@ -16,7 +16,7 @@ type HeroProps = {};
 const Hero: FunctionComponent<HeroProps> = ({}) => {
     return (
         <div className="relative w-full justify-center overflow-hidden">
-            <div className="flex flex-col px-4 text-center max-w-screen-md m-auto align-middle py-32">
+            <div className="z-10 relative flex flex-col px-4 text-center max-w-screen-md m-auto align-middle py-32">
                 <div>
                     <p className="text-xs sm:text-sm md:text-base font-semibold text-gray-light-10 dark:text-gray-dark-10 uppercase text-center mb-4 tracking-widest">
                         Introducing, Risedle
@@ -53,7 +53,7 @@ const Hero: FunctionComponent<HeroProps> = ({}) => {
                 viewBox="0 0 1159 1027"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="-z-50 absolute top-0 md:-top-1/4 left-1/2 -translate-x-1/2  stroke-gray-light-12 dark:stroke-white max-w-screen-xl"
+                className="z-0 absolute top-0 md:-top-1/4 left-1/2 -translate-x-1/2 stroke-gray-light-12 dark:stroke-white max-w-screen-xl"
                 style={{ minWidth: "619px" }}
             >
                 <circle opacity="0.1" cx="579.5" cy="447.5" r="222.549" />

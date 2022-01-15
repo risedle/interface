@@ -18,18 +18,45 @@ type NavigationProps = {};
  */
 const Navigation: FunctionComponent<NavigationProps> = ({}) => {
     return (
-        <div className="flex flex-row p-4 items-center">
-            <div className="basis-4/12">
+        <div className="flex flex-row p-4 items-center sm:justify-between">
+            <div className="flex-none">
                 <Link href="/">
                     <a>
                         <Logo />
-                        <span className="text-base font-inter font-bold pl-2 traking-tight text-gray-light-12 dark:text-gray-light-1">
+                        <span className="text-base font-inter font-bold pl-2 traking-tight text-gray-light-12 dark:text-gray-light-1 self-center leading-0">
                             Risedle
                         </span>
                     </a>
                 </Link>
             </div>
-            <div className="basis-8/12 flex flex-row-reverse text-right">
+            <div className="hidden sm:block flex-none flex flex-row space-x-4 text-center">
+                <Link href="https://twitter.com/risedle">
+                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
+                        Docs &#8599;
+                    </a>
+                </Link>
+                <Link href="https://discord.com/invite/YCSCd97SXj">
+                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
+                        Blog &#8599;
+                    </a>
+                </Link>
+                <Link href="https://github.com/risedle">
+                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
+                        Communities
+                    </a>
+                </Link>
+                <Link href="https://github.com/risedle">
+                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
+                        Resources
+                    </a>
+                </Link>
+                <Link href="https://github.com/risedle">
+                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
+                        About
+                    </a>
+                </Link>
+            </div>
+            <div className="grow sm:flex-none flex flex-row-reverse text-right">
                 <div className="ml-2">
                     <ButtonThemeSwitcher />
                 </div>

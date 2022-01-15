@@ -17,7 +17,7 @@ const Logo: FunctionComponent<LogoProps> = ({}) => {
             height="24"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
-            className="fill-gray-light-12 dark:fill-white"
+            className="fill-gray-light-12 dark:fill-white inline-block"
         >
             <path
                 fillRule="evenodd"

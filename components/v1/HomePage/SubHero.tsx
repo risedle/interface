@@ -13,7 +13,7 @@ type SubHeroProps = {};
 const SubHero: FunctionComponent<SubHeroProps> = ({}) => {
     return (
         <div className="relative w-full justify-center overflow-hidden">
-            <div className="flex flex-col px-4 text-center max-w-screen-md m-auto">
+            <div className="relative z-10 flex flex-col px-4 text-center max-w-screen-md m-auto">
                 <div className="mt-20 sm:mt-64">
                     <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold m-0 text-gray-light-12 dark:text-gray-dark-12">
                         Less{" "}
@@ -43,7 +43,7 @@ const SubHero: FunctionComponent<SubHeroProps> = ({}) => {
                 width="100%"
                 viewBox="0 0 375 312"
                 xmlns="http://www.w3.org/2000/svg"
-                className="-z-50 absolute top-0 left-1/2 -translate-x-1/2  fill-gray-light-12 dark:fill-white max-w-3xl"
+                className="z-0 absolute top-0 left-1/2 -translate-x-1/2  fill-gray-light-12 dark:fill-white max-w-3xl"
             >
                 <mask
                     id="mask0_479_18846"
