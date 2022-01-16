@@ -21,7 +21,7 @@ type NavigationProps = {};
 const Navigation: FunctionComponent<NavigationProps> = ({}) => {
     return (
         <div className="flex flex-row p-4 items-center justify-between">
-            <div className="flex-none w-[40px]">
+            <div className="flex-none w-[40px] lg:w-[359.25px]">
                 <Link href="/">
                     <a>
                         <Logo />
