@@ -106,10 +106,11 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> =
 
                             <div className="text-center p-4 border-t border-gray-light-3 dark:border-gray-dark-3 border-dashed m-0">
                                 <p className="text-gray-light-11 dark:text-gray-dark-11 text-xs leading-1">
-                                    Don't see you network? Chat us on{" "}
+                                    Don&apos;t see you network? Chat us on{" "}
                                     <a
                                         className="underline text-gray-light-12 dark:text-gray-dark-12"
                                         target="_blank"
+                                        rel="noreferrer"
                                         href={RisedleLinks.discord}
                                     >
                                         discord
