@@ -48,7 +48,7 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> =
                         <Dialog.Overlay className="fixed inset-0 bg-white/20 dark:bg-black/20 backdrop-blur" />
 
                         <div className="flex flex-col relative bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px] max-w-sm mx-auto">
-                            <Dialog.Title className="text-center p-4 border-b border-gray-light-3 dark:border-gray-dark-3 border-dashed m-0">
+                            <Dialog.Title className="text-center pr-4 py-4 pl-[49px] border-b border-gray-light-3 dark:border-gray-dark-3 border-dashed m-0">
                                 <span className="text-base leading-none font-bold text-gray-light-12 dark:text-gray-dark-12">
                                     Switch a Network
                                 </span>
@@ -130,7 +130,7 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> =
                         alt={network.name}
                         className="inline-block self-center bg-gray-light-4 dark:bg-gray-dark-4 p-[6px] rounded-full"
                     />
-                    <span className="text-gray-light-12 dark:text-gray-dark-12 font-inter text-xs font-bold inline-block leading-none ml-2">
+                    <span className="text-gray-light-12 dark:text-gray-dark-12 text-sm font-semibold inline-block leading-none ml-2">
                         {network.name}
                     </span>
                     <span className="w-[8px] h-[8px] rounded-full bg-sky-light-10 dark:bg-sky-dark-10 shadow-[0px_0px_12px] shadow-sky-light-10 inline-block ml-2"></span>

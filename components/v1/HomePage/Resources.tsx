@@ -1,6 +1,8 @@
 import type { FunctionComponent } from "react";
 import Link from "next/link";
 
+import RisedleLinks from "../../../utils/links";
+
 /**
  * ResourcesProps is a React Component properties that passed to React Component Resources
  */
@@ -14,8 +16,8 @@ type ResourcesProps = {};
 const Resources: FunctionComponent<ResourcesProps> = ({}) => {
     return (
         <div className="flex flex-col sm:flex-row px-4 gap-y-2 sm:gap-x-4 max-w-4xl m-auto">
-            <Link href="http://docs.risedle.com/">
-                <a className="bg-gray-light-3 dark:bg-gray-dark-2 p-4 rounded-lg sm:basis-1/3">
+            <Link href={RisedleLinks.docs}>
+                <a className="bg-gray-light-3 dark:bg-gray-dark-2 p-4 rounded-lg sm:basis-1/3 flex flex-row items-center">
                     <svg
                         width="15"
                         height="15"
@@ -31,8 +33,8 @@ const Resources: FunctionComponent<ResourcesProps> = ({}) => {
                     </span>
                 </a>
             </Link>
-            <Link href="https://discord.com/invite/YCSCd97SXj">
-                <a className="bg-violet-light-3 dark:bg-violet-dark-2 p-4 rounded-lg sm:basis-1/3">
+            <Link href={RisedleLinks.discord}>
+                <a className="bg-violet-light-3 dark:bg-violet-dark-2 p-4 rounded-lg sm:basis-1/3 flex flex-row items-center">
                     <svg
                         width="15"
                         height="15"
@@ -59,8 +61,8 @@ const Resources: FunctionComponent<ResourcesProps> = ({}) => {
                     </span>
                 </a>
             </Link>
-            <Link href="http://docs.risedle.com/">
-                <a className="bg-blue-light-3 p-4 dark:bg-blue-dark-2 rounded-lg sm:basis-1/3">
+            <Link href={RisedleLinks.twitter}>
+                <a className="bg-blue-light-3 p-4 dark:bg-blue-dark-2 rounded-lg sm:basis-1/3 flex flex-row items-center">
                     <svg
                         width="15"
                         height="15"

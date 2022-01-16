@@ -24,7 +24,7 @@ const Hero: FunctionComponent<HeroProps> = ({}) => {
                 </div>
                 <div>
                     <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold m-0 text-gray-light-12 dark:text-gray-dark-12 mb-6">
-                        Permissionless{" "}
+                        Decentralized{" "}
                         <span
                             className="bg-clip-text text-transparent"
                             style={{
@@ -39,9 +39,9 @@ const Hero: FunctionComponent<HeroProps> = ({}) => {
                 </div>
                 <div className="max-w-lg mx-auto">
                     <h2 className="text-base text-gray-light-10 dark:text-gray-dark-10 mb-10 ">
-                        A simple way to get leveraged exposure to a variety of
-                        tokens without risk of liquidation and earn high yield
-                        by lending a token.
+                        A simple way to generate leveraged gains from a variety
+                        of tokens without risk of liquidation and earn high
+                        yield on your stablecoins.
                     </h2>
                 </div>
                 <div>

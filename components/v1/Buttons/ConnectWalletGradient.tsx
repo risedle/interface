@@ -16,7 +16,7 @@ const ButtonConnectWalletGradient: FunctionComponent<ButtonConnectWalletGradient
         return (
             <Link href="/app">
                 <a
-                    className="text-gray-light-12 font-inter text-xs font-semibold py-3 px-4 rounded-full leading-none inline-block"
+                    className="text-gray-light-12 font-inter text-sm font-semibold py-3 px-4 rounded-full leading-4 inline-block"
                     style={{
                         background:
                             "radial-gradient(91.36% 358.74% at 12.29% 100%, #C9BBFF 0%, #B2ECFF 30.08%, #FFC1F9 60.28%, #FFF5C1 100%)",

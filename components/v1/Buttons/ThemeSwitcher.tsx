@@ -41,8 +41,7 @@ const ButtonThemeSwitcher: FunctionComponent<ButtonThemeSwitcherProps> =
 
         return (
             <button
-                className="rounded-full bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-5 dark:border-gray-dark-5 flex items-center justify-center"
-                style={{ height: "40px", width: "40px" }}
+                className="rounded-full bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-5 dark:border-gray-dark-5"
                 onClick={toggleTheme}
             >
                 <svg
@@ -50,7 +49,7 @@ const ButtonThemeSwitcher: FunctionComponent<ButtonThemeSwitcherProps> =
                     height="16"
                     viewBox="0 0 16 16"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="fill-gray-light-12 dark:hidden"
+                    className="fill-gray-light-12 dark:hidden m-[11px]"
                 >
                     <path
                         fillRule="evenodd"
@@ -63,7 +62,7 @@ const ButtonThemeSwitcher: FunctionComponent<ButtonThemeSwitcherProps> =
                     height="16"
                     viewBox="0 0 16 16"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="hidden fill-gray-dark-12 dark:block"
+                    className="hidden fill-gray-dark-12 dark:block m-[11px]"
                 >
                     <path
                         fillRule="evenodd"

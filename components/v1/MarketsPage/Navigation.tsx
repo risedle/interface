@@ -4,8 +4,9 @@ import Link from "next/link";
 // Import components
 import Logo from "../Logo";
 import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
-import ButtonLaunchBasic from "../Buttons/LaunchBasic";
 import ButtonConnectWalletGradient from "../Buttons/ConnectWalletGradient";
+import ButtonNetworkSwitcher from "../Buttons/NetworkSwitcher";
+import RisedleLinks from "../../../utils/links";
 
 /**
  * NavigationProps is a React Component properties that passed to React Component Navigation
@@ -19,47 +20,41 @@ type NavigationProps = {};
  */
 const Navigation: FunctionComponent<NavigationProps> = ({}) => {
     return (
-        <div className="flex flex-row p-4 items-center sm:justify-between">
-            <div className="flex-none">
+        <div className="flex flex-row p-4 items-center justify-between">
+            <div className="flex-none w-[40px]">
                 <Link href="/">
                     <a>
                         <Logo />
                     </a>
                 </Link>
             </div>
-            {/* <div className="hidden sm:block flex-none flex flex-row space-x-4 text-center">
-                <Link href="https://twitter.com/risedle">
-                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
+            <div className="flex flex-row space-x-4">
+                <Link href={RisedleLinks.docs}>
+                    <a
+                        target="_blank"
+                        className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center"
+                    >
                         Docs &#8599;
                     </a>
                 </Link>
-                <Link href="https://discord.com/invite/YCSCd97SXj">
-                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
-                        Blog &#8599;
+                <Link href={RisedleLinks.discord}>
+                    <a
+                        target="_blank"
+                        className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center"
+                    >
+                        Discord &#8599;
                     </a>
                 </Link>
-                <Link href="https://github.com/risedle">
-                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
-                        Communities
-                    </a>
-                </Link>
-                <Link href="https://github.com/risedle">
-                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
-                        Resources
-                    </a>
-                </Link>
-                <Link href="https://github.com/risedle">
-                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
-                        About
-                    </a>
-                </Link>
-            </div> */}
-            <div className="grow sm:flex-none flex flex-row-reverse text-right">
-                <div className="ml-2">
-                    <ButtonThemeSwitcher />
+            </div>
+            <div className="flex-none flex flex-row space-x-2 inline-block">
+                <div className="hidden sm:inline-block">
+                    <ButtonNetworkSwitcher />
                 </div>
-                <div>
+                <div className="hidden sm:inline-block">
                     <ButtonConnectWalletGradient />
+                </div>
+                <div className="inline-block h-[40px]">
+                    <ButtonThemeSwitcher />
                 </div>
             </div>
         </div>
