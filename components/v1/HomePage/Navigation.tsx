@@ -3,8 +3,8 @@ import Link from "next/link";
 
 // Import components
 import Logo from "../Logo";
-import ButtonThemeSwitcher from "../ButtonThemeSwitcher";
-import ButtonLaunchBasic from "../ButtonLaunchBasic";
+import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
+import ButtonLaunchBasic from "../Buttons/LaunchBasic";
 
 /**
  * NavigationProps is a React Component properties that passed to React Component Navigation

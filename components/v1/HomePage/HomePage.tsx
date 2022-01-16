@@ -8,7 +8,6 @@ import SubHero from "./SubHero";
 import FeatureCardOneColumn from "./FeatureCardOneColumn";
 import FeatureCardTwoColumns from "./FeatureCardTwoColumns";
 import HeroFooter from "./HeroFooter";
-import Resources from "./Resources";
 import Footer from "./Footer";
 import GoogleFont from "../GoogleFont";
 

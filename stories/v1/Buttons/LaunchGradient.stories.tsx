@@ -1,6 +1,6 @@
 import React from "react";
 
-import ButtonLaunchGradient from "../../components/v1/ButtonLaunchGradient";
+import ButtonLaunchGradient from "../../../components/v1/Buttons/LaunchGradient";
 
 export default {
     component: ButtonLaunchGradient,

@@ -1,7 +1,7 @@
 import type { FunctionComponent } from "react";
 
 // Import components
-import ButtonLaunchGradient from "../ButtonLaunchGradient";
+import ButtonLaunchGradient from "../Buttons/LaunchGradient";
 
 /**
  * HeroProps is a React Component properties that passed to React Component Hero

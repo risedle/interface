@@ -3,7 +3,7 @@ import Link from "next/link";
 
 // Import components
 import Logo from "../Logo";
-import ButtonThemeSwitcherText from "../ButtonThemeSwitcherText";
+import ButtonThemeSwitcherText from "../Buttons/ThemeSwitcherText";
 
 /**
  * FooterProps is a React Component properties that passed to React Component Footer

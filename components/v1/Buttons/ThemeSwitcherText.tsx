@@ -52,7 +52,7 @@ const ButtonThemeSwitcherText: FunctionComponent<ButtonThemeSwitcherTextProps> =
                         Dark
                     </span>
                 </div>
-                <div className="">
+                <div className="self-center">
                     <svg
                         width="16"
                         height="16"

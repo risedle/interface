@@ -1,6 +1,6 @@
 import React from "react";
 
-import ButtonLaunchBasic from "../../components/v1/ButtonLaunchBasic";
+import ButtonLaunchBasic from "../../../components/v1/Buttons/LaunchBasic";
 
 export default {
     component: ButtonLaunchBasic,
