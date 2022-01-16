@@ -11,11 +11,14 @@
         "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook"
     },
     "dependencies": {
+        "@headlessui/react": "1.4.3",
         "@usedapp/coingecko": "^0.3.24",
         "@usedapp/core": "^0.5.2",
+        "ethers": "5.5.3",
         "next": "^12.0.7",
         "react": "^17.0.2",
-        "react-dom": "^17.0.2"
+        "react-dom": "^17.0.2",
+        "wagmi": "0.1.5"
     },
     "devDependencies": {
         "@babel/core": "^7.15.5",
