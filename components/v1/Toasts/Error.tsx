@@ -1,5 +1,4 @@
 import type { FunctionComponent, ReactNode } from "react";
-import Link from "next/link";
 
 /**
  * ToastErrorProps is a React Component properties that passed to React Component ToastError
@@ -38,7 +37,7 @@ const ToastError: FunctionComponent<ToastErrorProps> = ({ children }) => {
                 />
             </svg>
 
-            <span className="text-red-light-1 dark:text-gray-dark-12 text-xs font-semibold inline-block leading-4 ml-2">
+            <span className="text-red-light-1 dark:text-red-dark-12 text-xs font-semibold inline-block leading-4 ml-2">
                 {children}
             </span>
         </div>
