@@ -42,12 +42,9 @@ const ButtonConnectWalletGradient: FunctionComponent<ButtonConnectWalletGradient
             const result = await connect(connector);
             console.debug("connectWallet result", result);
             if (result && result.error) {
-                toast.custom(
-                    (t) => <ToastError>{result.error.message}</ToastError>,
-                    {
-                        position: "bottom-right",
-                    }
-                );
+                toast.custom((t) => (
+                    <ToastError>{result.error.message}</ToastError>
+                ));
             }
             if (result && result.data) {
                 toast("Wallet connected");
@@ -203,7 +200,7 @@ const ButtonConnectWalletGradient: FunctionComponent<ButtonConnectWalletGradient
                     Connect Wallet
                 </button>
 
-                <Toaster />
+                <Toaster position="bottom-right" />
             </>
         );
     };
