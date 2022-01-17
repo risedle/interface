@@ -13,15 +13,17 @@ export const connectorStorageKey = "risedleConnectors.wallet";
 
 export const supportedChains = [chain.arbitrumOne, chain.kovan];
 
-export const RisedleConnectors = [
-    new InjectedConnector({ chains: supportedChains }),
-    new WalletConnectConnector({
-        chains: supportedChains,
-        options: {
-            qrcode: true,
-        },
-    }),
-];
+// Wallet connectors
+export const MetaMaskConnector = new InjectedConnector({
+    chains: supportedChains,
+});
+
+export const WCConnector = new WalletConnectConnector({
+    chains: supportedChains,
+    options: {
+        qrcode: true,
+    },
+});
 
 // Providers
 export const ArbitrumOneProvider = new ethers.providers.JsonRpcProvider(
@@ -93,7 +95,7 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
         <WalletContext.Provider value={defaultValue}>
             <Provider
                 connectorStorageKey={connectorStorageKey}
-                connectors={RisedleConnectors}
+                connectors={[MetaMaskConnector, WCConnector]}
                 provider={provider}
             >
                 {children}
