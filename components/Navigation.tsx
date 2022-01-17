@@ -4,7 +4,7 @@ import type { FunctionComponent } from "react";
 import Logo from "./Logo";
 import Menu from "./Menu";
 import ButtonGrey from "./ButtonGrey";
-import ConnectMetamask from "./ConnectMetamask";
+import ConnectWallet from "./ConnectWallet";
 import ButtonOutlineCircle from "./ButtonOutlineCircle";
 
 // PNG files
