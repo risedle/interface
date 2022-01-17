@@ -10,6 +10,8 @@ import MetamaskIcon from "../../../public/wallet/Metamask.svg";
 import WalletConnectIcon from "../../../public/wallet/WalletConnect.svg";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import ToastError from "../Toasts/Error";
+import ToastInProgress from "../Toasts/InProgress";
+import ToastSuccess from "../Toasts/Success";
 
 /**
  * ButtonConnectWalletGradientProps is a React Component properties that passed to React Component ButtonConnectWalletGradient
@@ -38,6 +40,16 @@ const ButtonConnectWalletGradient: FunctionComponent<ButtonConnectWalletGradient
             connector: InjectedConnector | WalletConnectConnector
         ) => {
             setIsConnecting(true);
+            const connectingToast = toast.custom(
+                (t) => (
+                    <ToastInProgress>
+                        Connecting to {connector.name} ...
+                    </ToastInProgress>
+                ),
+                {
+                    duration: Infinity,
+                }
+            );
             setUsedConnector(connector.name);
             const result = await connect(connector);
             console.debug("connectWallet result", result);
@@ -47,8 +59,11 @@ const ButtonConnectWalletGradient: FunctionComponent<ButtonConnectWalletGradient
                 ));
             }
             if (result && result.data) {
-                toast("Wallet connected");
+                toast.custom((t) => (
+                    <ToastSuccess>{connector.name} connected</ToastSuccess>
+                ));
             }
+            toast.dismiss(connectingToast);
             setIsConnecting(false);
         };
 
