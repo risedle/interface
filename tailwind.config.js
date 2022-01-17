@@ -50,9 +50,11 @@ module.exports = {
                 blue: {
                     light: {
                         3: "#EDF6FF",
+                        5: "#CEE7FE",
                     },
                     dark: {
                         2: "#0F1B2D",
+                        5: "#0F3058",
                     },
                 },
                 sky: {
@@ -61,6 +63,29 @@ module.exports = {
                     },
                     dark: {
                         10: "#8AE8FF",
+                    },
+                },
+                orange: {
+                    light: {
+                        2: "#FEF8F4",
+                        5: "#FFDCC3",
+                    },
+                    dark: {
+                        2: "#2B1400",
+                        5: "#4F2305",
+                    },
+                },
+                red: {
+                    light: {
+                        1: "#FFFCFC",
+                        9: "#E5484D",
+                        10: "#DC3D43",
+                    },
+                    dark: {
+                        2: "#291415",
+                        5: "#541B1F",
+                        11: "#FF6369",
+                        12: "#FEECEE",
                     },
                 },
             },
