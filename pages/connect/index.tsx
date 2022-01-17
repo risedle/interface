@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 // Import components
 import Navigation from "../../components/Navigation";
 import ConnectWalletPrompt from "../../components/ConnectWalletPrompt";
+import Favicon from "../../components/Favicon";
 
 // Import wagmi
 import { useConnect, useAccount, useNetwork, chain } from "wagmi";
@@ -88,12 +89,14 @@ const Connect: NextPage = () => {
     return(
         <div>
             <Head>
-                <title>Risedle Protocol</title>
+                <title>Risedle</title>
                 <meta
                     name="description"
                     content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol"
                 />
+                
             </Head>
+            <Favicon />
             <Navigation/>
             <div className="mt-8">
                 <ConnectWalletPrompt
