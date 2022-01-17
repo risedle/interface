@@ -8,7 +8,7 @@ export default {
     title: "Risedle V1/Buttons/Connect Wallet Gradient",
 };
 
-export const Basic = () => {
+export const ConnectWalletGradient = () => {
     return (
         <Wallet>
             <ButtonConnectWalletGradient />
