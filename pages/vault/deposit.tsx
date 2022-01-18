@@ -1,22 +1,28 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 // Import the useDapp
 import {
-    useEthers,
     useTokenAllowance,
-    useContractFunction,
     getExplorerTransactionLink,
-    ChainId,
     useTokenBalance,
 } from "@usedapp/core";
-import { utils, constants, BigNumber, Contract } from "ethers";
+import { utils, constants, BigNumber } from "ethers";
+
+// Import wagmi
+import {
+    useAccount,
+    useContractWrite,
+    useWaitForTransaction,
+    useContractEvent,
+    chain
+} from 'wagmi'
 
 // Import components
 import Favicon from "../../components/Favicon";
 import Navigation from "../../components/Navigation";
-import ConnectWalletPrompt from "../../components/ConnectWalletPrompt";
 import ExchangeFormNotApproved from "../../components/ExchangeFormNotApproved";
 import ExchangeFormApproved from "../../components/ExchangeFormAprroved";
 import TransactionInProgress from "../../components/TransactionInProgress";
@@ -26,7 +32,7 @@ import TransactionIsCompleted from "../../components/TransactionIsCompleted";
 import RisedleMarket from "../../abis/RisedleMarket";
 import ERC20 from "../../abis/ERC20";
 
-const LendDeposit: NextPage = () => {
+const VaultDeposit: NextPage = () => {
     // 1. Check wether the account is connected or not
     // 2. If not, display the connect wallet prompt
     // 3. If connected, check the allowance
@@ -35,16 +41,22 @@ const LendDeposit: NextPage = () => {
     //    4.2 Show transaction completed in 2s, then display the deposit form
     // 5. Otherwise user connected and ready to deposit
 
-    // Read data from chain
-
     // Setup hooks
-    const { activateBrowserWallet, account, deactivate } = useEthers();
-    console.debug("Risedle: account", account);
+    const router = useRouter();
+    const [{data: accountData}, disconnect] = useAccount();
+    console.debug("Risedle: account", accountData?.address);
+
+    // Check if account is connected, if no user will be redirected to /connect
+    useEffect(() => {
+        if (!accountData?.address) {
+            router.push('/connect');
+        }
+    }, [accountData])
 
     // Check USDC allowance
     const allowance = useTokenAllowance(
         ERC20.usdc,
-        account,
+        accountData?.address,
         RisedleMarket.address
     );
     console.debug("Risedle: USDC Address", ERC20.usdc);
@@ -52,7 +64,7 @@ const LendDeposit: NextPage = () => {
 
     // Get USDC balance
     let usdcBalance = "0";
-    const usdcBalanceBigNum = useTokenBalance(ERC20.usdc, account);
+    const usdcBalanceBigNum = useTokenBalance(ERC20.usdc, accountData?.address);
     if (usdcBalanceBigNum) {
         usdcBalance = utils.formatUnits(usdcBalanceBigNum, 6);
         // Rounding down
@@ -62,82 +74,85 @@ const LendDeposit: NextPage = () => {
     }
     console.debug("Risedle: USDC Balance", usdcBalance);
 
-    // Create the USDC contract and function that we use
-    const usdcContract = new Contract(ERC20.usdc, ERC20.interface);
-    const usdcApproval = useContractFunction(usdcContract, "approve", {
-        transactionName: "Approve",
-    });
+    // Create function to approve USDC
+    const [usdcApprovalResult, writeUsdcApproval] = useContractWrite(
+        {
+            addressOrName: ERC20.usdc,
+            contractInterface: ERC20.interface,
+        },
+        'approve',
+    )
+
+    // Setup usdc approval transaction wait
+    const [ waitUsdcApprovalResult, waitUsdcApprovalFunc] = useWaitForTransaction({
+        wait: usdcApprovalResult.data?.wait
+    })
 
     // Setup states for the approval
-    let [isApprovalInProgress, setIsApprovalInProgress] = useState(false);
     let [isApprovalCompleted, setIsApprovalCompleted] = useState(false);
 
     // Get approval transaction link
     let usdcApprovalTransactionLink = "";
-    if (usdcApproval.state.transaction?.hash) {
-        const transactionHash = usdcApproval.state.transaction?.hash;
-        const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
+    if (usdcApprovalResult.data?.hash) {
+        const transactionHash = usdcApprovalResult.data?.hash;
+        const link = getExplorerTransactionLink(transactionHash, chain.kovan.id);
         if (link) {
             usdcApprovalTransactionLink = link;
         }
     }
 
-    // Create the Risedle contract and function that we use
-    const risedleContract = new Contract(
-        RisedleMarket.address,
-        RisedleMarket.interface
-    );
-    const risedleLendDeposit = useContractFunction(
-        risedleContract,
-        "addSupply(uint256)",
+    // Create function to deposit USDC
+    const [usdcDepositResult, writeUsdcDeposit] = useContractWrite(
         {
-            transactionName: "AddSupply",
-        }
-    );
+            addressOrName: RisedleMarket.address,
+            contractInterface: RisedleMarket.interface,
+        },
+        'addSupply',
+    )
+
+    // Setup usdc approval transaction wait
+    const [ waitUsdcDepositResult, waitUsdcDepositFunc] = useWaitForTransaction({
+        wait: usdcDepositResult.data?.wait
+    })
 
     // Setup states for the deposit process
-    let [isDepositInProgress, setIsDepositInProgress] = useState(false);
     let [isDepositCompleted, setIsDepositCompleted] = useState(false);
     let [depositAmount, setDepositAmount] = useState("0");
 
     // Get deposit transaction link
-    let risedleDeositTransactionLink = "";
-    if (risedleLendDeposit.state.transaction?.hash) {
-        const transactionHash = risedleLendDeposit.state.transaction?.hash;
-        const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
+    let risedleDepositTransactionLink = "";
+    if (usdcDepositResult.data?.hash) {
+        const transactionHash = usdcDepositResult.data?.hash;
+        const link = getExplorerTransactionLink(transactionHash, chain.kovan.id);
         if (link) {
-            risedleDeositTransactionLink = link;
+            risedleDepositTransactionLink = link;
         }
     }
+
+    //get minted rvUSDC amount event
+    const [mintedEvent, setMintedEvent] = useState([])
+    useContractEvent(
+        {
+            addressOrName: RisedleMarket.address,
+            contractInterface: RisedleMarket.interface
+        },
+        'VaultSupplyAdded',
+        (e) => setMintedEvent(e)
+    )
 
     // If deposit success, get minted amount
     // TODO(bayu): Handle error
     let mintedAmount = "0";
-    if (risedleLendDeposit.events) {
-        // Get the SupplyAdded event
-        const event = risedleLendDeposit.events.filter(
-            (log) => log.name == "VaultSupplyAdded"
-        );
-        const mintedAmountBigNumber = event[0].args.mintedAmount;
+    if (mintedEvent[3]) {
+        const mintedAmountBigNumber = mintedEvent[3];
         mintedAmount = utils.formatUnits(mintedAmountBigNumber, 6);
     }
 
     const mainDisplay = (
-        account: string | null | undefined,
         allowance: BigNumber | undefined
     ) => {
-        if (!account) {
-            return (
-                <div className="mt-16">
-                    <ConnectWalletPrompt
-                        activateBrowserWallet={activateBrowserWallet}
-                    />
-                </div>
-            );
-        }
-
         // If approval in progress, display the spinner
-        if (isApprovalInProgress) {
+        if (waitUsdcApprovalResult.loading) {
             return (
                 <div className="mt-16">
                     <TransactionInProgress
@@ -150,7 +165,7 @@ const LendDeposit: NextPage = () => {
         }
 
         // If approval is completed, display completed transaction in 2s
-        if (isApprovalCompleted) {
+        if (waitUsdcApprovalResult.data && isApprovalCompleted) {
             const onClose = () => {
                 setIsApprovalCompleted(false);
             };
@@ -168,22 +183,24 @@ const LendDeposit: NextPage = () => {
         }
 
         // If deposit in progress, display the spinner
-        if (isDepositInProgress) {
+        if (waitUsdcDepositResult.loading) {
             return (
                 <div className="mt-16">
                     <TransactionInProgress
                         title={`Depositing ${depositAmount} USDC`}
                         subTitle="It may take a few minutes"
-                        transactionLink={risedleDeositTransactionLink}
+                        transactionLink={risedleDepositTransactionLink}
                     />
                 </div>
             );
         }
 
         // If deposit is completed, display completed transaction in 20s
-        if (isDepositCompleted) {
+        if ( waitUsdcDepositResult.data && isDepositCompleted) {
             const onClose = () => {
                 setIsDepositCompleted(false);
+                setMintedEvent([]);
+                mintedAmount="0";
             };
 
             return (
@@ -191,7 +208,7 @@ const LendDeposit: NextPage = () => {
                     <TransactionIsCompleted
                         title="Deposit completed"
                         subTitle={`You have received ${mintedAmount} rvUSDC`}
-                        transactionLink={risedleDeositTransactionLink}
+                        transactionLink={risedleDepositTransactionLink}
                         onClose={onClose}
                     />
                 </div>
@@ -205,8 +222,8 @@ const LendDeposit: NextPage = () => {
                 return (
                     <div className="mt-16">
                         <ExchangeFormNotApproved
-                            backTitle="← Go back to lend"
-                            backURL="/lend"
+                            backTitle="← Go back to vault"
+                            backURL="/vault"
                             title="Deposit USDC"
                             subTitle="Earn variable interest rate instantly."
                             formTitle="Deposit amount"
@@ -215,17 +232,12 @@ const LendDeposit: NextPage = () => {
                             formInputTokenBalance={usdcBalance}
                             formOutputToken="rvUSDC"
                             onClickApprove={async () => {
-                                // Display spinner
-                                setIsApprovalInProgress(true);
-
                                 // Send the tx
-                                await usdcApproval.send(
-                                    RisedleMarket.address,
-                                    constants.MaxUint256
+                                await writeUsdcApproval(
+                                    {
+                                        args: [RisedleMarket.address, constants.MaxUint256]
+                                    }
                                 );
-
-                                // Turn of spinner
-                                setIsApprovalInProgress(false);
 
                                 // Display the completed
                                 setIsApprovalCompleted(true);
@@ -237,8 +249,8 @@ const LendDeposit: NextPage = () => {
                 return (
                     <div className="mt-16">
                         <ExchangeFormApproved
-                            backTitle="← Go back to lend"
-                            backURL="/lend"
+                            backTitle="← Go back to vault"
+                            backURL="/vault"
                             title="Deposit USDC"
                             subTitle="Earn variable interest rate instantly."
                             formTitle="Deposit amount"
@@ -251,9 +263,6 @@ const LendDeposit: NextPage = () => {
                                 // Set deposit amount for the spinbar
                                 setDepositAmount(amount);
 
-                                // Show the spinner
-                                setIsDepositInProgress(true);
-
                                 // Parse units
                                 const depositAmount = utils.parseUnits(
                                     amount,
@@ -261,10 +270,11 @@ const LendDeposit: NextPage = () => {
                                 );
 
                                 // Send tx
-                                await risedleLendDeposit.send(depositAmount);
-
-                                // Turn of the spinner
-                                setIsDepositInProgress(false);
+                                await writeUsdcDeposit(
+                                    {
+                                        args: depositAmount,
+                                    }
+                                );
 
                                 // Display the receipt
                                 setIsDepositCompleted(true);
@@ -290,13 +300,11 @@ const LendDeposit: NextPage = () => {
             </Head>
             <Favicon />
             <Navigation
-                account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
+                activeMenu="vault"
             />
-            {mainDisplay(account, allowance)}
+            {mainDisplay(allowance)}
         </div>
     );
 };
 
-export default LendDeposit;
+export default VaultDeposit;
