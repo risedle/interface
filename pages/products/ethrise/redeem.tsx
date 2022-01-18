@@ -1,23 +1,28 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 // Import the useDapp
 import {
-    useContractCalls,
-    useEthers,
     useTokenAllowance,
-    useContractFunction,
     getExplorerTransactionLink,
-    ChainId,
     useTokenBalance,
 } from "@usedapp/core";
-import { utils, constants, BigNumber, Contract } from "ethers";
+import { utils, constants, BigNumber } from "ethers";
+
+// Import wagmi
+import { 
+    useContractWrite, 
+    useWaitForTransaction,
+    useContractEvent,
+    useAccount,
+    chain 
+} from "wagmi";
 
 // Import components
 import Favicon from "../../../components/Favicon";
 import Navigation from "../../../components/Navigation";
-import ConnectWalletPrompt from "../../../components/ConnectWalletPrompt";
 import ExchangeFormNotApproved from "../../../components/ExchangeFormNotApproved";
 import ExchangeFormApproved from "../../../components/ExchangeFormAprroved";
 import TransactionInProgress from "../../../components/TransactionInProgress";
@@ -37,13 +42,21 @@ const RedeemETHRISE: NextPage = () => {
     // 5. Otherwise user connected and ready to deposit
 
     // Setup hooks
-    const { activateBrowserWallet, account, deactivate } = useEthers();
-    console.debug("Risedle: account", account);
+    const [{data: accountData}, disconnect] = useAccount();
+    const router = useRouter();
+    console.debug("Risedle: account", accountData?.address);
+
+    // Check if account is connected, if no user will be redirected to /connect
+    useEffect(() => {
+        if (!accountData?.address) {
+            router.push('/connect');
+        }
+    }, [accountData])
 
     // Check ETHRISE allowance
     const allowance = useTokenAllowance(
         RisedleMarket.ethrise,
-        account,
+        accountData?.address,
         RisedleMarket.address
     );
     console.debug("Risedle: allowance", allowance);
@@ -52,7 +65,7 @@ const RedeemETHRISE: NextPage = () => {
     let ethriseBalance = "0";
     const ethriseBalanceBigNum = useTokenBalance(
         RisedleMarket.ethrise,
-        account
+        accountData?.address
     );
     if (ethriseBalanceBigNum) {
         ethriseBalance = utils.formatUnits(ethriseBalanceBigNum, 18);
@@ -62,82 +75,85 @@ const RedeemETHRISE: NextPage = () => {
         ).toFixed(2);
     }
 
-    // Create the WETH contract and function that we use
-    const ethriseContract = new Contract(
-        RisedleMarket.ethrise,
-        ERC20.interface
-    );
-    const ethriseApproval = useContractFunction(ethriseContract, "approve", {
-        transactionName: "Approve",
-    });
-    console.debug("Risedle: RisedleMarket.ethrise", RisedleMarket.ethrise);
+    // Create function to approve ETHRISE
+    const [ETHRISEApprovalResult, writeETHRISEApproval] = useContractWrite(
+        {
+            addressOrName: RisedleMarket.ethrise,
+            contractInterface: ERC20.interface,
+        },
+        'approve',
+    )
 
-    // Setup states for approval
-    let [isApprovalInProgress, setIsApprovalInProgress] = useState(false);
-    let [isApprovalCompleted, setIsApprovalCompleted] = useState(false);
+    // Setup ETHRISE approval transaction wait
+    const [ waitWethApprovalResult, waitWethApprovalFunc] = useWaitForTransaction({
+        wait: ETHRISEApprovalResult.data?.wait
+    })
+    
+    // Setup completed state for ETHRISE approval
+    const [isApprovalCompleted, setIsApprovalCompleted] = useState(false)
 
-    // Get the approval transaction link
+    // Get the ETHRISE approval transaction link
     let approvalTransactionLink = "";
-    if (ethriseApproval.state.transaction?.hash) {
-        const transactionHash = ethriseApproval.state.transaction?.hash;
-        const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
+    if (ETHRISEApprovalResult.data?.hash) {
+        const transactionHash = ETHRISEApprovalResult.data?.hash;
+        const link = getExplorerTransactionLink(transactionHash, chain.kovan.id);
         if (link) {
             approvalTransactionLink = link;
         }
     }
 
-    // Create the Risedle contract and function that we use
-    const risedleContract = new Contract(
-        RisedleMarket.address,
-        RisedleMarket.interface
-    );
-    const risedleRedeem = useContractFunction(risedleContract, "redeem", {
-        transactionName: "Redeem",
-    });
-    console.debug("Risedle: RisedleMarket.address", RisedleMarket.address);
+    // Create function to redeem ETHRISE
+    const [ETHRISERedeemResult, writeETHRISERedeem] = useContractWrite(
+        {
+            addressOrName: RisedleMarket.address,
+            contractInterface: RisedleMarket.interface
+        },
+        'redeem',
+    )
+
+    // Setup ETHRISE redeem transaction wait
+    const [ waitETHRISERedeemResult, waitETHRISERedeemFunc] = useWaitForTransaction({
+        wait: ETHRISERedeemResult.data?.wait
+    })
 
     // Setup states for mint process
-    let [isRedeemInProgress, setIsRedeemInProgress] = useState(false);
     let [isRedeemCompleted, setIsRedeemCompleted] = useState(false);
     let [burnedETHRISEAmount, setBurnedETHRISEAmount] = useState("0");
 
-    // Get mint transaction link
+    // Get redeem transaction link
     let mintTransactionLink = "";
-    if (risedleRedeem.state.transaction?.hash) {
-        const transactionHash = risedleRedeem.state.transaction?.hash;
-        const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
+    if (ETHRISERedeemResult.data?.hash) {
+        const transactionHash = ETHRISERedeemResult.data?.hash;
+        const link = getExplorerTransactionLink(transactionHash, chain.kovan.id);
         if (link) {
             mintTransactionLink = link;
         }
     }
 
-    // Get minted amount
+    //get redeemed ETHRISE amount event
+    const [redeemedEvent, setRedeemedEvent] = useState([])
+    useContractEvent(
+        {
+            addressOrName: RisedleMarket.address,
+            contractInterface: RisedleMarket.interface
+        },
+        'ETFBurned',
+        (e) => setRedeemedEvent(e)
+    )
+
+    // Get redeem amount
     let redeemedAmount = "0";
-    if (risedleRedeem.events) {
+    if (redeemedEvent[2]) {
         // Get the SupplyAdded event
-        const event = risedleRedeem.events.filter(
-            (log) => log.name == "ETFBurned"
-        );
-        const redeemedAmountBigNumber = event[0].args.amount;
+        const redeemedAmountBigNumber = redeemedEvent[2];
         redeemedAmount = utils.formatUnits(redeemedAmountBigNumber, 18);
     }
 
     const mainDisplay = (
-        account: string | null | undefined,
         allowance: BigNumber | undefined
     ) => {
-        if (!account) {
-            return (
-                <div className="mt-16">
-                    <ConnectWalletPrompt
-                        activateBrowserWallet={activateBrowserWallet}
-                    />
-                </div>
-            );
-        }
-
         // If approval in progress, display the spinner
-        if (isApprovalInProgress) {
+        if (waitWethApprovalResult.loading) {
             return (
                 <div className="mt-16">
                     <TransactionInProgress
@@ -150,7 +166,7 @@ const RedeemETHRISE: NextPage = () => {
         }
 
         // If approval is completed, display completed transaction in 2s
-        if (isApprovalCompleted) {
+        if (waitWethApprovalResult.data && isApprovalCompleted) {
             const onClose = () => {
                 setIsApprovalCompleted(false);
             };
@@ -168,7 +184,7 @@ const RedeemETHRISE: NextPage = () => {
         }
 
         // If deposit in progress, display the spinner
-        if (isRedeemInProgress) {
+        if (waitETHRISERedeemResult.loading) {
             return (
                 <div className="mt-16">
                     <TransactionInProgress
@@ -181,9 +197,11 @@ const RedeemETHRISE: NextPage = () => {
         }
 
         // If deposit is completed, display completed transaction in 20s
-        if (isRedeemCompleted) {
+        if (waitETHRISERedeemResult.data && isRedeemCompleted) {
             const onClose = () => {
                 setIsRedeemCompleted(false);
+                setRedeemedEvent([]);
+                redeemedAmount="0";
             };
 
             return (
@@ -206,7 +224,7 @@ const RedeemETHRISE: NextPage = () => {
                     <div className="mt-16">
                         <ExchangeFormNotApproved
                             backTitle="← Go back to ETHRISE"
-                            backURL="/invest/ethrise"
+                            backURL="/products/ethrise"
                             title="Redeem ETHRISE"
                             subTitle="Burn ETHRISE to receive WETH in exchange."
                             formTitle="Redeem amount"
@@ -215,17 +233,12 @@ const RedeemETHRISE: NextPage = () => {
                             formInputTokenBalance={ethriseBalance}
                             formOutputToken="WETH"
                             onClickApprove={async () => {
-                                // Display spinner
-                                setIsApprovalInProgress(true);
-
                                 // Send the tx
-                                await ethriseApproval.send(
-                                    RisedleMarket.address,
-                                    constants.MaxUint256
+                                await writeETHRISEApproval(
+                                    {
+                                        args: [RisedleMarket.address, constants.MaxUint256]
+                                    }
                                 );
-
-                                // Turn of spinner
-                                setIsApprovalInProgress(false);
 
                                 // Display the completed
                                 setIsApprovalCompleted(true);
@@ -238,7 +251,7 @@ const RedeemETHRISE: NextPage = () => {
                     <div className="mt-16">
                         <ExchangeFormApproved
                             backTitle="← Go back to ETHRISE"
-                            backURL="/invest/ethrise"
+                            backURL="/products/ethrise"
                             title="Redeem ETHRISE"
                             subTitle="Burn ETHRISE to receive WETH in exchange."
                             formTitle="Redeem amount"
@@ -251,9 +264,6 @@ const RedeemETHRISE: NextPage = () => {
                                 // Set deposit amount for the spinbar
                                 setBurnedETHRISEAmount(amount);
                                 console.debug("Risedle: weth amount", amount);
-
-                                // Show the spinner
-                                setIsRedeemInProgress(true);
 
                                 // Parse units
                                 const redeemAmount = utils.parseUnits(
@@ -270,18 +280,16 @@ const RedeemETHRISE: NextPage = () => {
                                     "Risedle: ETHRISE Address",
                                     RisedleMarket.ethrise
                                 );
-                                await risedleRedeem.send(
-                                    RisedleMarket.ethrise,
-                                    redeemAmount
+                                await writeETHRISERedeem(
+                                    {
+                                        args: [RisedleMarket.ethrise, redeemAmount]
+                                    }
                                 );
                                 console.debug(
                                     "Risedle: risedleRedeem",
-                                    risedleRedeem
+                                    ETHRISERedeemResult.data
                                 );
                                 console.debug("Risedle: WHYY?");
-
-                                // Turn of the spinner
-                                setIsRedeemInProgress(false);
 
                                 // Display the receipt
                                 setIsRedeemCompleted(true);
@@ -307,11 +315,9 @@ const RedeemETHRISE: NextPage = () => {
             </Head>
             <Favicon />
             <Navigation
-                account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
+                activeMenu="products"
             />
-            {mainDisplay(account, allowance)}
+            {mainDisplay(allowance)}
         </div>
     );
 };
