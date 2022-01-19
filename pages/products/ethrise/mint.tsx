@@ -1,23 +1,28 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 // Import the useDapp
 import {
-    useContractCalls,
-    useEthers,
     useTokenAllowance,
-    useContractFunction,
     getExplorerTransactionLink,
-    ChainId,
     useTokenBalance,
 } from "@usedapp/core";
-import { utils, constants, BigNumber, Contract } from "ethers";
+import { utils, constants, BigNumber } from "ethers";
+
+// Import wagmi
+import { 
+    useAccount, 
+    useContractEvent, 
+    useContractWrite, 
+    useWaitForTransaction,
+    chain,
+} from "wagmi";
 
 // Import components
 import Favicon from "../../../components/Favicon";
 import Navigation from "../../../components/Navigation";
-import ConnectWalletPrompt from "../../../components/ConnectWalletPrompt";
 import ExchangeFormNotApproved from "../../../components/ExchangeFormNotApproved";
 import ExchangeFormApproved from "../../../components/ExchangeFormAprroved";
 import TransactionInProgress from "../../../components/TransactionInProgress";
@@ -37,20 +42,28 @@ const MintETHRISE: NextPage = () => {
     // 5. Otherwise user connected and ready to deposit
 
     // Setup hooks
-    const { activateBrowserWallet, account, deactivate } = useEthers();
-    console.debug("Risedle: account", account);
+    const [{data: accountData}, disconnect] = useAccount();
+    console.debug("Risedle: account", accountData?.address);
+    const router = useRouter();
+
+    // Check if account is connected, if no user will be redirected to /connect
+    useEffect(() => {
+        if (!accountData?.address) {
+            router.push('/connect');
+        }
+    }, [accountData])
 
     // Check WETH allowance
     const allowance = useTokenAllowance(
         ERC20.weth,
-        account,
+        accountData?.address,
         RisedleMarket.address
     );
     console.debug("Risedle: allowance", allowance);
 
     // Get WETH balance
     let wethBalance = "0";
-    const wethBalanceBigNum = useTokenBalance(ERC20.weth, account);
+    const wethBalanceBigNum = useTokenBalance(ERC20.weth, accountData?.address);
     if (wethBalanceBigNum) {
         wethBalance = utils.formatUnits(wethBalanceBigNum, 18);
         // Rounding down
@@ -59,79 +72,84 @@ const MintETHRISE: NextPage = () => {
         );
     }
 
-    // Create the WETH contract and function that we use
-    const wethContract = new Contract(ERC20.weth, ERC20.interface);
-    const wethApproval = useContractFunction(wethContract, "approve", {
-        transactionName: "Approve",
-    });
-    console.debug("Risedle: ERC20.weth", ERC20.weth);
+    // Create function to approve WETH
+    const [wethApprovalResult, writeApproval] = useContractWrite(
+        {
+            addressOrName: ERC20.weth,
+            contractInterface: ERC20.interface,
+        },
+        'approve',
+    )
 
-    // Setup states for approval
-    let [isApprovalInProgress, setIsApprovalInProgress] = useState(false);
-    let [isApprovalCompleted, setIsApprovalCompleted] = useState(false);
+    // Setup weth approval transaction wait
+    const [ waitWethApprovalResult, waitWethApprovalFunc] = useWaitForTransaction({
+        wait: wethApprovalResult.data?.wait
+    })
+    
+    // Setup completed state for approval
+    const [isApprovalCompleted, setIsApprovalCompleted] = useState(false)
 
-    // Get the approval transaction link
+    // Get the weth approval transaction link
     let approvalTransactionLink = "";
-    if (wethApproval.state.transaction?.hash) {
-        const transactionHash = wethApproval.state.transaction?.hash;
-        const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
+    if (wethApprovalResult.data?.hash) {
+        const transactionHash = wethApprovalResult.data?.hash;
+        const link = getExplorerTransactionLink(transactionHash, chain.kovan.id);
         if (link) {
             approvalTransactionLink = link;
         }
     }
 
-    // Create the Risedle contract and function that we use
-    const risedleContract = new Contract(
-        RisedleMarket.address,
-        RisedleMarket.interface
-    );
-    const risedleETHRISEMint = useContractFunction(risedleContract, "invest", {
-        transactionName: "Invest",
-    });
-    console.debug("Risedle: RisedleMarket.address", RisedleMarket.address);
+    // Create function to mint ETHRISE
+    const [ETHRISEMintResult, writeETHRISEMint] = useContractWrite(
+        {
+            addressOrName: RisedleMarket.address,
+            contractInterface: RisedleMarket.interface
+        },
+        'invest',
+    )
+
+    // Setup ETHRISE minting transaction wait
+    const [ waitETHRISEMintResult, waitETHRISEMintFunc] = useWaitForTransaction({
+        wait: ETHRISEMintResult.data?.wait
+    })
 
     // Setup states for mint process
-    let [isMintInProgress, setIsMintInProgress] = useState(false);
     let [isMintCompleted, setIsMintCompleted] = useState(false);
     let [mintWETHAmount, setMintWETHAmount] = useState("0");
 
     // Get mint transaction link
     let mintTransactionLink = "";
-    if (risedleETHRISEMint.state.transaction?.hash) {
-        const transactionHash = risedleETHRISEMint.state.transaction?.hash;
-        const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
+    if (ETHRISEMintResult.data?.hash) {
+        const transactionHash = ETHRISEMintResult.data.hash;
+        const link = getExplorerTransactionLink(transactionHash, chain.kovan.id);
         if (link) {
             mintTransactionLink = link;
         }
     }
 
+    //get minted ETHRISE amount event
+    const [mintedEvent, setMintedEvent] = useState([])
+    useContractEvent(
+        {
+            addressOrName: RisedleMarket.address,
+            contractInterface: RisedleMarket.interface
+        },
+        'ETFMinted',
+        (e) => setMintedEvent(e)
+    )
+
     // Get minted amount
     let mintedAmount = "0";
-    if (risedleETHRISEMint.events) {
-        // Get the SupplyAdded event
-        const event = risedleETHRISEMint.events.filter(
-            (log) => log.name == "ETFMinted"
-        );
-        const mintedAmountBigNumber = event[0].args.amount;
+    if (mintedEvent[2]) {
+        const mintedAmountBigNumber = mintedEvent[2]
         mintedAmount = utils.formatUnits(mintedAmountBigNumber, 18);
     }
 
     const mainDisplay = (
-        account: string | null | undefined,
-        allowance: BigNumber | undefined
+        allowance: BigNumber | undefined,
     ) => {
-        if (!account) {
-            return (
-                <div className="mt-16">
-                    <ConnectWalletPrompt
-                        activateBrowserWallet={activateBrowserWallet}
-                    />
-                </div>
-            );
-        }
-
         // If approval in progress, display the spinner
-        if (isApprovalInProgress) {
+        if (waitWethApprovalResult.loading) {
             return (
                 <div className="mt-16">
                     <TransactionInProgress
@@ -144,7 +162,7 @@ const MintETHRISE: NextPage = () => {
         }
 
         // If approval is completed, display completed transaction in 2s
-        if (isApprovalCompleted) {
+        if (waitWethApprovalResult.data && isApprovalCompleted) {
             const onClose = () => {
                 setIsApprovalCompleted(false);
             };
@@ -162,7 +180,7 @@ const MintETHRISE: NextPage = () => {
         }
 
         // If deposit in progress, display the spinner
-        if (isMintInProgress) {
+        if (waitETHRISEMintResult.loading) {
             return (
                 <div className="mt-16">
                     <TransactionInProgress
@@ -175,9 +193,11 @@ const MintETHRISE: NextPage = () => {
         }
 
         // If deposit is completed, display completed transaction in 20s
-        if (isMintCompleted) {
+        if (waitETHRISEMintResult.data && isMintCompleted) {
             const onClose = () => {
                 setIsMintCompleted(false);
+                setMintedEvent([]);
+                mintedAmount="0";
             };
 
             return (
@@ -200,7 +220,7 @@ const MintETHRISE: NextPage = () => {
                     <div className="mt-16">
                         <ExchangeFormNotApproved
                             backTitle="← Go back to ETHRISE"
-                            backURL="/invest/ethrise"
+                            backURL="/products/ethrise"
                             title="Mint ETHRISE"
                             subTitle="Deposit WETH and receive ETHRISE in exchange."
                             formTitle="Mint amount"
@@ -209,17 +229,12 @@ const MintETHRISE: NextPage = () => {
                             formInputTokenBalance={wethBalance}
                             formOutputToken="ETHRISE"
                             onClickApprove={async () => {
-                                // Display spinner
-                                setIsApprovalInProgress(true);
-
                                 // Send the tx
-                                await wethApproval.send(
-                                    RisedleMarket.address,
-                                    constants.MaxUint256
+                                await writeApproval(
+                                    {
+                                        args: [RisedleMarket.address, constants.MaxUint256]
+                                    }
                                 );
-
-                                // Turn of spinner
-                                setIsApprovalInProgress(false);
 
                                 // Display the completed
                                 setIsApprovalCompleted(true);
@@ -232,7 +247,7 @@ const MintETHRISE: NextPage = () => {
                     <div className="mt-16">
                         <ExchangeFormApproved
                             backTitle="← Go back to ETHRISE"
-                            backURL="/invest/ethrise"
+                            backURL="/products/ethrise"
                             title="Mint ETHRISE"
                             subTitle="Deposit WETH and receive ETHRISE in exchange."
                             formTitle="Deposit amount"
@@ -245,9 +260,6 @@ const MintETHRISE: NextPage = () => {
                                 // Set deposit amount for the spinbar
                                 setMintWETHAmount(amount);
                                 console.debug("Risedle: weth amount", amount);
-
-                                // Show the spinner
-                                setIsMintInProgress(true);
 
                                 // Parse units
                                 const depositAmount = utils.parseUnits(
@@ -264,18 +276,16 @@ const MintETHRISE: NextPage = () => {
                                     "Risedle: ETHRISE Address",
                                     RisedleMarket.ethrise
                                 );
-                                await risedleETHRISEMint.send(
-                                    RisedleMarket.ethrise,
-                                    depositAmount
+                                await writeETHRISEMint(
+                                    {
+                                        args: [RisedleMarket.ethrise, depositAmount]
+                                    }
                                 );
                                 console.debug(
                                     "Risedle: risedleETHRISEMint",
-                                    risedleETHRISEMint
+                                    ETHRISEMintResult
                                 );
                                 console.debug("Risedle: WHYY?");
-
-                                // Turn of the spinner
-                                setIsMintInProgress(false);
 
                                 // Display the receipt
                                 setIsMintCompleted(true);
@@ -285,7 +295,7 @@ const MintETHRISE: NextPage = () => {
                 );
             }
         }
-
+        
         // TODO (bayu): If we reach here, there is something wrong.
         // Display error here
     };
@@ -301,11 +311,9 @@ const MintETHRISE: NextPage = () => {
             </Head>
             <Favicon />
             <Navigation
-                account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
+                activeMenu="products"
             />
-            {mainDisplay(account, allowance)}
+            {mainDisplay(allowance)}
         </div>
     );
 };
