@@ -5,6 +5,9 @@ import Head from "next/head";
 import { useContractCalls, useTokenBalance, useEthers } from "@usedapp/core";
 import { utils } from "ethers";
 
+// Import wagmi
+import { useAccount } from 'wagmi'
+
 // Import components
 import Favicon from "../../components/Favicon";
 import Navigation from "../../components/Navigation";
@@ -19,7 +22,7 @@ import RisedleMarket from "../../abis/RisedleMarket";
 
 const Vault: NextPage = () => {
     // Setup hooks
-    const { account, activateBrowserWallet, deactivate } = useEthers();
+    const [{data: accountData}, disconnect] = useAccount();
 
     // Read data from chain
     const results = useContractCalls([
@@ -94,7 +97,7 @@ const Vault: NextPage = () => {
     // Get user vault token balance
     // TODO (bayu): Get decimals from contract
     let balance: any = 0.0;
-    let balanceResult: any = useTokenBalance(RisedleMarket.address, account);
+    let balanceResult: any = useTokenBalance(RisedleMarket.address, accountData?.address);
     // console.log("DEBUG: balanceResult", balanceResult);
     if (balanceResult) {
         balance = balanceResult / 1e6; // TODO use decimals here from conttract
@@ -137,10 +140,7 @@ const Vault: NextPage = () => {
             </Head>
             <Favicon />
             <Navigation
-                activeMenu="lend"
-                account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
+                activeMenu="vault"
             />
             <div className="mt-8 gap gap-y-8 flex flex-col">
                 <DetailHeader
