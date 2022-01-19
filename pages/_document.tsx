@@ -8,9 +8,9 @@ class RisedleDocument extends Document {
 
     render() {
         return (
-            <Html className="dark">
+            <Html className="dark font-inter h-full">
                 <Head />
-                <body>
+                <body className="bg-gray-light-1 dark:bg-gray-dark-1 h-full">
                     <Main />
                     <NextScript />
                 </body>
