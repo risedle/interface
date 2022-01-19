@@ -9,14 +9,6 @@ import { usePopper } from "react-popper";
 // States
 import { MetaMaskConnector, WCConnector, useWalletContext, supportedChains } from "../Wallet";
 
-// Wallet icons
-import MetamaskIcon from "../../../public/wallet/Metamask.svg";
-import WalletConnectIcon from "../../../public/wallet/WalletConnect.svg";
-
-// Network icons
-import ArbitrumOneIcon from "../../../public/networks/Arbitrum.svg";
-import KovanIcon from "../../../public/networks/Kovan.svg";
-
 // Toasts
 import ToastError from "../Toasts/Error";
 import ToastInProgress from "../Toasts/InProgress";
@@ -124,9 +116,9 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
     const getChainIconPath = (c: Chain): string => {
         switch (c.id) {
             case Chains.arbitrumOne.id:
-                return ArbitrumOneIcon;
+                return "/networks/Arbitrum.svg";
             case Chains.kovan.id:
-                return KovanIcon;
+                return "/networks/Kovan.svg";
         }
         return "";
     };
@@ -311,7 +303,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                 }}
                                                             >
                                                                 <div>
-                                                                    <img src={MetamaskIcon} alt="MetaMask" className="inline-block self-center  mr-4" />
+                                                                    <img src="/wallet/Metamask.svg" alt="MetaMask" className="inline-block self-center  mr-4" />
                                                                     <span className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-semibold font-inter m-0 leading-none">Metamask</span>
                                                                 </div>
                                                                 {isConnecting && connectorName === "MetaMask" && (
@@ -332,7 +324,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                 }}
                                                             >
                                                                 <div>
-                                                                    <img src={WalletConnectIcon} alt="WalletConnect" className="inline-block self-center  mr-4" />
+                                                                    <img src="/wallet/WalletConnect.svg" alt="WalletConnect" className="inline-block self-center  mr-4" />
                                                                     <span className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-semibold font-inter m-0 leading-none">Wallet Connect</span>
                                                                 </div>
                                                                 {isConnecting && connectorName === "WalletConnect" && (

@@ -97,7 +97,7 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
     MetaMaskConnector.on("connect", (data) => {
         console.debug("Metamask connected");
         console.debug(data);
-        if (data.account) {
+        if (data && data.account) {
             setAccount(data.account);
         }
     });
@@ -108,14 +108,17 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
     MetaMaskConnector.on("change", (data) => {
         console.debug("Metamask changed");
         console.debug(data);
-        if (data.account) {
+        if (data && data.account) {
+            console.log("HELLOOOOOOOOOOO");
+            console.log("setAccount", setAccount);
+            console.log("data", data);
             setAccount(data.account);
         }
     });
     WCConnector.on("connect", (data) => {
         console.debug("WalletConnect connected");
         // Handle switch account or switch network on metamask
-        if (data.account) {
+        if (data && data.account) {
             setAccount(data.account);
         }
     });
@@ -125,7 +128,7 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
     WCConnector.on("change", (data) => {
         console.debug("WalletConnect change");
         // Handle switch account or switch network on wallet connect
-        if (data.account) {
+        if (data && data.account) {
             setAccount(data.account);
         }
     });

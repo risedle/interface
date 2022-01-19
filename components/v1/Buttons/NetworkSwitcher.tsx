@@ -6,8 +6,6 @@ import { chain as Chains, Chain, useNetwork } from "wagmi";
 
 import { useWalletContext, supportedChains } from "../Wallet";
 
-import ArbitrumOneIcon from "../../../public/networks/Arbitrum.svg";
-import KovanIcon from "../../../public/networks/Kovan.svg";
 import RisedleLinks from "../../../utils/links";
 
 /**
@@ -30,9 +28,9 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
     const getChainIconPath = (c: Chain): string => {
         switch (c.id) {
             case Chains.arbitrumOne.id:
-                return ArbitrumOneIcon;
+                return "/networks/Arbitrum.svg";
             case Chains.kovan.id:
-                return KovanIcon;
+                return "/networks/Kovan.svg";
         }
         return "";
     };
