@@ -2,8 +2,10 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 // Import the useDapp
-import { useContractCalls, useEthers } from "@usedapp/core";
 import { formatUnits } from "@ethersproject/units";
+
+// Import wagmi
+import { useContractRead } from "wagmi";
 
 // Import components
 import Favicon from "../../../components/Favicon";
@@ -15,26 +17,24 @@ import RisedleMarket from "../../../abis/RisedleMarket";
 import ETHRISE_ICON from "../../../public/ETHRISE_ICON.png";
 
 const ETHRISE: NextPage = () => {
-    // Setup hooks
-    const { account, activateBrowserWallet, deactivate } = useEthers();
-
     // Read data from chain
-    const results = useContractCalls([
+    const [ethriseNAVData, readEthriseNAV] = useContractRead(
         {
-            abi: RisedleMarket.interface,
-            address: RisedleMarket.address,
-            method: "getETFNAV",
-            args: [RisedleMarket.ethrise],
+            addressOrName: RisedleMarket.address,
+            contractInterface: RisedleMarket.interface,
+        }, 
+        'getETFNAV',
+        {
+            args: RisedleMarket.ethrise
         },
-    ]);
-    const [ethriseNAVResult] = results;
+    )
 
     // Get NAV data
     let ethriseNAV: string = "- USDC";
-    if (ethriseNAVResult) {
+    if (ethriseNAVData.data) {
         const nav = formatUnits(
             // @ts-ignore
-            ethriseNAVResult.etfNAV,
+            ethriseNAVData.data,
             6
         );
         const navFloat = parseFloat(nav);
@@ -55,10 +55,7 @@ const ETHRISE: NextPage = () => {
             </Head>
             <Favicon />
             <Navigation
-                activeMenu="ETHRISE"
-                account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
+                activeMenu="products"
             />
             <div className="mt-8 gap gap-y-8 flex flex-col">
                 <DetailHeader

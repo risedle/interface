@@ -2,9 +2,11 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 // useDapp
-import { useEthers, useContractCalls } from "@usedapp/core";
 import { useCoingeckoPrice } from "@usedapp/coingecko";
 import { formatUnits } from "@ethersproject/units";
+
+// Import wagmi
+import { useContractRead } from "wagmi";
 
 // Import components
 import Favicon from "../../components/Favicon";
@@ -17,38 +19,45 @@ import AUMLoading from "../../components/AUMLoading";
 import AUMLoaded from "../../components/AUMLoaded";
 
 const Products: NextPage = () => {
-    // Setup hooks
-    const { account, activateBrowserWallet, deactivate } = useEthers();
-
     // Get ethereum price
     const etherPrice = useCoingeckoPrice("ethereum", "usd");
+    
     // If undefined show the loader
     console.log("etherPrice", etherPrice);
+
     // Get ETF info
     // Read data from chain
-    const results = useContractCalls([
+    // call getETFInfo function
+    const [etfInfoData, readEtfInfo] = useContractRead(
         {
-            abi: RisedleMarket.interface,
-            address: RisedleMarket.address,
-            method: "getETFInfo",
-            args: [RisedleMarket.ethrise],
-        },
+            addressOrName: RisedleMarket.address,
+            contractInterface: RisedleMarket.interface,
+        }, 
+        'getETFInfo',
         {
-            abi: RisedleMarket.interface,
-            address: RisedleMarket.address,
-            method: "getETFNAV",
-            args: [RisedleMarket.ethrise],
+            args: RisedleMarket.ethrise
+        }
+    )
+
+    // call getETFNAV function
+    const [ethriseNAVData, readEthriseNAV] = useContractRead(
+        {
+            addressOrName: RisedleMarket.address,
+            contractInterface: RisedleMarket.interface,
+        }, 
+        'getETFNAV',
+        {
+            args: RisedleMarket.ethrise
         },
-    ]);
-    const [etfInfoResult, ethriseNAVResult] = results;
+    )
 
     // Total AUM
     let AUM: string | undefined = undefined;
-    if (etherPrice && etfInfoResult) {
+    if (etherPrice && etfInfoData.data) {
         // TODO (bayu): It should be minus totalPendingFees
         const ethTotalCollateral = formatUnits(
             // @ts-ignore
-            etfInfoResult.totalCollateral,
+            etfInfoData.data.totalCollateral,
             18
         );
         const AUMFloat =
@@ -69,14 +78,14 @@ const Products: NextPage = () => {
 
     // Get NAV data
     let ethriseNAV: string = "- USDC";
-    if (ethriseNAVResult) {
+    if (ethriseNAVData.data) {
         const nav = formatUnits(
             // @ts-ignore
-            ethriseNAVResult.etfNAV,
+            ethriseNAVData.data,
             6
         );
         // @ts-ignore
-        console.log("DEBUG: ethriseNAVResult.etfNAV", ethriseNAVResult.etfNAV);
+        console.log("DEBUG: ethriseNAVResult", ethriseNAVData.data);
         const navFloat = parseFloat(nav);
         console.log("DEBUG: navFloat", navFloat);
         let dollarUSLocale = Intl.NumberFormat("en-US");
@@ -94,10 +103,7 @@ const Products: NextPage = () => {
             </Head>
             <Favicon />
             <Navigation
-                activeMenu="invest"
-                account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
+                activeMenu="products"
             />
             <div className="mx-auto mt-16" style={{ width: "480px" }}>
                 <div>
