@@ -5,6 +5,7 @@ import type { FunctionComponent } from "react";
  */
 type ButtonOutlineProps = {
     onClick?: () => void;
+    active?: boolean | undefined;
 };
 
 /**
@@ -15,6 +16,7 @@ type ButtonOutlineProps = {
 const ButtonOutline: FunctionComponent<ButtonOutlineProps> = ({
     onClick,
     children,
+    active
 }) => {
     const tailwind = [
         "text-white",
@@ -28,9 +30,21 @@ const ButtonOutline: FunctionComponent<ButtonOutlineProps> = ({
         "border border-opacity-20 border-white",
         "hover:border-opacity-30",
     ];
+
+    const tailwindActive = [
+        "text-white",
+        "font-extrabold",
+        "px-6",
+        "text-sm",
+        "rounded-full",
+        "transform active:scale-95",
+        "transition duration-300 ease-in-out",
+        "border border-opacity-50 border-white",
+    ];
+
     return (
         <button
-            className={tailwind.join(" ")}
+            className={active ? tailwindActive.join(" ") : tailwind.join(" ")}
             onClick={onClick}
             style={{ lineHeight: "38px" }}
         >
