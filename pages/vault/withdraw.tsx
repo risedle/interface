@@ -1,17 +1,25 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 // Import the useDapp
 import {
     useTokenAllowance,
-    useEthers,
     useContractFunction,
     getExplorerTransactionLink,
-    ChainId,
     useTokenBalance,
 } from "@usedapp/core";
-import { utils, constants, BigNumber, Contract } from "ethers";
+import { utils, constants, BigNumber } from "ethers";
+
+// Import wagmi
+import {
+    useAccount,
+    useContractWrite,
+    useWaitForTransaction,
+    useContractEvent,
+    chain
+} from 'wagmi'
 
 // Import components
 import Favicon from "../../components/Favicon";
@@ -25,7 +33,7 @@ import TransactionIsCompleted from "../../components/TransactionIsCompleted";
 // Contract interface
 import RisedleMarket from "../../abis/RisedleMarket";
 
-const LendWithdraw: NextPage = () => {
+const VaultWithdraw: NextPage = () => {
     // 1. Check wether the account is connected or not
     // 2. If not, display the connect wallet prompt
     // 3. If connected, check the allowance of vault token
@@ -35,13 +43,21 @@ const LendWithdraw: NextPage = () => {
     // 5. Otherwise user connected and ready to deposit
 
     // Setup hooks
-    const { activateBrowserWallet, account, deactivate } = useEthers();
-    console.debug("Risedle: account", account);
+    const router = useRouter();
+    const [{data: accountData}, disconnect] = useAccount();
+    console.debug("Risedle: account", accountData?.address);
+
+    // Check if account is connected, if no user will be redirected to /connect
+    useEffect(() => {
+        if (!accountData?.address) {
+            router.push('/connect');
+        }
+    }, [accountData])
 
     // Check vault token allowance
     const allowance = useTokenAllowance(
         RisedleMarket.address,
-        account,
+        accountData?.address,
         RisedleMarket.address
     );
     console.debug("Risedle: rvUSDC Address", RisedleMarket.address);
@@ -49,7 +65,7 @@ const LendWithdraw: NextPage = () => {
 
     // Get rvUSDC balance
     let rvUSDCBalance = "0";
-    const rvUSDCBalanceBigNum = useTokenBalance(RisedleMarket.address, account);
+    const rvUSDCBalanceBigNum = useTokenBalance(RisedleMarket.address, accountData?.address);
     if (rvUSDCBalanceBigNum) {
         rvUSDCBalance = utils.formatUnits(rvUSDCBalanceBigNum, 6);
         // Rounding down
@@ -59,86 +75,84 @@ const LendWithdraw: NextPage = () => {
     }
     console.debug("Risedle: USDC Balance", rvUSDCBalance);
 
-    // Create Risedle vault token contract and function that we uses
-    const risedleContract = new Contract(
-        RisedleMarket.address,
-        RisedleMarket.interface
-    );
-    const risedleVaultTokenApproval = useContractFunction(
-        risedleContract,
-        "approve",
+    // Create function to approve Vault Token
+    const [rvTokenApprovalResult, writeRvTokenApproval] = useContractWrite(
         {
-            transactionName: "Approve",
-        }
-    );
+            addressOrName: RisedleMarket.address,
+            contractInterface: RisedleMarket.interface,
+        },
+        'approve',
+    )
+
+    // Setup Vault Token approval transaction wait
+    const [ waitRvTokenApprovalResult, waitRvTokenApprovalFunc] = useWaitForTransaction({
+        wait: rvTokenApprovalResult.data?.wait
+    })
 
     // Setup states for vault token approval
-    let [isApprovalInProgress, setIsApprovalInProgress] = useState(false);
     let [isApprovalCompleted, setIsApprovalCompleted] = useState(false);
 
     // Get approval transaction link
     let approvalTransactionLink = "";
-    if (risedleVaultTokenApproval.state.transaction?.hash) {
-        const transactionHash =
-            risedleVaultTokenApproval.state.transaction?.hash;
-        const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
+    if (rvTokenApprovalResult.data?.hash) {
+        const transactionHash = rvTokenApprovalResult.data?.hash;
+        const link = getExplorerTransactionLink(transactionHash, chain.kovan.id);
         if (link) {
             approvalTransactionLink = link;
         }
     }
 
-    // Use redeem function
-    const risedleRedeemUSDC = useContractFunction(
-        risedleContract,
-        "removeSupply(uint256)",
+    // Create function to redeem USDC
+    const [risedleRedeemUsdcResult, writeRisedleRedeemUsdc] = useContractWrite(
         {
-            transactionName: "RemoveSupply",
-        }
-    );
+            addressOrName: RisedleMarket.address,
+            contractInterface: RisedleMarket.interface,
+        },
+        'removeSupply',
+    )
+
+    // Setup redeem USDC transaction wait
+    const [waitRisedleRedeemUsdcResult, waitRisedleRedeemUsdcFunc] = useWaitForTransaction({
+        wait: risedleRedeemUsdcResult.data?.wait
+    })
 
     // Setup states for redeem process
-    let [isRedeemInProgress, setIsRedeemInProgress] = useState(false);
     let [isRedeemCompleted, setIsRedeemCompleted] = useState(false);
     let [redeemAmount, setRedeemAmount] = useState("0");
 
     // Get redeem transaction link
     let redeemTransactionLink = "";
-    if (risedleRedeemUSDC.state.transaction?.hash) {
-        const transactionHash = risedleRedeemUSDC.state.transaction?.hash;
-        const link = getExplorerTransactionLink(transactionHash, ChainId.Kovan);
+    if (risedleRedeemUsdcResult.data?.hash) {
+        const transactionHash = risedleRedeemUsdcResult.data?.hash;
+        const link = getExplorerTransactionLink(transactionHash, chain.kovan.id);
         if (link) {
             redeemTransactionLink = link;
         }
     }
 
-    // Get minted amount
+    //get redeemed rvUSDC amount event
+    const [redeemedEvent, setRedeemedEvent] = useState([])
+    useContractEvent(
+        {
+            addressOrName: RisedleMarket.address,
+            contractInterface: RisedleMarket.interface
+        },
+        'VaultSupplyRemoved',
+        (e) => setRedeemedEvent(e)
+    )
+
+    // Get redeemed amount
     let redeemedAmount = "0";
-    if (risedleRedeemUSDC.events) {
-        // Get the SupplyAdded event
-        const event = risedleRedeemUSDC.events.filter(
-            (log) => log.name == "VaultSupplyRemoved"
-        );
-        const redeemedAmountBigNumber = event[0].args.redeemedAmount;
+    if (redeemedEvent[3]) {
+        const redeemedAmountBigNumber = redeemedEvent[3];
         redeemedAmount = utils.formatUnits(redeemedAmountBigNumber, 6);
     }
 
     const mainDisplay = (
-        account: string | null | undefined,
-        allowance: BigNumber | undefined
+        allowance: BigNumber | undefined,
     ) => {
-        // If there is no account connected then display the prompt
-        if (!account) {
-            return (
-                <div className="mt-16">
-                    <ConnectWalletPrompt
-                        activateBrowserWallet={activateBrowserWallet}
-                    />
-                </div>
-            );
-        }
-
         // If approval in progress, display the spinner
-        if (isApprovalInProgress) {
+        if (waitRvTokenApprovalResult.loading) {
             return (
                 <div className="mt-16">
                     <TransactionInProgress
@@ -151,7 +165,7 @@ const LendWithdraw: NextPage = () => {
         }
 
         // If approval is completed, display completed transaction in 2s
-        if (isApprovalCompleted) {
+        if (waitRvTokenApprovalResult.data && isApprovalCompleted) {
             const onClose = () => {
                 setIsApprovalCompleted(false);
             };
@@ -169,7 +183,7 @@ const LendWithdraw: NextPage = () => {
         }
 
         // If deposit in progress, display the spinner
-        if (isRedeemInProgress) {
+        if (waitRisedleRedeemUsdcResult.loading) {
             return (
                 <div className="mt-16">
                     <TransactionInProgress
@@ -182,9 +196,11 @@ const LendWithdraw: NextPage = () => {
         }
 
         // If deposit is completed, display completed transaction in 20s
-        if (isRedeemCompleted) {
+        if (waitRisedleRedeemUsdcResult.data && isRedeemCompleted) {
             const onClose = () => {
                 setIsRedeemCompleted(false);
+                setRedeemedEvent([]);
+                redeemedAmount="0";
             };
 
             return (
@@ -206,8 +222,8 @@ const LendWithdraw: NextPage = () => {
                 return (
                     <div className="mt-16">
                         <ExchangeFormNotApproved
-                            backTitle="← Go back to lend"
-                            backURL="/lend"
+                            backTitle="← Go back to vault"
+                            backURL="/vault"
                             title="Withdraw USDC"
                             subTitle="Burn rvUSDC to receive USDC."
                             formTitle="Redeem amount"
@@ -216,17 +232,12 @@ const LendWithdraw: NextPage = () => {
                             formInputTokenBalance={rvUSDCBalance}
                             formOutputToken="USDC"
                             onClickApprove={async () => {
-                                // Display spinner
-                                setIsApprovalInProgress(true);
-
                                 // Send the tx
-                                await risedleVaultTokenApproval.send(
-                                    RisedleMarket.address,
-                                    constants.MaxUint256
+                                await writeRvTokenApproval(
+                                    {
+                                        args: [RisedleMarket.address, constants.MaxUint256]
+                                    }
                                 );
-
-                                // Turn of spinner
-                                setIsApprovalInProgress(false);
 
                                 // Display the completed
                                 setIsApprovalCompleted(true);
@@ -238,8 +249,8 @@ const LendWithdraw: NextPage = () => {
                 return (
                     <div className="mt-16">
                         <ExchangeFormApproved
-                            backTitle="← Go back to lend"
-                            backURL="/lend"
+                            backTitle="← Go back to vault"
+                            backURL="/vault"
                             title="Withdraw USDC"
                             subTitle="Burn rvUSDC to receive USDC."
                             formTitle="Redeem amount"
@@ -252,9 +263,6 @@ const LendWithdraw: NextPage = () => {
                                 // Set deposit amount for the spinbar
                                 setRedeemAmount(amount);
 
-                                // Show the spinner
-                                setIsRedeemInProgress(true);
-
                                 // Parse units
                                 const redeemAmountParsed = utils.parseUnits(
                                     amount,
@@ -262,12 +270,11 @@ const LendWithdraw: NextPage = () => {
                                 );
 
                                 // Send tx
-                                await risedleRedeemUSDC.send(
-                                    redeemAmountParsed
+                                await writeRisedleRedeemUsdc(
+                                    {
+                                        args: redeemAmountParsed
+                                    }
                                 );
-
-                                // Turn of the spinner
-                                setIsRedeemInProgress(false);
 
                                 // Display the receipt
                                 setIsRedeemCompleted(true);
@@ -293,13 +300,11 @@ const LendWithdraw: NextPage = () => {
             </Head>
             <Favicon />
             <Navigation
-                account={account}
-                activateBrowserWallet={activateBrowserWallet}
-                deactivate={deactivate}
+                activeMenu="vault"
             />
-            {mainDisplay(account, allowance)}
+            {mainDisplay(allowance)}
         </div>
     );
 };
 
-export default LendWithdraw;
+export default VaultWithdraw;
