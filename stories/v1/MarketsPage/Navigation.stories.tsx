@@ -5,10 +5,10 @@ import { Wallet } from "../../../components/v1/Wallet";
 
 export default {
     component: Navigation,
-    title: "Risedle V1/Markets Page/Navigation",
+    title: "Risedle V1/Markets Page/Market Navigation",
 };
 
-export const Basic = () => {
+export const MarketNavigation = () => {
     return (
         <Wallet>
             <Navigation />

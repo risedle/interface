@@ -22,27 +22,19 @@ const Footer: FunctionComponent<FooterProps> = ({}) => {
                 <Link href="/">
                     <a>
                         <Logo />
-                        <span className="text-base font-inter font-bold pl-2 traking-tight text-gray-light-12 dark:text-gray-light-1">
-                            Risedle
-                        </span>
+                        <span className="text-base font-inter font-bold pl-2 traking-tight text-gray-light-12 dark:text-gray-light-1">Risedle</span>
                     </a>
                 </Link>
             </div>
             <div className="px-4 grow flex flex-col sm:flex-row mt-8 sm:my-6 gap-y-4 sm:gap-x-4 sm:justify-end">
                 <Link href="https://twitter.com/risedle">
-                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
-                        Twitter &#8599;
-                    </a>
+                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">Twitter &#8599;</a>
                 </Link>
                 <Link href="https://discord.com/invite/YCSCd97SXj">
-                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
-                        Discord &#8599;
-                    </a>
+                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">Discord &#8599;</a>
                 </Link>
                 <Link href="https://github.com/risedle">
-                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
-                        Github &#8599;
-                    </a>
+                    <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">Github &#8599;</a>
                 </Link>
                 <div className="sm:self-center">
                     <ButtonThemeSwitcherText />

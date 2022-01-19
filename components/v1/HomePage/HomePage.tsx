@@ -28,10 +28,7 @@ const HomePage: FunctionComponent<HomePageProps> = ({}) => {
         <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter">
             <Head>
                 <title>Risedle Protocol</title>
-                <meta
-                    name="description"
-                    content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol"
-                />
+                <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
             </Head>
             <GoogleFont />
             <Favicon />

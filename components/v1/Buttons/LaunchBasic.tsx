@@ -13,10 +13,8 @@ type ButtonLaunchBasicProps = {};
  */
 const ButtonLaunchBasic: FunctionComponent<ButtonLaunchBasicProps> = ({}) => {
     return (
-        <Link href="/app">
-            <a className="text-gray-light-12 dark:text-gray-dark-12 bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-5 dark:border-gray-dark-5 font-inter text-sm font-semibold py-3 px-4 rounded-full leading-none inline-block">
-                Launch App
-            </a>
+        <Link href="/markets">
+            <a className="text-gray-light-12 dark:text-gray-dark-12 bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-5 dark:border-gray-dark-5 font-inter text-sm font-semibold py-3 px-4 rounded-full leading-none inline-block">Launch Markets</a>
         </Link>
     );
 };

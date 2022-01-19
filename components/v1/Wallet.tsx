@@ -1,7 +1,7 @@
 import { FunctionComponent, ReactNode } from "react";
 import createPersistedState from "use-persisted-state";
 
-import { Chain, Provider, chain as Chains } from "wagmi";
+import { Chain, Provider, chain as Chains, chain } from "wagmi";
 
 import { createContext, useContext } from "react";
 
@@ -27,12 +27,8 @@ export const WCConnector = new WalletConnectConnector({
 });
 
 // Providers
-export const ArbitrumOneProvider = new ethers.providers.JsonRpcProvider(
-    "https://arb-mainnet.g.alchemy.com/v2/qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj"
-);
-export const KovanProvider = new ethers.providers.JsonRpcProvider(
-    "https://eth-kovan.alchemyapi.io/v2/qLbNN95iUDTpQqbm5FzgaSPrPJ908VD-"
-);
+export const ArbitrumOneProvider = new ethers.providers.JsonRpcProvider("https://arb-mainnet.g.alchemy.com/v2/qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj");
+export const KovanProvider = new ethers.providers.JsonRpcProvider("https://eth-kovan.alchemyapi.io/v2/qLbNN95iUDTpQqbm5FzgaSPrPJ908VD-");
 
 type WalletProps = {
     children: ReactNode;
@@ -51,7 +47,7 @@ const defaultAccount = null; // null is not connected
 const defaultConnectorName = null;
 
 export type WalletStates = {
-    chain: Chain | null;
+    chain: Chain;
     switchChain: (c: number) => void;
     account: string | null;
     setAccount: (a: string | null) => void;
@@ -70,15 +66,10 @@ const WalletContext = createContext<WalletStates>({
 });
 
 export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
-    const [chain, setChain] = useChainState<Chain | null>(defaultChain);
-    const [provider, setProvider] =
-        useProviderState<BaseProvider>(defaultProvider);
-    const [account, setAccount] = useAccountState<string | null>(
-        defaultAccount
-    );
-    const [connectorName, setConnectorName] = useConnectorNameState<
-        string | null
-    >(defaultConnectorName);
+    const [chain, setChain] = useChainState<Chain>(defaultChain);
+    const [provider, setProvider] = useProviderState<BaseProvider>(defaultProvider);
+    const [account, setAccount] = useAccountState<string | null>(defaultAccount);
+    const [connectorName, setConnectorName] = useConnectorNameState<string | null>(defaultConnectorName);
 
     // Debugs
     console.debug("Wallet chain", chain);
@@ -86,20 +77,19 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
     console.debug("Wallet account", account);
     console.debug("Wallet connectorName", connectorName);
 
-    const switchChain = (chainID: number) => {
-        switch (chainID) {
-            case Chains.kovan.id:
-                setChain(Chains.kovan);
-                setProvider(KovanProvider);
-                return;
+    // Utilities
+    const switchChain = (id: number) => {
+        switch (id) {
             case Chains.arbitrumOne.id:
                 setChain(Chains.arbitrumOne);
                 setProvider(ArbitrumOneProvider);
-                return;
+                break;
+            case Chains.kovan.id:
+                setChain(Chains.kovan);
+                setProvider(KovanProvider);
+                break;
             default:
-                setChain(null);
-                setProvider(ethers.getDefaultProvider());
-                return;
+                throw Error("Chain is not supported");
         }
     };
 
@@ -107,12 +97,8 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
     MetaMaskConnector.on("connect", (data) => {
         console.debug("Metamask connected");
         console.debug(data);
-        // Handle switch account or switch network on metamask
         if (data.account) {
             setAccount(data.account);
-        }
-        if (data.chain) {
-            switchChain(data.chain.id);
         }
     });
     MetaMaskConnector.on("disconnect", () => {
@@ -122,12 +108,8 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
     MetaMaskConnector.on("change", (data) => {
         console.debug("Metamask changed");
         console.debug(data);
-        // Handle switch account or switch network on metamask
         if (data.account) {
             setAccount(data.account);
-        }
-        if (data.chain) {
-            switchChain(data.chain.id);
         }
     });
     WCConnector.on("connect", (data) => {
@@ -135,9 +117,6 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
         // Handle switch account or switch network on metamask
         if (data.account) {
             setAccount(data.account);
-        }
-        if (data.chain) {
-            switchChain(data.chain.id);
         }
     });
     WCConnector.on("disconnect", () => {
@@ -148,9 +127,6 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
         // Handle switch account or switch network on wallet connect
         if (data.account) {
             setAccount(data.account);
-        }
-        if (data.chain) {
-            switchChain(data.chain.id);
         }
     });
 
@@ -165,12 +141,7 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
 
     return (
         <WalletContext.Provider value={sharedPersistentStates}>
-            <Provider
-                autoConnect={true}
-                connectorStorageKey={connectorStorageKey}
-                connectors={[MetaMaskConnector, WCConnector]}
-                provider={provider}
-            >
+            <Provider autoConnect={true} connectorStorageKey={connectorStorageKey} connectors={[MetaMaskConnector, WCConnector]} provider={provider}>
                 {children}
             </Provider>
         </WalletContext.Provider>

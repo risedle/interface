@@ -8,7 +8,7 @@ export default {
     title: "Risedle V1/Buttons/Network Switcher",
 };
 
-export const Basic = () => {
+export const NetworkSwitcher = () => {
     return (
         <Wallet>
             <ButtonNetworkSwitcher />

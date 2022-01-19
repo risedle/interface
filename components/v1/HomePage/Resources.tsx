@@ -18,31 +18,15 @@ const Resources: FunctionComponent<ResourcesProps> = ({}) => {
         <div className="flex flex-col sm:flex-row px-4 gap-y-2 sm:gap-x-4 max-w-4xl m-auto">
             <Link href={RisedleLinks.docs}>
                 <a className="bg-gray-light-3 dark:bg-gray-dark-2 p-4 rounded-lg sm:basis-1/3 flex flex-row items-center">
-                    <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block"
-                    >
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
                         <path d="M3.25854 3.11684C3.67845 3.45796 3.83597 3.43193 4.62443 3.37933L12.0578 2.93299C12.2155 2.93299 12.0844 2.77571 12.0318 2.74957L10.7973 1.85711C10.5607 1.67347 10.2456 1.46315 9.64156 1.51576L2.44381 2.04074C2.18132 2.06677 2.12888 2.19801 2.23343 2.30322L3.25854 3.11684ZM3.70483 4.84917V12.6704C3.70483 13.0907 3.91489 13.248 4.38766 13.222L12.5569 12.7493C13.0299 12.7233 13.0826 12.4341 13.0826 12.0927V4.32397C13.0826 3.98306 12.9515 3.79921 12.6619 3.82545L4.12495 4.32397C3.80991 4.35044 3.70483 4.50803 3.70483 4.84917ZM11.7695 5.26872C11.8219 5.50518 11.7695 5.74142 11.5326 5.76799L11.139 5.84641V11.6205C10.7973 11.8042 10.4821 11.9092 10.2195 11.9092C9.79908 11.9092 9.69378 11.7779 9.37885 11.3844L6.80418 7.34249V11.2532L7.6189 11.437C7.6189 11.437 7.6189 11.9092 6.96159 11.9092L5.14952 12.0143C5.09688 11.9092 5.14952 11.647 5.33332 11.5944L5.80619 11.4634V6.29276L5.14963 6.24015C5.09699 6.00369 5.22812 5.66278 5.59614 5.63631L7.54008 5.50528L10.2195 9.5998V5.97765L9.53637 5.89924C9.48393 5.61018 9.69378 5.40028 9.95649 5.37425L11.7695 5.26872ZM1.83947 1.33212L9.32631 0.780787C10.2457 0.701932 10.4822 0.754753 11.0601 1.17452L13.45 2.85424C13.8443 3.14309 13.9758 3.22173 13.9758 3.53661V12.7493C13.9758 13.3266 13.7654 13.6681 13.0301 13.7203L4.33566 14.2454C3.78365 14.2717 3.52093 14.193 3.23184 13.8253L1.47189 11.5419C1.15653 11.1216 1.02539 10.8071 1.02539 10.4392V2.25041C1.02539 1.77825 1.23577 1.38441 1.83947 1.33212Z" />
                     </svg>
-                    <span className="text-base font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12 align-middle pl-4 leading-0">
-                        Read Docs &#8599;
-                    </span>
+                    <span className="text-base font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12 align-middle pl-4 leading-0">Read Docs &#8599;</span>
                 </a>
             </Link>
             <Link href={RisedleLinks.discord}>
                 <a className="bg-violet-light-3 dark:bg-violet-dark-2 p-4 rounded-lg sm:basis-1/3 flex flex-row items-center">
-                    <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block"
-                    >
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
                         <g clipPath="url(#clip0_481_19437)">
                             <path
                                 fillRule="evenodd"
@@ -56,30 +40,19 @@ const Resources: FunctionComponent<ResourcesProps> = ({}) => {
                             </clipPath>
                         </defs>
                     </svg>
-                    <span className="text-base font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12  align-middle pl-4 leading-0">
-                        Join Discord &#8599;
-                    </span>
+                    <span className="text-base font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12  align-middle pl-4 leading-0">Join Discord &#8599;</span>
                 </a>
             </Link>
             <Link href={RisedleLinks.twitter}>
                 <a className="bg-blue-light-3 p-4 dark:bg-blue-dark-2 rounded-lg sm:basis-1/3 flex flex-row items-center">
-                    <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block"
-                    >
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
                         <path
                             fillRule="evenodd"
                             clipRule="evenodd"
                             d="M7.23251 4.69633C7.23251 2.96887 8.6325 1.5686 10.3591 1.5686C11.3727 1.5686 12.1821 2.04807 12.7245 2.74388C13.3071 2.6247 13.8548 2.40916 14.3504 2.11511C14.155 2.72601 13.7416 3.23963 13.2025 3.56466C13.2029 3.56571 13.2034 3.56677 13.2038 3.56782C13.7325 3.50364 14.2356 3.36305 14.704 3.15549L14.7028 3.15718C14.3659 3.66186 13.9422 4.10739 13.4553 4.47037C13.4814 4.64675 13.4947 4.8243 13.4947 5.00083C13.4947 8.68713 10.6864 12.9746 5.52037 12.9746C3.93821 12.9746 2.46458 12.5111 1.22419 11.7152C0.991778 11.5661 0.924253 11.2568 1.07337 11.0244C1.08655 11.0038 1.10097 10.9846 1.11648 10.9667C1.20497 10.8202 1.37353 10.731 1.55454 10.7523C2.46981 10.8601 3.38483 10.7486 4.19134 10.3963C3.39141 10.0434 2.77044 9.35978 2.50118 8.51977C2.45273 8.36863 2.48749 8.20314 2.59266 8.08425C2.5963 8.08014 2.60001 8.07609 2.60379 8.07213C1.96306 7.50822 1.55888 6.68211 1.55888 5.76146V5.72762C1.55888 5.56817 1.64326 5.42062 1.78069 5.33977C1.82585 5.3132 1.87452 5.29514 1.92446 5.28561C1.70463 4.86158 1.5803 4.37988 1.5803 3.86961C1.5803 3.40168 1.58298 2.81195 1.91247 2.28084C1.98633 2.16178 2.10672 2.08918 2.23554 2.07198C2.42503 2.0124 2.64002 2.06972 2.7732 2.23305C3.86451 3.57129 5.4398 4.49586 7.2328 4.73964L7.23251 4.69633ZM5.52037 11.9746C4.73301 11.9746 3.97696 11.8436 3.27162 11.6024C4.12926 11.4538 4.95222 11.116 5.66133 10.5602C5.81125 10.4427 5.87096 10.2436 5.8104 10.063C5.74985 9.88237 5.58214 9.75946 5.3917 9.7561C4.68883 9.74369 4.06626 9.39719 3.67707 8.86848C3.86743 8.85309 4.05343 8.82042 4.23359 8.7717C4.43517 8.71719 4.57277 8.53117 4.56588 8.32246C4.559 8.11375 4.40944 7.93721 4.2047 7.89611C3.42609 7.7398 2.79797 7.16767 2.56083 6.42178C2.76169 6.47028 2.97016 6.49914 3.18396 6.50613C3.38477 6.5127 3.56561 6.38536 3.62709 6.19408C3.68858 6.0028 3.61581 5.79394 3.44878 5.68227C2.86438 5.29158 2.4803 4.62467 2.4803 3.86961C2.4803 3.70216 2.48266 3.55272 2.4927 3.41722C3.8503 4.79916 5.70787 5.68934 7.77503 5.79342C7.9314 5.80129 8.08242 5.73546 8.1831 5.61556C8.28377 5.49565 8.32247 5.33551 8.28765 5.18287C8.2517 5.0252 8.23251 4.86287 8.23251 4.69633C8.23251 3.52088 9.18506 2.5686 10.3591 2.5686C11.5934 2.5686 12.4947 3.71212 12.4947 5.00083C12.4947 8.25712 10.0194 11.9746 5.52037 11.9746Z"
                         />
                     </svg>
-                    <span className="text-base font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12 align-middle pl-4 leading-0">
-                        Follow Twitter &#8599;
-                    </span>
+                    <span className="text-base font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12 align-middle pl-4 leading-0">Follow Twitter &#8599;</span>
                 </a>
             </Link>
         </div>
