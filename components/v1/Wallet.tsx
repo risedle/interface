@@ -50,7 +50,8 @@ export type WalletStates = {
     chain: Chain;
     switchChain: (c: number) => void;
     account: string | null;
-    setAccount: (a: string | null) => void;
+    login: (a: string) => void;
+    logout: () => void;
     connectorName: string | null;
     setConnectorName: (n: string | null) => void;
 };
@@ -60,7 +61,8 @@ const WalletContext = createContext<WalletStates>({
     chain: defaultChain,
     switchChain: (c: number) => {},
     account: defaultAccount,
-    setAccount: (a: string | null) => {},
+    login: (a: string) => {},
+    logout: () => {},
     connectorName: defaultConnectorName,
     setConnectorName: (n: string | null) => {},
 });
@@ -93,51 +95,20 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
         }
     };
 
-    // Listen to connector events
-    MetaMaskConnector.on("connect", (data) => {
-        console.debug("Metamask connected");
-        console.debug(data);
-        if (data && data.account) {
-            setAccount(data.account);
-        }
-    });
-    MetaMaskConnector.on("disconnect", () => {
-        console.debug("Metamask disconnect");
+    // Login and logout functionalities
+    const login = (a: string) => {
+        setAccount(a);
+    };
+    const logout = () => {
         setAccount(null);
-    });
-    MetaMaskConnector.on("change", (data) => {
-        console.debug("Metamask changed");
-        console.debug(data);
-        if (data && data.account) {
-            console.log("HELLOOOOOOOOOOO");
-            console.log("setAccount", setAccount);
-            console.log("data", data);
-            setAccount(data.account);
-        }
-    });
-    WCConnector.on("connect", (data) => {
-        console.debug("WalletConnect connected");
-        // Handle switch account or switch network on metamask
-        if (data && data.account) {
-            setAccount(data.account);
-        }
-    });
-    WCConnector.on("disconnect", () => {
-        setAccount(null);
-    });
-    WCConnector.on("change", (data) => {
-        console.debug("WalletConnect change");
-        // Handle switch account or switch network on wallet connect
-        if (data && data.account) {
-            setAccount(data.account);
-        }
-    });
+    };
 
     const sharedPersistentStates = {
         chain: chain,
         switchChain: switchChain,
         account: account,
-        setAccount: setAccount,
+        login: login,
+        logout: logout,
         connectorName: connectorName,
         setConnectorName: setConnectorName,
     };

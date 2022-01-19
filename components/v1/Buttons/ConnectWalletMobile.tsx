@@ -1,5 +1,5 @@
 import type { FunctionComponent, SetStateAction } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Popover } from "@headlessui/react";
 import { InjectedConnector, useConnect, useAccount, Chain, useNetwork, chain as Chains } from "wagmi";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
@@ -43,7 +43,7 @@ const getEtherscanAddressURL = (chain: Chain | null, address: string): string =>
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProps> = ({}) => {
-    const { account, setAccount, connectorName, setConnectorName, chain, switchChain } = useWalletContext();
+    const { account, login, logout, connectorName, setConnectorName, chain, switchChain } = useWalletContext();
     const [connectionData, connect] = useConnect();
     const [connectedChain, switchNetwork] = useNetwork();
     const [accountData] = useAccount();
@@ -134,63 +134,39 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
         return;
     };
 
-    // Connect wallet
-    const connectWallet = async (connector: InjectedConnector | WalletConnectConnector) => {
+    // Set account states
+    const connectWallet = async function (c: InjectedConnector | WalletConnectConnector) {
+        console.debug("================== start wallet =======================");
         setIsConnecting(true);
+        const previousConnectorName = connectorName;
+        setConnectorName(c.name);
 
-        // Change wallet
-        if (connectorName && connector.name != connectorName) {
-            console.debug("Change wallet");
-            const connectingToast = toast.custom((t) => <ToastInProgress>Connecting via {connector.name}</ToastInProgress>, {
-                duration: Infinity,
-            });
-            const result = await connect(connector);
-            toast.dismiss(connectingToast);
+        const result = await connect(c);
+        // Handle the error
+        if (result && result.error) {
+            // Display error
+            toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
             setIsConnecting(false);
-
-            if (result && result.error) {
-                toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
-                return;
-            }
-
-            if (result && result.data && result.data.chain) {
-                toast.custom((t) => <ToastSuccess>{connector.name} connected</ToastSuccess>);
-
-                setConnectorName(connector.name);
-                return;
-            }
+            // Revert the connector name
+            setConnectorName(previousConnectorName);
             return;
         }
 
-        // Reconnect
-        if (connectionData.data.connected) {
-            console.debug("ButtonConnectWalletMobile reconnect");
-            // Set account manually
-            if (accountData.data?.address) {
-                setIsConnecting(false);
-                setConnectorName(connector.name);
-                toast.custom((t) => <ToastSuccess>{connector.name} connected</ToastSuccess>);
-                setAccount(accountData.data.address);
-            }
-            return;
-        }
-
-        // First time connect
-        const connectingToast = toast.custom((t) => <ToastInProgress>Connecting via {connector.name}</ToastInProgress>, {
-            duration: Infinity,
-        });
-        const result = await connect(connector);
-        toast.dismiss(connectingToast);
+        // Account connected
+        toast.custom((t) => <ToastSuccess>{c.name} connected</ToastSuccess>);
         setIsConnecting(false);
 
-        if (result && result.error) {
-            toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
+        // Login the user
+        if (result && result.data.account) {
+            login(result.data.account);
         }
 
-        if (result && result.data && result.data.chain) {
-            setConnectorName(connector.name);
-            toast.custom((t) => <ToastSuccess>{connector.name} connected</ToastSuccess>);
+        // If result is undefined; check the account data
+        if (!result && accountData && accountData.data) {
+            login(accountData.data.address);
         }
+
+        console.debug("connectWallet result", result);
     };
 
     return (
@@ -362,7 +338,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                             if (switchNetwork) {
                                                 switchNetwork(chain.id);
                                             } else {
-                                                toast.custom((t) => <ToastError>Cannot switch to {chain.name}</ToastError>);
+                                                toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);
                                             }
                                         }}
                                     >
@@ -436,7 +412,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                 <button
                                                                     className="hover:underline text-red-light-10 dark:text-red-dark-10"
                                                                     onClick={() => {
-                                                                        setAccount(null);
+                                                                        logout();
                                                                         toast.custom((t) => <ToastSuccess>{connectorName} disconnected</ToastSuccess>);
                                                                     }}
                                                                 >
