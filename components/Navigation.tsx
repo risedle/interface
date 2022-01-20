@@ -4,8 +4,11 @@ import type { FunctionComponent } from "react";
 import Logo from "./Logo";
 import Menu from "./Menu";
 import ButtonGrey from "./ButtonGrey";
-import ConnectMetamask from "./ConnectMetamask";
+import ConnectWallet from "./ConnectWallet";
 import ButtonOutlineCircle from "./ButtonOutlineCircle";
+
+// import wagmi
+import { useNetwork, chain } from "wagmi";
 
 // PNG files
 import ThreeDots from "../public/three-dots.png";
@@ -16,9 +19,6 @@ import ThreeDots from "../public/three-dots.png";
  */
 type NavigationProps = {
     activeMenu?: string;
-    account: string | null | undefined;
-    activateBrowserWallet: () => void;
-    deactivate: () => void;
 };
 
 /**
@@ -28,10 +28,19 @@ type NavigationProps = {
  */
 const Navigation: FunctionComponent<NavigationProps> = ({
     activeMenu,
-    account,
-    activateBrowserWallet,
-    deactivate,
 }) => {
+    const [networkData, switchNetwork] = useNetwork()
+    let networkName = "";
+    if(networkData.data.chain?.id === chain.kovan.id){
+        networkName = "Kovan"
+    } else if(networkData.data.chain?.id === chain.arbitrumOne.id){
+        networkName = "Arbtirum"
+    } else if(!networkData.data.chain){
+        networkName = ""
+    } else{
+        networkName = "Unsupported Network"
+    }
+
     return (
         <div className="flex flex-row p-4">
             <div className="flex-1">
@@ -40,14 +49,10 @@ const Navigation: FunctionComponent<NavigationProps> = ({
             <Menu active={activeMenu} />
             <div className="flex-1 flex flex-row gap gap-x-2 justify-end">
                 <div>
-                    <ButtonGrey>Kovan</ButtonGrey>
+                    <ButtonGrey>{networkName}</ButtonGrey>
                 </div>
                 <div>
-                    <ConnectMetamask
-                        account={account}
-                        activateBrowserWallet={activateBrowserWallet}
-                        deactivate={deactivate}
-                    />
+                    <ConnectWallet/>
                 </div>
                 <div>
                     <ButtonOutlineCircle icon={ThreeDots.src} />

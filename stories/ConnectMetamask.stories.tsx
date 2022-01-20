@@ -2,7 +2,7 @@ import { Meta, Story } from "@storybook/react";
 import { DAppProvider, ChainId } from "@usedapp/core";
 import { Fragment } from "react";
 
-import ConnectMetamask from "../components/ConnectMetamask";
+import ConnectMetamask from "../components/ConnectWallet";
 
 export default {
     component: ConnectMetamask,

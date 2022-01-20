@@ -1,8 +1,12 @@
 import type { FunctionComponent } from "react";
 import { Fragment } from "react";
+import Link from "next/link";
 
 // React useDapp
 import { shortenAddress } from "@usedapp/core";
+
+// Import wagmi
+import { useAccount } from "wagmi";
 
 // Import button
 import ButtonOutline from "./ButtonOutline";
@@ -12,27 +16,22 @@ import ButtonBlueSecondary from "./ButtonBlueSecondary";
  * ConnectMetamaskProps is a React Component properties that passed to React
  * Component Button
  */
-type ConnectMetamaskProps = {
-    account: string | null | undefined;
-    activateBrowserWallet: () => void;
-    deactivate: () => void;
-};
+type ConnectWalletProps = {};
 
 /**
  * ConnectMetamask is just yet another react component
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({
-    account,
-    activateBrowserWallet,
-    deactivate,
-}) => {
+const ConnectWallet: FunctionComponent<ConnectWalletProps> = ({}) => {
+
+    const [accountData, disconnect] = useAccount()
+
     let isAccountConnected = false;
     let shortAccountAddress = "NOT_CONNECTED";
-    if (account) {
+    if (accountData.data?.address) {
         isAccountConnected = true;
-        shortAccountAddress = shortenAddress(account);
+        shortAccountAddress = shortenAddress(accountData.data.address);
     }
 
     if (isAccountConnected) {
@@ -44,7 +43,7 @@ const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({
                     </ButtonBlueSecondary>
                 </div>
                 <div>
-                    <ButtonOutline onClick={deactivate}>
+                    <ButtonOutline onClick={disconnect}>
                         Disconnect
                     </ButtonOutline>
                 </div>
@@ -53,12 +52,16 @@ const ConnectMetamask: FunctionComponent<ConnectMetamaskProps> = ({
     } else {
         return (
             <Fragment>
-                <ButtonOutline onClick={activateBrowserWallet}>
-                    Connect wallet
-                </ButtonOutline>
+                <Link href={'/connect'}>
+                    <a>
+                        <ButtonOutline>
+                            Connect wallet
+                        </ButtonOutline>
+                    </a>
+                </Link>
             </Fragment>
         );
     }
 };
 
-export default ConnectMetamask;
+export default ConnectWallet;

@@ -1,13 +1,12 @@
-import type { FunctionComponent } from "react";
 import Link from "next/link";
-
+import type { FunctionComponent } from "react";
+import RisedleLinks from "../../../utils/links";
+import ButtonConnectWalletDesktop from "../Buttons/ConnectWalletDesktop";
+import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
+import ButtonNetworkSwitcher from "../Buttons/NetworkSwitcher";
+import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
 // Import components
 import Logo from "../Logo";
-import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
-import ButtonConnectWalletDesktop from "../Buttons/ConnectWalletDesktop";
-import ButtonNetworkSwitcher from "../Buttons/NetworkSwitcher";
-import RisedleLinks from "../../../utils/links";
-import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 
 /**
  * NavigationProps is a React Component properties that passed to React Component Navigation

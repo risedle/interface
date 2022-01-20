@@ -1,15 +1,14 @@
-import type { FunctionComponent } from "react";
 import Head from "next/head";
-
+import type { FunctionComponent } from "react";
 import Favicon from "../Favicon";
-import Navigation from "./Navigation";
-import Hero from "./Hero";
-import SubHero from "./SubHero";
+import GoogleFont from "../GoogleFont";
 import FeatureCardOneColumn from "./FeatureCardOneColumn";
 import FeatureCardTwoColumns from "./FeatureCardTwoColumns";
-import HeroFooter from "./HeroFooter";
 import Footer from "./Footer";
-import GoogleFont from "../GoogleFont";
+import Hero from "./Hero";
+import HeroFooter from "./HeroFooter";
+import Navigation from "./Navigation";
+import SubHero from "./SubHero";
 
 /**
  * HomePageProps is a React Component properties that passed to React Component HomePage
@@ -25,7 +24,7 @@ const HomePage: FunctionComponent<HomePageProps> = ({}) => {
     // By default use dark theme
 
     return (
-        <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter">
+        <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter overflow-clip">
             <Head>
                 <title>Risedle Protocol</title>
                 <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
