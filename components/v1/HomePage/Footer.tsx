@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { FunctionComponent } from "react";
+import RisedleLinks from "../../../utils/links";
 
 /**
  * FooterProps is a React Component properties that passed to React Component Footer
@@ -27,19 +28,19 @@ const Footer: FunctionComponent<FooterProps> = ({}) => {
                             fill="currentColor"
                         />
                     </svg>
-                    <a href="https://docs.risedle.com" target="_blank" rel="noopener noreferrer">
+                    <a href={RisedleLinks.docs} target="_blank" rel="noopener noreferrer">
                         Docs &#8599;
                     </a>
                 </div>
             </div>
             <div className="px-4 grow flex flex-col sm:flex-row mt-8 sm:my-0 gap-y-4 sm:gap-x-4 sm:justify-end">
-                <Link href="https://twitter.com/risedle">
+                <Link href={RisedleLinks.twitter}>
                     <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">Twitter &#8599;</a>
                 </Link>
-                <Link href="https://discord.com/invite/YCSCd97SXj">
+                <Link href={RisedleLinks.discord}>
                     <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">Discord &#8599;</a>
                 </Link>
-                <Link href="https://github.com/risedle">
+                <Link href={RisedleLinks.github}>
                     <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">Github &#8599;</a>
                 </Link>
             </div>
