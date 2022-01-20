@@ -2,6 +2,7 @@ import { INITIAL_VIEWPORTS } from "@storybook/addon-viewport";
 
 // Import tailwind in storybook preview
 import "tailwindcss/tailwind.css";
+import "../styles/globals.css";
 
 // Setup Next.js Image for storybook
 // https://xenox.dev/next-image-with-storybookjs/
