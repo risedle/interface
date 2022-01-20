@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react";
 
-import ButtonOutline from "../components/ButtonOutline";
+import ButtonOutline from "../../components/v0/ButtonOutline";
 
 export default {
     component: ButtonOutline,

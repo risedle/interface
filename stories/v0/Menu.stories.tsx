@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react";
 
-import Menu from "../components/Menu";
+import Menu from "../../components/v0/Menu";
 
 export default {
     component: Menu,

@@ -11,7 +11,7 @@ import ButtonOutlineCircle from "./ButtonOutlineCircle";
 import { useNetwork, chain } from "wagmi";
 
 // PNG files
-import ThreeDots from "../public/three-dots.png";
+import ThreeDots from "../../public/three-dots.png";
 
 /**
  * NavigationProps is a React Component properties that passed to React
@@ -26,19 +26,17 @@ type NavigationProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const Navigation: FunctionComponent<NavigationProps> = ({
-    activeMenu,
-}) => {
-    const [networkData, switchNetwork] = useNetwork()
+const Navigation: FunctionComponent<NavigationProps> = ({ activeMenu }) => {
+    const [networkData, switchNetwork] = useNetwork();
     let networkName = "";
-    if(networkData.data.chain?.id === chain.kovan.id){
-        networkName = "Kovan"
-    } else if(networkData.data.chain?.id === chain.arbitrumOne.id){
-        networkName = "Arbtirum"
-    } else if(!networkData.data.chain){
-        networkName = ""
-    } else{
-        networkName = "Unsupported Network"
+    if (networkData.data.chain?.id === chain.kovan.id) {
+        networkName = "Kovan";
+    } else if (networkData.data.chain?.id === chain.arbitrumOne.id) {
+        networkName = "Arbtirum";
+    } else if (!networkData.data.chain) {
+        networkName = "";
+    } else {
+        networkName = "Unsupported Network";
     }
 
     return (
@@ -52,7 +50,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
                     <ButtonGrey>{networkName}</ButtonGrey>
                 </div>
                 <div>
-                    <ConnectWallet/>
+                    <ConnectWallet />
                 </div>
                 <div>
                     <ButtonOutlineCircle icon={ThreeDots.src} />

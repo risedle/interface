@@ -1,9 +1,9 @@
 import { Meta, Story } from "@storybook/react";
 
-import DetailHeader from "../components/DetailHeader";
+import DetailHeader from "../../components/v0/DetailHeader";
 
 // PNG files
-import USDC_ICON from "../public/USDC_ICON.png";
+import USDC_ICON from "../../public/USDC_ICON.png";
 
 export default {
     component: DetailHeader,
@@ -18,17 +18,7 @@ const Template: Story<{
     leftPath: string;
     rightTitle: string;
     rightPath: string;
-}> = (args) => (
-    <DetailHeader
-        image={args.image}
-        title={args.title}
-        subTitle={args.subTitle}
-        leftTitle={args.leftTitle}
-        leftPath={args.leftPath}
-        rightTitle={args.rightTitle}
-        rightPath={args.rightPath}
-    />
-);
+}> = (args) => <DetailHeader image={args.image} title={args.title} subTitle={args.subTitle} leftTitle={args.leftTitle} leftPath={args.leftPath} rightTitle={args.rightTitle} rightPath={args.rightPath} />;
 
 //Each story then reuses that template
 export const Default = Template.bind({});

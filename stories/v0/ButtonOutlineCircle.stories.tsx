@@ -1,9 +1,9 @@
 import { Meta, Story } from "@storybook/react";
 
-import ButtonOutlineCircle from "../components/ButtonOutlineCircle";
+import ButtonOutlineCircle from "../../components/v0/ButtonOutlineCircle";
 
 // PNG files
-import ThreeDots from "../public/three-dots.png";
+import ThreeDots from "../../public/three-dots.png";
 
 export default {
     component: ButtonOutlineCircle,

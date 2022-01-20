@@ -3,7 +3,6 @@ import Head from "next/head";
 
 import Favicon from "../Favicon";
 import Navigation from "./Navigation";
-import GoogleFont from "../GoogleFont";
 
 /**
  * MarketsPageProps is a React Component properties that passed to React Component MarketsPage
@@ -24,7 +23,6 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                 <title>Risedle Protocol</title>
                 <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
             </Head>
-            <GoogleFont />
             <Favicon />
             <Navigation />
         </div>

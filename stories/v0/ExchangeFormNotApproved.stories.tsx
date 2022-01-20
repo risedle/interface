@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react";
 
-import ExchangeFormNotApproved from "../components/ExchangeFormNotApproved";
+import ExchangeFormNotApproved from "../../components/v0/ExchangeFormNotApproved";
 
 export default {
     component: ExchangeFormNotApproved,
@@ -18,20 +18,7 @@ const Template: Story<{
     formInputTokenBalance: string;
     formOutputToken: string;
     onClickApprove: () => void;
-}> = (args) => (
-    <ExchangeFormNotApproved
-        backTitle={args.backTitle}
-        backURL={args.backURL}
-        title={args.title}
-        subTitle={args.subTitle}
-        formTitle={args.formTitle}
-        formPlaceholder={args.formPlaceholder}
-        formInputToken={args.formInputToken}
-        formInputTokenBalance={args.formInputTokenBalance}
-        formOutputToken={args.formOutputToken}
-        onClickApprove={args.onClickApprove}
-    />
-);
+}> = (args) => <ExchangeFormNotApproved backTitle={args.backTitle} backURL={args.backURL} title={args.title} subTitle={args.subTitle} formTitle={args.formTitle} formPlaceholder={args.formPlaceholder} formInputToken={args.formInputToken} formInputTokenBalance={args.formInputTokenBalance} formOutputToken={args.formOutputToken} onClickApprove={args.onClickApprove} />;
 
 function approve() {
     alert("approve");

@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react";
 
-import ExchangeFormApproved from "../components/ExchangeFormAprroved";
+import ExchangeFormApproved from "../../components/v0/ExchangeFormAprroved";
 
 export default {
     component: ExchangeFormApproved,
@@ -19,21 +19,7 @@ const Template: Story<{
     formOutputToken: string;
     formSubmitTitle: string;
     onClickSubmit: () => void;
-}> = (args) => (
-    <ExchangeFormApproved
-        backTitle={args.backTitle}
-        backURL={args.backURL}
-        title={args.title}
-        subTitle={args.subTitle}
-        formTitle={args.formTitle}
-        formPlaceholder={args.formPlaceholder}
-        formInputToken={args.formInputToken}
-        formInputTokenBalance={args.formInputTokenBalance}
-        formOutputToken={args.formOutputToken}
-        formSubmitTitle={args.formSubmitTitle}
-        onClickSubmit={args.onClickSubmit}
-    />
-);
+}> = (args) => <ExchangeFormApproved backTitle={args.backTitle} backURL={args.backURL} title={args.title} subTitle={args.subTitle} formTitle={args.formTitle} formPlaceholder={args.formPlaceholder} formInputToken={args.formInputToken} formInputTokenBalance={args.formInputTokenBalance} formOutputToken={args.formOutputToken} formSubmitTitle={args.formSubmitTitle} onClickSubmit={args.onClickSubmit} />;
 
 function submit() {
     alert("submit");

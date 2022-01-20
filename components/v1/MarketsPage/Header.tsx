@@ -1,7 +1,8 @@
 import type { FunctionComponent } from "react";
-import { Markets } from "../../../markets/markets";
 import { useWalletContext } from "../Wallet";
-import { useContractRead } from "wagmi";
+
+// Snapshot data
+import { useMarkets } from "../../../utils/snapshot";
 
 /**
  * HeaderProps is a React Component properties that passed to React Component Header
@@ -15,6 +16,10 @@ type HeaderProps = {};
  */
 const Header: FunctionComponent<HeaderProps> = ({}) => {
     const { chain } = useWalletContext();
+    const { markets, isLoading, isError } = useMarkets(chain.id);
+    console.debug("Header markets", markets);
+    console.debug("Header isLoading", isLoading);
+    console.debug("Header isError", isError);
 
     // Get total AUM
     // Total collateral all of leveraged tokens in terms of USDC

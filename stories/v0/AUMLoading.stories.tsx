@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react";
 
-import AUMLoading from "../components/AUMLoading";
+import AUMLoading from "../../components/v0/AUMLoading";
 
 export default {
     component: AUMLoading,

@@ -9,7 +9,6 @@ import FeatureCardOneColumn from "./FeatureCardOneColumn";
 import FeatureCardTwoColumns from "./FeatureCardTwoColumns";
 import HeroFooter from "./HeroFooter";
 import Footer from "./Footer";
-import GoogleFont from "../GoogleFont";
 
 /**
  * HomePageProps is a React Component properties that passed to React Component HomePage
@@ -30,7 +29,6 @@ const HomePage: FunctionComponent<HomePageProps> = ({}) => {
                 <title>Risedle Protocol</title>
                 <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
             </Head>
-            <GoogleFont />
             <Favicon />
             <Navigation />
             <Hero />

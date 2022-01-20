@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react";
 
-import ETFCard from "../components/ETFCard";
+import ETFCard from "../../components/v0/ETFCard";
 
 export default {
     component: ETFCard,
@@ -13,15 +13,7 @@ const Template: Story<{
     etfURL: string;
     navPrice: string;
     change30d: string;
-}> = (args) => (
-    <ETFCard
-        title={args.title}
-        subTitle={args.subTitle}
-        etfURL={args.etfURL}
-        navPrice={args.navPrice}
-        change30d={args.change30d}
-    />
-);
+}> = (args) => <ETFCard title={args.title} subTitle={args.subTitle} etfURL={args.etfURL} navPrice={args.navPrice} change30d={args.change30d} />;
 
 //Each story then reuses that template
 export const Default = Template.bind({});

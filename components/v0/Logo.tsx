@@ -2,7 +2,7 @@ import type { FunctionComponent } from "react";
 import Link from "next/link";
 
 // Import SVG Logo
-import RisedleLogo from "../public/logo.svg";
+import RisedleLogo from "../../public/logo.svg";
 
 /**
  * LogoProps is a React Component properties that passed to React

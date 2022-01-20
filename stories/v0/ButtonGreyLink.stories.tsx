@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react";
 
-import ButtonGreyLink from "../components/ButtonGreyLink";
+import ButtonGreyLink from "../../components/v0/ButtonGreyLink";
 
 export default {
     component: ButtonGreyLink,

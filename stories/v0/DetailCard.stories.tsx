@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react";
 
-import DetailCard, { DetailCardListItem } from "../components/DetailCard";
+import DetailCard, { DetailCardListItem } from "../../components/v0/DetailCard";
 
 export default {
     component: DetailCard,

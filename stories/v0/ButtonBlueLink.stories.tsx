@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react";
 
-import ButtonBlueLink from "../components/ButtonBlueLink";
+import ButtonBlueLink from "../../components/v0/ButtonBlueLink";
 
 export default {
     component: ButtonBlueLink,

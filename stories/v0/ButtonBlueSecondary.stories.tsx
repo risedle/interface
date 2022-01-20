@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react";
 
-import ButtonBlueSecondary from "../components/ButtonBlueSecondary";
+import ButtonBlueSecondary from "../../components/v0/ButtonBlueSecondary";
 
 export default {
     component: ButtonBlueSecondary,

@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import Link from "next/link";
 
 // React useDapp
-import { shortenAddress } from "@usedapp/core";
+// import { shortenAddress } from "@usedapp/core";
 
 // Import wagmi
 import { useAccount } from "wagmi";
@@ -24,39 +24,32 @@ type ConnectWalletProps = {};
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const ConnectWallet: FunctionComponent<ConnectWalletProps> = ({}) => {
-
-    const [accountData, disconnect] = useAccount()
+    const [accountData, disconnect] = useAccount();
 
     let isAccountConnected = false;
     let shortAccountAddress = "NOT_CONNECTED";
     if (accountData.data?.address) {
         isAccountConnected = true;
-        shortAccountAddress = shortenAddress(accountData.data.address);
+        // shortAccountAddress = shortenAddress(accountData.data.address);
     }
 
     if (isAccountConnected) {
         return (
             <div className="flex flex-row gap gap-x-2">
                 <div>
-                    <ButtonBlueSecondary>
-                        {shortAccountAddress}
-                    </ButtonBlueSecondary>
+                    <ButtonBlueSecondary>{shortAccountAddress}</ButtonBlueSecondary>
                 </div>
                 <div>
-                    <ButtonOutline onClick={disconnect}>
-                        Disconnect
-                    </ButtonOutline>
+                    <ButtonOutline onClick={disconnect}>Disconnect</ButtonOutline>
                 </div>
             </div>
         );
     } else {
         return (
             <Fragment>
-                <Link href={'/connect'}>
+                <Link href={"/connect"}>
                     <a>
-                        <ButtonOutline>
-                            Connect wallet
-                        </ButtonOutline>
+                        <ButtonOutline>Connect wallet</ButtonOutline>
                     </a>
                 </Link>
             </Fragment>
