@@ -8,6 +8,7 @@ module.exports = {
         extend: {
             fontFamily: {
                 inter: ["'Inter'", "sans-serif"],
+                ibm: ["'IBM Plex Mono'", "monospace"],
             },
             colors: {
                 blue: {

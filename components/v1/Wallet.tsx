@@ -12,7 +12,8 @@ import { BaseProvider } from "@ethersproject/providers";
 
 export const connectorStorageKey = "risedleConnectors.wallet";
 
-export const supportedChains = [Chains.arbitrumOne, Chains.kovan];
+// export const supportedChains = [Chains.arbitrumOne, Chains.kovan];
+export const supportedChains = [Chains.kovan];
 
 // Wallet connectors
 export const MetaMaskConnector = new InjectedConnector({
