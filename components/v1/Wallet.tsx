@@ -1,7 +1,7 @@
 import { FunctionComponent, ReactNode } from "react";
 import createPersistedState from "use-persisted-state";
 
-import { Chain, Provider, chain as Chains, chain } from "wagmi";
+import { Chain, Provider, chain as Chains } from "wagmi";
 
 import { createContext, useContext } from "react";
 
