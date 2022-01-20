@@ -1,10 +1,10 @@
 import type { NextPage } from "next";
 
 // Import components
-import HomePage from "../components/v1/HomePage/HomePage";
+import MarketsPage from "../../components/v1/MarketsPage/MarketsPage";
 
 const Home: NextPage = () => {
-    return <HomePage />;
+    return <MarketsPage />;
 };
 
 export default Home;

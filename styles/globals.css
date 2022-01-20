@@ -1,3 +1,59 @@
-body {
-    background-color: black;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .button {
+        @apply focus:outline outline-offset-2 outline-2 dark:outline-white/30 outline-black/30 transition-all ease-in-out duration-200 active:scale-95;
+    }
+    .basic {
+        @apply text-gray-light-12 dark:text-gray-dark-12 bg-gray-light-2 hover:bg-gray-light-3 dark:bg-gray-dark-2 dark:hover:bg-gray-dark-3 border border-gray-light-5 dark:border-gray-dark-5 text-sm font-semibold h-[40px] px-4 rounded-full flex justify-center items-center;
+    }
+    .hero-text {
+        @apply text-5xl sm:text-6xl md:text-7xl font-bold m-0 text-gray-light-12 dark:text-gray-dark-12 max-w-2xl text-center tracking-tight;
+    }
+}
+
+html.dark {
+    background: rgb(22 22 22 / var(--tw-bg-opacity));
+}
+
+html {
+    background: rgb(252 252 252 / var(--tw-bg-opacity));
+}
+
+.dark .gradient {
+    background-image: radial-gradient(
+        91.36% 358.74% at 12.29% 100%,
+        #c9bbff 0%,
+        #b2ecff 30.08%,
+        #ffc1f9 60.28%,
+        #fff5c1 100%
+    );
+}
+
+.gradient {
+    background-image: radial-gradient(
+        91.36% 358.74% at 12.29% 100%,
+        #9d85ff 0%,
+        #7ad4f0 30.08%,
+        #f554e5 60.28%,
+        #e7cf55 100%
+    );
+}
+
+.move-gradient {
+    animation: gradient 5s ease-in-out infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
