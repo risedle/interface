@@ -45,20 +45,24 @@ module.exports = {
                 violet: {
                     light: {
                         3: "#F5F2FF",
+                        4: "#EDE9FE",
                     },
                     dark: {
                         2: "#1C172B",
+                        3: "#251E40",
                     },
                 },
                 blue: {
                     light: {
                         1: "#FBFDFF",
                         3: "#EDF6FF",
+                        4: "#E1F0FF",
                         5: "#CEE7FE",
                     },
                     dark: {
                         1: "#0F1720",
                         2: "#0F1B2D",
+                        3: "#10243E",
                         5: "#0F3058",
                     },
                 },

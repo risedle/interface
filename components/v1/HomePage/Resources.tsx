@@ -1,6 +1,5 @@
-import type { FunctionComponent } from "react";
 import Link from "next/link";
-
+import type { FunctionComponent } from "react";
 import RisedleLinks from "../../../utils/links";
 
 /**
@@ -15,9 +14,9 @@ type ResourcesProps = {};
  */
 const Resources: FunctionComponent<ResourcesProps> = ({}) => {
     return (
-        <div className="flex flex-col sm:flex-row px-4 gap-y-2 sm:gap-x-4 max-w-4xl m-auto">
+        <div className="flex flex-col sm:flex-row gap-y-2 sm:gap-x-4 flex-shrink-0 m-auto w-full">
             <Link href={RisedleLinks.docs}>
-                <a className="bg-gray-light-3 dark:bg-gray-dark-2 p-4 rounded-lg sm:basis-1/3 flex flex-row items-center">
+                <a className="bg-gray-light-3 hover:bg-gray-light-4 dark:bg-gray-dark-2 hover:dark:bg-gray-dark-3 p-4 rounded-lg sm:basis-1/3 flex flex-row items-center">
                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
                         <path d="M3.25854 3.11684C3.67845 3.45796 3.83597 3.43193 4.62443 3.37933L12.0578 2.93299C12.2155 2.93299 12.0844 2.77571 12.0318 2.74957L10.7973 1.85711C10.5607 1.67347 10.2456 1.46315 9.64156 1.51576L2.44381 2.04074C2.18132 2.06677 2.12888 2.19801 2.23343 2.30322L3.25854 3.11684ZM3.70483 4.84917V12.6704C3.70483 13.0907 3.91489 13.248 4.38766 13.222L12.5569 12.7493C13.0299 12.7233 13.0826 12.4341 13.0826 12.0927V4.32397C13.0826 3.98306 12.9515 3.79921 12.6619 3.82545L4.12495 4.32397C3.80991 4.35044 3.70483 4.50803 3.70483 4.84917ZM11.7695 5.26872C11.8219 5.50518 11.7695 5.74142 11.5326 5.76799L11.139 5.84641V11.6205C10.7973 11.8042 10.4821 11.9092 10.2195 11.9092C9.79908 11.9092 9.69378 11.7779 9.37885 11.3844L6.80418 7.34249V11.2532L7.6189 11.437C7.6189 11.437 7.6189 11.9092 6.96159 11.9092L5.14952 12.0143C5.09688 11.9092 5.14952 11.647 5.33332 11.5944L5.80619 11.4634V6.29276L5.14963 6.24015C5.09699 6.00369 5.22812 5.66278 5.59614 5.63631L7.54008 5.50528L10.2195 9.5998V5.97765L9.53637 5.89924C9.48393 5.61018 9.69378 5.40028 9.95649 5.37425L11.7695 5.26872ZM1.83947 1.33212L9.32631 0.780787C10.2457 0.701932 10.4822 0.754753 11.0601 1.17452L13.45 2.85424C13.8443 3.14309 13.9758 3.22173 13.9758 3.53661V12.7493C13.9758 13.3266 13.7654 13.6681 13.0301 13.7203L4.33566 14.2454C3.78365 14.2717 3.52093 14.193 3.23184 13.8253L1.47189 11.5419C1.15653 11.1216 1.02539 10.8071 1.02539 10.4392V2.25041C1.02539 1.77825 1.23577 1.38441 1.83947 1.33212Z" />
                     </svg>
@@ -25,7 +24,7 @@ const Resources: FunctionComponent<ResourcesProps> = ({}) => {
                 </a>
             </Link>
             <Link href={RisedleLinks.discord}>
-                <a className="bg-violet-light-3 dark:bg-violet-dark-2 p-4 rounded-lg sm:basis-1/3 flex flex-row items-center">
+                <a className="bg-violet-light-3 hover:bg-violet-light-4 dark:bg-violet-dark-2 hover:dark:bg-violet-dark-3 p-4 rounded-lg sm:basis-1/3 flex flex-row items-center">
                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
                         <g clipPath="url(#clip0_481_19437)">
                             <path
@@ -44,7 +43,7 @@ const Resources: FunctionComponent<ResourcesProps> = ({}) => {
                 </a>
             </Link>
             <Link href={RisedleLinks.twitter}>
-                <a className="bg-blue-light-3 p-4 dark:bg-blue-dark-2 rounded-lg sm:basis-1/3 flex flex-row items-center">
+                <a className="bg-blue-light-3 hover:bg-blue-light-4 dark:bg-blue-dark-2 hover:dark:bg-blue-dark-3 rounded-lg p-4 sm:basis-1/3 flex flex-row items-center">
                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
                         <path
                             fillRule="evenodd"
