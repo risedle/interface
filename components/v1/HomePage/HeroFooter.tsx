@@ -13,30 +13,18 @@ type HeroFooterProps = {};
  */
 const HeroFooter: FunctionComponent<HeroFooterProps> = ({}) => {
     return (
-        <div className="relative w-full justify-center overflow-hidden">
-            <div className="relative z-10 flex flex-col px-4 text-center max-w-screen-md m-auto">
-                <div className="mt-20 sm:mt-30">
-                    <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold m-0 text-gray-light-12 dark:text-gray-dark-12">Learn More</h1>
-                    <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold m-0 text-gray-light-12 dark:text-gray-dark-12 mb-6">
-                        About{" "}
-                        <span
-                            className="bg-clip-text text-transparent"
-                            style={{
-                                backgroundImage: "radial-gradient(91.36% 358.74% at 12.29% 100%, #9D85FF 0%, #7AD4F0 30.08%, #F554E5 60.28%, #E7CF55 100%)",
-                            }}
-                        >
-                            Risedle
-                        </span>
-                    </h1>
-                </div>
+        <div className="relative w-full flex justify-center items-center my-20 sm:my-40">
+            <div className="relative z-10 flex flex-col px-4 text-center max-w-screen-md w-full gap-8 items-center">
+                <h1 className="hero-text">
+                    Learn More <br />
+                    About <span className="bg-clip-text text-transparent gradient move-gradient bg-[length:250%_250%]">Risedle</span>
+                </h1>
                 <div>
                     <h2 className="text-base text-gray-light-10 dark:text-gray-dark-10 mb-6">These are links to help you dive deeper into Risedle labs and the products.</h2>
                 </div>
-                <div className="sm:mb-32">
-                    <Resources />
-                </div>
+                <Resources />
             </div>
-            <svg width="100%" height="auto" viewBox="0 0 375 463" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-0 absolute top-0 left-1/2 -translate-x-1/2  fill-gray-light-12 dark:fill-white max-w-3xl">
+            <svg width="100%" height="auto" viewBox="0 0 375 463" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-0 absolute top-0 left-1/2 -translate-x-1/2  fill-gray-light-12 dark:fill-white max-w-3xl scale-150">
                 <g filter="url(#filter0_f_488_28293)">
                     <rect x="42" y="208.087" width="14.5306" height="134.487" transform="rotate(-16.0921 42 208.087)" fill="#5FD4F4" />
                 </g>

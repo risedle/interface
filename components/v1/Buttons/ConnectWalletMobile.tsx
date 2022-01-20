@@ -1,21 +1,17 @@
-import type { FunctionComponent, SetStateAction } from "react";
-import { useState, useEffect } from "react";
 import { Popover } from "@headlessui/react";
-import { InjectedConnector, useConnect, useAccount, Chain, useNetwork, chain as Chains } from "wagmi";
-import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import Link from "next/link";
+import type { FunctionComponent } from "react";
+import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { usePopper } from "react-popper";
-
-// States
-import { MetaMaskConnector, WCConnector, useWalletContext, supportedChains } from "../Wallet";
-
+import { Chain, chain as Chains, InjectedConnector, useAccount, useConnect, useNetwork } from "wagmi";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import RisedleLinks from "../../../utils/links";
 // Toasts
 import ToastError from "../Toasts/Error";
-import ToastInProgress from "../Toasts/InProgress";
 import ToastSuccess from "../Toasts/Success";
-import Link from "next/link";
-
-import RisedleLinks from "../../../utils/links";
+// States
+import { MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
 
 /**
  * ButtonConnectWalletMobileProps is a React Component properties that passed to React Component ButtonConnectWalletMobile
@@ -187,8 +183,8 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         }
                         return (
                             <>
-                                <Popover.Button ref={setReferenceElement1} className="bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full">
-                                    <img src={getChainIconPath(chain)} alt={chain.name} className="mx-[9.5px] my-[9px]" />
+                                <Popover.Button ref={setReferenceElement1} className="button basic w-[40px] p-2">
+                                    <img src={getChainIconPath(chain)} alt={chain.name} className="flex-shrink-0" />
                                 </Popover.Button>
 
                                 <Popover.Panel ref={setPopperElement1} style={popper1.styles.popper} {...popper1.attributes.popper} className="bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 flex flex-col p-4 rounded-[16px] min-w-[241px]">
@@ -242,14 +238,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                 {/* If account is not connected then display the connect wallet button */}
                                 {(!account || !connectedChain.data || !connectedChain.data.chain) && (
                                     <>
-                                        <Popover.Button
-                                            ref={setReferenceElement2}
-                                            className="text-gray-light-12 text-sm font-semibold py-3 px-4 rounded-full leading-4 inline-block w-full"
-                                            style={{
-                                                background: "radial-gradient(91.36% 358.74% at 12.29% 100%, #C9BBFF 0%, #B2ECFF 30.08%, #FFC1F9 60.28%, #FFF5C1 100%)",
-                                                boxShadow: "-20px -24px 54px rgba(255, 169, 231, 0.08), 0px 6px 54px rgba(186, 243, 255, 0.16)",
-                                            }}
-                                        >
+                                        <Popover.Button ref={setReferenceElement2} className="text-gray-light-12 text-sm font-semibold py-3 px-4 rounded-full leading-4 inline-block w-full button gradient bg-[length:300%_300%] tracking-tight bg-center hover:bg-left hover:shadow-xl hover:shadow-blue-400/20">
                                             Connect Wallet
                                         </Popover.Button>
 
@@ -454,9 +443,9 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         }
                         return (
                             <>
-                                <Popover.Button ref={setReferenceElement3} className="bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full">
+                                <Popover.Button ref={setReferenceElement3} className="button basic w-[40px]">
                                     {open && (
-                                        <svg className="fill-gray-light-12 dark:fill-gray-dark-12 mx-[11px] my-[11px]" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                        <svg className="flex-shrink-0 fill-gray-light-12 dark:fill-gray-dark-12" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                                             <path
                                                 fillRule="evenodd"
                                                 clipRule="evenodd"
@@ -465,7 +454,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                         </svg>
                                     )}
                                     {!open && (
-                                        <svg className="fill-gray-light-12 dark:fill-gray-dark-12 mx-[11px] my-[11px]" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                        <svg className="flex-shrink-0 fill-gray-light-12 dark:fill-gray-dark-12" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                                             <path
                                                 fillRule="evenodd"
                                                 clipRule="evenodd"

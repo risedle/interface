@@ -1,5 +1,5 @@
-import type { FunctionComponent } from "react";
 import Link from "next/link";
+import type { FunctionComponent } from "react";
 
 /**
  * FeatureCardTwoColumnsProps is a React Component properties that passed to React Component FeatureCardTwoColumns
@@ -14,7 +14,7 @@ type FeatureCardTwoColumnsProps = {};
 const FeatureCardTwoColumns: FunctionComponent<FeatureCardTwoColumnsProps> = ({}) => {
     return (
         <div className="px-4 max-w-4xl m-auto flex flex-col sm:flex-row">
-            <div className="basis-1/2 bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-3 dark:border-gray-dark-3 rounded-lg overflow-hidden flex flex-col mb-4 sm:mb-0 sm:mr-2">
+            <div className="basis-1/2 bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-3 dark:border-gray-dark-3 rounded-2xl overflow-hidden flex flex-col mb-4 sm:mb-0 sm:mr-2">
                 <div className="px-4 sm:px-8 py-6 sm:basis-1/3">
                     <h1 className="m-0 text-base sm:text-lg font-bold mb-4 text-gray-light-12 dark:text-gray-dark-12">0% Management Fees</h1>
                     <p className="text-sm text-gray-light-10 dark:text-gray-dark-10 leading-6 mb-6">Just like leveraging assets manually using lending protocol, you will not get charged for management fees.</p>
@@ -87,7 +87,7 @@ const FeatureCardTwoColumns: FunctionComponent<FeatureCardTwoColumnsProps> = ({}
                 </div>
             </div>
 
-            <div className="basis-1/2 bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-3 dark:border-gray-dark-3 rounded-lg overflow-hidden flex flex-col sm:ml-2">
+            <div className="basis-1/2 bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-3 dark:border-gray-dark-3 rounded-2xl overflow-hidden flex flex-col sm:ml-2">
                 <div className="sm:basis-2/3 inline-block ">
                     <svg height="100%" width="auto" viewBox="0 0 343 341" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0_479_19257)">
