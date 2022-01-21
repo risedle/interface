@@ -35,7 +35,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                 <div className="mt-6 mb-12">
                     <MarketCards />
                 </div>
-                <div>
+                <div className="pb-20 sm:pb-0">
                     <Footer />
                 </div>
             </div>
