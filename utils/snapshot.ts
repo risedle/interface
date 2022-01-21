@@ -12,6 +12,7 @@ export type Market = {
     leveraged_token_address: string;
     leveraged_token_collateral_price: number;
     leveraged_token_market_cap: number;
+    leveraged_token_total_supply: number;
     leveraged_token_max_total_collateral: number;
     leveraged_token_price_change: number;
     leveraged_token_price_change_percent: number;
@@ -44,6 +45,38 @@ export function useMarkets(chainID: number) {
 
     return {
         data: data,
+        isLoading: !error && !data,
+        isError: error,
+    };
+}
+
+function filterOutSameNAV(
+    data: Array<LeveragedTokenHistoricalData> | undefined
+): Array<LeveragedTokenHistoricalData> | undefined {
+    if (!data) return undefined;
+    return [...new Map(data.map((item) => [item["nav"], item])).values()];
+}
+
+export type LeveragedTokenHistoricalData = {
+    timestamp: string;
+    collateral_per_leveraged_token: number;
+    debt_per_leveraged_token: number;
+    leverage_ratio: number;
+    nav: number;
+};
+
+export function useLeveragedTokenData3Months(
+    chainID: number,
+    leveragedTokenAddress: string
+) {
+    const endpoint = snapshotEndpoint[chainID];
+    const { data, error } = useSWR<Array<LeveragedTokenHistoricalData>, Error>(
+        `${endpoint}/v1/leveragedTokens/3months/${leveragedTokenAddress}`,
+        fetcher
+    );
+
+    return {
+        data: filterOutSameNAV(data),
         isLoading: !error && !data,
         isError: error,
     };
