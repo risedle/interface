@@ -25,7 +25,7 @@ const FeatureCardTwoColumns: FunctionComponent<FeatureCardTwoColumnsProps> = ({}
                     </p>
                 </div>
                 <div className="sm:basis-2/3 inline-block ">
-                    <svg height="100%" width="auto" viewBox="0 0 343 341" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg height="100%" width="100%" viewBox="0 0 343 341" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="169" cy="196" r="80.5" className="stroke-gray-light-5 dark:stroke-gray-dark-5" />
                         <path d="M362.5 195C362.5 302.421 275.642 389.5 168.5 389.5C61.358 389.5 -25.5 302.421 -25.5 195C-25.5 87.5794 61.358 0.5 168.5 0.5C275.642 0.5 362.5 87.5794 362.5 195Z" className="stroke-gray-light-5 dark:stroke-gray-dark-5" />
                         <circle cx="168.5" cy="195.5" r="130.5" className="stroke-gray-light-5 dark:stroke-gray-dark-5" strokeDasharray="4 4" />
@@ -89,7 +89,7 @@ const FeatureCardTwoColumns: FunctionComponent<FeatureCardTwoColumnsProps> = ({}
 
             <div className="basis-1/2 bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-3 dark:border-gray-dark-3 rounded-2xl overflow-hidden flex flex-col sm:ml-2">
                 <div className="sm:basis-2/3 inline-block ">
-                    <svg height="100%" width="auto" viewBox="0 0 343 341" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg height="100%" width="100%" viewBox="0 0 343 341" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0_479_19257)">
                             <path d="M-43 190L81.1444 182.3L134.707 168L203.286 176.8L239.829 168L259.852 147.1H318.921L344.451 130.6L387 124" stroke="#C7C7C7" strokeDasharray="4 4" />
                             <circle cx="160" cy="157" r="31.5" fill="white" fillOpacity="0.1" className="stroke-gray-light-12 dark:stroke-gray-dark-12" />

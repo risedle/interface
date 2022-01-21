@@ -7,4 +7,4 @@ export default {
     title: "Risedle V1/Home Page/Feature Card/One Column",
 };
 
-export const Component = () => <FeatureCardOneColumn />;
+export const OneColumn = () => <FeatureCardOneColumn />;

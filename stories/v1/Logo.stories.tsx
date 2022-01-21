@@ -4,7 +4,7 @@ import Logo from "../../components/v1/Logo";
 
 export default {
     component: Logo,
-    title: "Risedle V1/Logo/Logo",
+    title: "Risedle V1/Logo/Icon",
 };
 
-export const Basic = () => <Logo />;
+export const Icon = () => <Logo />;

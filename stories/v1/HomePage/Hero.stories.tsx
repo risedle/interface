@@ -4,7 +4,7 @@ import Hero from "../../../components/v1/HomePage/Hero";
 
 export default {
     component: Hero,
-    title: "Risedle V1/Home Page/Hero Header",
+    title: "Risedle V1/Home Page/Hero/Header",
 };
 
-export const HeroHeader = () => <Hero />;
+export const Header = () => <Hero />;

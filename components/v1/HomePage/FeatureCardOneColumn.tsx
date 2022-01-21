@@ -25,7 +25,7 @@ const FeatureCardOneColumn: FunctionComponent<FeatureCardOneColumnProps> = ({}) 
                     </p>
                 </div>
                 <div className="sm:basis-2/4 inline-block ">
-                    <svg height="100%" width="auto" viewBox="0 0 343 336" fill="none" xmlns="http://www.w3.org/2000/svg" className="object-cover sm:-mt-16">
+                    <svg height="100%" width="100%" viewBox="0 0 343 336" fill="none" xmlns="http://www.w3.org/2000/svg" className="object-cover sm:-mt-16">
                         <line x1="52.5" y1="2.18557e-08" x2="52.5" y2="382" className="stroke-gray-light-3 dark:stroke-gray-dark-3" />
                         <line x1="132.5" y1="2.18557e-08" x2="132.5" y2="382" className="stroke-gray-light-3 dark:stroke-gray-dark-3" />
                         <line x1="212.5" y1="2.18557e-08" x2="212.5" y2="382" className="stroke-gray-light-3 dark:stroke-gray-dark-3" />

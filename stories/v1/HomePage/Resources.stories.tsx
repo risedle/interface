@@ -4,7 +4,7 @@ import Resources from "../../../components/v1/HomePage/Resources";
 
 export default {
     component: Resources,
-    title: "Risedle V1/Home Page/Resources",
+    title: "Risedle V1/Home Page/Footer Resources",
 };
 
-export const Basic = () => <Resources />;
+export const FooterResources = () => <Resources />;

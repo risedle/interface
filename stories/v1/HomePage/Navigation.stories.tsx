@@ -1,15 +1,10 @@
-import { Meta, Story } from "@storybook/react";
+import React from "react";
 
 import Navigation from "../../../components/v1/HomePage/Navigation";
 
 export default {
     component: Navigation,
-    title: "Risedle V1/Home Page/Navigation",
-} as Meta;
-
-const Template: Story<{}> = () => {
-    return <Navigation />;
+    title: "Risedle V1/Home Page/Navigation Bar",
 };
 
-//Each story then reuses that template
-export const Default = Template.bind({});
+export const NavigationBar = () => <Navigation />;

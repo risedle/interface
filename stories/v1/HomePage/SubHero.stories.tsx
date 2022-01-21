@@ -4,7 +4,7 @@ import SubHero from "../../../components/v1/HomePage/SubHero";
 
 export default {
     component: SubHero,
-    title: "Risedle V1/Home Page/SubHero",
+    title: "Risedle V1/Home Page/Sub Hero Header",
 };
 
-export const Basic = () => <SubHero />;
+export const SubHeroHeader = () => <SubHero />;
