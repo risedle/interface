@@ -55,6 +55,7 @@ module.exports = {
                 blue: {
                     light: {
                         1: "#FBFDFF",
+                        2: "#F5FAFF",
                         3: "#EDF6FF",
                         4: "#E1F0FF",
                         5: "#CEE7FE",
@@ -77,10 +78,12 @@ module.exports = {
                 orange: {
                     light: {
                         2: "#FEF8F4",
+                        3: "#FFF1E7",
                         5: "#FFDCC3",
                     },
                     dark: {
                         2: "#2B1400",
+                        3: "#391A03",
                         5: "#4F2305",
                     },
                 },
