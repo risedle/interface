@@ -79,22 +79,22 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                             let cd, lastData;
                                             switch (currentTimeframe) {
                                                 case Timeframe.Daily:
-                                                    cd = data.slice(0, 24);
+                                                    cd = data.slice(data.length - 24, data.length);
                                                     lastData = cd[0];
                                                     setLastNAV(lastData.nav);
                                                     break;
                                                 case Timeframe.Weekly:
-                                                    cd = data.slice(0, 24 * 7);
+                                                    cd = data.slice(data.length - 24 * 7, data.length);
                                                     lastData = cd[0];
                                                     setLastNAV(lastData.nav);
                                                     break;
                                                 case Timeframe.TwoWeekly:
-                                                    cd = data.slice(0, 24 * 7 * 2);
+                                                    cd = data.slice(data.length - 24 * 7 * 2, data.length);
                                                     lastData = cd[0];
                                                     setLastNAV(lastData.nav);
                                                     break;
                                                 case Timeframe.Monthly:
-                                                    cd = data.slice(0, 24 * 7 * 4);
+                                                    cd = data.slice(data.length - 24 * 7 * 2 * 4, data.length);
                                                     lastData = cd[0];
                                                     setLastNAV(lastData.nav);
                                                     break;
@@ -120,7 +120,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                 className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Daily ? activeTimeframeClasses : ""}`}
                                 onClick={() => {
                                     setCurrentTimeframe(Timeframe.Daily);
-                                    setCurrentData(data.slice(0, 24));
+                                    setCurrentData(data.slice(data.length - 24, data.length));
                                 }}
                             >
                                 1D
@@ -131,7 +131,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                 className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Weekly ? activeTimeframeClasses : ""}`}
                                 onClick={() => {
                                     setCurrentTimeframe(Timeframe.Weekly);
-                                    setCurrentData(data.slice(0, 24 * 7));
+                                    setCurrentData(data.slice(data.length - 24 * 7, data.length));
                                 }}
                             >
                                 1W
@@ -142,7 +142,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                 className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.TwoWeekly ? activeTimeframeClasses : ""}`}
                                 onClick={() => {
                                     setCurrentTimeframe(Timeframe.TwoWeekly);
-                                    setCurrentData(data.slice(0, 24 * 7 * 2));
+                                    setCurrentData(data.slice(data.length - 24 * 7 * 2, data.length));
                                 }}
                             >
                                 2W
@@ -153,7 +153,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                 className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
                                 onClick={() => {
                                     setCurrentTimeframe(Timeframe.Monthly);
-                                    setCurrentData(data.slice(0, 24 * 7 * 4));
+                                    setCurrentData(data.slice(data.length - 24 * 7 * 2 * 4, data.length));
                                 }}
                             >
                                 1M
@@ -164,7 +164,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                 className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
                                 onClick={() => {
                                     setCurrentTimeframe(Timeframe.ThreeMonthly);
-                                    setCurrentData(data.slice(0, 24 * 7 * 4));
+                                    setCurrentData(data);
                                 }}
                             >
                                 3M
