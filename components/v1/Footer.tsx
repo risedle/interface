@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { FunctionComponent } from "react";
-import RisedleLinks from "../../../utils/links";
+import RisedleLinks from "../../utils/links";
 
 /**
  * FooterProps is a React Component properties that passed to React Component Footer
