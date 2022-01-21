@@ -21,9 +21,6 @@ const Header: FunctionComponent<HeaderProps> = ({}) => {
     const { chain } = useWalletContext();
     const { data, isLoading } = useMarkets(chain.id);
 
-    // Get total AUM
-    // Total collateral all of leveraged tokens in terms of USDC
-
     return (
         <div className="flex flex-col px-4 max-w-4xl m-auto">
             <div className="flex flex-col space-y-6 sm:space-y-0 sm:flex-row sm:justify-between items-center border-b border-gray-light-9 dark:border-gray-dark-9 border-dashed pb-6 sm:pb-8">
