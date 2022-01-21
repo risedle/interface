@@ -5,6 +5,7 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
+        "deploy": "next build && next export",
         "start": "next start",
         "lint": "next lint",
         "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
