@@ -131,7 +131,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
 
                         <div className="flex flex-col p-4 space-y-2">
                             <button
-                                className={`bg-orange-light-2 dark:bg-orange-dark-2 border border-orange-light-5 dark:border-orange-dark-5 rounded-[12px] py-[11px] px-[12px] text-left w-full m-0 flex flex-row items-center justify-between transition ease-in-out duration-300 focus:scale-95 hover:bg-orange-light-3 dark:hover:bg-orange-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
+                                className={`bg-orange-light-2 dark:bg-orange-dark-2 border border-orange-light-5 dark:border-orange-dark-5 rounded-[12px] py-[11px] px-[12px] text-left w-full m-0 flex flex-row items-center justify-between transition ease-in-out duration-300 active:scale-95 hover:bg-orange-light-3 dark:hover:bg-orange-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
                                 disabled={isConnecting && connectorName ? true : false}
                                 onClick={async () => {
                                     await connectWallet(MetaMaskConnector);
@@ -152,7 +152,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                 )}
                             </button>
                             <button
-                                className={`bg-blue-light-2 dark:bg-blue-dark-2 border border-blue-light-5 dark:border-blue-dark-5 rounded-[12px] py-[11px] px-[12px] text-left w-full m-0 flex flex-row items-center justify-between transition ease-in-out duration-300 focus:scale-95 hover:bg-blue-light-3 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
+                                className={`bg-blue-light-2 dark:bg-blue-dark-2 border border-blue-light-5 dark:border-blue-dark-5 rounded-[12px] py-[11px] px-[12px] text-left w-full m-0 flex flex-row items-center justify-between transition ease-in-out duration-300 active:scale-95 hover:bg-blue-light-3 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
                                 disabled={isConnecting && connectorName ? true : false}
                                 onClick={async () => {
                                     await connectWallet(WCConnector);
