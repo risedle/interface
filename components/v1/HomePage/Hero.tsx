@@ -31,7 +31,7 @@ const Hero: FunctionComponent<HeroProps> = ({}) => {
                     <ButtonLaunchGradient />
                 </div>
             </div>
-            <svg width="100%" viewBox="0 0 1159 1027" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-0 absolute top-0 md:-top-1/4 left-1/2 -translate-x-1/2 stroke-gray-light-12 dark:stroke-white max-w-screen-xl opacity-50" style={{ minWidth: "619px" }}>
+            <svg width="100%" viewBox="0 0 1159 1027" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-0 absolute top-0 md:-top-1/4 left-1/2 -translate-x-1/2 stroke-gray-light-12 dark:stroke-white max-w-[1159px] opacity-50" style={{ minWidth: "619px" }}>
                 <circle opacity="0.1" cx="579.5" cy="447.5" r="222.549" />
                 <circle opacity="0.1" cx="579.5" cy="447.5" r="299.389" />
                 <circle opacity="0.05" cx="579.5" cy="447.5" r="389.035" />
