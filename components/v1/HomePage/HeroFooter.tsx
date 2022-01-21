@@ -24,7 +24,7 @@ const HeroFooter: FunctionComponent<HeroFooterProps> = ({}) => {
                 </div>
                 <Resources />
             </div>
-            <svg width="100%" height="100%" viewBox="0 0 375 463" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-0 absolute top-0 left-1/2 -translate-x-1/2  fill-gray-light-12 dark:fill-white">
+            <svg width="100%" height="100%" viewBox="0 0 375 463" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-0 absolute top-0 left-1/2 -translate-x-1/2  fill-gray-light-12 dark:fill-white sm:scale-150">
                 <g filter="url(#filter0_f_488_28293)">
                     <rect x="42" y="208.087" width="14.5306" height="134.487" transform="rotate(-16.0921 42 208.087)" fill="#5FD4F4" />
                 </g>
