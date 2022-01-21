@@ -7,4 +7,4 @@ export default {
     title: "Risedle V1/Buttons/Launch Basic",
 };
 
-export const Basic = () => <ButtonLaunchBasic />;
+export const LaunchBasic = () => <ButtonLaunchBasic />;

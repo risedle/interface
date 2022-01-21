@@ -19,7 +19,7 @@ type HeaderProps = {};
  */
 const Header: FunctionComponent<HeaderProps> = ({}) => {
     const { chain } = useWalletContext();
-    const { markets, isLoading } = useMarkets(chain.id);
+    const { data, isLoading } = useMarkets(chain.id);
 
     // Get total AUM
     // Total collateral all of leveraged tokens in terms of USDC
@@ -34,12 +34,12 @@ const Header: FunctionComponent<HeaderProps> = ({}) => {
                     <div className="basis-1/2 text-center flex flex-col space-y-2">
                         <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10 sm:text-right">AUM</p>
                         {isLoading && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-full animate-pulse"></div>}
-                        {!isLoading && <p className="font-ibm font-semibold text-sm sm:text-base leading-4 tracking-tighter text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(markets.aum)}</p>}
+                        {!isLoading && data && <p className="font-ibm font-semibold text-sm sm:text-base leading-4 tracking-tighter text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(data.aum)}</p>}
                     </div>
                     <div className="basis-1/2 text-center flex flex-col space-y-2">
                         <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10 sm:text-right">TVL</p>
                         {isLoading && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-full animate-pulse"></div>}
-                        {!isLoading && <p className="font-ibm font-semibold text-sm sm:text-base leading-4 tracking-tighter text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(markets.tvl)}</p>}
+                        {!isLoading && data && <p className="font-ibm font-semibold text-sm sm:text-base leading-4 tracking-tighter text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(data.tvl)}</p>}
                     </div>
                 </div>
             </div>
