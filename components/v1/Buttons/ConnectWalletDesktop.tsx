@@ -71,7 +71,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
     // console.debug("ButtonConnectWalletDesktop account", account);
     // console.debug("ButtonConnectWalletDesktop connectorName", connectorName);
     // console.debug("ButtonConnectWalletDesktop chain", chain);
-    // console.debug("ButtonConnectWalletDesktop connectedChain", connectedChain);
+    console.debug("ButtonConnectWalletDesktop connectedChain", connectedChain);
 
     // Set account states
     const connectWallet = async function (c: InjectedConnector | WalletConnectConnector) {
@@ -187,7 +187,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
             </Dialog>
 
             {/* If account is not connected then display the connect wallet button */}
-            {!account && (
+            {(!account || !connectedChain.data || !connectedChain.data.chain) && (
                 <button className="text-gray-light-12 text-sm font-semibold py-3 px-4 rounded-full leading-4 inline-block button gradient bg-[length:300%_300%] tracking-tight bg-center hover:bg-left hover:shadow-xl hover:shadow-blue-400/20" onClick={() => setIsOpen(true)}>
                     Connect Wallet
                 </button>
@@ -205,7 +205,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                         }
                     }}
                 >
-                    <span className="w-[8px] h-[8px] rounded-full bg-red-light-10 dark:bg-sky-dark-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:shadow-red-dark-10 inline-block mr-2"></span>
+                    <span className="w-[8px] h-[8px] rounded-full bg-red-light-10 dark:bg-red-dark-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:shadow-red-dark-10 inline-block mr-2"></span>
                     Switch to {chain.name}
                 </button>
             )}

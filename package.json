@@ -5,6 +5,7 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
+        "deploy": "next build && next export",
         "start": "next start",
         "lint": "next lint",
         "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
@@ -14,7 +15,7 @@
         "@headlessui/react": "1.4.3",
         "@popperjs/core": "2.11.2",
         "ethers": "5.5.3",
-        "next": "^12.0.7",
+        "next": "12.0.8",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-hot-toast": "2.2.0",

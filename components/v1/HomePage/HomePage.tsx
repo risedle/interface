@@ -3,7 +3,7 @@ import type { FunctionComponent } from "react";
 import Favicon from "../Favicon";
 import FeatureCardOneColumn from "./FeatureCardOneColumn";
 import FeatureCardTwoColumns from "./FeatureCardTwoColumns";
-import Footer from "./Footer";
+import Footer from "../Footer";
 import Hero from "./Hero";
 import HeroFooter from "./HeroFooter";
 import Navigation from "./Navigation";
