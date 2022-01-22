@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import { useWalletContext } from "./Wallet";
 import { AreaChart, Area, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
