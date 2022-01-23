@@ -1,3 +1,5 @@
+let plugin = require("tailwindcss/plugin");
+
 module.exports = {
     purge: [
         "./pages/**/*.{js,ts,jsx,tsx}",
@@ -146,5 +148,10 @@ module.exports = {
             scale: ["active"],
         },
     },
-    plugins: [],
+    plugins: [
+        plugin(function ({ addVariant }) {
+            // Add a `state-active` variant, ie. `state-active:pb-0`
+            addVariant("state-active", "&[data-state='active']");
+        }),
+    ],
 };
