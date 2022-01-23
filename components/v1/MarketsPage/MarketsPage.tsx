@@ -27,7 +27,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                 <meta name="description" content="Invest, earn and build on the decentralized leveraged token market protocol" />
             </Head>
             <Favicon />
-            <div className="z-10">
+            <div className="z-10 min-h-screen">
                 <Navigation />
                 <div className="mt-8">
                     <Header />
@@ -35,12 +35,12 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                 <div className="mt-6 mb-12">
                     <MarketCards />
                 </div>
-                <div className="pb-20 sm:pb-0">
-                    <Footer />
-                </div>
+            </div>
+            <div className="pb-20 sm:pb-0">
+                <Footer />
             </div>
             <div className="">
-                <svg className="absolute top-0 z-10 z-0 absolute top-0 md:top-0 left-1/2 -translate-x-1/2 stroke-gray-light-12 dark:stroke-white max-w-[679px]" width="100%" height="auto" viewBox="0 0 679 679" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className="absolute top-0 -z-1 left-1/2 -translate-x-1/2 stroke-gray-light-12 dark:stroke-white max-w-[679px]" width="100%" height="auto" viewBox="0 0 679 679" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g filter="url(#filter0_f_924_31599)">
                         <rect x="205" y="221.087" width="14.5306" height="134.487" transform="rotate(-16.0921 205 221.087)" fill="#5FD4F4" />
                     </g>

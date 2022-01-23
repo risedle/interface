@@ -23,7 +23,7 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
     const [networkData, switchNetwork] = useNetwork();
     let [isOpen, setIsOpen] = useState(false);
 
-    console.debug("ButtonNetworkSwitcher chain", chain);
+    // console.debug("ButtonNetworkSwitcher chain", chain);
 
     const getChainIconPath = (c: Chain): string => {
         switch (c.id) {

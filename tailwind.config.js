@@ -1,3 +1,5 @@
+let plugin = require("tailwindcss/plugin");
+
 module.exports = {
     purge: [
         "./pages/**/*.{js,ts,jsx,tsx}",
@@ -59,12 +61,16 @@ module.exports = {
                         3: "#EDF6FF",
                         4: "#E1F0FF",
                         5: "#CEE7FE",
+                        10: "#0081F1",
+                        11: "#006ADC",
                     },
                     dark: {
                         1: "#0F1720",
                         2: "#0F1B2D",
                         3: "#10243E",
                         5: "#0F3058",
+                        10: "#369EFF",
+                        11: "#52A9FF",
                     },
                 },
                 sky: {
@@ -92,6 +98,7 @@ module.exports = {
                         1: "#FFFCFC",
                         9: "#E5484D",
                         10: "#DC3D43",
+                        11: "#CD2B31",
                     },
                     dark: {
                         2: "#291415",
@@ -115,6 +122,18 @@ module.exports = {
                         12: "#E5FBEB",
                     },
                 },
+                yellow: {
+                    light: {
+                        2: "#FFFCE8",
+                        5: "#FEF2A4",
+                        12: "#35290F",
+                    },
+                    dark: {
+                        2: "#221A00",
+                        5: "#3E3000",
+                        12: "#FFFAD1",
+                    },
+                },
             },
             opacity: {
                 8: ".08",
@@ -129,5 +148,10 @@ module.exports = {
             scale: ["active"],
         },
     },
-    plugins: [],
+    plugins: [
+        plugin(function ({ addVariant }) {
+            // Add a `state-active` variant, ie. `state-active:pb-0`
+            addVariant("state-active", "&[data-state='active']");
+        }),
+    ],
 };
