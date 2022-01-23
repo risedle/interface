@@ -28,6 +28,10 @@ export type Market = {
     vault_timestamp: string;
     vault_total_available_cash: number;
     vault_total_outstanding_debt: number;
+    vault_utilization_rate?: number;
+    collateral_per_token?: number;
+    debt_per_token?: number;
+    leverage_ratio?: number;
 };
 
 export type MarketData = {
@@ -50,6 +54,20 @@ export function useMarkets(chainID: number) {
     };
 }
 
+export function useMarket(chainID: number, address: string) {
+    const endpoint = snapshotEndpoint[chainID];
+    const { data, error } = useSWR<Market, Error>(
+        `${endpoint}/v1/markets/${address}`,
+        fetcher
+    );
+
+    return {
+        market: data,
+        marketIsLoading: !error && !data,
+        marketIsError: error,
+    };
+}
+
 function filterOutSameNAV(
     data: Array<LeveragedTokenHistoricalData> | undefined
 ): Array<LeveragedTokenHistoricalData> | undefined {
@@ -65,6 +83,15 @@ export type LeveragedTokenHistoricalData = {
     nav: number;
 };
 
+// Chart timeframes
+export enum Timeframe {
+    Daily,
+    Weekly,
+    TwoWeekly,
+    Monthly,
+    ThreeMonthly,
+}
+
 export function useLeveragedTokenData3Months(
     chainID: number,
     leveragedTokenAddress: string
@@ -76,8 +103,31 @@ export function useLeveragedTokenData3Months(
     );
 
     return {
-        data: filterOutSameNAV(data),
-        isLoading: !error && !data,
-        isError: error,
+        leveragedTokenHistoricalData: filterOutSameNAV(data),
+        leveragedTokenHistoricalDataIsLoading: !error && !data,
+        leveragedTokenHistoricalDataIsError: error,
+    };
+}
+
+export type VaultHistoricalData = {
+    timestamp: string;
+    borrow_apy: number;
+    supply_apy: number;
+    utilization_rate: number;
+    total_available_cash: number;
+    total_outstanding_debt: number;
+};
+
+export function useVaultData3Months(chainID: number, vaultAddress: string) {
+    const endpoint = snapshotEndpoint[chainID];
+    const { data, error } = useSWR<Array<VaultHistoricalData>, Error>(
+        `${endpoint}/v1/vaults/3months/${vaultAddress}`,
+        fetcher
+    );
+
+    return {
+        vaultHistoricalData: data,
+        vaultHistoricalDataIsLoading: !error && !data,
+        vaultHistoricalDataIsError: error,
     };
 }

@@ -67,11 +67,11 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
     });
 
     // Debugs
-    console.debug("ButtonConnectWalletDesktop connectionData", connectionData);
+    // console.debug("ButtonConnectWalletDesktop connectionData", connectionData);
     // console.debug("ButtonConnectWalletDesktop account", account);
     // console.debug("ButtonConnectWalletDesktop connectorName", connectorName);
     // console.debug("ButtonConnectWalletDesktop chain", chain);
-    console.debug("ButtonConnectWalletDesktop connectedChain", connectedChain);
+    // console.debug("ButtonConnectWalletDesktop connectedChain", connectedChain);
 
     // Set account states
     const connectWallet = async function (c: InjectedConnector | WalletConnectConnector) {

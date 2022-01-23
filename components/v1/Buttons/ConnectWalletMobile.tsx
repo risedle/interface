@@ -103,10 +103,10 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
     });
 
     // Debugs
-    console.debug("ButtonConnectWalletMobile account", account);
-    console.debug("ButtonConnectWalletMobile connectorName", connectorName);
-    console.debug("ButtonConnectWalletMobile chain", chain);
-    console.debug("ButtonConnectWalletMobile connectedChain", connectedChain);
+    // console.debug("ButtonConnectWalletMobile account", account);
+    // console.debug("ButtonConnectWalletMobile connectorName", connectorName);
+    // console.debug("ButtonConnectWalletMobile chain", chain);
+    // console.debug("ButtonConnectWalletMobile connectedChain", connectedChain);
 
     // Utilities
     const getChainIconPath = (c: Chain): string => {
