@@ -1,6 +1,5 @@
 import { FunctionComponent, useState } from "react";
 import { useWalletContext } from "../Wallet";
-import { chain as Chains } from "wagmi";
 
 // Snapshot data
 import { useMarkets } from "../../../utils/snapshot";
@@ -9,28 +8,7 @@ import { useMarkets } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
 import ButtonLinkBasic from "../Buttons/LinkBasic";
 import PriceChart from "../PriceChart";
-
-// Markets Metadata
-type Metadata = {
-    logo: string;
-    title: string;
-    subtitle: string;
-    path: string;
-    description: string;
-};
-type MarketMetadata = Record<string, Metadata>;
-type MarketMetadataRecord = Record<number, MarketMetadata>;
-const Metadata: MarketMetadataRecord = {
-    [Chains.kovan.id]: {
-        ["0xc4676f88663360155c2bc6d2A482E34121a50b3b"]: {
-            logo: "/markets/ethrise.svg",
-            title: "ETHRISE",
-            subtitle: "ETH Leverage Market",
-            path: "/markets/ethrise",
-            description: "Enjoy leveraged ETH without risk of liquidation or earn yield from your idle USDC",
-        },
-    },
-};
+import { Metadata } from "../MarketMetadata";
 
 /**
  * MarketCardsProps is a React Component properties that passed to React Component MarketCards
