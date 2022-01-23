@@ -43,9 +43,9 @@ enum Timeframe {
  */
 const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress, title, subtitle, logo, mintTokenSymbol, totalCollateral, maxTotalCollateral, uniswapURL, mintTokenBalance, redeemTokenSymbol, redeemTokenBalance }) => {
     const { chain } = useWalletContext();
-    const { data, isLoading, isError } = useLeveragedTokenData3Months(chain.id, leveragedTokenAddress);
+    const { leveragedTokenHistoricalData, leveragedTokenHistoricalDataIsLoading, leveragedTokenHistoricalDataIsError } = useLeveragedTokenData3Months(chain.id, leveragedTokenAddress);
     const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
-    const [currentData, setCurrentData] = useState(data);
+    const [currentData, setCurrentData] = useState(leveragedTokenHistoricalData);
     const [nav, setNAV] = useState(0);
     const [initialNAV, setInitialNAV] = useState(0);
     const [change, setChange] = useState(0);
@@ -57,10 +57,10 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
     // Max minting amount
     const maxMintAmount = maxTotalCollateral - totalCollateral;
 
-    // Set initial data for onMouseLeave event on the price chart
-    if (initialNAV === 0 && initialChange === 0 && data) {
-        const latestData = data[data.length - 1];
-        const oldestData = data[0];
+    // Set initial leveragedTokenHistoricalData for onMouseLeave event on the price chart
+    if (initialNAV === 0 && initialChange === 0 && leveragedTokenHistoricalData) {
+        const latestData = leveragedTokenHistoricalData[leveragedTokenHistoricalData.length - 1];
+        const oldestData = leveragedTokenHistoricalData[0];
         const change = ((latestData.nav - oldestData.nav) / oldestData.nav) * 100;
 
         setInitialNAV(latestData.nav);
@@ -71,9 +71,9 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
 
     const activeTimeframeClasses = "bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full font-semibold text-gray-light-12 dark:text-gray-dark-12";
 
-    // Set current data on the first load
-    if (!currentData && data) {
-        setCurrentData(data);
+    // Set current leveragedTokenHistoricalData on the first load
+    if (!currentData && leveragedTokenHistoricalData) {
+        setCurrentData(leveragedTokenHistoricalData);
     }
 
     return (
@@ -386,13 +386,13 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                     <div className="flex flex-row px-4 space-x-4">
                         <div className="min-w-[67px] flex flex-col space-y-1">
                             <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Price</p>
-                            {(isLoading || isError) && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
-                            {!isLoading && data && <p className="font-ibm text-sm leading-4 tracking-tighter font-semibold text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(nav)}</p>}
+                            {(leveragedTokenHistoricalDataIsLoading || leveragedTokenHistoricalDataIsError) && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
+                            {!leveragedTokenHistoricalDataIsLoading && leveragedTokenHistoricalData && <p className="font-ibm text-sm leading-4 tracking-tighter font-semibold text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(nav)}</p>}
                         </div>
                         <div className="min-w-[67px] flex flex-col space-y-1">
                             <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Change</p>
-                            {(isLoading || isError) && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
-                            {!isLoading && data && (
+                            {(leveragedTokenHistoricalDataIsLoading || leveragedTokenHistoricalDataIsError) && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
+                            {!leveragedTokenHistoricalDataIsLoading && leveragedTokenHistoricalData && (
                                 <div className="flex flex-row items-center">
                                     <svg className={change > 0 ? "fill-green-light-11 dark:fill-green-dark-11 inline-block" : "hidden"} width="15" height="15" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
                                         <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 2.14645C7.34171 1.95118 7.65829 1.95118 7.85355 2.14645L11.8536 6.14645C12.0488 6.34171 12.0488 6.65829 11.8536 6.85355C11.6583 7.04882 11.3417 7.04882 11.1464 6.85355L8 3.70711L8 12.5C8 12.7761 7.77614 13 7.5 13C7.22386 13 7 12.7761 7 12.5L7 3.70711L3.85355 6.85355C3.65829 7.04882 3.34171 7.04882 3.14645 6.85355C2.95118 6.65829 2.95118 6.34171 3.14645 6.14645L7.14645 2.14645Z" />
@@ -406,8 +406,8 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                         </div>
                     </div>
                     <div className="w-full h-[232px] inline-block flex flex-col pt-4">
-                        {(isLoading || isError) && <div className="h-[192px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse mb-2"></div>}
-                        {!isLoading && data && (
+                        {(leveragedTokenHistoricalDataIsLoading || leveragedTokenHistoricalDataIsError) && <div className="h-[192px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse mb-2"></div>}
+                        {!leveragedTokenHistoricalDataIsLoading && leveragedTokenHistoricalData && (
                             <ResponsiveContainer width="100%" height="100%" className="h-[192px]">
                                 <AreaChart
                                     data={currentData}
@@ -441,23 +441,23 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                                 let cd, oldestData;
                                                 switch (currentTimeframe) {
                                                     case Timeframe.Daily:
-                                                        cd = data.slice(data.length - 24, data.length);
+                                                        cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24, leveragedTokenHistoricalData.length);
                                                         oldestData = cd[0];
                                                         break;
                                                     case Timeframe.Weekly:
-                                                        cd = data.slice(data.length - 24 * 7, data.length);
+                                                        cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7, leveragedTokenHistoricalData.length);
                                                         oldestData = cd[0];
                                                         break;
                                                     case Timeframe.TwoWeekly:
-                                                        cd = data.slice(data.length - 24 * 7 * 2, data.length);
+                                                        cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2, leveragedTokenHistoricalData.length);
                                                         oldestData = cd[0];
                                                         break;
                                                     case Timeframe.Monthly:
-                                                        cd = data.slice(data.length - 24 * 7 * 2 * 4, data.length);
+                                                        cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2 * 4, leveragedTokenHistoricalData.length);
                                                         oldestData = cd[0];
                                                         break;
                                                     case Timeframe.ThreeMonthly:
-                                                        cd = data;
+                                                        cd = leveragedTokenHistoricalData;
                                                         oldestData = cd[0];
                                                         break;
                                                 }
@@ -470,7 +470,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                             return null;
                                         }}
                                     />
-                                    <YAxis hide={true} type="number" domain={["dataMin - 5", "dataMax + 5"]} />
+                                    <YAxis hide={true} type="number" domain={["leveragedTokenHistoricalDataMin - 5", "leveragedTokenHistoricalDataMax + 5"]} />
                                     <Area type="monotoneX" dataKey="nav" stroke={change > 0 ? "#4CC38A" : "#CD2B31"} fill={change > 0 ? "url(#upGradient)" : "url(#downGradient)"} strokeWidth={2} />
                                 </AreaChart>
                             </ResponsiveContainer>
@@ -481,8 +481,8 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                     className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Daily ? activeTimeframeClasses : ""}`}
                                     onClick={() => {
                                         setCurrentTimeframe(Timeframe.Daily);
-                                        if (data) {
-                                            setCurrentData(data.slice(data.length - 24, data.length));
+                                        if (leveragedTokenHistoricalData) {
+                                            setCurrentData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24, leveragedTokenHistoricalData.length));
                                         }
                                     }}
                                 >
@@ -494,8 +494,8 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                     className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Weekly ? activeTimeframeClasses : ""}`}
                                     onClick={() => {
                                         setCurrentTimeframe(Timeframe.Weekly);
-                                        if (data) {
-                                            setCurrentData(data.slice(data.length - 24 * 7, data.length));
+                                        if (leveragedTokenHistoricalData) {
+                                            setCurrentData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7, leveragedTokenHistoricalData.length));
                                         }
                                     }}
                                 >
@@ -507,8 +507,8 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                     className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.TwoWeekly ? activeTimeframeClasses : ""}`}
                                     onClick={() => {
                                         setCurrentTimeframe(Timeframe.TwoWeekly);
-                                        if (data) {
-                                            setCurrentData(data.slice(data.length - 24 * 7 * 2, data.length));
+                                        if (leveragedTokenHistoricalData) {
+                                            setCurrentData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2, leveragedTokenHistoricalData.length));
                                         }
                                     }}
                                 >
@@ -520,8 +520,8 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                     className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
                                     onClick={() => {
                                         setCurrentTimeframe(Timeframe.Monthly);
-                                        if (data) {
-                                            setCurrentData(data.slice(data.length - 24 * 7 * 2 * 4, data.length));
+                                        if (leveragedTokenHistoricalData) {
+                                            setCurrentData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2 * 4, leveragedTokenHistoricalData.length));
                                         }
                                     }}
                                 >
@@ -533,7 +533,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                     className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
                                     onClick={() => {
                                         setCurrentTimeframe(Timeframe.ThreeMonthly);
-                                        setCurrentData(data);
+                                        setCurrentData(leveragedTokenHistoricalData);
                                     }}
                                 >
                                     3M

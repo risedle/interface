@@ -31,19 +31,19 @@ enum Timeframe {
  */
 const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress, setNAV, setLastNAV, initialNAV, initialLastNAV }) => {
     const { chain } = useWalletContext();
-    const { data, isLoading } = useLeveragedTokenData3Months(chain.id, leveragedTokenAddress);
+    const { leveragedTokenHistoricalData, leveragedTokenHistoricalDataIsLoading } = useLeveragedTokenData3Months(chain.id, leveragedTokenAddress);
     const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
-    const [currentData, setCurrentData] = useState(data);
+    const [currentData, setCurrentData] = useState(leveragedTokenHistoricalData);
     const activeTimeframeClasses = "bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full font-semibold text-gray-light-12 dark:text-gray-dark-12";
 
-    // Set current data on the first load
-    if (!currentData && data) {
-        setCurrentData(data);
+    // Set current leveragedTokenHistoricalData on the first load
+    if (!currentData && leveragedTokenHistoricalData) {
+        setCurrentData(leveragedTokenHistoricalData);
     }
 
     return (
         <div className="">
-            {!isLoading && data && (
+            {!leveragedTokenHistoricalDataIsLoading && leveragedTokenHistoricalData && (
                 <div className="w-full h-[192px] inline-block">
                     <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
@@ -79,27 +79,27 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                             let cd, lastData;
                                             switch (currentTimeframe) {
                                                 case Timeframe.Daily:
-                                                    cd = data.slice(data.length - 24, data.length);
+                                                    cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24, leveragedTokenHistoricalData.length);
                                                     lastData = cd[0];
                                                     setLastNAV(lastData.nav);
                                                     break;
                                                 case Timeframe.Weekly:
-                                                    cd = data.slice(data.length - 24 * 7, data.length);
+                                                    cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7, leveragedTokenHistoricalData.length);
                                                     lastData = cd[0];
                                                     setLastNAV(lastData.nav);
                                                     break;
                                                 case Timeframe.TwoWeekly:
-                                                    cd = data.slice(data.length - 24 * 7 * 2, data.length);
+                                                    cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2, leveragedTokenHistoricalData.length);
                                                     lastData = cd[0];
                                                     setLastNAV(lastData.nav);
                                                     break;
                                                 case Timeframe.Monthly:
-                                                    cd = data.slice(data.length - 24 * 7 * 2 * 4, data.length);
+                                                    cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2 * 4, leveragedTokenHistoricalData.length);
                                                     lastData = cd[0];
                                                     setLastNAV(lastData.nav);
                                                     break;
                                                 case Timeframe.ThreeMonthly:
-                                                    cd = data;
+                                                    cd = leveragedTokenHistoricalData;
                                                     lastData = cd[0];
                                                     setLastNAV(lastData.nav);
                                                     break;
@@ -110,7 +110,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                     return null;
                                 }}
                             />
-                            <YAxis hide={true} type="number" domain={["dataMin - 5", "dataMax + 5"]} />
+                            <YAxis hide={true} type="number" domain={["leveragedTokenHistoricalDataMin - 5", "leveragedTokenHistoricalDataMax + 5"]} />
                             <Area type="monotoneX" dataKey="nav" stroke="#4CC38A" fill="url(#priceColor)" strokeWidth={2} />
                         </AreaChart>
                     </ResponsiveContainer>
@@ -120,7 +120,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                 className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Daily ? activeTimeframeClasses : ""}`}
                                 onClick={() => {
                                     setCurrentTimeframe(Timeframe.Daily);
-                                    setCurrentData(data.slice(data.length - 24, data.length));
+                                    setCurrentData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24, leveragedTokenHistoricalData.length));
                                 }}
                             >
                                 1D
@@ -131,7 +131,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                 className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Weekly ? activeTimeframeClasses : ""}`}
                                 onClick={() => {
                                     setCurrentTimeframe(Timeframe.Weekly);
-                                    setCurrentData(data.slice(data.length - 24 * 7, data.length));
+                                    setCurrentData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7, leveragedTokenHistoricalData.length));
                                 }}
                             >
                                 1W
@@ -142,7 +142,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                 className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.TwoWeekly ? activeTimeframeClasses : ""}`}
                                 onClick={() => {
                                     setCurrentTimeframe(Timeframe.TwoWeekly);
-                                    setCurrentData(data.slice(data.length - 24 * 7 * 2, data.length));
+                                    setCurrentData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2, leveragedTokenHistoricalData.length));
                                 }}
                             >
                                 2W
@@ -153,7 +153,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                 className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
                                 onClick={() => {
                                     setCurrentTimeframe(Timeframe.Monthly);
-                                    setCurrentData(data.slice(data.length - 24 * 7 * 2 * 4, data.length));
+                                    setCurrentData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2 * 4, leveragedTokenHistoricalData.length));
                                 }}
                             >
                                 1M
@@ -164,7 +164,7 @@ const PriceChart: FunctionComponent<PriceChartProps> = ({ leveragedTokenAddress,
                                 className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
                                 onClick={() => {
                                     setCurrentTimeframe(Timeframe.ThreeMonthly);
-                                    setCurrentData(data);
+                                    setCurrentData(leveragedTokenHistoricalData);
                                 }}
                             >
                                 3M
