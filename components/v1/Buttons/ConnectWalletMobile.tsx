@@ -238,7 +238,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                 {/* If account is not connected then display the connect wallet button */}
                                 {(!account || !connectedChain.data || !connectedChain.data.chain) && (
                                     <>
-                                        <Popover.Button ref={setReferenceElement2} className="outline-0 text-gray-light-12 text-sm font-semibold py-3 px-4 rounded-full leading-4 inline-block w-full button gradient bg-[length:300%_300%] tracking-tight bg-center hover:bg-left hover:shadow-xl hover:shadow-blue-400/20">
+                                        <Popover.Button ref={setReferenceElement2} className="outline-0 text-gray-light-1 dark:text-gray-dark-1 text-sm font-semibold py-3 px-4 rounded-full leading-4 inline-block w-full button gradient bg-[length:300%_300%] tracking-tight bg-center hover:bg-left hover:shadow-xl hover:shadow-blue-400/20">
                                             Connect Wallet
                                         </Popover.Button>
 
