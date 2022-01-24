@@ -78,7 +78,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
             {
                 name: "preventOverflow",
                 options: {
-                    padding: { left: 16, right: 16 },
+                    padding: { left: 0, right: 0 },
                 },
             },
         ],
@@ -175,7 +175,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         if (process.browser) {
                             if (open) {
                                 const dom = document.getElementById("popover-1");
-                                if (dom) dom.style.zIndex = "1";
+                                if (dom) dom.style.zIndex = "10";
                             } else {
                                 const dom = document.getElementById("popover-1");
                                 if (dom) dom.style.zIndex = "0";
@@ -214,7 +214,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                         );
                                     }}
                                 </Popover.Panel>
-                                <Popover.Overlay className={`${open ? "opacity-100 fixed inset-0 bg-white/20 dark:bg-black/20 backdrop-blur" : "opacity-0"} -z-[1]`} />
+                                <Popover.Overlay className={`${open ? "opacity-100 fixed inset-0 bg-white/20 dark:bg-black/20 backdrop-blur z-10" : "opacity-0"} -z-[1]`} />
                             </>
                         );
                     }}
@@ -227,7 +227,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         if (process.browser) {
                             if (open) {
                                 const dom = document.getElementById("popover-2");
-                                if (dom) dom.style.zIndex = "1";
+                                if (dom) dom.style.zIndex = "10";
                             } else {
                                 const dom = document.getElementById("popover-2");
                                 if (dom) dom.style.zIndex = "0";
@@ -242,10 +242,10 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                             Connect Wallet
                                         </Popover.Button>
 
-                                        <Popover.Panel ref={setPopperElement2} style={popper2.styles.popper} {...popper2.attributes.popper} className="bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px] max-w-[288px]">
+                                        <Popover.Panel ref={setPopperElement2} style={popper2.styles.popper} {...popper2.attributes.popper} className="container">
                                             {({ close }) => {
                                                 return (
-                                                    <div>
+                                                    <div className="bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px] mx-4">
                                                         <div className="text-center pr-4 py-4 pl-[49px] border-b border-gray-light-3 dark:border-gray-dark-3 border-dashed m-0">
                                                             <span className="text-base leading-none font-bold text-gray-light-12 dark:text-gray-dark-12">{isConnecting ? "Connecting..." : "Connect Wallet"}</span>
                                                             <button className="float-right bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full align-middle self-center" onClick={() => close()}>
@@ -437,7 +437,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         if (process.browser) {
                             if (open) {
                                 const dom = document.getElementById("popover-3");
-                                if (dom) dom.style.zIndex = "1";
+                                if (dom) dom.style.zIndex = "10";
                             } else {
                                 const dom = document.getElementById("popover-3");
                                 if (dom) dom.style.zIndex = "0";

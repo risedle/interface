@@ -1,13 +1,18 @@
 import type { FunctionComponent } from "react";
 import Head from "next/head";
+import Link from "next/link";
 
 import Favicon from "../Favicon";
-import Navigation from "../Navigation/MarketNavigation";
 import Footer from "../Footer";
 import { useWalletContext } from "../Wallet";
 import { useMarkets } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
 import MarketCard from "./MarketCard";
+import ButtonNetworkSwitcher from "../Buttons/NetworkSwitcher";
+import ButtonConnectWalletDesktop from "../Buttons/ConnectWalletDesktop";
+import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
+import Logo from "../Logo";
+import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 
 /**
  * MarketsPageProps is a React Component properties that passed to React Component MarketsPage
@@ -31,9 +36,34 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                 <meta name="description" content="Invest, earn and build on the decentralized leveraged token market protocol" />
             </Head>
             <Favicon />
-            <div className="flex flex-col z-10 min-h-screen">
-                <Navigation />
 
+            <div className="container max-w-full mx-auto z-20">
+                <div className="flex flex-row p-4 items-center justify-between">
+                    <div className="flex-none">
+                        <Link href="/">
+                            <a className="flex items-center">
+                                <Logo />
+                                <span className="text-base font-inter font-bold pl-2 traking-tight text-gray-light-12 dark:text-gray-light-1 self-center leading-0">Risedle</span>
+                            </a>
+                        </Link>
+                    </div>
+                    <div className="flex-none flex flex-row space-x-2 inline-block">
+                        <div className="hidden sm:inline-block">
+                            <ButtonNetworkSwitcher />
+                        </div>
+
+                        <div className="hidden sm:inline-block">
+                            <ButtonConnectWalletDesktop />
+                        </div>
+
+                        <div className="inline-block h-[40px]">
+                            <ButtonThemeSwitcher />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex flex-col z-10 min-h-screen">
                 {/* Headers */}
                 <div className="container px-4 mx-auto max-w-4xl mt-8 sm:mt-16">
                     <div className="flex flex-col sm:flex-row sm:items-center space-y-6 sm:space-y-0 sm:justify-between border-b border-gray-light-9 dark:border-gray-dark-9 border-dashed pb-6">
@@ -174,6 +204,10 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                         </filter>
                     </defs>
                 </svg>
+            </div>
+
+            <div className="sm:hidden z-10">
+                <ButtonConnectWalletMobile />
             </div>
         </div>
     );
