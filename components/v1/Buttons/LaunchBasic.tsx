@@ -14,7 +14,7 @@ type ButtonLaunchBasicProps = {};
 const ButtonLaunchBasic: FunctionComponent<ButtonLaunchBasicProps> = ({}) => {
     return (
         <Link href="/markets">
-            <a className="button basic">Launch Markets</a>
+            <a className="button basic"><span className="mr-2">&#8594;</span> Launch Markets</a>
         </Link>
     );
 };
