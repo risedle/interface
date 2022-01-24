@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { FunctionComponent } from "react";
 
 import Logo from "../Logo";
-import RisedleLinks from "../../../utils/links";
 import ButtonConnectWalletDesktop from "../Buttons/ConnectWalletDesktop";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import ButtonNetworkSwitcher from "../Buttons/NetworkSwitcher";
@@ -22,22 +21,11 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
     return (
         <>
             <div className="flex flex-row p-4 items-center justify-between">
-                <div className="flex-none w-[40px] lg:w-[359.25px]">
+                <div className="flex-none">
                     <Link href="/">
-                        <a>
+                        <a className="flex items-center">
                             <Logo />
-                        </a>
-                    </Link>
-                </div>
-                <div className="hidden flex flex-row space-x-4">
-                    <Link href={RisedleLinks.docs}>
-                        <a target="_blank" className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
-                            Docs &#8599;
-                        </a>
-                    </Link>
-                    <Link href={RisedleLinks.discord}>
-                        <a target="_blank" className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">
-                            Discord &#8599;
+                            <span className="text-base font-inter font-bold pl-2 traking-tight text-gray-light-12 dark:text-gray-light-1 self-center leading-0">Risedle</span>
                         </a>
                     </Link>
                 </div>

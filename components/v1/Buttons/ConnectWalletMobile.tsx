@@ -40,7 +40,7 @@ const getEtherscanAddressURL = (chain: Chain | null, address: string): string =>
  */
 const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProps> = ({}) => {
     const { account, login, logout, connectorName, setConnectorName, chain, switchChain } = useWalletContext();
-    const [connectionData, connect] = useConnect();
+    const [, connect] = useConnect();
     const [connectedChain, switchNetwork] = useNetwork();
     const [accountData] = useAccount();
     let [isConnecting, setIsConnecting] = useState(false);
@@ -183,7 +183,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         }
                         return (
                             <>
-                                <Popover.Button ref={setReferenceElement1} className="button basic w-[40px] p-2">
+                                <Popover.Button ref={setReferenceElement1} className="outline-0 button basic w-[40px] p-2">
                                     <img src={getChainIconPath(chain)} alt={chain.name} className="flex-shrink-0" />
                                 </Popover.Button>
 
@@ -238,7 +238,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                 {/* If account is not connected then display the connect wallet button */}
                                 {(!account || !connectedChain.data || !connectedChain.data.chain) && (
                                     <>
-                                        <Popover.Button ref={setReferenceElement2} className="text-gray-light-12 text-sm font-semibold py-3 px-4 rounded-full leading-4 inline-block w-full button gradient bg-[length:300%_300%] tracking-tight bg-center hover:bg-left hover:shadow-xl hover:shadow-blue-400/20">
+                                        <Popover.Button ref={setReferenceElement2} className="outline-0 text-gray-light-12 text-sm font-semibold py-3 px-4 rounded-full leading-4 inline-block w-full button gradient bg-[length:300%_300%] tracking-tight bg-center hover:bg-left hover:shadow-xl hover:shadow-blue-400/20">
                                             Connect Wallet
                                         </Popover.Button>
 
@@ -445,7 +445,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         }
                         return (
                             <>
-                                <Popover.Button ref={setReferenceElement3} className="button basic w-[40px]">
+                                <Popover.Button ref={setReferenceElement3} className="outline-0 button basic w-[40px]">
                                     {open && (
                                         <svg className="flex-shrink-0 fill-gray-light-12 dark:fill-gray-dark-12" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                                             <path

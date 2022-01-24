@@ -8,7 +8,7 @@ class RisedleDocument extends Document {
 
     render() {
         return (
-            <Html className="dark font-inter h-full">
+            <Html className="dark font-inter overflow-x-hidden">
                 <Head>
                     <link rel="preconnect" href="https://fonts.googleapis.com" />
                     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

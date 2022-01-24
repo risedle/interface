@@ -114,7 +114,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                 </div>
 
                 {/* Market tabs and content */}
-                <Tabs.Root defaultValue="leverage" className="px-4">
+                <Tabs.Root defaultValue="leverage" className="px-4 outline-0">
                     <Tabs.List aria-label="ETHRISE" className="bg-gray-light-3 dark:bg-gray-dark-2 rounded-[12px] flex flex-row p-1 mx-auto sm:max-w-[253px] mb-6">
                         <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 state-active:text-gray-light-12 state-active:dark:text-gray-dark-12 state-active:font-bold state-active:py-[12px] state-active:dark:bg-gray-dark-4 state-active:bg-gray-light-1">
                             Leverage
@@ -125,14 +125,14 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                     </Tabs.List>
 
                     {/* Leverage tab */}
-                    <Tabs.Content value="leverage" className="flex flex-col mx-auto max-w-[540px] space-y-6">
+                    <Tabs.Content value="leverage" className="outline-0 flex flex-col mx-auto max-w-[540px] space-y-6">
                         {/* Price info card */}
                         <div className="flex flex-col bg-gray-light-2 dark:bg-gray-dark-2 rounded-[16px] w-full">
                             {/* Title, subtitle and lgoo */}
                             <div className="flex flex-row p-4 items-center justify-between">
                                 <div className="grow sflex flex-col space-y-2">
                                     <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{subtitle}</p>
-                                    <h1 className="m-0 text-2xl tracking-tighter text-gray-light-12 dark:text-gray-dark-12 tracking-[-.02em]">{title}</h1>
+                                    <h1 className="m-0 text-2xl text-gray-light-12 dark:text-gray-dark-12 tracking-[-.02em] font-bold">{title}</h1>
                                 </div>
                                 <img className="sm:hidden" src={logo} alt={title} />
                             </div>
@@ -388,14 +388,14 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                     </Tabs.Content>
 
                     {/* Earn tab */}
-                    <Tabs.Content value="earn" className="flex flex-col mx-auto max-w-[540px] space-y-6">
+                    <Tabs.Content value="earn" className="outline-0 flex flex-col mx-auto max-w-[540px] space-y-6">
                         {/* APY info card */}
                         <div className="flex flex-col bg-gray-light-2 dark:bg-gray-dark-2 rounded-[16px] w-full">
                             {/* Title, subtitle and lgoo */}
                             <div className="flex flex-row p-4 items-center justify-between">
                                 <div className="grow sflex flex-col space-y-2">
                                     <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{subtitle}</p>
-                                    <h1 className="m-0 text-2xl tracking-tighter text-gray-light-12 dark:text-gray-dark-12 tracking-[-.02em]">
+                                    <h1 className="m-0 text-2xl text-gray-light-12 dark:text-gray-dark-12 tracking-[-.02em] font-bold">
                                         rv{collateralSymbol}
                                         {debtSymbol}
                                     </h1>
