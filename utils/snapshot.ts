@@ -48,9 +48,9 @@ export function useMarkets(chainID: number) {
     );
 
     return {
-        data: data,
-        isLoading: !error && !data,
-        isError: error,
+        markets: data,
+        marketsIsLoading: !error && !data,
+        marketsIsError: error,
     };
 }
 

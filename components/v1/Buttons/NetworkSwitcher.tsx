@@ -97,9 +97,8 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                 </div>
             </Dialog>
 
-            <button className="bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-5 dark:border-gray-dark-5 py-[3px] pl-[4px] pr-4 rounded-full inline-block" onClick={() => setIsOpen(true)}>
-                <img src={getChainIconPath(chain)} alt={chain.name} className="inline-block self-center bg-gray-light-4 dark:bg-gray-dark-4 p-[6px] rounded-full" />
-                <span className="text-gray-light-12 dark:text-gray-dark-12 text-sm font-semibold inline-block leading-none ml-2">{chain.name}</span>
+            <button className="button basic p-0" onClick={() => setIsOpen(true)}>
+                <img src={getChainIconPath(chain)} alt={chain.name} className="w-[16px] h-[16px] m-[11px]" />
             </button>
         </>
     );
