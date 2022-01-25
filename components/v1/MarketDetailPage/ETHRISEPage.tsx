@@ -132,7 +132,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                     </div>
                 </div>
 
-                <div className="sm:z-10 flex flex-col">
+                <div className="sm:z-10 flex flex-col mb-20 ">
                     {/* Market header on the desktop; Only show this on w > 640px */}
                     <div className="hidden sm:inline-block flex flex-col m-auto text-center space-y-6 mt-12 mb-14">
                         <div>
@@ -997,7 +997,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                 </div>
             </div>
 
-            <div className="mt-20 sm:hidden">
+            <div className="sm:hidden">
                 <ButtonConnectWalletMobile />
             </div>
         </>
