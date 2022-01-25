@@ -10,7 +10,7 @@ import Favicon from "../Favicon";
 import Footer from "../Footer";
 import { useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
-import { useLeveragedTokenData3Months, Timeframe, useMarket, useVaultData3Months } from "../../../utils/snapshot";
+import { useLeveragedTokenHistoricalData, Timeframe, useMarket, useVaultData3Months } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import Logo from "../Logo";
@@ -55,7 +55,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const debtSymbol = metadata.debtSymbol;
 
     // Get price external data from Risedle Snapshot
-    const { leveragedTokenHistoricalData, leveragedTokenHistoricalDataIsLoading, leveragedTokenHistoricalDataIsError } = useLeveragedTokenData3Months(chain.id, ethriseAddress);
+    const { leveragedTokenDailyData, leveragedTokenWeeklyData, leveragedTokenTwoWeeklyData, leveragedTokenMonthlyData, leveragedTokenThreeMonthlyData, leveragedTokenDataIsLoading, leveragedTokenDataIsError } = useLeveragedTokenHistoricalData(chain.id, ethriseAddress);
     const { vaultHistoricalData, vaultHistoricalDataIsLoading, vaultHistoricalDataIsError } = useVaultData3Months(chain.id, vaultAddress);
     const { market, marketIsLoading, marketIsError } = useMarket(chain.id, ethriseAddress);
 
@@ -72,7 +72,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const [initialBorrowAPY, setInitialBorrowAPY] = useState(0);
 
     const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
-    const [currentLeveragedTokenData, setCurrentLeveragedTokenData] = useState(leveragedTokenHistoricalData);
+    const [currentLeveragedTokenData, setCurrentLeveragedTokenData] = useState(leveragedTokenTwoWeeklyData);
     const [currentVaultData, setCurrentVaultData] = useState(vaultHistoricalData);
 
     // Set initial data for onMouseLeave event on the price chart
@@ -92,8 +92,8 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     }
 
     // Set current data on the first load
-    if (!currentLeveragedTokenData && leveragedTokenHistoricalData) {
-        setCurrentLeveragedTokenData(leveragedTokenHistoricalData);
+    if (!currentLeveragedTokenData && leveragedTokenTwoWeeklyData) {
+        setCurrentLeveragedTokenData(leveragedTokenTwoWeeklyData);
     }
     if (!currentVaultData && vaultHistoricalData) {
         setCurrentVaultData(vaultHistoricalData);
@@ -178,13 +178,13 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 <div className="flex flex-row space-x-4 px-4">
                                     <div className="flex flex-col space-y-2 w-[52px]">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 ">Price</p>
-                                        {(leveragedTokenHistoricalDataIsLoading || leveragedTokenHistoricalDataIsError) && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
-                                        {!leveragedTokenHistoricalDataIsLoading && leveragedTokenHistoricalData && <p className="font-ibm font-semibold text-sm leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(nav)}</p>}
+                                        {(leveragedTokenDataIsLoading || leveragedTokenDataIsError) && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
+                                        {!leveragedTokenDataIsLoading && currentLeveragedTokenData && <p className="font-ibm font-semibold text-sm leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(nav)}</p>}
                                     </div>
                                     <div className="flex flex-col space-y-2">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 ">Change</p>
-                                        {(leveragedTokenHistoricalDataIsLoading || leveragedTokenHistoricalDataIsError) && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
-                                        {!leveragedTokenHistoricalDataIsLoading && leveragedTokenHistoricalData && (
+                                        {(leveragedTokenDataIsLoading || leveragedTokenDataIsError) && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
+                                        {!leveragedTokenDataIsLoading && currentLeveragedTokenData && (
                                             <div className="flex flex-row items-center">
                                                 <svg className={navChange > 0 ? "fill-green-light-11 dark:fill-green-dark-11 inline-block" : "hidden"} width="15" height="15" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
                                                     <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 2.14645C7.34171 1.95118 7.65829 1.95118 7.85355 2.14645L11.8536 6.14645C12.0488 6.34171 12.0488 6.65829 11.8536 6.85355C11.6583 7.04882 11.3417 7.04882 11.1464 6.85355L8 3.70711L8 12.5C8 12.7761 7.77614 13 7.5 13C7.22386 13 7 12.7761 7 12.5L7 3.70711L3.85355 6.85355C3.65829 7.04882 3.34171 7.04882 3.14645 6.85355C2.95118 6.65829 2.95118 6.34171 3.14645 6.14645L7.14645 2.14645Z" />
@@ -200,15 +200,15 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
 
                                 {/* Price chart */}
                                 <div className="w-full h-[192px] mt-8 z-0">
-                                    {(leveragedTokenHistoricalDataIsLoading || leveragedTokenHistoricalDataIsError) && <div className="h-[192px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse mb-2"></div>}
-                                    {!leveragedTokenHistoricalDataIsLoading && leveragedTokenHistoricalData && (
+                                    {(leveragedTokenDataIsLoading || leveragedTokenDataIsError) && <div className="h-[192px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse mb-2"></div>}
+                                    {!leveragedTokenDataIsLoading && currentLeveragedTokenData && (
                                         <ResponsiveContainer width="100%" height="100%" className="h-full">
                                             <AreaChart
-                                                data={currentLeveragedTokenData}
+                                                data={currentLeveragedTokenData.data}
                                                 margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
                                                 onMouseLeave={() => {
-                                                    setNAV(initialNAV);
-                                                    setNAVChange(initialNAVChange);
+                                                    setNAV(currentLeveragedTokenData.latestNAV);
+                                                    setNAVChange(currentLeveragedTokenData.change);
                                                 }}
                                             >
                                                 <defs>
@@ -225,38 +225,13 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                     position={{ y: 0 }}
                                                     content={({ active, payload }) => {
                                                         if (active && payload && payload.length) {
-                                                            const latestData = payload[0].payload;
-                                                            const timestamp = latestData.timestamp;
+                                                            const selectedData = payload[0].payload;
+                                                            const timestamp = selectedData.timestamp;
                                                             const date = new Date(timestamp);
                                                             const formattedDate = new Intl.DateTimeFormat("en-US", { hour: "numeric", day: "numeric", month: "numeric", year: "numeric", minute: "numeric" }).format(date);
 
-                                                            setNAV(latestData.nav);
-
-                                                            let cd, oldestData;
-                                                            switch (currentTimeframe) {
-                                                                case Timeframe.Daily:
-                                                                    cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24, leveragedTokenHistoricalData.length);
-                                                                    oldestData = cd[0];
-                                                                    break;
-                                                                case Timeframe.Weekly:
-                                                                    cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7, leveragedTokenHistoricalData.length);
-                                                                    oldestData = cd[0];
-                                                                    break;
-                                                                case Timeframe.TwoWeekly:
-                                                                    cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2, leveragedTokenHistoricalData.length);
-                                                                    oldestData = cd[0];
-                                                                    break;
-                                                                case Timeframe.Monthly:
-                                                                    cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2 * 4, leveragedTokenHistoricalData.length);
-                                                                    oldestData = cd[0];
-                                                                    break;
-                                                                case Timeframe.ThreeMonthly:
-                                                                    cd = leveragedTokenHistoricalData;
-                                                                    oldestData = cd[0];
-                                                                    break;
-                                                            }
-
-                                                            const change = ((latestData.nav - oldestData.nav) / oldestData.nav) * 100;
+                                                            setNAV(selectedData.nav);
+                                                            const change = ((selectedData.nav - currentLeveragedTokenData.oldestNAV) / currentLeveragedTokenData.oldestNAV) * 100;
                                                             setNAVChange(change);
 
                                                             return <div className="text-xs text-gray-light-10 dark:text-gray-dark-10">{formattedDate}</div>;
@@ -278,8 +253,10 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                             className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Daily ? activeTimeframeClasses : ""}`}
                                             onClick={() => {
                                                 setCurrentTimeframe(Timeframe.Daily);
-                                                if (leveragedTokenHistoricalData) {
-                                                    setCurrentLeveragedTokenData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24, leveragedTokenHistoricalData.length));
+                                                if (leveragedTokenDailyData) {
+                                                    setCurrentLeveragedTokenData(leveragedTokenDailyData);
+                                                    setNAV(leveragedTokenDailyData.latestNAV);
+                                                    setNAVChange(leveragedTokenDailyData.change);
                                                 }
                                             }}
                                         >
@@ -291,8 +268,10 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                             className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Weekly ? activeTimeframeClasses : ""}`}
                                             onClick={() => {
                                                 setCurrentTimeframe(Timeframe.Weekly);
-                                                if (leveragedTokenHistoricalData) {
-                                                    setCurrentLeveragedTokenData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7, leveragedTokenHistoricalData.length));
+                                                if (leveragedTokenWeeklyData) {
+                                                    setCurrentLeveragedTokenData(leveragedTokenWeeklyData);
+                                                    setNAV(leveragedTokenWeeklyData.latestNAV);
+                                                    setNAVChange(leveragedTokenWeeklyData.change);
                                                 }
                                             }}
                                         >
@@ -304,8 +283,10 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                             className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.TwoWeekly ? activeTimeframeClasses : ""}`}
                                             onClick={() => {
                                                 setCurrentTimeframe(Timeframe.TwoWeekly);
-                                                if (leveragedTokenHistoricalData) {
-                                                    setCurrentLeveragedTokenData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2, leveragedTokenHistoricalData.length));
+                                                if (leveragedTokenTwoWeeklyData) {
+                                                    setCurrentLeveragedTokenData(leveragedTokenTwoWeeklyData);
+                                                    setNAV(leveragedTokenTwoWeeklyData.latestNAV);
+                                                    setNAVChange(leveragedTokenTwoWeeklyData.change);
                                                 }
                                             }}
                                         >
@@ -317,8 +298,10 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                             className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
                                             onClick={() => {
                                                 setCurrentTimeframe(Timeframe.Monthly);
-                                                if (leveragedTokenHistoricalData) {
-                                                    setCurrentLeveragedTokenData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2 * 4, leveragedTokenHistoricalData.length));
+                                                if (leveragedTokenMonthlyData) {
+                                                    setCurrentLeveragedTokenData(leveragedTokenMonthlyData);
+                                                    setNAV(leveragedTokenMonthlyData.latestNAV);
+                                                    setNAVChange(leveragedTokenMonthlyData.change);
                                                 }
                                             }}
                                         >
@@ -330,7 +313,11 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                             className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
                                             onClick={() => {
                                                 setCurrentTimeframe(Timeframe.ThreeMonthly);
-                                                setCurrentLeveragedTokenData(leveragedTokenHistoricalData);
+                                                if (leveragedTokenThreeMonthlyData) {
+                                                    setCurrentLeveragedTokenData(leveragedTokenThreeMonthlyData);
+                                                    setNAV(leveragedTokenThreeMonthlyData.latestNAV);
+                                                    setNAVChange(leveragedTokenThreeMonthlyData.change);
+                                                }
                                             }}
                                         >
                                             3M

@@ -2,7 +2,7 @@ import { FunctionComponent, useState } from "react";
 import { useWalletContext } from "../Wallet";
 
 // Snapshot data
-import { Timeframe, useLeveragedTokenData3Months, useMarkets } from "../../../utils/snapshot";
+import { Timeframe, useLeveragedTokenHistoricalData } from "../../../utils/snapshot";
 
 // Formatters
 import { dollarFormatter } from "../../../utils/formatters";
@@ -35,18 +35,18 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ chainID, address, init
     const description = metadata.description;
 
     // Get the data
-    const { leveragedTokenHistoricalData, leveragedTokenHistoricalDataIsLoading, leveragedTokenHistoricalDataIsError } = useLeveragedTokenData3Months(chainID, address);
+    const { leveragedTokenDailyData, leveragedTokenWeeklyData, leveragedTokenTwoWeeklyData, leveragedTokenMonthlyData, leveragedTokenThreeMonthlyData, leveragedTokenDataIsLoading, leveragedTokenDataIsError } = useLeveragedTokenHistoricalData(chainID, address);
 
     // States
     const [nav, setNAV] = useState(initialNAV);
     const [navChange, setNAVChange] = useState(initialNAVChange);
     const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
-    const [currentLeveragedTokenData, setCurrentLeveragedTokenData] = useState(leveragedTokenHistoricalData);
+    const [currentLeveragedTokenData, setCurrentLeveragedTokenData] = useState(leveragedTokenTwoWeeklyData);
     const mcap = totalSupply * nav;
 
     // Set current data on the first load
-    if (!currentLeveragedTokenData && leveragedTokenHistoricalData) {
-        setCurrentLeveragedTokenData(leveragedTokenHistoricalData);
+    if (!currentLeveragedTokenData && leveragedTokenTwoWeeklyData) {
+        setCurrentLeveragedTokenData(leveragedTokenTwoWeeklyData);
     }
 
     // Styling for active timeframe selector
@@ -71,16 +71,16 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ chainID, address, init
             </div>
 
             {/* Display price loading state */}
-            {(leveragedTokenHistoricalDataIsLoading || leveragedTokenHistoricalDataIsError) && <div className="hidden sm:block h-[192px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>}
-            {!leveragedTokenHistoricalDataIsLoading && leveragedTokenHistoricalData && (
+            {(leveragedTokenDataIsLoading || leveragedTokenDataIsError) && <div className="hidden sm:block h-[192px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>}
+            {!leveragedTokenDataIsLoading && currentLeveragedTokenData && (
                 <div className="hidden sm:block h-[192px] border-t border-gray-light-3 dark:border-gray-dark-3 border-dashed">
                     <ResponsiveContainer width="100%" height="100%" className="h-full">
                         <AreaChart
-                            data={currentLeveragedTokenData}
+                            data={currentLeveragedTokenData.data}
                             margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
                             onMouseLeave={() => {
-                                setNAV(initialNAV);
-                                setNAVChange(initialNAVChange);
+                                setNAV(currentLeveragedTokenData.latestNAV);
+                                setNAVChange(currentLeveragedTokenData.change);
                             }}
                         >
                             <defs>
@@ -97,38 +97,13 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ chainID, address, init
                                 position={{ y: 0 }}
                                 content={({ active, payload }) => {
                                     if (active && payload && payload.length) {
-                                        const latestData = payload[0].payload;
-                                        const timestamp = latestData.timestamp;
+                                        const selectedData = payload[0].payload;
+                                        const timestamp = selectedData.timestamp;
                                         const date = new Date(timestamp);
                                         const formattedDate = new Intl.DateTimeFormat("en-US", { hour: "numeric", day: "numeric", month: "numeric", year: "numeric", minute: "numeric" }).format(date);
 
-                                        setNAV(latestData.nav);
-
-                                        let cd, oldestData;
-                                        switch (currentTimeframe) {
-                                            case Timeframe.Daily:
-                                                cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24, leveragedTokenHistoricalData.length);
-                                                oldestData = cd[0];
-                                                break;
-                                            case Timeframe.Weekly:
-                                                cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7, leveragedTokenHistoricalData.length);
-                                                oldestData = cd[0];
-                                                break;
-                                            case Timeframe.TwoWeekly:
-                                                cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2, leveragedTokenHistoricalData.length);
-                                                oldestData = cd[0];
-                                                break;
-                                            case Timeframe.Monthly:
-                                                cd = leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2 * 4, leveragedTokenHistoricalData.length);
-                                                oldestData = cd[0];
-                                                break;
-                                            case Timeframe.ThreeMonthly:
-                                                cd = leveragedTokenHistoricalData;
-                                                oldestData = cd[0];
-                                                break;
-                                        }
-
-                                        const change = ((latestData.nav - oldestData.nav) / oldestData.nav) * 100;
+                                        setNAV(selectedData.nav);
+                                        const change = ((selectedData.nav - currentLeveragedTokenData.oldestNAV) / currentLeveragedTokenData.oldestNAV) * 100;
                                         setNAVChange(change);
 
                                         return <div className="text-xs text-gray-light-10 dark:text-gray-dark-10">{formattedDate}</div>;
@@ -144,15 +119,17 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ chainID, address, init
             )}
 
             {/* Timeframe selector button */}
-            {!leveragedTokenHistoricalDataIsLoading && leveragedTokenHistoricalData && (
+            {!leveragedTokenDataIsLoading && currentLeveragedTokenData && (
                 <div className="hidden sm:flex flex-row items-center px-4 mt-2">
                     <div className="basis-1/5 text-center">
                         <button
                             className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Daily ? activeTimeframeClasses : ""}`}
                             onClick={() => {
                                 setCurrentTimeframe(Timeframe.Daily);
-                                if (leveragedTokenHistoricalData) {
-                                    setCurrentLeveragedTokenData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24, leveragedTokenHistoricalData.length));
+                                if (leveragedTokenDailyData) {
+                                    setCurrentLeveragedTokenData(leveragedTokenDailyData);
+                                    setNAV(leveragedTokenDailyData.latestNAV);
+                                    setNAVChange(leveragedTokenDailyData.change);
                                 }
                             }}
                         >
@@ -164,8 +141,10 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ chainID, address, init
                             className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Weekly ? activeTimeframeClasses : ""}`}
                             onClick={() => {
                                 setCurrentTimeframe(Timeframe.Weekly);
-                                if (leveragedTokenHistoricalData) {
-                                    setCurrentLeveragedTokenData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7, leveragedTokenHistoricalData.length));
+                                if (leveragedTokenWeeklyData) {
+                                    setCurrentLeveragedTokenData(leveragedTokenWeeklyData);
+                                    setNAV(leveragedTokenWeeklyData.latestNAV);
+                                    setNAVChange(leveragedTokenWeeklyData.change);
                                 }
                             }}
                         >
@@ -177,8 +156,10 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ chainID, address, init
                             className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.TwoWeekly ? activeTimeframeClasses : ""}`}
                             onClick={() => {
                                 setCurrentTimeframe(Timeframe.TwoWeekly);
-                                if (leveragedTokenHistoricalData) {
-                                    setCurrentLeveragedTokenData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2, leveragedTokenHistoricalData.length));
+                                if (leveragedTokenTwoWeeklyData) {
+                                    setCurrentLeveragedTokenData(leveragedTokenTwoWeeklyData);
+                                    setNAV(leveragedTokenTwoWeeklyData.latestNAV);
+                                    setNAVChange(leveragedTokenTwoWeeklyData.change);
                                 }
                             }}
                         >
@@ -190,8 +171,10 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ chainID, address, init
                             className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
                             onClick={() => {
                                 setCurrentTimeframe(Timeframe.Monthly);
-                                if (leveragedTokenHistoricalData) {
-                                    setCurrentLeveragedTokenData(leveragedTokenHistoricalData.slice(leveragedTokenHistoricalData.length - 24 * 7 * 2 * 4, leveragedTokenHistoricalData.length));
+                                if (leveragedTokenMonthlyData) {
+                                    setCurrentLeveragedTokenData(leveragedTokenMonthlyData);
+                                    setNAV(leveragedTokenMonthlyData.latestNAV);
+                                    setNAVChange(leveragedTokenMonthlyData.change);
                                 }
                             }}
                         >
@@ -203,7 +186,11 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ chainID, address, init
                             className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
                             onClick={() => {
                                 setCurrentTimeframe(Timeframe.ThreeMonthly);
-                                setCurrentLeveragedTokenData(leveragedTokenHistoricalData);
+                                if (leveragedTokenThreeMonthlyData) {
+                                    setCurrentLeveragedTokenData(leveragedTokenThreeMonthlyData);
+                                    setNAV(leveragedTokenThreeMonthlyData.latestNAV);
+                                    setNAVChange(leveragedTokenThreeMonthlyData.change);
+                                }
                             }}
                         >
                             3M
