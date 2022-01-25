@@ -37,7 +37,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
             </Head>
             <Favicon />
 
-            <div className="container max-w-full mx-auto z-20">
+            <div className="container max-w-full mx-auto z-10 sm:z-20">
                 <div className="flex flex-row p-4 items-center justify-between">
                     <div className="flex-none">
                         <Link href="/">
