@@ -214,7 +214,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                         );
                                     }}
                                 </Popover.Panel>
-                                <Popover.Overlay className={`${open ? "opacity-100 fixed inset-0 bg-white/20 dark:bg-black/20 backdrop-blur z-10" : "opacity-0"} -z-[1]`} />
+                                <Popover.Overlay className={`${open ? "opacity-100 fixed inset-0 bg-gray-dark-1/60 dark:bg-black/60 backdrop-blur" : "opacity-0"} z-[-1]`} />
                             </>
                         );
                     }}
@@ -559,7 +559,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                         );
                                     }}
                                 </Popover.Panel>
-                                <Popover.Overlay className={`${open ? "opacity-100 fixed inset-0 bg-white/20 dark:bg-black/20 backdrop-blur" : "opacity-0"} -z-[1]`} />
+                                <Popover.Overlay className={`${open ? "opacity-100 fixed inset-0 bg-gray-dark-1/60 dark:bg-black/60 backdrop-blur" : "opacity-0"} -z-[1]`} />
                             </>
                         );
                     }}

@@ -112,7 +112,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                 <Favicon />
 
                 {/* Navigation */}
-                <div className="container max-w-full mx-auto z-10">
+                <div className="container max-w-full mx-auto sm:z-10">
                     <div className="flex flex-row p-4 items-center justify-between">
                         <div className="flex-none">
                             <Link href="/">
