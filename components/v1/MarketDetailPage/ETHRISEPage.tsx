@@ -605,7 +605,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             </div>
                         </Tabs.Content>
                     </Tabs.Root>
-                    <div className="pb-20 sm:pb-0 mt-20">
+                    <div className="hidden sm:inline-block sm:mt-20">
                         <Footer />
                     </div>
                 </div>
@@ -997,7 +997,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                 </div>
             </div>
 
-            <div className="sm:hidden">
+            <div className="mt-20 sm:hidden">
                 <ButtonConnectWalletMobile />
             </div>
         </>
