@@ -136,7 +136,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                     )}
                 </div>
             </div>
-            <div className="pb-20 sm:pb-0">
+            <div className="hidden sm:inline-block">
                 <Footer />
             </div>
 
