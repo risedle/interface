@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactNode } from "react";
+import { FunctionComponent, ReactNode, useState } from "react";
 import createPersistedState from "use-persisted-state";
 
 import { Chain, Provider, chain as Chains } from "wagmi";
@@ -97,6 +97,17 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
         }
     };
 
+    const getProvider = () => {
+        switch (chain.id) {
+            case Chains.kovan.id:
+                return KovanProvider;
+            case Chains.arbitrumOne.id:
+                return ArbitrumOneProvider;
+            default:
+                return ethers.getDefaultProvider();
+        }
+    };
+
     // Login and logout functionalities
     const login = (a: string) => {
         setAccount(a);
@@ -117,7 +128,7 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
 
     return (
         <WalletContext.Provider value={sharedPersistentStates}>
-            <Provider autoConnect={true} connectorStorageKey={connectorStorageKey} connectors={[MetaMaskConnector, WCConnector]}>
+            <Provider autoConnect={true} connectorStorageKey={connectorStorageKey} connectors={[MetaMaskConnector, WCConnector]} provider={getProvider}>
                 {children}
             </Provider>
         </WalletContext.Provider>
