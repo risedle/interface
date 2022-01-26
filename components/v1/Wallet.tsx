@@ -1,14 +1,10 @@
-import { FunctionComponent, ReactNode, useState } from "react";
+import { FunctionComponent, ReactNode } from "react";
 import createPersistedState from "use-persisted-state";
-
 import { Chain, Provider, chain as Chains } from "wagmi";
-
 import { createContext, useContext } from "react";
-
 import { ethers, providers } from "ethers";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-import { BaseProvider } from "@ethersproject/providers";
 
 export const connectorStorageKey = "risedleConnectors.wallet";
 

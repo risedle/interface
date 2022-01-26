@@ -1,4 +1,4 @@
-import { FunctionComponent, useRef, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { ethers } from "ethers";
@@ -35,7 +35,12 @@ const ETHRISEAddresses = {
 };
 
 // Vault ABIs
-const VaultABI = new ethers.utils.Interface(["function getMetadata(address token) external view returns (bool isETH, address token, address collateral, address oracleContract, address swapContract, address maxSwapSlippageInEther, uint256 initialPrice, uint256 feeInEther, uint256 totalCollateralPlusFee, uint256 totalPendingFees, uint256 minLeverageRatioInEther, uint256 maxLeverageRatioInEther, uint256 maxRebalancingValue, uint256 rebalancingStepInEther, uint256 maxTotalCollateral)"]);
+const VaultABI = new ethers.utils.Interface([
+    "function getMetadata(address token) external view returns (bool isETH, address token, address collateral, address oracleContract, address swapContract, address maxSwapSlippageInEther, uint256 initialPrice, uint256 feeInEther, uint256 totalCollateralPlusFee, uint256 totalPendingFees, uint256 minLeverageRatioInEther, uint256 maxLeverageRatioInEther, uint256 maxRebalancingValue, uint256 rebalancingStepInEther, uint256 maxTotalCollateral)",
+    "function getTotalAvailableCash() external view returns (uint256 totalAvailableCash)",
+    "function getNAV(address token) external view returns (uint256 nav)",
+]);
+const OracleABI = new ethers.utils.Interface(["function getPrice() external view returns (uint256 price)"]);
 
 /**
  * ETHRISEPageProps is a React Component properties that passed to React Component ETHRISEPage
@@ -50,7 +55,6 @@ type ETHRISEPageProps = {};
 const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const { chain, account } = useWalletContext();
     const [connectedChain, switchNetwork] = useNetwork();
-    const provider = Providers[chain.id];
 
     const ethriseAddress = ETHRISEAddresses[chain.id].token;
     const vaultAddress = ETHRISEAddresses[chain.id].vault;
@@ -67,6 +71,9 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const collateralSymbol = metadata.collateralSymbol;
     const debtSymbol = metadata.debtSymbol;
     const uniswapSwapURL = metadata.uniswapSwapURL;
+    const collateralDecimals = metadata.collateralDecimals;
+    const debtDecimals = metadata.debtDecimals;
+    const oracleContract = metadata.oracleContract;
 
     // Get price external data from Risedle Snapshot
     const { leveragedTokenDailyData, leveragedTokenWeeklyData, leveragedTokenTwoWeeklyData, leveragedTokenMonthlyData, leveragedTokenThreeMonthlyData, leveragedTokenDataIsLoading, leveragedTokenDataIsError } = useLeveragedTokenHistoricalData(chain.id, ethriseAddress);
@@ -78,21 +85,51 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
         {
             addressOrName: vaultAddress,
             contractInterface: VaultABI,
-            signerOrProvider: provider,
         },
         "getMetadata",
         {
             args: ethriseAddress,
         }
     );
+    console.debug("onchainETHRISEMetadata", onchainETHRISEMetadata);
 
     // Get onchain balance
     const [onchainBalance] = useBalance({ addressOrName: account ? account : undefined });
     const userCollateralBalance = onchainBalance && onchainBalance.data && onchainBalance.data.formatted ? parseFloat(onchainBalance.data.formatted) : 0;
-
     console.debug("onchainBalance", onchainBalance);
 
-    console.debug("onchainETHRISEMetadata", onchainETHRISEMetadata);
+    // Get onchain oracle
+    const [onchainOracle] = useContractRead(
+        {
+            addressOrName: oracleContract,
+            contractInterface: OracleABI,
+        },
+        "getPrice"
+    );
+    console.debug("onchainOracle", onchainOracle);
+
+    // Get total available cash of vault
+    const [onchainTotalAvailableCash] = useContractRead(
+        {
+            addressOrName: vaultAddress,
+            contractInterface: VaultABI,
+        },
+        "getTotalAvailableCash"
+    );
+    console.debug("onchainTotalAvailableCash", onchainTotalAvailableCash);
+
+    // Get NAV of the token
+    const [onchainNAV] = useContractRead(
+        {
+            addressOrName: vaultAddress,
+            contractInterface: VaultABI,
+        },
+        "getNAV",
+        {
+            args: ethriseAddress,
+        }
+    );
+    console.debug("onchainNAV", onchainNAV);
 
     // States
     const [nav, setNAV] = useState(0);
@@ -136,18 +173,38 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const activeTimeframeClasses = "bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full font-semibold text-gray-light-12 dark:text-gray-dark-12";
 
     // Main button states
-    const showFetchingOnchainDataInProgress = onchainETHRISEMetadata.loading || onchainBalance.loading;
-    const showFailedToFetchOnChainData = !showFetchingOnchainDataInProgress && onchainETHRISEMetadata.error && onchainBalance.error ? true : false;
+    const showFetchingOnchainDataInProgress = onchainETHRISEMetadata.loading || onchainBalance.loading || onchainOracle.loading || onchainTotalAvailableCash.loading || onchainNAV.loading;
+    const showFailedToFetchOnChainData = !showFetchingOnchainDataInProgress && (onchainETHRISEMetadata.error || onchainBalance.error || onchainOracle.error || onchainTotalAvailableCash.error || onchainNAV.error) ? true : false;
     const showConnectWalletToMintOrRedeem = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && (!account || !connectedChain.data || !connectedChain.data.chain);
     const showSwitchNetwork = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && !showConnectWalletToMintOrRedeem && connectedChain.data.chain && connectedChain.data.chain.id != chain.id ? true : false;
     const showMintOrRedeem = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && !showConnectWalletToMintOrRedeem && !showSwitchNetwork ? true : false;
 
-    // Dialog states
-    const showBuyOnUniswapButton = onchainETHRISEMetadata.data && onchainETHRISEMetadata.data.maxTotalCollateral.gt(0) && onchainETHRISEMetadata.data.maxTotalCollateral.lt(onchainETHRISEMetadata.data.totalCollateralPlusFee.sub(onchainETHRISEMetadata.data.totalPendingFees)) ? true : false;
-    const showMintButton = !showBuyOnUniswapButton && onchainBalance.data ? true : false;
-
     // Mint & Redeem States
     const [mintAmount, setMintAmount] = useState(0);
+
+    // Current data
+    const maxTotalCollateral = parseFloat(ethers.utils.formatUnits(onchainETHRISEMetadata.data ? onchainETHRISEMetadata.data.maxTotalCollateral : 0, collateralDecimals));
+    const totalCollateralPlusFee = parseFloat(ethers.utils.formatUnits(onchainETHRISEMetadata.data ? onchainETHRISEMetadata.data.totalCollateralPlusFee : 0, collateralDecimals));
+    const totalPendingFees = parseFloat(ethers.utils.formatUnits(onchainETHRISEMetadata.data ? onchainETHRISEMetadata.data.totalPendingFees : 0, collateralDecimals));
+    const collateralPrice = parseFloat(ethers.utils.formatUnits(onchainOracle.data ? onchainOracle.data : 0, debtDecimals));
+    const totalAvailableCash = parseFloat(ethers.utils.formatUnits(onchainTotalAvailableCash.data ? onchainTotalAvailableCash.data : 0, debtDecimals));
+    const tokenNAV = parseFloat(ethers.utils.formatUnits(onchainNAV.data ? onchainNAV.data : 0, debtDecimals));
+    const isMaxCapReached = maxTotalCollateral > 0 && totalCollateralPlusFee - totalPendingFees > maxTotalCollateral ? true : false;
+    const isMintAmountMakeMaxCapReached = maxTotalCollateral > 0 && totalCollateralPlusFee - totalPendingFees + mintAmount > maxTotalCollateral ? true : false;
+    const isNotEnoughLiquidity = mintAmount * collateralPrice > totalAvailableCash;
+    const defaultMaxMintAmount = 5; // 5 ETH
+    const maxMintAmount = maxTotalCollateral > 0 ? maxTotalCollateral - totalCollateralPlusFee : defaultMaxMintAmount;
+    const mintedAmount = (mintAmount * collateralPrice) / tokenNAV;
+    const minimalMintedAmount = mintedAmount - mintedAmount * (5 / 100);
+
+    console.debug("DEBUG: maxTotalCollateral", maxTotalCollateral);
+    console.debug("DEBUG: totalCollateralPlusFee", totalCollateralPlusFee);
+    console.debug("DEBUG: totalPendingFees", totalPendingFees);
+    console.debug("DEBUG: collateralPrice", collateralPrice);
+    console.debug("DEBUG: totalAvailableCash", totalAvailableCash);
+    console.debug("DEBUG: isMaxCapReached", isMaxCapReached);
+    console.debug("DEBUG: isMintAmountMakeMaxCapReached", isMintAmountMakeMaxCapReached);
+    console.debug("DEBUG: isNotEnoughLiquidity", isNotEnoughLiquidity);
 
     return (
         <>
@@ -438,7 +495,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                         </Tabs.List>
 
                                                         <Tabs.Content value="mint" className="outline-0 flex flex-col mx-auto sm:max-w-[540px] space-y-6">
-                                                            {showBuyOnUniswapButton && (
+                                                            {isMaxCapReached && (
                                                                 <div className="flex flex-col mt-4 space-y-4">
                                                                     <div className="flex flex-row space-x-2 bg-yellow-light-2 dark:bg-yellow-dark-2 border border-yellow-light-5 dark:border-yellow-dark-5 rounded-[8px] items-center p-4">
                                                                         <svg className="fill-yellow-light-12 dark:fill-yellow-dark-12" width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg">
@@ -461,13 +518,10 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                                 </div>
                                                             )}
 
-                                                            {showMintButton && (
+                                                            {!isMaxCapReached && (
                                                                 <div className="mt-6">
                                                                     <div className="flex flex-row justify-between items-center">
                                                                         <p className="text-xs leading-4 font-semibold text-gray-light-12 dark:text-gray-dark-12">How many {collateralSymbol}?</p>
-                                                                        <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">
-                                                                            Balance: {userCollateralBalance.toFixed(3)} {collateralSymbol}
-                                                                        </p>
                                                                     </div>
 
                                                                     <form className="flex flex-col mt-2 space-y-4">
@@ -478,7 +532,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                                                     type="number"
                                                                                     placeholder="0"
                                                                                     min={0}
-                                                                                    max={userCollateralBalance.toFixed(3)}
+                                                                                    max={maxMintAmount.toFixed(3)}
                                                                                     value={mintAmount.toString()}
                                                                                     step={0.001}
                                                                                     onChange={(e) => {
@@ -512,6 +566,15 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                                             </div>
                                                                         </div>
 
+                                                                        <div className="flex flex-row justify-between">
+                                                                            <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10 text-left">
+                                                                                Balance: {userCollateralBalance.toFixed(3)} {collateralSymbol}
+                                                                            </p>
+                                                                            <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10 text-right">
+                                                                                Max mint: {maxMintAmount.toFixed(3)} {collateralSymbol}
+                                                                            </p>
+                                                                        </div>
+
                                                                         <div className="pt-4 pb-8 border-b border-gray-light-5 dark:border-gray-dark-5 border-dashed">
                                                                             {/* mint amount in range, display normal slider */}
                                                                             {mintAmount <= userCollateralBalance && (
@@ -532,8 +595,8 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                                                 </Slider.Root>
                                                                             )}
 
-                                                                            {/* mint amount out of range, display red slider */}
-                                                                            {mintAmount > userCollateralBalance && (
+                                                                            {/* mint amount out of range or mint amount max cap reached or mint amount not enough liquidity, display red slider */}
+                                                                            {(mintAmount > userCollateralBalance || isMintAmountMakeMaxCapReached || isNotEnoughLiquidity) && (
                                                                                 <Slider.Root
                                                                                     min={0}
                                                                                     value={[userCollateralBalance]}
@@ -561,17 +624,55 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                                             </div>
                                                                         )}
 
-                                                                        {/* Dislay disabled button with not enough balance */}
-                                                                        {mintAmount <= userCollateralBalance && (
+                                                                        {/* Dislay disabled button with max mint */}
+                                                                        {mintAmount < userCollateralBalance && isMintAmountMakeMaxCapReached && !isNotEnoughLiquidity && (
                                                                             <div className="text-center w-full">
-                                                                                <button
-                                                                                    onClick={(e) => {
-                                                                                        e.preventDefault();
-                                                                                    }}
-                                                                                    className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 text-sm leading-4 tracking-tighter font-semibold text-gray-light-1 dark:text-blue-light-1 py-[11px] w-full rounded-full"
-                                                                                >
-                                                                                    Mint
+                                                                                <button disabled className="bg-gray-light-4 dark:bg-gray-dark-4 border border-gray-light-5 dark:border-gray-dark-5 text-sm leading-4 tracking-tighter font-semibold text-gray-light-10 dark:text-gray-dark-10 cursor-not-allowed py-[11px] w-full rounded-full">
+                                                                                    Max Limit per Mint
                                                                                 </button>
+                                                                            </div>
+                                                                        )}
+
+                                                                        {/* Dislay disabled button with not enough liquidity */}
+                                                                        {mintAmount < userCollateralBalance && isNotEnoughLiquidity && !isMintAmountMakeMaxCapReached && (
+                                                                            <div className="text-center w-full">
+                                                                                <button disabled className="bg-gray-light-4 dark:bg-gray-dark-4 border border-gray-light-5 dark:border-gray-dark-5 text-sm leading-4 tracking-tighter font-semibold text-gray-light-10 dark:text-gray-dark-10 cursor-not-allowed py-[11px] w-full rounded-full">
+                                                                                    {debtSymbol} liquidity not enough
+                                                                                </button>
+                                                                            </div>
+                                                                        )}
+
+                                                                        {/* Dislay disabled button with not enough liquidity */}
+                                                                        {mintAmount < userCollateralBalance && isNotEnoughLiquidity && isMintAmountMakeMaxCapReached && (
+                                                                            <div className="text-center w-full">
+                                                                                <button disabled className="bg-gray-light-4 dark:bg-gray-dark-4 border border-gray-light-5 dark:border-gray-dark-5 text-sm leading-4 tracking-tighter font-semibold text-gray-light-10 dark:text-gray-dark-10 cursor-not-allowed py-[11px] w-full rounded-full">
+                                                                                    Please lower the mint amount
+                                                                                </button>
+                                                                            </div>
+                                                                        )}
+
+                                                                        {/* Dislay mint button */}
+                                                                        {mintAmount < userCollateralBalance && !isMintAmountMakeMaxCapReached && !isNotEnoughLiquidity && (
+                                                                            <div className="flex flex-col space-y-4">
+                                                                                <div className="text-center">
+                                                                                    <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">
+                                                                                        You will get{" "}
+                                                                                        <span className="font-semibold text-gray-light-12 dark:text-gray-dark-12">
+                                                                                            {minimalMintedAmount.toFixed(3)} {title}
+                                                                                        </span>{" "}
+                                                                                        at minimum or transaction will failed
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div className="text-center w-full">
+                                                                                    <button
+                                                                                        onClick={(e) => {
+                                                                                            e.preventDefault();
+                                                                                        }}
+                                                                                        className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 text-sm leading-4 tracking-tighter font-semibold text-gray-light-1 dark:text-blue-light-1 py-[11px] w-full rounded-full"
+                                                                                    >
+                                                                                        Mint
+                                                                                    </button>
+                                                                                </div>
                                                                             </div>
                                                                         )}
                                                                     </form>
