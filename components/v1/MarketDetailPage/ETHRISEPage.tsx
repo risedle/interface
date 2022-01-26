@@ -13,7 +13,7 @@ import Favicon from "../Favicon";
 import Footer from "../Footer";
 import { useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
-import { useLeveragedTokenHistoricalData, Timeframe, useMarket, useVaultData3Months } from "../../../utils/snapshot";
+import { Timeframe, useMarket, useVaultData3Months } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import Logo from "../Logo";
@@ -28,6 +28,7 @@ import ButtonConnectWalletToMintOrRedeem from "./Buttons/ConnectWalletToMintOrRe
 import ButtonSwitchNetwork from "./Buttons/SwitchNetwork";
 import ToastTransaction from "../Toasts/Transaction";
 import ToastSuccess from "../Toasts/Success";
+import LeveragedTokenChart from "./LeveragedTokenChart";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -42,6 +43,7 @@ const VaultABI = new ethers.utils.Interface([
     "function mint(address token) external payable",
 ]);
 const OracleABI = new ethers.utils.Interface(["function getPrice() external view returns (uint256 price)"]);
+const ERC20ABI = new ethers.utils.Interface(["function allowance(address owner, address spender) external view returns (uint256 amount)", "function approve(address spender, uint256 amount) external"]);
 
 /**
  * ETHRISEPageProps is a React Component properties that passed to React Component ETHRISEPage
@@ -71,13 +73,13 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const vaultInformationText = metadata.vaultInformationText;
     const collateralSymbol = metadata.collateralSymbol;
     const debtSymbol = metadata.debtSymbol;
+    const debtDecimals = metadata.debtDecimals;
+    const debtContract = metadata.debtContract;
     const uniswapSwapURL = metadata.uniswapSwapURL;
     const collateralDecimals = metadata.collateralDecimals;
-    const debtDecimals = metadata.debtDecimals;
     const oracleContract = metadata.oracleContract;
 
     // Get price external data from Risedle Snapshot
-    const { leveragedTokenDailyData, leveragedTokenWeeklyData, leveragedTokenTwoWeeklyData, leveragedTokenMonthlyData, leveragedTokenThreeMonthlyData, leveragedTokenDataIsLoading, leveragedTokenDataIsError } = useLeveragedTokenHistoricalData(chain.id, ethriseAddress);
     const { vaultHistoricalData, vaultHistoricalDataIsLoading, vaultHistoricalDataIsError } = useVaultData3Months(chain.id, vaultAddress);
     const { market, marketIsLoading, marketIsError } = useMarket(chain.id, ethriseAddress);
 
@@ -126,12 +128,53 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
             args: ethriseAddress,
         }
     );
+    console.debug("onchainNAV", onchainNAV, new Date());
+
+    // Allowances
+    // TODO: add collateral token allowance here
+    // const [leveragedTokenAllowance] = useContractRead(
+    //     {
+    //         addressOrName: ethriseAddress,
+    //         contractInterface: ERC20ABI,
+    //     },
+    //     "allowance",
+    //     {
+    //         args: [account, vaultAddress],
+    //     }
+    // );
+    // console.debug("leveragedTokenAllowance", leveragedTokenAllowance);
+
+    // const [debtTokenAllowance] = useContractRead(
+    //     {
+    //         addressOrName: debtContract,
+    //         contractInterface: ERC20ABI,
+    //     },
+    //     "allowance",
+    //     {
+    //         args: [account, vaultAddress],
+    //     }
+    // );
+    // const [rvTokenAllowance] = useContractRead(
+    //     {
+    //         addressOrName: vaultAddress,
+    //         contractInterface: ERC20ABI,
+    //     },
+    //     "allowance",
+    //     {
+    //         args: [account, vaultAddress],
+    //     }
+    // );
+
+    // Actions
     const [, mint] = useContractWrite(
         {
             addressOrName: vaultAddress,
             contractInterface: VaultABI,
         },
-        "mint"
+        "mint",
+        {
+            args: [account, vaultAddress],
+        }
     );
 
     // console.debug("onchainETHRISEMetadata", onchainETHRISEMetadata);
@@ -141,17 +184,12 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     // console.debug("onchainTotalAvailableCash", onchainTotalAvailableCash);
 
     // States
-    const [nav, setNAV] = useState(0);
-    const [initialNAV, setInitialNAV] = useState(0);
-    const [navChange, setNAVChange] = useState(0);
-    const [initialNAVChange, setInitialNAVChange] = useState(0);
+    const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
     const [supplyAPY, setSupplyAPY] = useState(0);
     const [initialSupplyAPY, setInitialSupplyAPY] = useState(0);
     const [borrowAPY, setBorrowAPY] = useState(0);
     const [initialBorrowAPY, setInitialBorrowAPY] = useState(0);
 
-    const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
-    const [currentLeveragedTokenData, setCurrentLeveragedTokenData] = useState(leveragedTokenTwoWeeklyData);
     const [currentVaultData, setCurrentVaultData] = useState(vaultHistoricalData);
     const [mintAmount, setMintAmount] = useState(0);
 
@@ -159,31 +197,10 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const [isMinting, setIsMinting] = useState(false);
     const [mintingHash, setMingtingHash] = useState<string | undefined>(undefined);
 
-    // Set initial data for onMouseLeave event on the price chart
-    if (initialNAV === 0 && initialNAVChange === 0 && initialSupplyAPY === 0 && initialBorrowAPY === 0 && market) {
-        // Initial Price and changes
-        const change = ((market.nav_last - market.nav_past) / market.nav_past) * 100;
-        setInitialNAV(market.nav_last);
-        setNAV(market.nav_last);
-        setInitialNAVChange(change);
-        setNAVChange(change);
-
-        // Initial APYs
-        setInitialSupplyAPY(market.vault_supply_apy);
-        setSupplyAPY(market.vault_supply_apy);
-        setInitialBorrowAPY(market.vault_borrow_apy);
-        setBorrowAPY(market.vault_borrow_apy);
-    }
-
-    // Set current data on the first load
-    if (!currentLeveragedTokenData && leveragedTokenTwoWeeklyData) {
-        setCurrentLeveragedTokenData(leveragedTokenTwoWeeklyData);
-    }
     if (!currentVaultData && vaultHistoricalData) {
         setCurrentVaultData(vaultHistoricalData);
     }
 
-    // Styling for active timeframe selector
     const activeTimeframeClasses = "bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full font-semibold text-gray-light-12 dark:text-gray-dark-12";
 
     // Main button states
@@ -207,6 +224,16 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const maxMintAmount = maxTotalCollateral > 0 ? maxTotalCollateral - totalCollateralPlusFee : defaultMaxMintAmount;
     const mintedAmount = (mintAmount * collateralPrice) / tokenNAV;
     const minimalMintedAmount = mintedAmount - mintedAmount * (5 / 100);
+
+    // Approval states
+    // TODO(bayu): add collateral token approval states here
+    // const isLeveragedTokenApproved = leveragedTokenAllowance.data && leveragedTokenAllowance.data.eq(ethers.constants.MaxUint256) ? true : false;
+    // const isDebtTokenApproved = debtTokenAllowance.data && debtTokenAllowance.data.eq(ethers.constants.MaxInt256) ? true : false;
+    // const isrvTokenApproved = rvTokenAllowance.data && rvTokenAllowance.data.eq(ethers.constants.MaxInt256) ? true : false;
+
+    // console.debug("isLeveragedTokenApproved", isLeveragedTokenApproved);
+    // console.debug("isDebtTokenApproved", isDebtTokenApproved);
+    // console.debug("isrvTokenApproved", isrvTokenApproved);
 
     return (
         <>
@@ -280,156 +307,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     <img className="sm:hidden" src={logo} alt={title} />
                                 </div>
 
-                                {/* Price & Change */}
-                                <div className="flex flex-row space-x-4 px-4">
-                                    <div className="flex flex-col space-y-2 w-[52px]">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 ">Price</p>
-                                        {(leveragedTokenDataIsLoading || leveragedTokenDataIsError) && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
-                                        {!leveragedTokenDataIsLoading && currentLeveragedTokenData && <p className="font-ibm font-semibold text-sm leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(nav)}</p>}
-                                    </div>
-                                    <div className="flex flex-col space-y-2">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 ">Change</p>
-                                        {(leveragedTokenDataIsLoading || leveragedTokenDataIsError) && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
-                                        {!leveragedTokenDataIsLoading && currentLeveragedTokenData && (
-                                            <div className="flex flex-row items-center">
-                                                <svg className={navChange > 0 ? "fill-green-light-11 dark:fill-green-dark-11 inline-block" : "hidden"} width="15" height="15" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 2.14645C7.34171 1.95118 7.65829 1.95118 7.85355 2.14645L11.8536 6.14645C12.0488 6.34171 12.0488 6.65829 11.8536 6.85355C11.6583 7.04882 11.3417 7.04882 11.1464 6.85355L8 3.70711L8 12.5C8 12.7761 7.77614 13 7.5 13C7.22386 13 7 12.7761 7 12.5L7 3.70711L3.85355 6.85355C3.65829 7.04882 3.34171 7.04882 3.14645 6.85355C2.95118 6.65829 2.95118 6.34171 3.14645 6.14645L7.14645 2.14645Z" />
-                                                </svg>
-                                                <svg className={navChange > 0 ? "hidden" : "fill-red-light-11 dark:fill-red-dark-11 inline-block"} width="15" height="15" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 12.8536C7.34171 13.0488 7.65829 13.0488 7.85355 12.8536L11.8536 8.85355C12.0488 8.65829 12.0488 8.34171 11.8536 8.14645C11.6583 7.95118 11.3417 7.95118 11.1464 8.14645L8 11.2929L8 2.5C8 2.22386 7.77614 2 7.5 2C7.22386 2 7 2.22386 7 2.5L7 11.2929L3.85355 8.14645C3.65829 7.95118 3.34171 7.95118 3.14645 8.14645C2.95118 8.34171 2.95118 8.65829 3.14645 8.85355L7.14645 12.8536Z" />
-                                                </svg>
-                                                <p className={`font-ibm font-semibold text-sm text-gray-light-12 dark:text-gray-dark-12 tracking-[-0.02em] ${navChange > 0 ? "text-green-light-11 dark:text-green-dark-11" : "text-red-light-10 dark:text-red-dark-10"}`}>{navChange.toFixed(2) + "%"}</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Price chart */}
-                                <div className="w-full h-[192px] mt-8 z-0">
-                                    {(leveragedTokenDataIsLoading || leveragedTokenDataIsError) && <div className="h-[192px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse mb-2"></div>}
-                                    {!leveragedTokenDataIsLoading && currentLeveragedTokenData && (
-                                        <ResponsiveContainer width="100%" height="100%" className="h-full">
-                                            <AreaChart
-                                                data={currentLeveragedTokenData.data}
-                                                margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-                                                onMouseLeave={() => {
-                                                    setNAV(currentLeveragedTokenData.latestNAV);
-                                                    setNAVChange(currentLeveragedTokenData.change);
-                                                }}
-                                            >
-                                                <defs>
-                                                    <linearGradient id="upGradient" x1="0" y1="0" x2="0" y2="1">
-                                                        <stop offset="0%" stopColor="rgba(37, 208, 171)" stopOpacity={0.4} />
-                                                        <stop offset="100%" stopColor="rgba(37, 208, 171)" stopOpacity={0} />
-                                                    </linearGradient>
-                                                    <linearGradient id="downGradient" x1="0" y1="0" x2="0" y2="1">
-                                                        <stop offset="0%" stopColor="rgb(205, 43, 49)" stopOpacity={0.4} />
-                                                        <stop offset="100%" stopColor="rgb(205, 43, 49)" stopOpacity={0} />
-                                                    </linearGradient>
-                                                </defs>
-                                                <Tooltip
-                                                    position={{ y: 0 }}
-                                                    content={({ active, payload }) => {
-                                                        if (active && payload && payload.length) {
-                                                            const selectedData = payload[0].payload;
-                                                            const timestamp = selectedData.timestamp;
-                                                            const date = new Date(timestamp);
-                                                            const formattedDate = new Intl.DateTimeFormat("en-US", { hour: "numeric", day: "numeric", month: "numeric", year: "numeric", minute: "numeric" }).format(date);
-
-                                                            setNAV(selectedData.nav);
-                                                            const change = ((selectedData.nav - currentLeveragedTokenData.oldestNAV) / currentLeveragedTokenData.oldestNAV) * 100;
-                                                            setNAVChange(change);
-
-                                                            return <div className="text-xs text-gray-light-10 dark:text-gray-dark-10">{formattedDate}</div>;
-                                                        }
-                                                        return null;
-                                                    }}
-                                                />
-                                                <YAxis hide={true} type="number" domain={["dataMin - 5", "dataMax + 5"]} />
-                                                <Area type="monotoneX" dataKey="nav" stroke={navChange > 0 ? "#4CC38A" : "#CD2B31"} fill={navChange > 0 ? "url(#upGradient)" : "url(#downGradient)"} strokeWidth={2} />
-                                            </AreaChart>
-                                        </ResponsiveContainer>
-                                    )}
-                                </div>
-
-                                {/* Timeframe selector */}
-                                <div className="flex flex-row items-center px-4 mt-2">
-                                    <div className="basis-1/5 text-center">
-                                        <button
-                                            className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Daily ? activeTimeframeClasses : ""}`}
-                                            onClick={() => {
-                                                setCurrentTimeframe(Timeframe.Daily);
-                                                if (leveragedTokenDailyData) {
-                                                    setCurrentLeveragedTokenData(leveragedTokenDailyData);
-                                                    setNAV(leveragedTokenDailyData.latestNAV);
-                                                    setNAVChange(leveragedTokenDailyData.change);
-                                                }
-                                            }}
-                                        >
-                                            1D
-                                        </button>
-                                    </div>
-                                    <div className="basis-1/5 text-center">
-                                        <button
-                                            className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Weekly ? activeTimeframeClasses : ""}`}
-                                            onClick={() => {
-                                                setCurrentTimeframe(Timeframe.Weekly);
-                                                if (leveragedTokenWeeklyData) {
-                                                    setCurrentLeveragedTokenData(leveragedTokenWeeklyData);
-                                                    setNAV(leveragedTokenWeeklyData.latestNAV);
-                                                    setNAVChange(leveragedTokenWeeklyData.change);
-                                                }
-                                            }}
-                                        >
-                                            1W
-                                        </button>
-                                    </div>
-                                    <div className="basis-1/5 text-center">
-                                        <button
-                                            className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.TwoWeekly ? activeTimeframeClasses : ""}`}
-                                            onClick={() => {
-                                                setCurrentTimeframe(Timeframe.TwoWeekly);
-                                                if (leveragedTokenTwoWeeklyData) {
-                                                    setCurrentLeveragedTokenData(leveragedTokenTwoWeeklyData);
-                                                    setNAV(leveragedTokenTwoWeeklyData.latestNAV);
-                                                    setNAVChange(leveragedTokenTwoWeeklyData.change);
-                                                }
-                                            }}
-                                        >
-                                            2W
-                                        </button>
-                                    </div>
-                                    <div className="basis-1/5 text-center">
-                                        <button
-                                            className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
-                                            onClick={() => {
-                                                setCurrentTimeframe(Timeframe.Monthly);
-                                                if (leveragedTokenMonthlyData) {
-                                                    setCurrentLeveragedTokenData(leveragedTokenMonthlyData);
-                                                    setNAV(leveragedTokenMonthlyData.latestNAV);
-                                                    setNAVChange(leveragedTokenMonthlyData.change);
-                                                }
-                                            }}
-                                        >
-                                            1M
-                                        </button>
-                                    </div>
-                                    <div className="basis-1/5 text-center">
-                                        <button
-                                            className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
-                                            onClick={() => {
-                                                setCurrentTimeframe(Timeframe.ThreeMonthly);
-                                                if (leveragedTokenThreeMonthlyData) {
-                                                    setCurrentLeveragedTokenData(leveragedTokenThreeMonthlyData);
-                                                    setNAV(leveragedTokenThreeMonthlyData.latestNAV);
-                                                    setNAVChange(leveragedTokenThreeMonthlyData.change);
-                                                }
-                                            }}
-                                        >
-                                            3M
-                                        </button>
-                                    </div>
-                                </div>
+                                <LeveragedTokenChart chainID={chain.id} address={ethriseAddress} />
 
                                 {/* Mint & Redeem Button */}
                                 <div className="p-4">
@@ -543,7 +421,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                                                             return;
                                                                                         }
                                                                                         const value = parseFloat(e.target.value);
-                                                                                        console.debug("e.target.value", e.target.value);
                                                                                         setMintAmount(value);
                                                                                     }}
                                                                                 />
@@ -736,7 +613,12 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                             )}
                                                         </Tabs.Content>
                                                         <Tabs.Content value="redeem" className="outline-0 flex flex-col mx-auto sm:max-w-[540px] space-y-6">
-                                                            Redeem
+                                                            {/* Display approval button if the leveraged token is not approved yet */}
+                                                            {/* {!isLeveragedTokenApproved && (
+                                                                <div>
+                                                                    <div>test</div>
+                                                                </div>
+                                                            )} */}
                                                         </Tabs.Content>
                                                     </Tabs.Root>
                                                 </div>
