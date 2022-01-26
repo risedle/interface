@@ -584,7 +584,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     )}
                                     {/* Wallet connected; Display mint and redeem button */}
                                     {/* TODO (bayu): handle connected wallet */}
-                                    {account && <button>Deposit or Withdraw</button>}
+                                    {account && <ButtonPrimary full>Deposit or Withdraw</ButtonPrimary>}
                                 </div>
                             </div>
 
