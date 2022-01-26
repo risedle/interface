@@ -11,7 +11,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
-import { useWalletContext } from "../Wallet";
+import { useWalletContext, Providers } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import { useLeveragedTokenHistoricalData, Timeframe, useMarket, useVaultData3Months } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
@@ -29,6 +29,7 @@ import ButtonSwitchNetwork from "./Buttons/SwitchNetwork";
 import ToastTransaction from "../Toasts/Transaction";
 import ToastSuccess from "../Toasts/Success";
 
+
 // ETHRISE Token ids
 const ETHRISEAddresses = {
     [Chains.kovan.id]: { token: "0xc4676f88663360155c2bc6d2A482E34121a50b3b", vault: "0x42B6BAE111D9300E19F266Abf58cA215f714432c" },
@@ -40,6 +41,7 @@ const VaultABI = new ethers.utils.Interface([
     "function getTotalAvailableCash() external view returns (uint256 totalAvailableCash)",
     "function getNAV(address token) external view returns (uint256 nav)",
     "function mint(address token) external payable",
+
 ]);
 const OracleABI = new ethers.utils.Interface(["function getPrice() external view returns (uint256 price)"]);
 
@@ -97,6 +99,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const [onchainBalance] = useBalance({ addressOrName: account ? account : undefined });
     const userCollateralBalance = onchainBalance && onchainBalance.data && onchainBalance.data.formatted ? parseFloat(onchainBalance.data.formatted) : 0;
 
+
     // Get onchain oracle
     const [onchainOracle] = useContractRead(
         {
@@ -106,6 +109,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
         "getPrice"
     );
 
+
     // Get total available cash of vault
     const [onchainTotalAvailableCash] = useContractRead(
         {
@@ -114,6 +118,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
         },
         "getTotalAvailableCash"
     );
+
 
     // Get NAV of the token
     const [onchainNAV] = useContractRead(
@@ -139,6 +144,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     // console.debug("onchainNAV", onchainNAV);
     // console.debug("onchainOracle", onchainOracle);
     // console.debug("onchainTotalAvailableCash", onchainTotalAvailableCash);
+
 
     // States
     const [nav, setNAV] = useState(0);
@@ -192,8 +198,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const showSwitchNetwork = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && !showConnectWalletToMintOrRedeem && connectedChain.data.chain && connectedChain.data.chain.id != chain.id ? true : false;
     const showMintOrRedeem = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && !showConnectWalletToMintOrRedeem && !showSwitchNetwork ? true : false;
 
-    // Mint & Redeem States
-
     // Current data
     const maxTotalCollateral = parseFloat(ethers.utils.formatUnits(onchainETHRISEMetadata.data ? onchainETHRISEMetadata.data.maxTotalCollateral : 0, collateralDecimals));
     const totalCollateralPlusFee = parseFloat(ethers.utils.formatUnits(onchainETHRISEMetadata.data ? onchainETHRISEMetadata.data.totalCollateralPlusFee : 0, collateralDecimals));
@@ -209,8 +213,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const mintedAmount = (mintAmount * collateralPrice) / tokenNAV;
     const minimalMintedAmount = mintedAmount - mintedAmount * (5 / 100);
 
-    // console.debug("mintStatus", mintStatus);
-    // console.debug("mint", mint);
 
     return (
         <>
@@ -670,6 +672,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                                                     </p>
                                                                                 </div>
                                                                                 <div className="text-center w-full">
+
                                                                                     {!isMinting && (
                                                                                         <button
                                                                                             onClick={async (e) => {
