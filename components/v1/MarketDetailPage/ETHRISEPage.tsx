@@ -19,7 +19,6 @@ import ButtonConnectWalletDesktop from "../Buttons/ConnectWalletDesktop";
 import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
 import ToastError from "../Toasts/Error";
 import BackgroundGradient from "./BackgroundGradient";
-import ButtonPrimary from "../Buttons/ButtonPrimary";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -353,7 +352,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     )}
 
                                     {/* If account is connected and connected chain is the same as current chain then display account information */}
-                                    {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id === chain.id && <ButtonPrimary full>Mint or Redeem</ButtonPrimary>}
+                                    {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id === chain.id && <button className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 rounded-full w-full text-sm leading-4 tracking-[-0.02em] text-gray-light-1 dark:text-blue-light-1 font-semibold py-[11px]">Mint or Redeem</button>}
                                 </div>
                             </div>
 
