@@ -2,7 +2,7 @@ import { FunctionComponent, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { ethers } from "ethers";
-import { chain as Chains, useContractRead, useNetwork, useBalance } from "wagmi";
+import { chain as Chains, useContractRead, useNetwork, useBalance, useContractWrite } from "wagmi";
 import * as Tabs from "@radix-ui/react-tabs";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Slider from "@radix-ui/react-slider";
@@ -11,7 +11,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
-import { useWalletContext, Providers } from "../Wallet";
+import { useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import { useLeveragedTokenHistoricalData, Timeframe, useMarket, useVaultData3Months } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
@@ -24,10 +24,10 @@ import ToastError from "../Toasts/Error";
 import BackgroundGradient from "./BackgroundGradient";
 import ButtonFetchingOnchainData from "./Buttons/FetchingOnchainData";
 import ButtonFailedToFetchOnchainData from "./Buttons/FailedToFetchOnchainData";
-import ButtonBuyOnUniswap from "./Buttons/BuyOnUniswap";
 import ButtonConnectWalletToMintOrRedeem from "./Buttons/ConnectWalletToMintOrRedeem";
 import ButtonSwitchNetwork from "./Buttons/SwitchNetwork";
-import ButtonClose from "../Buttons/Close";
+import ToastTransaction from "../Toasts/Transaction";
+import ToastSuccess from "../Toasts/Success";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -39,6 +39,7 @@ const VaultABI = new ethers.utils.Interface([
     "function getMetadata(address token) external view returns (bool isETH, address token, address collateral, address oracleContract, address swapContract, address maxSwapSlippageInEther, uint256 initialPrice, uint256 feeInEther, uint256 totalCollateralPlusFee, uint256 totalPendingFees, uint256 minLeverageRatioInEther, uint256 maxLeverageRatioInEther, uint256 maxRebalancingValue, uint256 rebalancingStepInEther, uint256 maxTotalCollateral)",
     "function getTotalAvailableCash() external view returns (uint256 totalAvailableCash)",
     "function getNAV(address token) external view returns (uint256 nav)",
+    "function mint(address token) external payable",
 ]);
 const OracleABI = new ethers.utils.Interface(["function getPrice() external view returns (uint256 price)"]);
 
@@ -91,12 +92,10 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
             args: ethriseAddress,
         }
     );
-    console.debug("onchainETHRISEMetadata", onchainETHRISEMetadata);
 
     // Get onchain balance
     const [onchainBalance] = useBalance({ addressOrName: account ? account : undefined });
     const userCollateralBalance = onchainBalance && onchainBalance.data && onchainBalance.data.formatted ? parseFloat(onchainBalance.data.formatted) : 0;
-    console.debug("onchainBalance", onchainBalance);
 
     // Get onchain oracle
     const [onchainOracle] = useContractRead(
@@ -106,7 +105,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
         },
         "getPrice"
     );
-    console.debug("onchainOracle", onchainOracle);
 
     // Get total available cash of vault
     const [onchainTotalAvailableCash] = useContractRead(
@@ -116,7 +114,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
         },
         "getTotalAvailableCash"
     );
-    console.debug("onchainTotalAvailableCash", onchainTotalAvailableCash);
 
     // Get NAV of the token
     const [onchainNAV] = useContractRead(
@@ -129,7 +126,19 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
             args: ethriseAddress,
         }
     );
-    console.debug("onchainNAV", onchainNAV);
+    const [, mint] = useContractWrite(
+        {
+            addressOrName: vaultAddress,
+            contractInterface: VaultABI,
+        },
+        "mint"
+    );
+
+    // console.debug("onchainETHRISEMetadata", onchainETHRISEMetadata);
+    // console.debug("onchainBalance", onchainBalance);
+    // console.debug("onchainNAV", onchainNAV);
+    // console.debug("onchainOracle", onchainOracle);
+    // console.debug("onchainTotalAvailableCash", onchainTotalAvailableCash);
 
     // States
     const [nav, setNAV] = useState(0);
@@ -144,6 +153,10 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
     const [currentLeveragedTokenData, setCurrentLeveragedTokenData] = useState(leveragedTokenTwoWeeklyData);
     const [currentVaultData, setCurrentVaultData] = useState(vaultHistoricalData);
+    const [mintAmount, setMintAmount] = useState(0);
+
+    // Action states
+    const [isMinting, setIsMinting] = useState(false);
 
     // Set initial data for onMouseLeave event on the price chart
     if (initialNAV === 0 && initialNAVChange === 0 && initialSupplyAPY === 0 && initialBorrowAPY === 0 && market) {
@@ -180,7 +193,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const showMintOrRedeem = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && !showConnectWalletToMintOrRedeem && !showSwitchNetwork ? true : false;
 
     // Mint & Redeem States
-    const [mintAmount, setMintAmount] = useState(0);
 
     // Current data
     const maxTotalCollateral = parseFloat(ethers.utils.formatUnits(onchainETHRISEMetadata.data ? onchainETHRISEMetadata.data.maxTotalCollateral : 0, collateralDecimals));
@@ -197,14 +209,8 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const mintedAmount = (mintAmount * collateralPrice) / tokenNAV;
     const minimalMintedAmount = mintedAmount - mintedAmount * (5 / 100);
 
-    console.debug("DEBUG: maxTotalCollateral", maxTotalCollateral);
-    console.debug("DEBUG: totalCollateralPlusFee", totalCollateralPlusFee);
-    console.debug("DEBUG: totalPendingFees", totalPendingFees);
-    console.debug("DEBUG: collateralPrice", collateralPrice);
-    console.debug("DEBUG: totalAvailableCash", totalAvailableCash);
-    console.debug("DEBUG: isMaxCapReached", isMaxCapReached);
-    console.debug("DEBUG: isMintAmountMakeMaxCapReached", isMintAmountMakeMaxCapReached);
-    console.debug("DEBUG: isNotEnoughLiquidity", isNotEnoughLiquidity);
+    // console.debug("mintStatus", mintStatus);
+    // console.debug("mint", mint);
 
     return (
         <>
@@ -460,6 +466,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                             <Dialog.Trigger className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 rounded-full w-full text-sm leading-4 tracking-[-0.02em] text-gray-light-1 dark:text-blue-light-1 font-semibold py-[11px] w-full">Mint or Redeem</Dialog.Trigger>
                                             <Dialog.Overlay className="fixed inset-0 bg-gray-dark-1/60 dark:bg-black/60 backdrop-blur z-30" />
                                             <Dialog.Content className="fixed left-0 bottom-0 z-30 w-screen sm:-translate-y-1/3">
+                                                {/* Mint or Redeem container */}
                                                 <div className="mx-4 mb-4 sm:max-w-[376px] sm:m-auto flex flex-col bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px] mx-auto p-4">
                                                     <Dialog.Title className="flex flex-row justify-between items-center mb-4">
                                                         <div className="flex flex-row items-center space-x-4">
@@ -523,7 +530,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                                     <div className="flex flex-row justify-between items-center">
                                                                         <p className="text-xs leading-4 font-semibold text-gray-light-12 dark:text-gray-dark-12">How many {collateralSymbol}?</p>
                                                                     </div>
-
                                                                     <form className="flex flex-col mt-2 space-y-4">
                                                                         <div className="flex flex-row p-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] items-center justify-between">
                                                                             <div className="grow">
@@ -664,14 +670,52 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                                                     </p>
                                                                                 </div>
                                                                                 <div className="text-center w-full">
-                                                                                    <button
-                                                                                        onClick={(e) => {
-                                                                                            e.preventDefault();
-                                                                                        }}
-                                                                                        className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 text-sm leading-4 tracking-tighter font-semibold text-gray-light-1 dark:text-blue-light-1 py-[11px] w-full rounded-full"
-                                                                                    >
-                                                                                        Mint
-                                                                                    </button>
+                                                                                    {!isMinting && (
+                                                                                        <button
+                                                                                            onClick={async (e) => {
+                                                                                                e.preventDefault();
+                                                                                                // Set isMintingInProgress
+                                                                                                setIsMinting(true);
+                                                                                                const result = await mint({ args: [ethriseAddress], overrides: { value: ethers.utils.parseUnits(mintAmount.toString(), collateralDecimals) } });
+                                                                                                if (result.error) {
+                                                                                                    toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
+                                                                                                    setIsMinting(false);
+                                                                                                    return;
+                                                                                                }
+
+                                                                                                const it = toast.custom((t) => <ToastTransaction hash={result.data.hash} />, { duration: Infinity });
+                                                                                                const receipt = await result.data.wait(3);
+                                                                                                toast.dismiss(it);
+                                                                                                setIsMinting(false);
+                                                                                                if (receipt.status === 1) {
+                                                                                                    // success
+                                                                                                    const event = receipt.logs[receipt.logs.length - 1];
+                                                                                                    const confirmedMintedAmount = ethers.utils.formatUnits(event.data, collateralDecimals);
+                                                                                                    toast.custom((t) => (
+                                                                                                        <ToastSuccess>
+                                                                                                            Successfully minted {parseFloat(confirmedMintedAmount).toFixed(3)} {title}{" "}
+                                                                                                        </ToastSuccess>
+                                                                                                    ));
+                                                                                                } else {
+                                                                                                    console.error("Something happening", receipt);
+                                                                                                }
+                                                                                            }}
+                                                                                            className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 text-sm leading-4 tracking-tighter font-semibold text-gray-light-1 dark:text-blue-light-1 py-[11px] w-full rounded-full"
+                                                                                        >
+                                                                                            Mint
+                                                                                        </button>
+                                                                                    )}
+                                                                                    {isMinting && (
+                                                                                        <button className="cursor-wait flex flex-row text-center justify-center space-x-2 bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 text-blue-dark-1 dark:text-blue-light-1 text-sm leading-4 font-semibold py-[11px] px-4 rounded-full leading-4 inline-block tracking-[-0.02em] w-full drop-shadow-[0_0_45px_rgba(54,158,255,0.1)]">
+                                                                                            <svg width="17" height="16" viewBox="0 0 17 16" className="fill-gray-light-12 dark:fill-gray-dark-12 animate-spin" xmlns="http://www.w3.org/2000/svg">
+                                                                                                <g clipPath="url(#clip0_1161_30088)">
+                                                                                                    <path opacity="0.2" d="M16.5 8.00049C16.5 12.4188 12.9183 16.0005 8.5 16.0005C4.08172 16.0005 0.5 12.4188 0.5 8.00049C0.5 3.58221 4.08172 0.000488281 8.5 0.000488281C12.9183 0.000488281 16.5 3.58221 16.5 8.00049ZM2.9 8.00049C2.9 11.0933 5.40721 13.6005 8.5 13.6005C11.5928 13.6005 14.1 11.0933 14.1 8.00049C14.1 4.90769 11.5928 2.40049 8.5 2.40049C5.40721 2.40049 2.9 4.90769 2.9 8.00049Z" />
+                                                                                                    <path d="M15.3 8.00049C15.9627 8.00049 16.5092 8.5407 16.4102 9.196C16.3136 9.83526 16.1396 10.4619 15.891 11.062C15.489 12.0326 14.8997 12.9145 14.1569 13.6573C13.414 14.4002 12.5321 14.9895 11.5615 15.3915C10.9614 15.6401 10.3348 15.814 9.69551 15.9107C9.04021 16.0097 8.5 15.4632 8.5 14.8005C8.5 14.1377 9.04326 13.6133 9.69084 13.4724C10.0157 13.4017 10.3344 13.3021 10.643 13.1742C11.3224 12.8928 11.9398 12.4803 12.4598 11.9603C12.9798 11.4403 13.3923 10.8229 13.6737 10.1435C13.8016 9.83489 13.9012 9.51619 13.9719 9.19133C14.1129 8.54375 14.6373 8.00049 15.3 8.00049Z" />
+                                                                                                </g>
+                                                                                            </svg>
+                                                                                            <div>Minting...</div>
+                                                                                        </button>
+                                                                                    )}
                                                                                 </div>
                                                                             </div>
                                                                         )}
