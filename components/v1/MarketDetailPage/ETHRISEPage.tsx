@@ -459,8 +459,8 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                         <Dialog.Root>
                                             <Dialog.Trigger className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 rounded-full w-full text-sm leading-4 tracking-[-0.02em] text-gray-light-1 dark:text-blue-light-1 font-semibold py-[11px] w-full">Mint or Redeem</Dialog.Trigger>
                                             <Dialog.Overlay className="fixed inset-0 bg-gray-dark-1/60 dark:bg-black/60 backdrop-blur z-30" />
-                                            <Dialog.Content className="fixed left-0 bottom-0 z-30 w-screen">
-                                                <div className="mx-4 mb-4 flex flex-col bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px] mx-auto p-4">
+                                            <Dialog.Content className="fixed left-0 bottom-0 z-30 w-screen sm:-translate-y-1/3">
+                                                <div className="mx-4 mb-4 sm:max-w-[376px] sm:m-auto flex flex-col bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px] mx-auto p-4">
                                                     <Dialog.Title className="flex flex-row justify-between items-center mb-4">
                                                         <div className="flex flex-row items-center space-x-4">
                                                             <div>
@@ -485,7 +485,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                     </Dialog.Title>
 
                                                     <Tabs.Root defaultValue="mint" className="outline-0">
-                                                        <Tabs.List aria-label="mintOrRedeem" className="bg-gray-light-3 dark:bg-gray-dark-2 rounded-[12px] flex flex-row p-1 mx-auto sm:max-w-[253px] mb-6 mt-2">
+                                                        <Tabs.List aria-label="mintOrRedeem" className="bg-gray-light-3 dark:bg-gray-dark-2 rounded-[12px] flex flex-row p-1 mx-auto mb-6 mt-2">
                                                             <Tabs.Trigger value="mint" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 state-active:text-gray-light-12 state-active:dark:text-gray-dark-12 state-active:font-bold state-active:py-[12px] state-active:dark:bg-gray-dark-4 state-active:bg-gray-light-1">
                                                                 Mint
                                                             </Tabs.Trigger>
@@ -660,7 +660,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                                                         <span className="font-semibold text-gray-light-12 dark:text-gray-dark-12">
                                                                                             {minimalMintedAmount.toFixed(3)} {title}
                                                                                         </span>{" "}
-                                                                                        at minimum or transaction will failed
+                                                                                        at minimum
                                                                                     </p>
                                                                                 </div>
                                                                                 <div className="text-center w-full">
