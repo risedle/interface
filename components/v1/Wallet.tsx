@@ -1,14 +1,10 @@
 import { FunctionComponent, ReactNode } from "react";
 import createPersistedState from "use-persisted-state";
-
 import { Chain, Provider, chain as Chains } from "wagmi";
-
 import { createContext, useContext } from "react";
-
-import { ethers } from "ethers";
+import { ethers, providers } from "ethers";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-import { BaseProvider } from "@ethersproject/providers";
 
 export const connectorStorageKey = "risedleConnectors.wallet";
 
@@ -28,8 +24,15 @@ export const WCConnector = new WalletConnectConnector({
 });
 
 // Providers
-export const ArbitrumOneProvider = new ethers.providers.JsonRpcProvider("https://arb-mainnet.g.alchemy.com/v2/qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj");
-export const KovanProvider = new ethers.providers.JsonRpcProvider("https://eth-kovan.alchemyapi.io/v2/qLbNN95iUDTpQqbm5FzgaSPrPJ908VD-");
+// export const ArbitrumOneProvider = new ethers.providers.JsonRpcProvider("https://arb-mainnet.g.alchemy.com/v2/qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj");
+// export const KovanProvider = new ethers.providers.JsonRpcProvider("https://eth-kovan.alchemyapi.io/v2/qLbNN95iUDTpQqbm5FzgaSPrPJ908VD-");
+
+export const ArbitrumOneProvider = new providers.AlchemyProvider(Chains.arbitrumOne.id, "qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj");
+export const KovanProvider = new providers.AlchemyProvider(Chains.kovan.id, "qLbNN95iUDTpQqbm5FzgaSPrPJ908VD-");
+export const Providers = {
+    [Chains.kovan.id]: KovanProvider,
+    [Chains.arbitrumOne.id]: ArbitrumOneProvider,
+};
 
 type WalletProps = {
     children: ReactNode;
@@ -37,13 +40,11 @@ type WalletProps = {
 
 // Persistent states
 const useChainState = createPersistedState("risedle.chain");
-const useProviderState = createPersistedState("risedle.provider");
 const useAccountState = createPersistedState("risedle.account");
 const useConnectorNameState = createPersistedState("risedle.connectorName");
 
 // Default states
 const defaultChain = Chains.kovan;
-const defaultProvider = KovanProvider;
 const defaultAccount = null; // null is not connected
 const defaultConnectorName = null;
 
@@ -70,13 +71,11 @@ const WalletContext = createContext<WalletStates>({
 
 export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
     const [chain, setChain] = useChainState<Chain>(defaultChain);
-    const [provider, setProvider] = useProviderState<BaseProvider>(defaultProvider);
     const [account, setAccount] = useAccountState<string | null>(defaultAccount);
     const [connectorName, setConnectorName] = useConnectorNameState<string | null>(defaultConnectorName);
 
     // Debugs
     console.debug("Wallet chain", chain);
-    console.debug("Wallet provider", provider);
     console.debug("Wallet account", account);
     console.debug("Wallet connectorName", connectorName);
 
@@ -85,14 +84,23 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
         switch (id) {
             case Chains.arbitrumOne.id:
                 setChain(Chains.arbitrumOne);
-                setProvider(ArbitrumOneProvider);
                 break;
             case Chains.kovan.id:
                 setChain(Chains.kovan);
-                setProvider(KovanProvider);
                 break;
             default:
                 throw Error("Chain is not supported");
+        }
+    };
+
+    const getProvider = () => {
+        switch (chain.id) {
+            case Chains.kovan.id:
+                return KovanProvider;
+            case Chains.arbitrumOne.id:
+                return ArbitrumOneProvider;
+            default:
+                return ethers.getDefaultProvider();
         }
     };
 
@@ -116,7 +124,7 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
 
     return (
         <WalletContext.Provider value={sharedPersistentStates}>
-            <Provider autoConnect={true} connectorStorageKey={connectorStorageKey} connectors={[MetaMaskConnector, WCConnector]} provider={provider}>
+            <Provider autoConnect={true} connectorStorageKey={connectorStorageKey} connectors={[MetaMaskConnector, WCConnector]} provider={getProvider}>
                 {children}
             </Provider>
         </WalletContext.Provider>

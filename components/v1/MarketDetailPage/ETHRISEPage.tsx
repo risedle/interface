@@ -1,14 +1,17 @@
 import { FunctionComponent, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { chain as Chains, useNetwork } from "wagmi";
+import { ethers } from "ethers";
+import { chain as Chains, useContractRead, useNetwork, useBalance } from "wagmi";
 import * as Tabs from "@radix-ui/react-tabs";
+import * as Dialog from "@radix-ui/react-dialog";
+import * as Slider from "@radix-ui/react-slider";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 import toast, { Toaster } from "react-hot-toast";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
-import { useWalletContext } from "../Wallet";
+import { useWalletContext, Providers } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import { useLeveragedTokenHistoricalData, Timeframe, useMarket, useVaultData3Months } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
@@ -19,11 +22,25 @@ import ButtonConnectWalletDesktop from "../Buttons/ConnectWalletDesktop";
 import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
 import ToastError from "../Toasts/Error";
 import BackgroundGradient from "./BackgroundGradient";
+import ButtonFetchingOnchainData from "./Buttons/FetchingOnchainData";
+import ButtonFailedToFetchOnchainData from "./Buttons/FailedToFetchOnchainData";
+import ButtonBuyOnUniswap from "./Buttons/BuyOnUniswap";
+import ButtonConnectWalletToMintOrRedeem from "./Buttons/ConnectWalletToMintOrRedeem";
+import ButtonSwitchNetwork from "./Buttons/SwitchNetwork";
+import ButtonClose from "../Buttons/Close";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
     [Chains.kovan.id]: { token: "0xc4676f88663360155c2bc6d2A482E34121a50b3b", vault: "0x42B6BAE111D9300E19F266Abf58cA215f714432c" },
 };
+
+// Vault ABIs
+const VaultABI = new ethers.utils.Interface([
+    "function getMetadata(address token) external view returns (bool isETH, address token, address collateral, address oracleContract, address swapContract, address maxSwapSlippageInEther, uint256 initialPrice, uint256 feeInEther, uint256 totalCollateralPlusFee, uint256 totalPendingFees, uint256 minLeverageRatioInEther, uint256 maxLeverageRatioInEther, uint256 maxRebalancingValue, uint256 rebalancingStepInEther, uint256 maxTotalCollateral)",
+    "function getTotalAvailableCash() external view returns (uint256 totalAvailableCash)",
+    "function getNAV(address token) external view returns (uint256 nav)",
+]);
+const OracleABI = new ethers.utils.Interface(["function getPrice() external view returns (uint256 price)"]);
 
 /**
  * ETHRISEPageProps is a React Component properties that passed to React Component ETHRISEPage
@@ -53,13 +70,66 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const vaultInformationText = metadata.vaultInformationText;
     const collateralSymbol = metadata.collateralSymbol;
     const debtSymbol = metadata.debtSymbol;
+    const uniswapSwapURL = metadata.uniswapSwapURL;
+    const collateralDecimals = metadata.collateralDecimals;
+    const debtDecimals = metadata.debtDecimals;
+    const oracleContract = metadata.oracleContract;
 
     // Get price external data from Risedle Snapshot
     const { leveragedTokenDailyData, leveragedTokenWeeklyData, leveragedTokenTwoWeeklyData, leveragedTokenMonthlyData, leveragedTokenThreeMonthlyData, leveragedTokenDataIsLoading, leveragedTokenDataIsError } = useLeveragedTokenHistoricalData(chain.id, ethriseAddress);
     const { vaultHistoricalData, vaultHistoricalDataIsLoading, vaultHistoricalDataIsError } = useVaultData3Months(chain.id, vaultAddress);
     const { market, marketIsLoading, marketIsError } = useMarket(chain.id, ethriseAddress);
 
-    console.debug("market", market);
+    // Get onchain market data
+    const [onchainETHRISEMetadata] = useContractRead(
+        {
+            addressOrName: vaultAddress,
+            contractInterface: VaultABI,
+        },
+        "getMetadata",
+        {
+            args: ethriseAddress,
+        }
+    );
+    console.debug("onchainETHRISEMetadata", onchainETHRISEMetadata);
+
+    // Get onchain balance
+    const [onchainBalance] = useBalance({ addressOrName: account ? account : undefined });
+    const userCollateralBalance = onchainBalance && onchainBalance.data && onchainBalance.data.formatted ? parseFloat(onchainBalance.data.formatted) : 0;
+    console.debug("onchainBalance", onchainBalance);
+
+    // Get onchain oracle
+    const [onchainOracle] = useContractRead(
+        {
+            addressOrName: oracleContract,
+            contractInterface: OracleABI,
+        },
+        "getPrice"
+    );
+    console.debug("onchainOracle", onchainOracle);
+
+    // Get total available cash of vault
+    const [onchainTotalAvailableCash] = useContractRead(
+        {
+            addressOrName: vaultAddress,
+            contractInterface: VaultABI,
+        },
+        "getTotalAvailableCash"
+    );
+    console.debug("onchainTotalAvailableCash", onchainTotalAvailableCash);
+
+    // Get NAV of the token
+    const [onchainNAV] = useContractRead(
+        {
+            addressOrName: vaultAddress,
+            contractInterface: VaultABI,
+        },
+        "getNAV",
+        {
+            args: ethriseAddress,
+        }
+    );
+    console.debug("onchainNAV", onchainNAV);
 
     // States
     const [nav, setNAV] = useState(0);
@@ -101,6 +171,40 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
 
     // Styling for active timeframe selector
     const activeTimeframeClasses = "bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full font-semibold text-gray-light-12 dark:text-gray-dark-12";
+
+    // Main button states
+    const showFetchingOnchainDataInProgress = onchainETHRISEMetadata.loading || onchainBalance.loading || onchainOracle.loading || onchainTotalAvailableCash.loading || onchainNAV.loading;
+    const showFailedToFetchOnChainData = !showFetchingOnchainDataInProgress && (onchainETHRISEMetadata.error || onchainBalance.error || onchainOracle.error || onchainTotalAvailableCash.error || onchainNAV.error) ? true : false;
+    const showConnectWalletToMintOrRedeem = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && (!account || !connectedChain.data || !connectedChain.data.chain);
+    const showSwitchNetwork = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && !showConnectWalletToMintOrRedeem && connectedChain.data.chain && connectedChain.data.chain.id != chain.id ? true : false;
+    const showMintOrRedeem = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && !showConnectWalletToMintOrRedeem && !showSwitchNetwork ? true : false;
+
+    // Mint & Redeem States
+    const [mintAmount, setMintAmount] = useState(0);
+
+    // Current data
+    const maxTotalCollateral = parseFloat(ethers.utils.formatUnits(onchainETHRISEMetadata.data ? onchainETHRISEMetadata.data.maxTotalCollateral : 0, collateralDecimals));
+    const totalCollateralPlusFee = parseFloat(ethers.utils.formatUnits(onchainETHRISEMetadata.data ? onchainETHRISEMetadata.data.totalCollateralPlusFee : 0, collateralDecimals));
+    const totalPendingFees = parseFloat(ethers.utils.formatUnits(onchainETHRISEMetadata.data ? onchainETHRISEMetadata.data.totalPendingFees : 0, collateralDecimals));
+    const collateralPrice = parseFloat(ethers.utils.formatUnits(onchainOracle.data ? onchainOracle.data : 0, debtDecimals));
+    const totalAvailableCash = parseFloat(ethers.utils.formatUnits(onchainTotalAvailableCash.data ? onchainTotalAvailableCash.data : 0, debtDecimals));
+    const tokenNAV = parseFloat(ethers.utils.formatUnits(onchainNAV.data ? onchainNAV.data : 0, debtDecimals));
+    const isMaxCapReached = maxTotalCollateral > 0 && totalCollateralPlusFee - totalPendingFees > maxTotalCollateral ? true : false;
+    const isMintAmountMakeMaxCapReached = maxTotalCollateral > 0 && totalCollateralPlusFee - totalPendingFees + mintAmount > maxTotalCollateral ? true : false;
+    const isNotEnoughLiquidity = mintAmount * collateralPrice > totalAvailableCash;
+    const defaultMaxMintAmount = 5; // 5 ETH
+    const maxMintAmount = maxTotalCollateral > 0 ? maxTotalCollateral - totalCollateralPlusFee : defaultMaxMintAmount;
+    const mintedAmount = (mintAmount * collateralPrice) / tokenNAV;
+    const minimalMintedAmount = mintedAmount - mintedAmount * (5 / 100);
+
+    console.debug("DEBUG: maxTotalCollateral", maxTotalCollateral);
+    console.debug("DEBUG: totalCollateralPlusFee", totalCollateralPlusFee);
+    console.debug("DEBUG: totalPendingFees", totalPendingFees);
+    console.debug("DEBUG: collateralPrice", collateralPrice);
+    console.debug("DEBUG: totalAvailableCash", totalAvailableCash);
+    console.debug("DEBUG: isMaxCapReached", isMaxCapReached);
+    console.debug("DEBUG: isMintAmountMakeMaxCapReached", isMintAmountMakeMaxCapReached);
+    console.debug("DEBUG: isNotEnoughLiquidity", isNotEnoughLiquidity);
 
     return (
         <>
@@ -192,7 +296,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                 <svg className={navChange > 0 ? "hidden" : "fill-red-light-11 dark:fill-red-dark-11 inline-block"} width="15" height="15" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
                                                     <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 12.8536C7.34171 13.0488 7.65829 13.0488 7.85355 12.8536L11.8536 8.85355C12.0488 8.65829 12.0488 8.34171 11.8536 8.14645C11.6583 7.95118 11.3417 7.95118 11.1464 8.14645L8 11.2929L8 2.5C8 2.22386 7.77614 2 7.5 2C7.22386 2 7 2.22386 7 2.5L7 11.2929L3.85355 8.14645C3.65829 7.95118 3.34171 7.95118 3.14645 8.14645C2.95118 8.34171 2.95118 8.65829 3.14645 8.85355L7.14645 12.8536Z" />
                                                 </svg>
-                                                <p className={`font-ibm font-semibold text-sm text-gray-light-12 dark:text-gray-dark-12 tracking-tighter ${navChange > 0 ? "text-green-light-11 dark:text-green-dark-11" : "text-red-light-10 dark:text-red-dark-10"}`}>{navChange.toFixed(2) + "%"}</p>
+                                                <p className={`font-ibm font-semibold text-sm text-gray-light-12 dark:text-gray-dark-12 tracking-[-0.02em] ${navChange > 0 ? "text-green-light-11 dark:text-green-dark-11" : "text-red-light-10 dark:text-red-dark-10"}`}>{navChange.toFixed(2) + "%"}</p>
                                             </div>
                                         )}
                                     </div>
@@ -327,17 +431,18 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
 
                                 {/* Mint & Redeem Button */}
                                 <div className="p-4">
-                                    {/* Wallet not connected; Display disabled button */}
-                                    {(!account || !connectedChain.data || !connectedChain.data.chain) && (
-                                        <button disabled className="bg-gray-light-4 dark:bg-gray-dark-4 border border-gray-light-5 dark:border-0 text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-10 rounded-full cursor-not-allowed w-full py-[11px] dark:py-[12px]">
-                                            Connect wallet to Mint or Redeem
-                                        </button>
-                                    )}
+                                    {/* Show loading button */}
+                                    {showFetchingOnchainDataInProgress && <ButtonFetchingOnchainData />}
 
-                                    {/* If account is connected and connected chain is not the same as current chain then display the switch network button */}
-                                    {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id != chain.id && (
-                                        <button
-                                            className="bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 text-blue-dark-1 dark:text-blue-light-1 text-sm leading-4 font-semibold py-[11px] px-4 rounded-full leading-4 inline-block tracking-[-0.02em] w-full"
+                                    {/* Show Failed to fetach button */}
+                                    {showFailedToFetchOnChainData && <ButtonFailedToFetchOnchainData />}
+
+                                    {/* Show Connect wallet to mint or redeem */}
+                                    {showConnectWalletToMintOrRedeem && <ButtonConnectWalletToMintOrRedeem />}
+
+                                    {/* Show switch netwoek */}
+                                    {showSwitchNetwork && (
+                                        <ButtonSwitchNetwork
                                             onClick={() => {
                                                 if (switchNetwork) {
                                                     switchNetwork(chain.id);
@@ -345,14 +450,243 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                     toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);
                                                 }
                                             }}
-                                        >
-                                            <span className="w-[8px] h-[8px] rounded-full bg-red-light-10 dark:bg-red-dark-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:shadow-red-dark-10 inline-block mr-2"></span>
-                                            Switch to {chain.name}
-                                        </button>
+                                            chainName={chain.name}
+                                        />
                                     )}
 
-                                    {/* If account is connected and connected chain is the same as current chain then display account information */}
-                                    {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id === chain.id && <button className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 rounded-full w-full text-sm leading-4 tracking-[-0.02em] text-gray-light-1 dark:text-blue-light-1 font-semibold py-[11px]">Mint or Redeem</button>}
+                                    {/* Show mint or redeem */}
+                                    {showMintOrRedeem && (
+                                        <Dialog.Root>
+                                            <Dialog.Trigger className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 rounded-full w-full text-sm leading-4 tracking-[-0.02em] text-gray-light-1 dark:text-blue-light-1 font-semibold py-[11px] w-full">Mint or Redeem</Dialog.Trigger>
+                                            <Dialog.Overlay className="fixed inset-0 bg-gray-dark-1/60 dark:bg-black/60 backdrop-blur z-30" />
+                                            <Dialog.Content className="fixed left-0 bottom-0 z-30 w-screen sm:-translate-y-1/3">
+                                                <div className="mx-4 mb-4 sm:max-w-[376px] sm:m-auto flex flex-col bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px] mx-auto p-4">
+                                                    <Dialog.Title className="flex flex-row justify-between items-center mb-4">
+                                                        <div className="flex flex-row items-center space-x-4">
+                                                            <div>
+                                                                <img src={logo} alt={title} />
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{subtitle}</p>
+                                                                <h1 className="m-0 text-base tracking-[-0.02em] font-bold text-gray-light-12 dark:text-gray-dark-12">{title}</h1>
+                                                            </div>
+                                                        </div>
+                                                        <Dialog.Close asChild>
+                                                            <button className="button basic p-0 h-[32px]">
+                                                                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 w-[11px] h-[11px] m-[9.5px]">
+                                                                    <path
+                                                                        fillRule="evenodd"
+                                                                        clipRule="evenodd"
+                                                                        d="M12.8536 2.85355C13.0488 2.65829 13.0488 2.34171 12.8536 2.14645C12.6583 1.95118 12.3417 1.95118 12.1464 2.14645L7.5 6.79289L2.85355 2.14645C2.65829 1.95118 2.34171 1.95118 2.14645 2.14645C1.95118 2.34171 1.95118 2.65829 2.14645 2.85355L6.79289 7.5L2.14645 12.1464C1.95118 12.3417 1.95118 12.6583 2.14645 12.8536C2.34171 13.0488 2.65829 13.0488 2.85355 12.8536L7.5 8.20711L12.1464 12.8536C12.3417 13.0488 12.6583 13.0488 12.8536 12.8536C13.0488 12.6583 13.0488 12.3417 12.8536 12.1464L8.20711 7.5L12.8536 2.85355Z"
+                                                                    />
+                                                                </svg>
+                                                            </button>
+                                                        </Dialog.Close>
+                                                    </Dialog.Title>
+
+                                                    <Tabs.Root defaultValue="mint" className="outline-0">
+                                                        <Tabs.List aria-label="mintOrRedeem" className="bg-gray-light-3 dark:bg-gray-dark-2 rounded-[12px] flex flex-row p-1 mx-auto mb-6 mt-2">
+                                                            <Tabs.Trigger value="mint" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 state-active:text-gray-light-12 state-active:dark:text-gray-dark-12 state-active:font-bold state-active:py-[12px] state-active:dark:bg-gray-dark-4 state-active:bg-gray-light-1">
+                                                                Mint
+                                                            </Tabs.Trigger>
+                                                            <Tabs.Trigger value="redeem" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 state-active:text-gray-light-12 state-active:dark:text-gray-dark-12 state-active:font-bold state-active:py-[12px] state-active:dark:bg-gray-dark-4 state-active:bg-gray-light-1">
+                                                                Redeem
+                                                            </Tabs.Trigger>
+                                                        </Tabs.List>
+
+                                                        <Tabs.Content value="mint" className="outline-0 flex flex-col mx-auto sm:max-w-[540px] space-y-6">
+                                                            {isMaxCapReached && (
+                                                                <div className="flex flex-col mt-4 space-y-4">
+                                                                    <div className="flex flex-row space-x-2 bg-yellow-light-2 dark:bg-yellow-dark-2 border border-yellow-light-5 dark:border-yellow-dark-5 rounded-[8px] items-center p-4">
+                                                                        <svg className="fill-yellow-light-12 dark:fill-yellow-dark-12" width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path
+                                                                                fillRule="evenodd"
+                                                                                clipRule="evenodd"
+                                                                                d="M8.4449 1.10861C8.0183 0.392832 6.9817 0.392832 6.55509 1.10861L0.161178 11.8367C-0.275824 12.5699 0.252503 13.4998 1.10608 13.4998H13.8939C14.7475 13.4998 15.2758 12.5699 14.8388 11.8367L8.4449 1.10861ZM7.4141 1.62058C7.45288 1.55551 7.54712 1.55551 7.5859 1.62058L13.9798 12.3486C14.0196 12.4153 13.9715 12.4998 13.8939 12.4998H1.10608C1.02849 12.4998 0.980454 12.4153 1.02018 12.3486L7.4141 1.62058ZM6.8269 4.98596C6.81221 4.60408 7.11783 4.28648 7.5 4.28648C7.88217 4.28648 8.18778 4.60408 8.1731 4.98596L8.01921 8.98686C8.00848 9.26585 7.7792 9.48649 7.5 9.48649C7.2208 9.48649 6.99151 9.26585 6.98078 8.98686L6.8269 4.98596ZM8.24989 10.9758C8.24989 11.3901 7.9141 11.7258 7.49989 11.7258C7.08567 11.7258 6.74989 11.3901 6.74989 10.9758C6.74989 10.5616 7.08567 10.2258 7.49989 10.2258C7.9141 10.2258 8.24989 10.5616 8.24989 10.9758Z"
+                                                                            />
+                                                                        </svg>
+                                                                        <p className="text-yellow-light-12 dark:text-yellow-dark-12 text-xs">Max cap is reached</p>
+                                                                    </div>
+                                                                    <div className="border-b border-gray-light-3 dark:border-gray-dark-3 border-dashed pb-4">
+                                                                        <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">Buy {title} directly from Uniswap</p>
+                                                                    </div>
+                                                                    <Link href={uniswapSwapURL}>
+                                                                        <a className="rounded-full bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 text-center font-semibold text-sm tracking-tighter text-gray-light-1 dark:text-blue-light-1 py-[9px]" target="_blank" rel="noreferrer">
+                                                                            Buy on Uniswap
+                                                                        </a>
+                                                                    </Link>
+                                                                </div>
+                                                            )}
+
+                                                            {!isMaxCapReached && (
+                                                                <div className="mt-6">
+                                                                    <div className="flex flex-row justify-between items-center">
+                                                                        <p className="text-xs leading-4 font-semibold text-gray-light-12 dark:text-gray-dark-12">How many {collateralSymbol}?</p>
+                                                                    </div>
+
+                                                                    <form className="flex flex-col mt-2 space-y-4">
+                                                                        <div className="flex flex-row p-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] items-center justify-between">
+                                                                            <div className="grow">
+                                                                                <input
+                                                                                    className="w-full appearance-none outline-none font-ibm text-2xl font-bold bg-clip-text placeholder:bg-clip-text text-transparent placeholder:text-transparent transition-none gradient move-gradient bg-[length:250%_250%] focus:outline-none focus:ring-0 focus:shadow-none"
+                                                                                    type="number"
+                                                                                    placeholder="0"
+                                                                                    min={0}
+                                                                                    max={maxMintAmount.toFixed(3)}
+                                                                                    value={mintAmount.toString()}
+                                                                                    step={0.001}
+                                                                                    onChange={(e) => {
+                                                                                        if (e.target.value === "") {
+                                                                                            setMintAmount(0);
+                                                                                            return;
+                                                                                        }
+                                                                                        const value = parseFloat(e.target.value);
+                                                                                        console.debug("e.target.value", e.target.value);
+                                                                                        setMintAmount(value);
+                                                                                    }}
+                                                                                />
+                                                                            </div>
+                                                                            <div className="flex-none">
+                                                                                <button
+                                                                                    className="outline-none flex flex-row items-center space-x-2"
+                                                                                    onClick={(e) => {
+                                                                                        e.preventDefault();
+                                                                                        setMintAmount(parseFloat(userCollateralBalance.toFixed(3)));
+                                                                                    }}
+                                                                                >
+                                                                                    <svg width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg" className="fill-green-light-10 dark:fill-green-dark-10">
+                                                                                        <path
+                                                                                            fillRule="evenodd"
+                                                                                            clipRule="evenodd"
+                                                                                            d="M13.9 1.0001C13.9 0.779184 13.7209 0.600098 13.5 0.600098C13.2791 0.600098 13.1 0.779184 13.1 1.0001V1.6001H12.5C12.2791 1.6001 12.1 1.77918 12.1 2.0001C12.1 2.22101 12.2791 2.4001 12.5 2.4001H13.1V3.0001C13.1 3.22101 13.2791 3.4001 13.5 3.4001C13.7209 3.4001 13.9 3.22101 13.9 3.0001V2.4001H14.5C14.7209 2.4001 14.9 2.22101 14.9 2.0001C14.9 1.77918 14.7209 1.6001 14.5 1.6001H13.9V1.0001ZM11.8536 3.64654C12.0488 3.8418 12.0488 4.15838 11.8536 4.35365L10.8536 5.35365C10.6583 5.54891 10.3417 5.54891 10.1465 5.35365C9.9512 5.15839 9.9512 4.84181 10.1465 4.64655L11.1464 3.64655C11.3417 3.45128 11.6583 3.45128 11.8536 3.64654ZM9.85357 5.64654C10.0488 5.84181 10.0488 6.15839 9.85357 6.35365L2.85355 13.3537C2.65829 13.5489 2.34171 13.5489 2.14645 13.3537C1.95118 13.1584 1.95118 12.8418 2.14645 12.6465L9.14646 5.64654C9.34172 5.45128 9.65831 5.45128 9.85357 5.64654ZM13.5 5.6001C13.7209 5.6001 13.9 5.77918 13.9 6.0001V6.6001H14.5C14.7209 6.6001 14.9 6.77918 14.9 7.0001C14.9 7.22101 14.7209 7.4001 14.5 7.4001H13.9V8.0001C13.9 8.22101 13.7209 8.4001 13.5 8.4001C13.2791 8.4001 13.1 8.22101 13.1 8.0001V7.4001H12.5C12.2791 7.4001 12.1 7.22101 12.1 7.0001C12.1 6.77918 12.2791 6.6001 12.5 6.6001H13.1V6.0001C13.1 5.77918 13.2791 5.6001 13.5 5.6001ZM8.90002 1.0001C8.90002 0.779184 8.72093 0.600098 8.50002 0.600098C8.2791 0.600098 8.10002 0.779184 8.10002 1.0001V1.6001H7.50002C7.2791 1.6001 7.10002 1.77918 7.10002 2.0001C7.10002 2.22101 7.2791 2.4001 7.50002 2.4001H8.10002V3.0001C8.10002 3.22101 8.2791 3.4001 8.50002 3.4001C8.72093 3.4001 8.90002 3.22101 8.90002 3.0001V2.4001H9.50002C9.72093 2.4001 9.90002 2.22101 9.90002 2.0001C9.90002 1.77918 9.72093 1.6001 9.50002 1.6001H8.90002V1.0001Z"
+                                                                                        />
+                                                                                    </svg>
+                                                                                    <p className="text-green-light-10 dark:text-green-dark-10 text-sm tracking-tighter font-semibold">MAX</p>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div className="flex flex-row justify-between">
+                                                                            <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10 text-left">
+                                                                                Balance: {userCollateralBalance.toFixed(3)} {collateralSymbol}
+                                                                            </p>
+                                                                            <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10 text-right">
+                                                                                Max mint: {maxMintAmount.toFixed(3)} {collateralSymbol}
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div className="pt-4 pb-8 border-b border-gray-light-5 dark:border-gray-dark-5 border-dashed">
+                                                                            {/* mint amount in range, display normal slider */}
+                                                                            {mintAmount <= userCollateralBalance && (
+                                                                                <Slider.Root
+                                                                                    min={0}
+                                                                                    value={[mintAmount]}
+                                                                                    max={parseFloat(userCollateralBalance.toFixed(3))}
+                                                                                    step={0.01}
+                                                                                    className="relative w-full flex flex-row items-center"
+                                                                                    onValueChange={(value) => {
+                                                                                        setMintAmount(value[0]);
+                                                                                    }}
+                                                                                >
+                                                                                    <Slider.Track className="relative h-[2px] w-full bg-gray-light-4 dark:bg-gray-dark-4">
+                                                                                        <Slider.Range className="absolute h-[2px] bg-blue-light-10 dark:bg-blue-dark-10" />
+                                                                                    </Slider.Track>
+                                                                                    <Slider.Thumb className="h-[20px] w-[20px] rounded-full bg-gray-light-1 dark:bg-gray-dark-12 border border-gray-light-5 dark:border-0 block" />
+                                                                                </Slider.Root>
+                                                                            )}
+
+                                                                            {/* mint amount out of range or mint amount max cap reached or mint amount not enough liquidity, display red slider */}
+                                                                            {(mintAmount > userCollateralBalance || isMintAmountMakeMaxCapReached || isNotEnoughLiquidity) && (
+                                                                                <Slider.Root
+                                                                                    min={0}
+                                                                                    value={[userCollateralBalance]}
+                                                                                    max={parseFloat(userCollateralBalance.toFixed(3))}
+                                                                                    step={0.01}
+                                                                                    className="relative w-full flex flex-row items-center"
+                                                                                    onValueChange={(value) => {
+                                                                                        setMintAmount(value[0]);
+                                                                                    }}
+                                                                                >
+                                                                                    <Slider.Track className="relative h-[2px] w-full bg-gray-light-4 dark:bg-gray-dark-4">
+                                                                                        <Slider.Range className="absolute h-[2px] bg-red-light-11 dark:bg-red-dark-11" />
+                                                                                    </Slider.Track>
+                                                                                    <Slider.Thumb className="h-[20px] w-[20px] rounded-full bg-gray-light-1 dark:bg-gray-dark-12 border border-gray-light-5 dark:border-0 block" />
+                                                                                </Slider.Root>
+                                                                            )}
+                                                                        </div>
+
+                                                                        {/* Dislay disabled button with not enough balance */}
+                                                                        {mintAmount > userCollateralBalance && (
+                                                                            <div className="text-center w-full">
+                                                                                <button disabled className="bg-gray-light-4 dark:bg-gray-dark-4 border border-gray-light-5 dark:border-gray-dark-5 text-sm leading-4 tracking-tighter font-semibold text-gray-light-10 dark:text-gray-dark-10 cursor-not-allowed py-[11px] w-full rounded-full">
+                                                                                    Not enough balance
+                                                                                </button>
+                                                                            </div>
+                                                                        )}
+
+                                                                        {/* Dislay disabled button with max mint */}
+                                                                        {mintAmount < userCollateralBalance && isMintAmountMakeMaxCapReached && !isNotEnoughLiquidity && (
+                                                                            <div className="text-center w-full">
+                                                                                <button disabled className="bg-gray-light-4 dark:bg-gray-dark-4 border border-gray-light-5 dark:border-gray-dark-5 text-sm leading-4 tracking-tighter font-semibold text-gray-light-10 dark:text-gray-dark-10 cursor-not-allowed py-[11px] w-full rounded-full">
+                                                                                    Max Limit per Mint
+                                                                                </button>
+                                                                            </div>
+                                                                        )}
+
+                                                                        {/* Dislay disabled button with not enough liquidity */}
+                                                                        {mintAmount < userCollateralBalance && isNotEnoughLiquidity && !isMintAmountMakeMaxCapReached && (
+                                                                            <div className="text-center w-full">
+                                                                                <button disabled className="bg-gray-light-4 dark:bg-gray-dark-4 border border-gray-light-5 dark:border-gray-dark-5 text-sm leading-4 tracking-tighter font-semibold text-gray-light-10 dark:text-gray-dark-10 cursor-not-allowed py-[11px] w-full rounded-full">
+                                                                                    {debtSymbol} liquidity not enough
+                                                                                </button>
+                                                                            </div>
+                                                                        )}
+
+                                                                        {/* Dislay disabled button with not enough liquidity */}
+                                                                        {mintAmount < userCollateralBalance && isNotEnoughLiquidity && isMintAmountMakeMaxCapReached && (
+                                                                            <div className="text-center w-full">
+                                                                                <button disabled className="bg-gray-light-4 dark:bg-gray-dark-4 border border-gray-light-5 dark:border-gray-dark-5 text-sm leading-4 tracking-tighter font-semibold text-gray-light-10 dark:text-gray-dark-10 cursor-not-allowed py-[11px] w-full rounded-full">
+                                                                                    Please lower the mint amount
+                                                                                </button>
+                                                                            </div>
+                                                                        )}
+
+                                                                        {/* Dislay mint button */}
+                                                                        {mintAmount < userCollateralBalance && !isMintAmountMakeMaxCapReached && !isNotEnoughLiquidity && (
+                                                                            <div className="flex flex-col space-y-4">
+                                                                                <div className="text-center">
+                                                                                    <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">
+                                                                                        You will get{" "}
+                                                                                        <span className="font-semibold text-gray-light-12 dark:text-gray-dark-12">
+                                                                                            {minimalMintedAmount.toFixed(3)} {title}
+                                                                                        </span>{" "}
+                                                                                        at minimum
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div className="text-center w-full">
+                                                                                    <button
+                                                                                        onClick={(e) => {
+                                                                                            e.preventDefault();
+                                                                                        }}
+                                                                                        className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 text-sm leading-4 tracking-tighter font-semibold text-gray-light-1 dark:text-blue-light-1 py-[11px] w-full rounded-full"
+                                                                                    >
+                                                                                        Mint
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
+                                                                    </form>
+                                                                </div>
+                                                            )}
+                                                        </Tabs.Content>
+                                                        <Tabs.Content value="redeem" className="outline-0 flex flex-col mx-auto sm:max-w-[540px] space-y-6">
+                                                            Redeem
+                                                        </Tabs.Content>
+                                                    </Tabs.Root>
+                                                </div>
+                                            </Dialog.Content>
+                                        </Dialog.Root>
+                                    )}
                                 </div>
                             </div>
 
