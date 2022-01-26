@@ -1,5 +1,4 @@
-import Link from "next/link";
-import type { FunctionComponent, ReactNode } from "react";
+import type { FunctionComponent } from "react";
 
 /**
  * ButtonCloseProps is a React Component properties that passed to React Component ButtonClose

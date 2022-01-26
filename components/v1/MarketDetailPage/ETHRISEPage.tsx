@@ -1,14 +1,16 @@
 import { FunctionComponent, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { chain as Chains, useNetwork } from "wagmi";
+import { ethers } from "ethers";
+import { chain as Chains, useContractRead, useNetwork } from "wagmi";
 import * as Tabs from "@radix-ui/react-tabs";
+import * as Dialog from "@radix-ui/react-dialog";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 import toast, { Toaster } from "react-hot-toast";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
-import { useWalletContext } from "../Wallet";
+import { useWalletContext, Providers } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import { useLeveragedTokenHistoricalData, Timeframe, useMarket, useVaultData3Months } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
@@ -25,6 +27,9 @@ const ETHRISEAddresses = {
     [Chains.kovan.id]: { token: "0xc4676f88663360155c2bc6d2A482E34121a50b3b", vault: "0x42B6BAE111D9300E19F266Abf58cA215f714432c" },
 };
 
+// Vault ABIs
+const VaultABI = new ethers.utils.Interface(["function getMetadata(address token) external view returns (bool isETH, address token, address collateral, address oracleContract, address swapContract, address maxSwapSlippageInEther, uint256 initialPrice, uint256 feeInEther, uint256 totalCollateralPlusFee, uint256 totalPendingFees, uint256 minLeverageRatioInEther, uint256 maxLeverageRatioInEther, uint256 maxRebalancingValue, uint256 rebalancingStepInEther, uint256 maxTotalCollateral)"]);
+
 /**
  * ETHRISEPageProps is a React Component properties that passed to React Component ETHRISEPage
  */
@@ -38,6 +43,7 @@ type ETHRISEPageProps = {};
 const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const { chain, account } = useWalletContext();
     const [connectedChain, switchNetwork] = useNetwork();
+    const provider = Providers[chain.id];
 
     const ethriseAddress = ETHRISEAddresses[chain.id].token;
     const vaultAddress = ETHRISEAddresses[chain.id].vault;
@@ -59,7 +65,20 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const { vaultHistoricalData, vaultHistoricalDataIsLoading, vaultHistoricalDataIsError } = useVaultData3Months(chain.id, vaultAddress);
     const { market, marketIsLoading, marketIsError } = useMarket(chain.id, ethriseAddress);
 
-    console.debug("market", market);
+    // Get onchain market data
+    const [onchainETHRISEMetadata] = useContractRead(
+        {
+            addressOrName: vaultAddress,
+            contractInterface: VaultABI,
+            signerOrProvider: provider,
+        },
+        "getMetadata",
+        {
+            args: ethriseAddress,
+        }
+    );
+
+    console.debug("onchainETHRISEMetadata", onchainETHRISEMetadata);
 
     // States
     const [nav, setNAV] = useState(0);
@@ -101,6 +120,31 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
 
     // Styling for active timeframe selector
     const activeTimeframeClasses = "bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full font-semibold text-gray-light-12 dark:text-gray-dark-12";
+
+    // UI States
+    // isAccountConnected
+    // isNetworkCorrect
+    // isAccountConnectedToCorrectNetwork
+    // isOnchainDataFetchInProgress
+    // isOnchainDataFetched
+    // isMaxCapReached
+    // Syarat utamanya on-chain data harus ke fetch ya
+    // On chaind data ke fetch ada 2 states, loading sama results
+    // Berarti buttonnya aku harus pake animate pulse dulu.
+    // okee
+
+    // TODO: use show* instead
+    const isOnchainDataFetchInProgress = onchainETHRISEMetadata.loading;
+    const isOnchainDataFetched = !isOnchainDataFetchInProgress && onchainETHRISEMetadata.data ? true : false;
+    const isMaxCapReached = isOnchainDataFetched && onchainETHRISEMetadata.data && onchainETHRISEMetadata.data.totalCollateralPlusFee - onchainETHRISEMetadata.data.totalPendingFees > onchainETHRISEMetadata.data.maxTotalCollateral ? true : false;
+    const isAccountConnected = !isMaxCapReached && account && connectedChain.data && connectedChain.data.chain ? true : false;
+    const isNetworkCorrect = isAccountConnected && connectedChain.data.chain?.id === chain.id ? true : false;
+
+    console.debug("isOnchainDataFetchInProgress", isOnchainDataFetchInProgress);
+    console.debug("isOnchainDataFetched", isOnchainDataFetched);
+    console.debug("isMaxCapReached", isMaxCapReached);
+    console.debug("isAccountConnected", isAccountConnected);
+    console.debug("isNetworkCorrect", isNetworkCorrect);
 
     return (
         <>
@@ -351,8 +395,30 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                         </button>
                                     )}
 
-                                    {/* If account is connected and connected chain is the same as current chain then display account information */}
-                                    {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id === chain.id && <button className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 rounded-full w-full text-sm leading-4 tracking-[-0.02em] text-gray-light-1 dark:text-blue-light-1 font-semibold py-[11px]">Mint or Redeem</button>}
+                                    {/* If account is connected and connected chain is the same as current chain then display the mint button or buy on uniswap button */}
+                                    {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id === chain.id && (
+                                        <Dialog.Root>
+                                            <Dialog.Trigger className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 rounded-full w-full text-sm leading-4 tracking-[-0.02em] text-gray-light-1 dark:text-blue-light-1 font-semibold py-[11px] w-full">Mint or Redeem</Dialog.Trigger>
+                                            <Dialog.Portal>
+                                                <Dialog.Overlay className="fixed inset-0 bg-gray-dark-1/60 dark:bg-black/60 backdrop-blur" />
+                                                <Dialog.Content className="absolute top-0 flex flex-col bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px] mx-auto p-4">
+                                                    <Dialog.Title className="flex flex-row justify-between items-center mb-4">
+                                                        <div className="flex flex-row items-center space-x-4">
+                                                            <div>
+                                                                <img src={logo} alt={title} />
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{subtitle}</p>
+                                                                <h1 className="m-0 text-base tracking-tighter font-bold text-gray-light-12 dark:text-gray-dark-12">{title}</h1>
+                                                            </div>
+                                                        </div>
+                                                    </Dialog.Title>
+                                                    <Dialog.Description />
+                                                    <Dialog.Close />
+                                                </Dialog.Content>
+                                            </Dialog.Portal>
+                                        </Dialog.Root>
+                                    )}
                                 </div>
                             </div>
 

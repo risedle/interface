@@ -333,7 +333,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                             }
                                         }}
                                     >
-                                        <span className="w-[8px] h-[8px] rounded-full bg-red-light-10 dark:bg-sky-dark-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:shadow-red-dark-10 inline-block mr-2"></span>
+                                        <span className="w-[8px] h-[8px] rounded-full bg-red-light-10 dark:bg-red-dark-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:shadow-red-dark-10 inline-block mr-2"></span>
                                         Switch to {chain.name}
                                     </button>
                                 )}
