@@ -21,6 +21,11 @@ import ButtonConnectWalletDesktop from "../Buttons/ConnectWalletDesktop";
 import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
 import ToastError from "../Toasts/Error";
 import BackgroundGradient from "./BackgroundGradient";
+import ButtonFetchingOnchainData from "./Buttons/FetchingOnchainData";
+import ButtonFailedToFetchOnchainData from "./Buttons/FailedToFetchOnchainData";
+import ButtonBuyOnUniswap from "./Buttons/BuyOnUniswap";
+import ButtonConnectWalletToMintOrRedeem from "./Buttons/ConnectWalletToMintOrRedeem";
+import ButtonSwitchNetwork from "./Buttons/SwitchNetwork";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -59,6 +64,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const vaultInformationText = metadata.vaultInformationText;
     const collateralSymbol = metadata.collateralSymbol;
     const debtSymbol = metadata.debtSymbol;
+    const uniswapSwapURL = metadata.uniswapSwapURL;
 
     // Get price external data from Risedle Snapshot
     const { leveragedTokenDailyData, leveragedTokenWeeklyData, leveragedTokenTwoWeeklyData, leveragedTokenMonthlyData, leveragedTokenThreeMonthlyData, leveragedTokenDataIsLoading, leveragedTokenDataIsError } = useLeveragedTokenHistoricalData(chain.id, ethriseAddress);
@@ -121,30 +127,20 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     // Styling for active timeframe selector
     const activeTimeframeClasses = "bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full font-semibold text-gray-light-12 dark:text-gray-dark-12";
 
-    // UI States
-    // isAccountConnected
-    // isNetworkCorrect
-    // isAccountConnectedToCorrectNetwork
-    // isOnchainDataFetchInProgress
-    // isOnchainDataFetched
-    // isMaxCapReached
-    // Syarat utamanya on-chain data harus ke fetch ya
-    // On chaind data ke fetch ada 2 states, loading sama results
-    // Berarti buttonnya aku harus pake animate pulse dulu.
-    // okee
+    // Main button states
+    const showFetchingOnchainDataInProgress = onchainETHRISEMetadata.loading;
+    const showFailedToFetchOnChainData = !showFetchingOnchainDataInProgress && onchainETHRISEMetadata.error ? true : false;
+    const showBuyOnUniswap = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && onchainETHRISEMetadata.data && onchainETHRISEMetadata.data.maxTotalCollateral.gt(0) && onchainETHRISEMetadata.data.maxTotalCollateral.lt(onchainETHRISEMetadata.data.totalCollateralPlusFee.sub(onchainETHRISEMetadata.data.totalPendingFees)) ? true : false;
+    const showConnectWalletToMintOrRedeem = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && !showBuyOnUniswap && (!account || !connectedChain.data || !connectedChain.data.chain);
+    const showSwitchNetwork = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && !showBuyOnUniswap && !showConnectWalletToMintOrRedeem && connectedChain.data.chain && connectedChain.data.chain.id != chain.id ? true : false;
+    const showMintOrRedeem = !showFetchingOnchainDataInProgress && !showFailedToFetchOnChainData && !showBuyOnUniswap && !showConnectWalletToMintOrRedeem && !showSwitchNetwork ? true : false;
 
-    // TODO: use show* instead
-    const isOnchainDataFetchInProgress = onchainETHRISEMetadata.loading;
-    const isOnchainDataFetched = !isOnchainDataFetchInProgress && onchainETHRISEMetadata.data ? true : false;
-    const isMaxCapReached = isOnchainDataFetched && onchainETHRISEMetadata.data && onchainETHRISEMetadata.data.totalCollateralPlusFee - onchainETHRISEMetadata.data.totalPendingFees > onchainETHRISEMetadata.data.maxTotalCollateral ? true : false;
-    const isAccountConnected = !isMaxCapReached && account && connectedChain.data && connectedChain.data.chain ? true : false;
-    const isNetworkCorrect = isAccountConnected && connectedChain.data.chain?.id === chain.id ? true : false;
-
-    console.debug("isOnchainDataFetchInProgress", isOnchainDataFetchInProgress);
-    console.debug("isOnchainDataFetched", isOnchainDataFetched);
-    console.debug("isMaxCapReached", isMaxCapReached);
-    console.debug("isAccountConnected", isAccountConnected);
-    console.debug("isNetworkCorrect", isNetworkCorrect);
+    console.debug("showFetchingOnchainDataInProgress", showFetchingOnchainDataInProgress);
+    console.debug("showFailedToFetchOnChainData", showFailedToFetchOnChainData);
+    console.debug("showBuyOnUniswap", showBuyOnUniswap);
+    console.debug("showConnectWalletToMintOrRedeem", showConnectWalletToMintOrRedeem);
+    console.debug("showSwitchNetwork", showSwitchNetwork);
+    console.debug("showMintOrRedeem", showMintOrRedeem);
 
     return (
         <>
@@ -371,17 +367,21 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
 
                                 {/* Mint & Redeem Button */}
                                 <div className="p-4">
-                                    {/* Wallet not connected; Display disabled button */}
-                                    {(!account || !connectedChain.data || !connectedChain.data.chain) && (
-                                        <button disabled className="bg-gray-light-4 dark:bg-gray-dark-4 border border-gray-light-5 dark:border-0 text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-10 rounded-full cursor-not-allowed w-full py-[11px] dark:py-[12px]">
-                                            Connect wallet to Mint or Redeem
-                                        </button>
-                                    )}
+                                    {/* Show loading button */}
+                                    {showFetchingOnchainDataInProgress && <ButtonFetchingOnchainData />}
 
-                                    {/* If account is connected and connected chain is not the same as current chain then display the switch network button */}
-                                    {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id != chain.id && (
-                                        <button
-                                            className="bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 text-blue-dark-1 dark:text-blue-light-1 text-sm leading-4 font-semibold py-[11px] px-4 rounded-full leading-4 inline-block tracking-[-0.02em] w-full"
+                                    {/* Show Failed to fetach button */}
+                                    {showFailedToFetchOnChainData && <ButtonFailedToFetchOnchainData />}
+
+                                    {/* Show Buy on Uniswap */}
+                                    {showBuyOnUniswap && <ButtonBuyOnUniswap href={uniswapSwapURL} />}
+
+                                    {/* Show Connect wallet to mint or redeem */}
+                                    {showConnectWalletToMintOrRedeem && <ButtonConnectWalletToMintOrRedeem />}
+
+                                    {/* Show switch netwoek */}
+                                    {showSwitchNetwork && (
+                                        <ButtonSwitchNetwork
                                             onClick={() => {
                                                 if (switchNetwork) {
                                                     switchNetwork(chain.id);
@@ -389,14 +389,12 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                     toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);
                                                 }
                                             }}
-                                        >
-                                            <span className="w-[8px] h-[8px] rounded-full bg-red-light-10 dark:bg-red-dark-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:shadow-red-dark-10 inline-block mr-2"></span>
-                                            Switch to {chain.name}
-                                        </button>
+                                            chainName={chain.name}
+                                        />
                                     )}
 
-                                    {/* If account is connected and connected chain is the same as current chain then display the mint button or buy on uniswap button */}
-                                    {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id === chain.id && (
+                                    {/* Show mint or redeem */}
+                                    {showMintOrRedeem && (
                                         <Dialog.Root>
                                             <Dialog.Trigger className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 rounded-full w-full text-sm leading-4 tracking-[-0.02em] text-gray-light-1 dark:text-blue-light-1 font-semibold py-[11px] w-full">Mint or Redeem</Dialog.Trigger>
                                             <Dialog.Portal>
