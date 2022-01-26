@@ -27,7 +27,6 @@ type MarketsPageProps = {};
 const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
     const { chain } = useWalletContext();
     const { markets, marketsIsLoading, marketsIsError } = useMarkets(chain.id);
-    console.debug(markets);
 
     return (
         <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter min-h-screen flex flex-col overflow-hidden relative">

@@ -11,10 +11,12 @@ export type Metadata = {
     informationText: string;
     vaultInformationText: string;
     collateralSymbol: string;
-    debtSymbol: string;
-    uniswapSwapURL: string;
     collateralDecimals: number;
+    collateralContract: string;
+    debtSymbol: string;
     debtDecimals: number;
+    debtContract: string;
+    uniswapSwapURL: string;
     oracleContract: string;
 };
 export type MarketMetadata = Record<string, Metadata>;
@@ -34,10 +36,12 @@ export const Metadata: MarketMetadataRecord = {
             vaultInformationText:
                 "rvETHUSDC is an interest-bearing token that increase value overtime. Start earning variable interest rate in real time by depositing USDC.",
             collateralSymbol: "ETH",
-            debtSymbol: "USDC",
-            uniswapSwapURL: "#",
             collateralDecimals: 18, // ETH is 18 decimals
+            collateralContract: "0x4470E84Ce5C1fe89EA35a19560b6f2b1Ed71507f",
+            debtSymbol: "USDC",
             debtDecimals: 6, // USDC is 6 decimals
+            debtContract: "0x0af08696cb51e81456dc0a1dee7f8bfad8d82a22",
+            uniswapSwapURL: "#",
             oracleContract: "0x1F6Ec9B472b5EB3c7aA617Ce45ea2ed4f1A2db7D",
         },
     },

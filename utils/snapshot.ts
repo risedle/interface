@@ -202,13 +202,13 @@ export function useLeveragedTokenHistoricalData(
     }
 
     return {
-        leveragedTokenDailyData: dailyData,
-        leveragedTokenWeeklyData: weeklyData,
-        leveragedTokenTwoWeeklyData: twoWeeklyData,
-        leveragedTokenMonthlyData: monthlyData,
-        leveragedTokenThreeMonthlyData: threeMonthlyData,
-        leveragedTokenDataIsLoading: !error && !data,
-        leveragedTokenDataIsError: error,
+        daily: dailyData,
+        weekly: weeklyData,
+        twoWeekly: twoWeeklyData,
+        monthly: monthlyData,
+        threeMonthly: threeMonthlyData,
+        isLoading: !error && !data,
+        error: error,
     };
 }
 
