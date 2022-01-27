@@ -10,6 +10,6 @@ export default {
 
 export const Transaction = () => (
     <Wallet>
-        <ToastTransaction hash="0x4bd32945f8d1ee82a24422074460b8e811b200eec1b0d6264e8fd171a0b50c89"></ToastTransaction>
+        <ToastTransaction hash="0x4bd32945f8d1ee82a24422074460b8e811b200eec1b0d6264e8fd171a0b50c89">test</ToastTransaction>
     </Wallet>
 );
