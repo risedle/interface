@@ -1,10 +1,15 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import Link from "next/link";
+import { useProvider } from "wagmi";
+import { Result } from "ethers/lib/utils";
+
 import { useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import { ethers } from "ethers";
-import { useBalance, useContractRead } from "wagmi";
 import MintForm from "./MintForm";
+import FormLoading from "./FormLoading";
+import FormLoadingFailed from "./FormLoadingFailed";
+import { RequestState } from "./States";
 
 // ABIs
 import VaultABI from "./VaultABI";
@@ -23,119 +28,69 @@ type MintProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const Mint: FunctionComponent<MintProps> = ({ address }) => {
+    // Global states
     const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
+    const provider = useProvider();
 
-    // Get onchain market data
-    const [onchainETHRISEMetadata] = useContractRead(
-        {
-            addressOrName: metadata.vaultAddress,
-            contractInterface: VaultABI,
-        },
-        "getMetadata",
-        {
-            args: address,
+    // Contracts
+    const vaultContract = new ethers.Contract(metadata.vaultAddress, VaultABI, provider);
+    const oracleContract = new ethers.Contract(metadata.oracleAddress, OracleABI, provider);
+
+    // Local states
+    const [balanceState, setBalanceState] = useState<RequestState>({ loading: true });
+    const [tokenMetadataState, setTokenMetadataState] = useState<RequestState>({ loading: true });
+    const [collateralPriceState, setCollateralPriceState] = useState<RequestState>({ loading: true });
+    const [totalAvailableCashState, setTotalAvailableCashState] = useState<RequestState>({ loading: true });
+    const [navState, setNAVState] = useState<RequestState>({ loading: true });
+
+    // Load onchain data
+    const loadData = async () => {
+        if (balanceState.loading && account && tokenMetadataState.loading && collateralPriceState.loading && totalAvailableCashState.loading && navState.loading) {
+            const values = await Promise.all([provider.getBalance(account), vaultContract.getMetadata(address), oracleContract.getPrice(), vaultContract.getTotalAvailableCash(), vaultContract.getNAV(address)]);
+            const balanceResponse = values[0] as unknown as Result;
+            setBalanceState({ response: balanceResponse, loading: false });
+            setTokenMetadataState({ response: values[1], loading: false });
+            setCollateralPriceState({ response: values[2], loading: false });
+            setTotalAvailableCashState({ response: values[3], loading: false });
+            setNAVState({ response: values[4], loading: false });
         }
-    );
-    // Get onchain oracle
-    const [onchainOracle] = useContractRead(
-        {
-            addressOrName: metadata.oracleAddress,
-            contractInterface: OracleABI,
-        },
-        "getPrice"
-    );
-    // Get total available cash of vault
-    const [onchainTotalAvailableCash] = useContractRead(
-        {
-            addressOrName: metadata.vaultAddress,
-            contractInterface: VaultABI,
-        },
-        "getTotalAvailableCash"
-    );
-    // Get the latest NAV of the leveraged token
-    const [onchainNAV] = useContractRead(
-        {
-            addressOrName: metadata.vaultAddress,
-            contractInterface: VaultABI,
-        },
-        "getNAV",
-        {
-            args: address,
-        }
-    );
-    // Get the user balance
-    const [onchainBalance] = useBalance({ addressOrName: account ? account : undefined });
+    };
 
-    const balance = onchainBalance && onchainBalance.data && onchainBalance.data.formatted ? parseFloat(onchainBalance.data.formatted) : 0;
+    // This will be executed when component is mounted or updated
+    useEffect(() => {
+        loadData();
+    });
 
-    // Check wether the max cap is reached or not
-    const maxTotalCollateral = parseFloat(ethers.utils.formatUnits(onchainETHRISEMetadata.data ? onchainETHRISEMetadata.data.maxTotalCollateral : 0, metadata.collateralDecimals));
-    const totalCollateralPlusFee = parseFloat(ethers.utils.formatUnits(onchainETHRISEMetadata.data ? onchainETHRISEMetadata.data.totalCollateralPlusFee : 0, metadata.collateralDecimals));
-    const totalPendingFees = parseFloat(ethers.utils.formatUnits(onchainETHRISEMetadata.data ? onchainETHRISEMetadata.data.totalPendingFees : 0, metadata.collateralDecimals));
-
-    const collateralPrice = parseFloat(ethers.utils.formatUnits(onchainOracle.data ? onchainOracle.data : 0, metadata.debtDecimals));
-    const totalAvailableCash = parseFloat(ethers.utils.formatUnits(onchainTotalAvailableCash.data ? onchainTotalAvailableCash.data : 0, metadata.debtDecimals));
-    const tokenNAV = parseFloat(ethers.utils.formatUnits(onchainNAV.data ? onchainNAV.data : 0, metadata.debtDecimals));
-
+    // Data
     // First order UI states
-    const showLoading = onchainETHRISEMetadata.loading || onchainOracle.loading || onchainTotalAvailableCash.loading || onchainNAV.loading || onchainBalance.loading ? true : false;
-    const showError = !showLoading && (onchainETHRISEMetadata.error || onchainOracle.error || onchainTotalAvailableCash.error || onchainNAV.error || onchainBalance.error) ? true : false;
+    const showLoading = balanceState.loading || tokenMetadataState.loading || totalAvailableCashState.loading || collateralPriceState.loading || navState.loading ? true : false;
+    const showError = !showLoading && (balanceState.error || tokenMetadataState.error || totalAvailableCashState.error || collateralPriceState.error || navState.error) ? true : false;
     // TODO: show ApprovalOrMaxCapOrMintForm
-    const showMintFormOrMaxCap = !showLoading && !showError && onchainETHRISEMetadata.data && onchainOracle.data && onchainTotalAvailableCash.data && onchainNAV.data ? true : false;
+    const showMintFormOrMaxCap = !showLoading && !showError && balanceState.response && tokenMetadataState.response && totalAvailableCashState.response && collateralPriceState.response && navState.response ? true : false;
+
+    // Data
+    const balance = parseFloat(ethers.utils.formatUnits(balanceState.response ? balanceState.response : 0, metadata.collateralDecimals));
+    const maxTotalCollateral = parseFloat(ethers.utils.formatUnits(tokenMetadataState.response ? tokenMetadataState.response.maxTotalCollateral : 0, metadata.collateralDecimals));
+    const totalCollateralPlusFee = parseFloat(ethers.utils.formatUnits(tokenMetadataState.response ? tokenMetadataState.response.totalCollateralPlusFee : 0, metadata.collateralDecimals));
+    const totalPendingFees = parseFloat(ethers.utils.formatUnits(tokenMetadataState.response ? tokenMetadataState.response.totalPendingFees : 0, metadata.collateralDecimals));
+    const collateralPrice = parseFloat(ethers.utils.formatUnits(collateralPriceState.response ? collateralPriceState.response : 0, metadata.debtDecimals));
+    const totalAvailableCash = parseFloat(ethers.utils.formatUnits(totalAvailableCashState.response ? totalAvailableCashState.response : 0, metadata.debtDecimals));
+    const nav = parseFloat(ethers.utils.formatUnits(navState.response ? navState.response : 0, metadata.debtDecimals));
 
     // Second order UI states
     const showMaxCap = maxTotalCollateral > 0 && totalCollateralPlusFee - totalPendingFees > maxTotalCollateral ? true : false;
     const showMintForm = !showMaxCap;
 
+    // Data
+
     return (
         <div>
             {/* Show loading states */}
-            {showLoading && (
-                <div className="mt-6">
-                    <div className="flex flex-row justify-between items-center">
-                        <p className="text-xs leading-4 font-semibold text-gray-light-12 dark:text-gray-dark-12">How many {metadata.collateralSymbol}?</p>
-                    </div>
-                    <form className="flex flex-col mt-2 space-y-4">
-                        <div className="h-[64px] animate-pulse flex flex-row p-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] items-center justify-between"></div>
-
-                        <div className="flex flex-row h-[16px] animate-pulse bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px]"></div>
-
-                        <div className="pt-4 pb-8 border-b border-gray-light-5 dark:border-gray-dark-5 border-dashed h-[50px]"></div>
-
-                        <button className="cursor-wait flex flex-row text-center justify-center space-x-2 bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 text-blue-dark-1 dark:text-blue-light-1 text-sm leading-4 font-semibold py-[11px] px-4 rounded-full leading-4 inline-block tracking-[-0.02em] w-full drop-shadow-[0_0_45px_rgba(54,158,255,0.1)]">
-                            <svg width="17" height="16" viewBox="0 0 17 16" className="fill-gray-light-12 dark:fill-gray-dark-12 animate-spin" xmlns="http://www.w3.org/2000/svg">
-                                <g clipPath="url(#clip0_1161_30088)">
-                                    <path opacity="0.2" d="M16.5 8.00049C16.5 12.4188 12.9183 16.0005 8.5 16.0005C4.08172 16.0005 0.5 12.4188 0.5 8.00049C0.5 3.58221 4.08172 0.000488281 8.5 0.000488281C12.9183 0.000488281 16.5 3.58221 16.5 8.00049ZM2.9 8.00049C2.9 11.0933 5.40721 13.6005 8.5 13.6005C11.5928 13.6005 14.1 11.0933 14.1 8.00049C14.1 4.90769 11.5928 2.40049 8.5 2.40049C5.40721 2.40049 2.9 4.90769 2.9 8.00049Z" />
-                                    <path d="M15.3 8.00049C15.9627 8.00049 16.5092 8.5407 16.4102 9.196C16.3136 9.83526 16.1396 10.4619 15.891 11.062C15.489 12.0326 14.8997 12.9145 14.1569 13.6573C13.414 14.4002 12.5321 14.9895 11.5615 15.3915C10.9614 15.6401 10.3348 15.814 9.69551 15.9107C9.04021 16.0097 8.5 15.4632 8.5 14.8005C8.5 14.1377 9.04326 13.6133 9.69084 13.4724C10.0157 13.4017 10.3344 13.3021 10.643 13.1742C11.3224 12.8928 11.9398 12.4803 12.4598 11.9603C12.9798 11.4403 13.3923 10.8229 13.6737 10.1435C13.8016 9.83489 13.9012 9.51619 13.9719 9.19133C14.1129 8.54375 14.6373 8.00049 15.3 8.00049Z" />
-                                </g>
-                            </svg>
-                            <div>Loading data...</div>
-                        </button>
-                    </form>
-                </div>
-            )}
+            {showLoading && <FormLoading />}
 
             {/* Show error states */}
-            {showError && (
-                <div className="mt-6">
-                    <div className="flex flex-row justify-between items-center">
-                        <p className="text-xs leading-4 font-semibold text-gray-light-12 dark:text-gray-dark-12">How many {metadata.collateralSymbol}?</p>
-                    </div>
-                    <form className="flex flex-col mt-2 space-y-4">
-                        <div className="h-[64px] animate-pulse flex flex-row p-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] items-center justify-between"></div>
-
-                        <div className="flex flex-row h-[16px] animate-pulse bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px]"></div>
-
-                        <div className="pt-4 pb-8 border-b border-gray-light-5 dark:border-gray-dark-5 border-dashed h-[50px]"></div>
-
-                        <button className="cursor-not-allowed flex flex-row text-center justify-center items-center space-x-2 bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 text-blue-dark-1 dark:text-blue-light-1 text-sm leading-4 font-semibold py-[11px] px-4 rounded-full leading-4 inline-block tracking-[-0.02em] w-full">
-                            <span className="w-[8px] h-[8px] rounded-full bg-red-light-10 dark:bg-red-dark-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:shadow-red-dark-10 inline-block mr-2"></span>
-                            <div>Failed to load data</div>
-                        </button>
-                    </form>
-                </div>
-            )}
+            {showError && <FormLoadingFailed />}
 
             {showMintFormOrMaxCap && (
                 <div>
@@ -164,7 +119,7 @@ const Mint: FunctionComponent<MintProps> = ({ address }) => {
                     )}
 
                     {/* Show mint input */}
-                    {showMintForm && <MintForm address={address} balance={balance} nav={tokenNAV} maxTotalCollateral={maxTotalCollateral} totalCollateralPlusFee={totalCollateralPlusFee} totalPendingFees={totalPendingFees} totalAvailableCash={totalAvailableCash} collateralPrice={collateralPrice} />}
+                    {showMintForm && <MintForm address={address} balance={balance} nav={nav} maxTotalCollateral={maxTotalCollateral} totalCollateralPlusFee={totalCollateralPlusFee} totalPendingFees={totalPendingFees} totalAvailableCash={totalAvailableCash} collateralPrice={collateralPrice} />}
                 </div>
             )}
         </div>

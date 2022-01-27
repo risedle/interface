@@ -206,7 +206,7 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                                         }
 
                                         setMingtingHash(result.data.hash);
-                                        toast.custom((t) => <ToastTransaction hash={result.data.hash} />);
+                                        toast.custom((t) => <ToastTransaction hash={result.data.hash}>Minting </ToastTransaction>);
                                         const receipt = await result.data.wait();
                                         setIsMinting(false);
                                         setMingtingHash(undefined);
