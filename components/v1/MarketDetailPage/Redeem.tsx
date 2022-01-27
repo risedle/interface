@@ -1,7 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import Link from "next/link";
 import { ethers } from "ethers";
-import { Result } from "ethers/lib/utils";
 import { erc20ABI, useProvider, useSigner } from "wagmi";
 import toast from "react-hot-toast";
 
@@ -46,17 +45,15 @@ const Redeem: FunctionComponent<RedeemProps> = ({ address }) => {
 
     // States
     const [allowanceState, setAllowanceState] = useState<RequestState>({ loading: true });
-    const [balanceState, setBalanceState] = useState<RequestState>({ loading: true });
     const [navState, setNAVState] = useState<RequestState>({ loading: true });
     const [collateralPriceState, setCollateralPriceState] = useState<RequestState>({ loading: true });
     const [approval, setApproval] = useState<ApprovalState>({});
 
     // Load onchain data
     const loadData = async () => {
-        if (allowanceState.loading && balanceState.loading && navState.loading && collateralPriceState.loading) {
+        if (allowanceState.loading && navState.loading && collateralPriceState.loading) {
             const values = await Promise.all([leveragedTokenContract.allowance(account, metadata.vaultAddress), leveragedTokenContract.balanceOf(account), vaultContract.getNAV(address), oracleContract.getPrice()]);
             setAllowanceState({ response: values[0], loading: false });
-            setBalanceState({ response: values[1], loading: false });
             setNAVState({ response: values[2], loading: false });
             setCollateralPriceState({ response: values[3], loading: false });
         }
@@ -68,14 +65,13 @@ const Redeem: FunctionComponent<RedeemProps> = ({ address }) => {
     });
 
     // UI States
-    const showLoading = allowanceState.loading || balanceState.loading || navState.loading || collateralPriceState.loading ? true : false;
-    const showError = !showLoading && (allowanceState.error || balanceState.error || navState.error || collateralPriceState.error) ? true : false;
-    const showApprovalOrRedeem = !showLoading && !showError && allowanceState.response && balanceState.response && navState.response && collateralPriceState.response ? true : false;
+    const showLoading = allowanceState.loading || navState.loading || collateralPriceState.loading ? true : false;
+    const showError = !showLoading && (allowanceState.error || navState.error || collateralPriceState.error) ? true : false;
+    const showApprovalOrRedeem = !showLoading && !showError && allowanceState.response && navState.response && collateralPriceState.response ? true : false;
     const showApproval = showApprovalOrRedeem && allowanceState.response && !allowanceState.response.eq(ethers.constants.MaxUint256) && !approval.approved ? true : false;
     const showRedeem = !showApproval || approval.approved ? true : false;
 
     // Data
-    const leveragedTokenBalance = parseFloat(ethers.utils.formatUnits(balanceState.response ? balanceState.response : 0, metadata.collateralDecimals));
     const nav = parseFloat(ethers.utils.formatUnits(navState.response ? navState.response : 0, metadata.debtDecimals));
     const collateralPrice = parseFloat(ethers.utils.formatUnits(collateralPriceState.response ? collateralPriceState.response : 0, metadata.debtDecimals));
 
@@ -138,7 +134,7 @@ const Redeem: FunctionComponent<RedeemProps> = ({ address }) => {
                         </div>
                     )}
 
-                    {showRedeem && <RedeemForm address={address} balance={leveragedTokenBalance} nav={nav} collateralPrice={collateralPrice} />}
+                    {showRedeem && <RedeemForm address={address} nav={nav} collateralPrice={collateralPrice} />}
                 </div>
             )}
         </div>

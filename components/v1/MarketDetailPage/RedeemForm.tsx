@@ -1,7 +1,7 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import Link from "next/link";
 import { ethers } from "ethers";
-import { useProvider, useSigner } from "wagmi";
+import { erc20ABI, useProvider, useSigner } from "wagmi";
 import * as Slider from "@radix-ui/react-slider";
 import toast from "react-hot-toast";
 
@@ -13,7 +13,7 @@ import ToastSuccess from "../Toasts/Success";
 
 // ABIs
 import VaultABI from "./VaultABI";
-import { RedeemState } from "./States";
+import { RedeemState, RequestState } from "./States";
 import ButtonLoading from "../Buttons/ButtonLoading";
 import { getExplorerLink } from "./Explorer";
 
@@ -22,7 +22,6 @@ import { getExplorerLink } from "./Explorer";
  */
 type RedeemFormProps = {
     address: string;
-    balance: number;
     nav: number;
     collateralPrice: number;
 };
@@ -32,18 +31,34 @@ type RedeemFormProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, balance, nav, collateralPrice }) => {
-    const { chain } = useWalletContext();
+const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collateralPrice }) => {
+    const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
     const [, getSigner] = useSigner({ skip: true });
 
     // Initialize contract
     const vaultContract = new ethers.Contract(metadata.vaultAddress, VaultABI, provider);
+    const leveragedTokenContract = new ethers.Contract(address, erc20ABI, provider);
 
     // Mint form states
+    const [balanceState, setBalanceState] = useState<RequestState>({ loading: true });
     const [redeem, setRedeem] = useState<RedeemState>({ amount: 0 });
 
+    // Load onchain data
+    const loadData = async () => {
+        if (balanceState.loading) {
+            const values = await Promise.all([leveragedTokenContract.balanceOf(account)]);
+            setBalanceState({ response: values[0], loading: false });
+        }
+    };
+
+    // This will be executed when component is mounted or updated
+    useEffect(() => {
+        loadData();
+    });
+
+    const balance = parseFloat(ethers.utils.formatUnits(balanceState.response ? balanceState.response : 0, metadata.collateralDecimals));
     const redeemedValue = redeem.amount ? (redeem.amount * nav) / collateralPrice : 0;
     const minimalRedeemedValue = redeemedValue - redeemedValue * (5 / 100); // rough estimation
 
