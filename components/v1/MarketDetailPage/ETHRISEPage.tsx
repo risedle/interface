@@ -24,6 +24,7 @@ import ButtonConnectWalletToMintOrRedeem from "./Buttons/ConnectWalletToMintOrRe
 import ButtonSwitchNetwork from "./Buttons/SwitchNetwork";
 import LeveragedTokenChart from "./LeveragedTokenChart";
 import ButtonMintOrRedeem from "./ButtonMintOrRedeem";
+import MarketDetailPageMeta from "./MarketDetailPageMeta";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -62,6 +63,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const vaultInformationText = metadata.vaultInformationText;
     const collateralSymbol = metadata.collateralSymbol;
     const debtSymbol = metadata.debtSymbol;
+    const path = metadata.path;
 
     // Get price external data from Risedle Snapshot
     const { vaultHistoricalData, vaultHistoricalDataIsLoading, vaultHistoricalDataIsError } = useVaultData3Months(chain.id, vaultAddress);
@@ -146,8 +148,10 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
         <>
             <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter min-h-screen flex flex-col overflow-hidden">
                 <Head>
-                    <title>ETHRISE Market | Risedle</title>
-                    <meta name="description" content="Leverage ETH or earn yield from your idle USDC" />
+                    {/* <!-- HTML Meta Tags --> */}
+                    <title>{title} Market | Risedle Protocol</title>
+                    <meta name="description" content="Leverage ETH or earn yield from your idle USDC"/> 
+                    <MarketDetailPageMeta title={title} path={path} />
                 </Head>
                 <Favicon />
 

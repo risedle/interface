@@ -13,6 +13,7 @@ import ButtonConnectWalletDesktop from "../Buttons/ConnectWalletDesktop";
 import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
 import Logo from "../Logo";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
+import MarketsPageMeta from "./MarketsPageMeta";
 
 /**
  * MarketsPageProps is a React Component properties that passed to React Component MarketsPage
@@ -31,8 +32,10 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
     return (
         <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter min-h-screen flex flex-col overflow-hidden relative">
             <Head>
-                <title>Leveraged Tokens Market | Risedle</title>
-                <meta name="description" content="Invest, earn and build on the decentralized leveraged token market protocol" />
+                {/* <!-- HTML Meta Tags --> */}
+                <title>Risedle Protocol</title>
+                <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol"/>
+                <MarketsPageMeta />
             </Head>
             <Favicon />
 

@@ -8,6 +8,7 @@ import Hero from "./Hero";
 import HeroFooter from "./HeroFooter";
 import Navigation from "./Navigation";
 import SubHero from "./SubHero";
+import HomePageMeta from "./HomePageMeta";
 
 /**
  * HomePageProps is a React Component properties that passed to React Component HomePage
@@ -25,8 +26,10 @@ const HomePage: FunctionComponent<HomePageProps> = ({}) => {
     return (
         <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter overflow-clip">
             <Head>
+                {/* <!-- HTML Meta Tags --> */}
                 <title>Risedle Protocol</title>
-                <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
+                <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol"/>
+                <HomePageMeta />
             </Head>
             <Favicon />
             <Navigation />
