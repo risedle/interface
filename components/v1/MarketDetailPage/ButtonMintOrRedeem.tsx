@@ -4,6 +4,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { Metadata } from "../MarketMetadata";
 import { useWalletContext } from "../Wallet";
 import Mint from "./Mint";
+import Redeem from "./Redeem";
 
 /**
  * ButtonMintOrRedeemProps is a React Component properties that passed to React Component ButtonMintOrRedeem
@@ -65,12 +66,7 @@ const ButtonMintOrRedeem: FunctionComponent<ButtonMintOrRedeemProps> = ({ addres
                             <Mint address={address} />
                         </Tabs.Content>
                         <Tabs.Content value="redeem" className="outline-0 flex flex-col mx-auto sm:max-w-[540px] space-y-6">
-                            {/* Display approval button if the leveraged token is not approved yet */}
-                            {/* {!isLeveragedTokenApproved && (
-                            <div>
-                                <div>test</div>
-                            </div>
-                        )} */}
+                            <Redeem address={address} />
                         </Tabs.Content>
                     </Tabs.Root>
                 </div>
