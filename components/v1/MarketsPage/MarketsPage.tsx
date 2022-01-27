@@ -32,6 +32,9 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
     return (
         <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter min-h-screen flex flex-col overflow-hidden relative">
             <Head>
+                {/* <!-- HTML Meta Tags --> */}
+                <title>Risedle Protocol</title>
+                <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol"/>
                 <MarketsPageMeta />
             </Head>
             <Favicon />

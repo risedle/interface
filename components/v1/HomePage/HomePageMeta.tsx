@@ -14,10 +14,6 @@ import type { FunctionComponent } from "react";
  const HomePageMeta: FunctionComponent<HomePageMetaProps> = ({}) => {
     return(
         <>
-            {/* <!-- HTML Meta Tags --> */}
-            <title>Risedle Protocol</title>
-            <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol"/>
-
             {/* <!-- Facebook Meta Tags --> */}
             <meta property="og:url" content="https://risedle.com/"/>
             <meta property="og:type" content="website"/>
