@@ -4,6 +4,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { Metadata } from "../MarketMetadata";
 import { useWalletContext } from "../Wallet";
 import Mint from "./Mint";
+import Redeem from "./Redeem";
 
 /**
  * ButtonMintOrRedeemProps is a React Component properties that passed to React Component ButtonMintOrRedeem
@@ -25,7 +26,7 @@ const ButtonMintOrRedeem: FunctionComponent<ButtonMintOrRedeemProps> = ({ addres
         <Dialog.Root>
             <Dialog.Trigger className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 rounded-full w-full text-sm leading-4 tracking-[-0.02em] text-gray-light-1 dark:text-blue-light-1 font-semibold py-[11px] w-full">Mint or Redeem</Dialog.Trigger>
             <Dialog.Overlay className="fixed inset-0 bg-gray-dark-1/60 dark:bg-black/60 backdrop-blur z-30" />
-            <Dialog.Content className="fixed left-0 bottom-0 z-30 w-screen sm:-translate-y-1/3">
+            <Dialog.Content className="fixed left-0 bottom-0 z-30 w-screen sm:-translate-y-1/3 sm:min-h-[477px]">
                 {/* Mint or Redeem container */}
                 <div className="mx-4 mb-4 sm:max-w-[376px] sm:m-auto flex flex-col bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px] mx-auto p-4">
                     <Dialog.Title className="flex flex-row justify-between items-center mb-4">
@@ -65,12 +66,7 @@ const ButtonMintOrRedeem: FunctionComponent<ButtonMintOrRedeemProps> = ({ addres
                             <Mint address={address} />
                         </Tabs.Content>
                         <Tabs.Content value="redeem" className="outline-0 flex flex-col mx-auto sm:max-w-[540px] space-y-6">
-                            {/* Display approval button if the leveraged token is not approved yet */}
-                            {/* {!isLeveragedTokenApproved && (
-                            <div>
-                                <div>test</div>
-                            </div>
-                        )} */}
+                            <Redeem address={address} />
                         </Tabs.Content>
                     </Tabs.Root>
                 </div>
