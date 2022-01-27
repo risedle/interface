@@ -30,7 +30,7 @@ import type { FunctionComponent } from "react";
             <meta property="og:type" content="website"/>
             <meta property="og:title" content={`${title} Market | Risedle Protocol`}/>
             <meta property="og:description" content="Leverage ETH or earn yield from your idle USDC"/>
-            <meta property="og:image" content={`https://risedle.com/${title}.png`}/>
+            <meta property="og:image" content={`https://risedle.com/og/${title}.png`}/>
 
             {/* <!-- Twitter Meta Tags --> */}
             <meta name="twitter:card" content="summary_large_image"/>
@@ -38,7 +38,7 @@ import type { FunctionComponent } from "react";
             <meta property="twitter:url" content={`https://risedle.com${path}`}/>
             <meta name="twitter:title" content={`${title} Market | Risedle Protocol`}/>
             <meta name="twitter:description" content="Leverage ETH or earn yield from your idle USDC"/>
-            <meta name="twitter:image" content={`https://risedle.com/${title}.png`}/>
+            <meta name="twitter:image" content={`https://risedle.com/og/${title}.png`}/>
         </>
     )
  }
