@@ -33,3 +33,10 @@ export type DepositState = {
     hash?: string;
     error?: Error;
 };
+
+export type WithdrawState = {
+    amount?: number;
+    withdrawing?: boolean;
+    hash?: string;
+    error?: Error;
+};

@@ -3,8 +3,8 @@ import * as Dialog from "@radix-ui/react-dialog";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Metadata } from "../MarketMetadata";
 import { useWalletContext } from "../Wallet";
-import Redeem from "./Redeem";
 import Deposit from "./Deposit";
+import Withdraw from "./Withdraw";
 
 /**
  * ButtonDepositOrWithdrawProps is a React Component properties that passed to React Component ButtonDepositOrWithdraw
@@ -66,7 +66,7 @@ const ButtonDepositOrWithdraw: FunctionComponent<ButtonDepositOrWithdrawProps> =
                             <Deposit address={address} />
                         </Tabs.Content>
                         <Tabs.Content value="withdraw" className="outline-0 flex flex-col mx-auto sm:max-w-[540px] space-y-6">
-                            <Redeem address={address} />
+                            <Withdraw address={address} />
                         </Tabs.Content>
                     </Tabs.Root>
                 </div>
