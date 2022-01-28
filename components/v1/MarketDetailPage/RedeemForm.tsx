@@ -32,6 +32,7 @@ type RedeemFormProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collateralPrice }) => {
+    // Global states
     const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
@@ -41,7 +42,7 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
     const vaultContract = new ethers.Contract(metadata.vaultAddress, VaultABI, provider);
     const leveragedTokenContract = new ethers.Contract(address, erc20ABI, provider);
 
-    // Mint form states
+    // Local states
     const [balanceState, setBalanceState] = useState<RequestState>({ loading: true });
     const [redeem, setRedeem] = useState<RedeemState>({ amount: 0 });
 
