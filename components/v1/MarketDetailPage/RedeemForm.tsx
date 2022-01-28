@@ -32,6 +32,7 @@ type RedeemFormProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collateralPrice }) => {
+    // Global states
     const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
@@ -41,7 +42,7 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
     const vaultContract = new ethers.Contract(metadata.vaultAddress, VaultABI, provider);
     const leveragedTokenContract = new ethers.Contract(address, erc20ABI, provider);
 
-    // Mint form states
+    // Local states
     const [balanceState, setBalanceState] = useState<RequestState>({ loading: true });
     const [redeem, setRedeem] = useState<RedeemState>({ amount: 0 });
 
@@ -196,6 +197,7 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
 
                                         // Get signer otherwise return early
                                         const signer = await getSigner();
+                                        console.debug("Redeem: signer", signer);
                                         if (!signer) {
                                             toast.custom((t) => <ToastError>No signer detected</ToastError>);
                                             setRedeem({ ...redeem, redeeming: false, error: new Error("Signer is not detected") });
@@ -218,11 +220,12 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
                                                         Successfully redeemed {parseFloat(confirmedRedeemendAmount).toFixed(3)} {metadata.collateralSymbol}
                                                     </ToastSuccess>
                                                 ));
+                                                setRedeem({ ...redeem, amount: 0, redeeming: false, hash: undefined });
+                                                setBalanceState({ loading: true });
                                             } else {
                                                 setRedeem({ ...redeem, error: new Error("Something wrong with the receipt") });
                                                 toast.custom((t) => <ToastError>Something wrong with the receipt</ToastError>);
                                             }
-                                            setRedeem({ ...redeem, redeeming: false, hash: undefined });
                                         } catch (e) {
                                             const error = e as Error;
                                             toast.custom((t) => <ToastError>{error.message}</ToastError>);
