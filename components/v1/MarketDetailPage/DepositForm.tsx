@@ -1,69 +1,79 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import Link from "next/link";
-import { useWalletContext } from "../Wallet";
-import { Metadata } from "../MarketMetadata";
 import { ethers } from "ethers";
-import { useProvider, useSigner } from "wagmi";
+import { erc20ABI, useProvider, useSigner } from "wagmi";
 import * as Slider from "@radix-ui/react-slider";
 import toast from "react-hot-toast";
+
+import { useWalletContext } from "../Wallet";
+import { Metadata } from "../MarketMetadata";
 import ToastError from "../Toasts/Error";
 import ToastSuccess from "../Toasts/Success";
 
 // ABIs
 import VaultABI from "./VaultABI";
-import { MintState } from "./States";
+import { DepositState, RequestState } from "./States";
 import ButtonLoading from "../Buttons/ButtonLoading";
 import { getExplorerLink } from "./Explorer";
 import ToastInProgress from "../Toasts/InProgress";
 
 /**
- * MintFormProps is a React Component properties that passed to React Component MintForm
+ * DepositFormProps is a React Component properties that passed to React Component DepositForm
  */
-type MintFormProps = {
+type DepositFormProps = {
     address: string;
-    balance: number;
-    nav: number;
-    maxTotalCollateral: number;
-    totalCollateralPlusFee: number;
-    totalPendingFees: number;
-    totalAvailableCash: number;
-    collateralPrice: number;
 };
 
 /**
- * MintForm is just yet another react component
+ * DepositForm is just yet another react component
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, maxTotalCollateral, totalCollateralPlusFee, totalPendingFees, totalAvailableCash, collateralPrice }) => {
+const DepositForm: FunctionComponent<DepositFormProps> = ({ address }) => {
     // Global states
-    const { chain } = useWalletContext();
+    const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
     const [, getSigner] = useSigner({ skip: true });
 
     // Initialize contract
+    const tokenContract = new ethers.Contract(metadata.debtAddress, erc20ABI, provider);
     const vaultContract = new ethers.Contract(metadata.vaultAddress, VaultABI, provider);
 
     // Local states
-    const [mintState, setMintState] = useState<MintState>({ amount: 0 });
+    const [balanceState, setBalanceState] = useState<RequestState>({ loading: true });
+    const [exchangeRateState, setExchangeRateState] = useState<RequestState>({ loading: true });
+    const [depositState, setDepositState] = useState<DepositState>({ amount: 0 });
 
-    const mintedAmount = mintState.amount ? (mintState.amount * collateralPrice) / nav : 0;
-    const minimalMintedAmount = mintedAmount - mintedAmount * (5 / 100); // rough estimation
+    // Load onchain data
+    const loadData = async () => {
+        if (balanceState.loading && exchangeRateState.loading) {
+            const values = await Promise.all([tokenContract.balanceOf(account), vaultContract.getExchangeRateInEther()]);
+            setBalanceState({ response: values[0], loading: false });
+            setExchangeRateState({ response: values[1], loading: false });
+        }
+    };
+
+    // This will be executed when component is mounted or updated
+    useEffect(() => {
+        loadData();
+    });
+
+    // Data
+    const balance = parseFloat(ethers.utils.formatUnits(balanceState.response ? balanceState.response : 0, metadata.debtDecimals));
+    const exchangeRate = parseFloat(ethers.utils.formatUnits(exchangeRateState.response ? exchangeRateState.response : 0, 18)); // In ether units
+    const rvTokenAmount = depositState.amount ? depositState.amount / exchangeRate : 0;
 
     // UI States
-    const showNotEnoughBalanceButton = mintState.amount && mintState.amount > balance ? true : false;
-    const showMaxCapReachedButton = !showNotEnoughBalanceButton && mintState.amount && maxTotalCollateral > 0 && totalCollateralPlusFee - totalPendingFees + mintState.amount > maxTotalCollateral ? true : false;
-    const showNotEnoughLiquidityButton = !showNotEnoughBalanceButton && !showMaxCapReachedButton && mintState.amount && mintState.amount * collateralPrice > totalAvailableCash ? true : false;
-    const showMintButton = !showNotEnoughBalanceButton && !showMaxCapReachedButton && !showNotEnoughLiquidityButton;
-
-    const showNormalSlider = !mintState.amount || (mintState.amount && mintState.amount <= balance) ? true : false;
+    const showNotEnoughBalanceButton = depositState.amount && depositState.amount > balance ? true : false;
+    const showRedeemButton = !showNotEnoughBalanceButton;
+    const showNormalSlider = !depositState.amount || (depositState.amount && depositState.amount <= balance) ? true : false;
     const showRedSlider = !showNormalSlider;
 
     return (
         <div className="mt-6">
             <div className="flex flex-row justify-between items-center">
-                <p className="text-xs leading-4 font-semibold text-gray-light-12 dark:text-gray-dark-12">How many {metadata.collateralSymbol}?</p>
+                <p className="text-xs leading-4 font-semibold text-gray-light-12 dark:text-gray-dark-12">How many {metadata.debtSymbol}?</p>
             </div>
             <form className="flex flex-col mt-2 space-y-4">
                 <div className="flex flex-row p-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] items-center justify-between">
@@ -75,15 +85,15 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                             placeholder="0"
                             min={0}
                             max={balance.toFixed(3)}
-                            value={mintState.amount ? mintState.amount : 0}
+                            value={depositState.amount ? depositState.amount.toString() : 0}
                             step={0.001}
                             onChange={(e) => {
                                 if (e.target.value === "") {
-                                    setMintState({ ...mintState, amount: 0 });
+                                    setDepositState({ ...depositState, amount: 0 });
                                     return;
                                 }
                                 const value = parseFloat(e.target.value);
-                                setMintState({ ...mintState, amount: value });
+                                setDepositState({ ...depositState, amount: value });
                             }}
                         />
                     </div>
@@ -94,7 +104,7 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                             className="outline-none flex flex-row items-center space-x-2"
                             onClick={(e) => {
                                 e.preventDefault();
-                                setMintState({ ...mintState, amount: balance });
+                                setDepositState({ ...depositState, amount: balance });
                             }}
                         >
                             <svg width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg" className="fill-green-light-10 dark:fill-green-dark-10">
@@ -112,7 +122,7 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                 {/* Balance information */}
                 <div className="flex flex-row justify-between">
                     <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10 text-left">
-                        Balance: {balance.toFixed(5)} {metadata.collateralSymbol}
+                        Balance: {balance.toFixed(3)} {metadata.debtSymbol}
                     </p>
                 </div>
 
@@ -122,12 +132,12 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                     {showNormalSlider && (
                         <Slider.Root
                             min={0}
-                            value={[mintState.amount ? mintState.amount : 0]}
+                            value={[depositState.amount ? depositState.amount : 0]}
                             max={parseFloat(balance.toFixed(3))}
                             step={0.01}
                             className="relative w-full flex flex-row items-center"
                             onValueChange={(value) => {
-                                setMintState({ ...mintState, amount: value[0] });
+                                setDepositState({ ...depositState, amount: value[0] });
                             }}
                         >
                             <Slider.Track className="relative h-[2px] w-full bg-gray-light-4 dark:bg-gray-dark-4">
@@ -146,7 +156,7 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                             step={0.01}
                             className="relative w-full flex flex-row items-center"
                             onValueChange={(value) => {
-                                setMintState({ ...mintState, amount: value[0] });
+                                setDepositState({ ...depositState, amount: value[0] });
                             }}
                         >
                             <Slider.Track className="relative h-[2px] w-full bg-gray-light-4 dark:bg-gray-dark-4">
@@ -162,9 +172,8 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                     <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">
                         You will get{" "}
                         <span className="font-semibold text-gray-light-12 dark:text-gray-dark-12">
-                            {minimalMintedAmount.toFixed(5)} {metadata.title}
-                        </span>{" "}
-                        at minimum
+                            {rvTokenAmount.toFixed(3)} {metadata.vaultTitle}
+                        </span>
                     </p>
                 </div>
 
@@ -177,84 +186,75 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                         </button>
                     )}
 
-                    {/* Dislay disabled button with max mint */}
-                    {showMaxCapReachedButton && (
-                        <button disabled className="bg-gray-light-4 dark:bg-gray-dark-4 border border-gray-light-5 dark:border-gray-dark-5 text-sm leading-4 tracking-tighter font-semibold text-gray-light-10 dark:text-gray-dark-10 cursor-not-allowed py-[11px] w-full rounded-full">
-                            Max cap reached
-                        </button>
-                    )}
-
-                    {/* Dislay disabled button with max mint */}
-                    {showNotEnoughLiquidityButton && (
-                        <button disabled className="bg-gray-light-4 dark:bg-gray-dark-4 border border-gray-light-5 dark:border-gray-dark-5 text-sm leading-4 tracking-tighter font-semibold text-gray-light-10 dark:text-gray-dark-10 cursor-not-allowed py-[11px] w-full rounded-full">
-                            {metadata.debtSymbol} liquidity not enough
-                        </button>
-                    )}
-
-                    {showMintButton && (
+                    {showRedeemButton && (
                         <div>
-                            {!mintState.minting && (
+                            {!depositState.depositing && (
                                 <button
                                     onClick={async (e) => {
                                         e.preventDefault();
                                         // Set redeeming in progress
-                                        setMintState({ ...mintState, minting: true });
+                                        setDepositState({ ...depositState, depositing: true });
 
                                         // Get signer otherwise return early
                                         const signer = await getSigner();
                                         if (!signer) {
+                                            toast.remove();
                                             toast.custom((t) => <ToastError>No signer detected</ToastError>);
-                                            setMintState({ ...mintState, minting: false, error: new Error("Signer is not detected") });
+                                            setDepositState({ ...depositState, depositing: false, error: new Error("Signer is not detected") });
                                             return;
                                         }
 
                                         try {
                                             const connectedContract = vaultContract.connect(signer);
-                                            const result = await connectedContract.mint(address, { value: ethers.utils.parseUnits(mintState.amount ? mintState.amount.toString() : "0", metadata.collateralDecimals) });
-                                            setMintState({ ...mintState, minting: true, hash: result.hash });
+                                            const result = await connectedContract.addSupply(ethers.utils.parseUnits(depositState.amount ? depositState.amount.toString() : "0", metadata.debtDecimals));
+                                            setDepositState({ ...depositState, depositing: true, hash: result.hash });
+                                            toast.remove();
                                             toast.custom((t) => (
                                                 <ToastInProgress>
-                                                    Mint with {mintState.amount} {metadata.collateralSymbol}
+                                                    Depositing {depositState.amount} {metadata.debtSymbol}
                                                 </ToastInProgress>
                                             ));
                                             const receipt = await result.wait();
                                             if (receipt.status === 1) {
                                                 // success
-                                                const event = receipt.logs[receipt.logs.length - 1];
-                                                const confirmedRedeemendAmount = ethers.utils.formatUnits(event.data, metadata.collateralDecimals);
                                                 toast.remove();
                                                 toast.custom((t) => (
                                                     <ToastSuccess>
-                                                        Successfully minted {parseFloat(confirmedRedeemendAmount).toFixed(3)} {metadata.title}
+                                                        Deposit {depositState.amount} {metadata.debtSymbol} is successful
                                                     </ToastSuccess>
                                                 ));
-                                                setMintState({ ...mintState, amount: 0, minting: false, hash: undefined });
+                                                setDepositState({ ...depositState, amount: 0, depositing: false, hash: undefined });
+                                                // Reload balance & exchange rate
+                                                setBalanceState({ loading: true });
+                                                setExchangeRateState({ loading: true });
                                             } else {
-                                                setMintState({ ...mintState, error: new Error("Something wrong with the receipt"), hash: undefined, minting: false });
+                                                setDepositState({ ...depositState, error: new Error("Something wrong with the receipt") });
+                                                toast.remove();
                                                 toast.custom((t) => <ToastError>Something wrong with the receipt</ToastError>);
-                                                return;
                                             }
                                         } catch (e) {
                                             const error = e as Error;
+                                            toast.remove();
                                             toast.custom((t) => <ToastError>{error.message}</ToastError>);
-                                            setMintState({ ...mintState, minting: false, error, hash: undefined });
+                                            setDepositState({ ...depositState, depositing: false, error });
                                             console.error(e);
                                         }
                                     }}
                                     className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 text-sm leading-4 tracking-tighter font-semibold text-gray-light-1 dark:text-blue-light-1 py-[11px] w-full rounded-full"
                                 >
-                                    Mint
+                                    Deposit
                                 </button>
                             )}
-                            {mintState.minting && <ButtonLoading full>Minting...</ButtonLoading>}
+
+                            {depositState.depositing && <ButtonLoading full>Depositing...</ButtonLoading>}
                         </div>
                     )}
                 </div>
 
                 {/* Display transaction hash */}
-                {mintState.hash && (
+                {depositState.hash && (
                     <div className="text-center">
-                        <Link href={getExplorerLink(chain, mintState.hash)}>
+                        <Link href={getExplorerLink(chain, depositState.hash)}>
                             <a target="_blank" rel="noreferrer" className="text-sm py-4 text-gray-text-center text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">
                                 <span className="hover:underline">Goto transaction</span> &#8599;
                             </a>
@@ -266,4 +266,4 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
     );
 };
 
-export default MintForm;
+export default DepositForm;

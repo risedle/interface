@@ -23,8 +23,6 @@ const VaultChart: FunctionComponent<VaultChartProps> = ({ chainID, address }) =>
         setSupplyAPY(currentData.latestSupplyAPY);
         setBorrowAPY(currentData.latestBorrowAPY);
     }
-    console.debug("borrowAPY", borrowAPY);
-    console.debug("currentData", currentData);
     const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
 
     // UI states

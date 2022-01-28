@@ -16,6 +16,7 @@ import VaultABI from "./VaultABI";
 import { RedeemState, RequestState } from "./States";
 import ButtonLoading from "../Buttons/ButtonLoading";
 import { getExplorerLink } from "./Explorer";
+import ToastInProgress from "../Toasts/InProgress";
 
 /**
  * RedeemFormProps is a React Component properties that passed to React Component RedeemForm
@@ -199,6 +200,7 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
                                         const signer = await getSigner();
                                         console.debug("Redeem: signer", signer);
                                         if (!signer) {
+                                            toast.remove();
                                             toast.custom((t) => <ToastError>No signer detected</ToastError>);
                                             setRedeem({ ...redeem, redeeming: false, error: new Error("Signer is not detected") });
                                             return;
@@ -208,7 +210,12 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
                                             const connectedContract = vaultContract.connect(signer);
                                             const result = await connectedContract.redeem(address, ethers.utils.parseUnits(redeem.amount ? redeem.amount.toString() : "0", metadata.collateralDecimals));
                                             setRedeem({ ...redeem, redeeming: true, hash: result.hash });
-                                            toast.custom((t) => <ToastTransaction hash={result.hash}>Redeeming</ToastTransaction>);
+                                            toast.remove();
+                                            toast.custom((t) => (
+                                                <ToastInProgress>
+                                                    Redeeming {redeem.amount} {metadata.title}
+                                                </ToastInProgress>
+                                            ));
                                             const receipt = await result.wait();
                                             if (receipt.status === 1) {
                                                 // success
@@ -224,10 +231,12 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
                                                 setBalanceState({ loading: true });
                                             } else {
                                                 setRedeem({ ...redeem, error: new Error("Something wrong with the receipt") });
+                                                toast.remove();
                                                 toast.custom((t) => <ToastError>Something wrong with the receipt</ToastError>);
                                             }
                                         } catch (e) {
                                             const error = e as Error;
+                                            toast.remove();
                                             toast.custom((t) => <ToastError>{error.message}</ToastError>);
                                             setRedeem({ ...redeem, redeeming: false, error });
                                             console.error(e);

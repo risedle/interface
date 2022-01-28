@@ -26,3 +26,10 @@ export type MintState = {
     hash?: string;
     error?: Error;
 };
+
+export type DepositState = {
+    amount?: number;
+    depositing?: boolean;
+    hash?: string;
+    error?: Error;
+};
