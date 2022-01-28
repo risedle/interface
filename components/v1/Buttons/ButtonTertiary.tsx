@@ -21,7 +21,7 @@ const ButtonTertiary: FunctionComponent<ButtonTertiaryProps> = ({
     children
 }) => {
     return(
-        <button className={`button basic ${full ? 'w-full' : ''}`} onClick={onClick}>
+        <button className={`button basic px-[24px] py-[12px] ${full ? 'w-full' : ''}`} onClick={onClick}>
             {children}
         </button>
     )
