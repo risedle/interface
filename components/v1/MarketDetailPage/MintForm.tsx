@@ -40,7 +40,7 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
     const { chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
-    const [, getSigner] = useSigner({ skip: true });
+    const [signerData] = useSigner();
 
     // Initialize contract
     const vaultContract = new ethers.Contract(metadata.vaultAddress, VaultABI, provider);
@@ -200,16 +200,9 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                                         // Set redeeming in progress
                                         setMintState({ ...mintState, minting: true });
 
-                                        // Get signer otherwise return early
-                                        const signer = await getSigner();
-                                        if (!signer) {
-                                            toast.custom((t) => <ToastError>No signer detected</ToastError>);
-                                            setMintState({ ...mintState, minting: false, error: new Error("Signer is not detected") });
-                                            return;
-                                        }
-
                                         try {
-                                            const connectedContract = vaultContract.connect(signer);
+                                            if (!signerData.data) return setMintState({ minting: false });
+                                            const connectedContract = vaultContract.connect(signerData.data);
                                             const result = await connectedContract.mint(address, { value: ethers.utils.parseUnits(mintState.amount ? mintState.amount.toString() : "0", metadata.collateralDecimals) });
                                             setMintState({ ...mintState, minting: true, hash: result.hash });
                                             toast.custom((t) => (

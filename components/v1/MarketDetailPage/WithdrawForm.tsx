@@ -34,7 +34,7 @@ const WithdrawForm: FunctionComponent<WithdrawFormProps> = ({ address }) => {
     const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
-    const [, getSigner] = useSigner({ skip: true });
+    const [signerData] = useSigner();
 
     // Initialize contract
     const tokenContract = new ethers.Contract(metadata.vaultAddress, erc20ABI, provider);
@@ -192,21 +192,13 @@ const WithdrawForm: FunctionComponent<WithdrawFormProps> = ({ address }) => {
                                 <button
                                     onClick={async (e) => {
                                         e.preventDefault();
-                                        // Set redeeming in progress
                                         setWithdrawState({ ...withdrawState, withdrawing: true });
 
-                                        // Get signer otherwise return early
-                                        const signer = await getSigner();
-                                        if (!signer) {
-                                            toast.remove();
-                                            toast.custom((t) => <ToastError>No signer detected</ToastError>);
-                                            setWithdrawState({ ...withdrawState, withdrawing: false, error: new Error("Signer is not detected") });
-                                            return;
-                                        }
-
                                         try {
-                                            const connectedContract = vaultContract.connect(signer);
+                                            if (!signerData.data) return setWithdrawState({ withdrawing: false });
+                                            const connectedContract = vaultContract.connect(signerData.data);
                                             const result = await connectedContract.removeSupply(ethers.utils.parseUnits(withdrawState.amount ? withdrawState.amount.toString() : "0", metadata.debtDecimals));
+                                            console.debug("WithdrawForm: removeSupply result", result);
                                             setWithdrawState({ ...withdrawState, withdrawing: true, hash: result.hash });
                                             toast.remove();
                                             toast.custom((t) => (
@@ -227,10 +219,12 @@ const WithdrawForm: FunctionComponent<WithdrawFormProps> = ({ address }) => {
                                                 // Reload balance & exchange rate
                                                 setBalanceState({ loading: true });
                                                 setExchangeRateState({ loading: true });
+                                                console.debug("WithdrawForm: removeSupply success");
                                             } else {
                                                 setWithdrawState({ ...withdrawState, error: new Error("Something wrong with the receipt") });
                                                 toast.remove();
                                                 toast.custom((t) => <ToastError>Something wrong with the receipt</ToastError>);
+                                                console.debug("WithdrawForm: removeSupply failed");
                                             }
                                         } catch (e) {
                                             const error = e as Error;
@@ -238,6 +232,7 @@ const WithdrawForm: FunctionComponent<WithdrawFormProps> = ({ address }) => {
                                             toast.custom((t) => <ToastError>{error.message}</ToastError>);
                                             setWithdrawState({ ...withdrawState, withdrawing: false, error });
                                             console.error(e);
+                                            console.debug("WithdrawForm: removeSupply error");
                                         }
                                     }}
                                     className="bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 text-sm leading-4 tracking-tighter font-semibold text-gray-light-1 dark:text-blue-light-1 py-[11px] w-full rounded-full"

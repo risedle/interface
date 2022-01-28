@@ -3,6 +3,7 @@ import useSWR from "swr";
 
 const snapshotEndpoint = {
     [Chains.kovan.id]: "https://snapshot-kovan.risedle.com",
+    [Chains.arbitrumOne.id]: "https://snapshot-arbitrum.risedle.com",
 };
 
 // @ts-ignore

@@ -35,7 +35,7 @@ const Withdraw: FunctionComponent<WithdrawProps> = ({ address }) => {
     const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
-    const [, getSigner] = useSigner({ skip: true });
+    const [signerData] = useSigner();
 
     // Initialize contracts
     const tokenContract = new ethers.Contract(metadata.vaultAddress, erc20ABI, provider);
@@ -83,18 +83,11 @@ const Withdraw: FunctionComponent<WithdrawProps> = ({ address }) => {
                                         full
                                         onClick={async () => {
                                             setApprovalState({ approving: true });
-                                            // Get signer otherwise return early
-                                            const signer = await getSigner();
-                                            if (!signer) {
-                                                toast.remove();
-                                                toast.custom((t) => <ToastError>No signer detected</ToastError>);
-                                                setApprovalState({ error: new Error("Signer is not detected") });
-                                                return;
-                                            }
-
                                             try {
-                                                const connectedContract = tokenContract.connect(signer);
+                                                if (!signerData.data) return setApprovalState({ approving: false });
+                                                const connectedContract = tokenContract.connect(signerData.data);
                                                 const result = await connectedContract.approve(metadata.vaultAddress, ethers.constants.MaxUint256);
+                                                console.debug("Withdraw: approve result", result);
                                                 setApprovalState({ approving: true, hash: result.hash });
                                                 toast.remove();
                                                 toast.custom((t) => <ToastInProgress>Approving {metadata.vaultTitle}</ToastInProgress>, { duration: 10000 });
@@ -102,12 +95,15 @@ const Withdraw: FunctionComponent<WithdrawProps> = ({ address }) => {
                                                 toast.remove();
                                                 toast.custom((t) => <ToastSuccess>{metadata.vaultTitle} approved</ToastSuccess>);
                                                 setApprovalState({ approving: false, hash: result.hash, approved: true });
+                                                setAllowanceState({ loading: true });
+                                                console.debug("Withdraw: approve success");
                                             } catch (e) {
                                                 console.error(e);
                                                 const error = e as Error;
                                                 setApprovalState({ approving: false, error });
                                                 toast.remove();
                                                 toast.custom((t) => <ToastError>Approving failed</ToastError>);
+                                                console.debug("Withdraw: approve failed");
                                             }
                                         }}
                                     >

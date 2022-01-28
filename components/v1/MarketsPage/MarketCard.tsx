@@ -67,7 +67,7 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ chainID, address, init
                 </div>
                 <div>
                     <Link href={path}>
-                        <a className="button basic">Open</a>
+                        <a className="button basic px-4">Open</a>
                     </Link>
                 </div>
             </div>

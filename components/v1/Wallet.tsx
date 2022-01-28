@@ -8,8 +8,8 @@ import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 
 export const connectorStorageKey = "risedleConnectors.wallet";
 
-// export const supportedChains = [Chains.arbitrumOne, Chains.kovan];
-export const supportedChains = [Chains.kovan];
+export const supportedChains = [Chains.arbitrumOne, Chains.kovan];
+// export const supportedChains = [Chains.kovan];
 
 // Wallet connectors
 export const MetaMaskConnector = new InjectedConnector({
@@ -44,7 +44,7 @@ const useAccountState = createPersistedState("risedle.account");
 const useConnectorNameState = createPersistedState("risedle.connectorName");
 
 // Default states
-const defaultChain = Chains.kovan;
+const defaultChain = Chains.arbitrumOne;
 const defaultAccount = null; // null is not connected
 const defaultConnectorName = null;
 

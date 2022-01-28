@@ -37,7 +37,7 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
     const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
-    const [, getSigner] = useSigner({ skip: true });
+    const [signerData] = useSigner();
 
     // Initialize contract
     const vaultContract = new ethers.Contract(metadata.vaultAddress, VaultABI, provider);
@@ -196,18 +196,9 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
                                         // Set redeeming in progress
                                         setRedeem({ ...redeem, redeeming: true });
 
-                                        // Get signer otherwise return early
-                                        const signer = await getSigner();
-                                        console.debug("Redeem: signer", signer);
-                                        if (!signer) {
-                                            toast.remove();
-                                            toast.custom((t) => <ToastError>No signer detected</ToastError>);
-                                            setRedeem({ ...redeem, redeeming: false, error: new Error("Signer is not detected") });
-                                            return;
-                                        }
-
                                         try {
-                                            const connectedContract = vaultContract.connect(signer);
+                                            if (!signerData.data) return setRedeem({ redeeming: false });
+                                            const connectedContract = vaultContract.connect(signerData.data);
                                             const result = await connectedContract.redeem(address, ethers.utils.parseUnits(redeem.amount ? redeem.amount.toString() : "0", metadata.collateralDecimals));
                                             setRedeem({ ...redeem, redeeming: true, hash: result.hash });
                                             toast.remove();
