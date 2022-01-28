@@ -18,12 +18,12 @@ import ButtonConnectWalletDesktop from "../Buttons/ConnectWalletDesktop";
 import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
 import ToastError from "../Toasts/Error";
 import BackgroundGradient from "./BackgroundGradient";
-import ButtonConnectWalletToMintOrRedeem from "./Buttons/ConnectWalletToMintOrRedeem";
 import ButtonSwitchNetwork from "./Buttons/SwitchNetwork";
 import LeveragedTokenChart from "./LeveragedTokenChart";
 import ButtonMintOrRedeem from "./ButtonMintOrRedeem";
 import MarketDetailPageMeta from "./MarketDetailPageMeta";
 import VaultChart from "./VaultChart";
+import ButtonDisabled from "../Buttons/ButtonDisabled";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -48,86 +48,23 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
 
     // Get ETHRISE metadata
     const metadata = Metadata[chain.id][ethriseAddress];
-    const title = metadata.title;
-    const subtitle = metadata.subtitle;
-    const logo = metadata.logo;
-    const vaultLogo = metadata.vaultLogo;
-    const description = metadata.description;
-    const informationText = metadata.informationText;
-    const vaultInformationText = metadata.vaultInformationText;
-    const collateralSymbol = metadata.collateralSymbol;
-    const debtSymbol = metadata.debtSymbol;
-    const path = metadata.path;
 
     // Get price external data from Risedle Snapshot
     const { market, marketIsLoading, marketIsError } = useMarket(chain.id, ethriseAddress);
 
-    // Allowances
-    // TODO: add collateral token allowance here
-    // const [leveragedTokenAllowance] = useContractRead(
-    //     {
-    //         addressOrName: ethriseAddress,
-    //         contractInterface: ERC20ABI,
-    //     },
-    //     "allowance",
-    //     {
-    //         args: [account, vaultAddress],
-    //     }
-    // );
-    // console.debug("leveragedTokenAllowance", leveragedTokenAllowance);
-
-    // const [debtTokenAllowance] = useContractRead(
-    //     {
-    //         addressOrName: debtContract,
-    //         contractInterface: ERC20ABI,
-    //     },
-    //     "allowance",
-    //     {
-    //         args: [account, vaultAddress],
-    //     }
-    // );
-    // const [rvTokenAllowance] = useContractRead(
-    //     {
-    //         addressOrName: vaultAddress,
-    //         contractInterface: ERC20ABI,
-    //     },
-    //     "allowance",
-    //     {
-    //         args: [account, vaultAddress],
-    //     }
-    // );
-
-    // console.debug("onchainETHRISEMetadata", onchainETHRISEMetadata);
-    // console.debug("onchainBalance", onchainBalance);
-    // console.debug("onchainNAV", onchainNAV);
-    // console.debug("onchainOracle", onchainOracle);
-    // console.debug("onchainTotalAvailableCash", onchainTotalAvailableCash);
-
     // Main button states
-    const showConnectWalletToMintOrRedeem = !account || !connectedChain.data || !connectedChain.data.chain;
-    const showSwitchNetwork = !showConnectWalletToMintOrRedeem && connectedChain.data.chain && connectedChain.data.chain.id != chain.id ? true : false;
-    const showMintOrRedeem = !showConnectWalletToMintOrRedeem && !showSwitchNetwork ? true : false;
-
-    // Current data
-
-    // Approval states
-    // TODO(bayu): add collateral token approval states here
-    // const isLeveragedTokenApproved = leveragedTokenAllowance.data && leveragedTokenAllowance.data.eq(ethers.constants.MaxUint256) ? true : false;
-    // const isDebtTokenApproved = debtTokenAllowance.data && debtTokenAllowance.data.eq(ethers.constants.MaxInt256) ? true : false;
-    // const isrvTokenApproved = rvTokenAllowance.data && rvTokenAllowance.data.eq(ethers.constants.MaxInt256) ? true : false;
-
-    // console.debug("isLeveragedTokenApproved", isLeveragedTokenApproved);
-    // console.debug("isDebtTokenApproved", isDebtTokenApproved);
-    // console.debug("isrvTokenApproved", isrvTokenApproved);
+    const showConnectWallet = !account || !connectedChain.data || !connectedChain.data.chain;
+    const showSwitchNetwork = !showConnectWallet && connectedChain.data.chain && connectedChain.data.chain.id != chain.id ? true : false;
+    const showAction = !showConnectWallet && !showSwitchNetwork ? true : false;
 
     return (
         <>
             <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter min-h-screen flex flex-col overflow-hidden">
                 <Head>
                     {/* <!-- HTML Meta Tags --> */}
-                    <title>{title} Market | Risedle Protocol</title>
+                    <title>{metadata.title} Market | Risedle Protocol</title>
                     <meta name="description" content="Leverage ETH or earn yield from your idle USDC" />
-                    <MarketDetailPageMeta title={title} path={path} />
+                    <MarketDetailPageMeta title={metadata.title} path={metadata.path} />
                 </Head>
                 <Favicon />
 
@@ -162,11 +99,11 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                     {/* Market header on the desktop; Only show this on w > 640px */}
                     <div className="hidden sm:inline-block flex flex-col m-auto text-center space-y-6 mt-12 mb-14">
                         <div>
-                            <img src={logo} alt={title} className="w-[64px] h-[64px] inline-block" />
+                            <img src={metadata.logo} alt={metadata.title} className="w-[64px] h-[64px] inline-block" />
                         </div>
                         <div className="flex flex-col space-y-2">
-                            <h1 className="m-0 text-[32px] leading-none tracking-[-.02em] font-bold text-gray-light-12 dark:text-gray-dark-12">{title} Market</h1>
-                            <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">{description}</p>
+                            <h1 className="m-0 text-[32px] leading-none tracking-[-.02em] font-bold text-gray-light-12 dark:text-gray-dark-12">{metadata.title} Market</h1>
+                            <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">{metadata.description}</p>
                         </div>
                     </div>
 
@@ -188,10 +125,10 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 {/* Title, subtitle and lgoo */}
                                 <div className="flex flex-row p-4 items-center justify-between">
                                     <div className="grow sflex flex-col space-y-2">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{subtitle}</p>
-                                        <h1 className="m-0 text-2xl text-gray-light-12 dark:text-gray-dark-12 tracking-[-.02em] font-bold">{title}</h1>
+                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>
+                                        <h1 className="m-0 text-2xl text-gray-light-12 dark:text-gray-dark-12 tracking-[-.02em] font-bold">{metadata.title}</h1>
                                     </div>
-                                    <img className="sm:hidden" src={logo} alt={title} />
+                                    <img className="sm:hidden" src={metadata.logo} alt={metadata.title} />
                                 </div>
 
                                 <LeveragedTokenChart chainID={chain.id} address={ethriseAddress} />
@@ -199,7 +136,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 {/* Mint & Redeem Button */}
                                 <div className="p-4">
                                     {/* Show Connect wallet to mint or redeem */}
-                                    {showConnectWalletToMintOrRedeem && <ButtonConnectWalletToMintOrRedeem />}
+                                    {showConnectWallet && <ButtonDisabled full>Connect wallet to Mint or Redeem</ButtonDisabled>}
 
                                     {/* Show switch netwoek */}
                                     {showSwitchNetwork && (
@@ -216,7 +153,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     )}
 
                                     {/* Show mint or redeem */}
-                                    {showMintOrRedeem && <ButtonMintOrRedeem address={ethriseAddress} />}
+                                    {showAction && <ButtonMintOrRedeem address={ethriseAddress} />}
                                 </div>
                             </div>
 
@@ -226,7 +163,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     <h2 className="text-base leading-4 font-bold text-gray-light-12 dark:text-gray-dark-12">Information</h2>
                                 </div>
                                 <div className="">
-                                    <p className="text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">{informationText}</p>
+                                    <p className="text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">{metadata.informationText}</p>
                                 </div>
                                 <div className="flex flex-col space-y-6">
                                     <div className="flex flex-row justify-between">
@@ -250,7 +187,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     <div className="flex flex-row justify-between">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Underlying assets</p>
                                         <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
-                                            {collateralSymbol}, {debtSymbol}
+                                            {metadata.collateralSymbol}, {metadata.debtSymbol}
                                         </p>
                                     </div>
                                     {/* TODO(bayu): Handle case when capacity is maxed out */}
@@ -259,7 +196,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                         {(marketIsLoading || marketIsError) && <p className="w-[100px] h-[16px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse rounded-[8px]"></p>}
                                         {!marketIsLoading && market && (
                                             <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
-                                                <span className="text-green-light-11 dark:text-green-dark-11">{market.leveraged_token_total_collateral.toFixed(2) + collateralSymbol}</span> / {market.leveraged_token_max_total_collateral > 0 && <span>{market.leveraged_token_max_total_collateral.toFixed(2) + collateralSymbol}</span>}
+                                                <span className="text-green-light-11 dark:text-green-dark-11">{market.leveraged_token_total_collateral.toFixed(2) + metadata.collateralSymbol}</span> / {market.leveraged_token_max_total_collateral > 0 && <span>{market.leveraged_token_max_total_collateral.toFixed(2) + metadata.collateralSymbol}</span>}
                                                 {market.leveraged_token_max_total_collateral <= 0 && <span>&#8734;</span>}
                                             </p>
                                         )}
@@ -279,14 +216,14 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     </div>
 
                                     <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{collateralSymbol}</p>
+                                        <p className="text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.collateralSymbol}</p>
                                         {(marketIsLoading || marketIsError) && <p className="w-[100px] h-[16px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse rounded-[8px]"></p>}
-                                        {!marketIsLoading && market && market.collateral_per_token && <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{market.collateral_per_token.toFixed(2) + " " + collateralSymbol}</p>}
+                                        {!marketIsLoading && market && market.collateral_per_token && <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{market.collateral_per_token.toFixed(2) + " " + metadata.collateralSymbol}</p>}
                                     </div>
                                     <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{debtSymbol}</p>
+                                        <p className="text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.debtSymbol}</p>
                                         {(marketIsLoading || marketIsError) && <p className="w-[100px] h-[16px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse rounded-[8px]"></p>}
-                                        {!marketIsLoading && market && market.debt_per_token && <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">-{market.debt_per_token.toFixed(2) + " " + debtSymbol}</p>}
+                                        {!marketIsLoading && market && market.debt_per_token && <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">-{market.debt_per_token.toFixed(2) + " " + metadata.debtSymbol}</p>}
                                     </div>
                                 </div>
                             </div>
@@ -299,29 +236,39 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 {/* Title, subtitle and lgoo */}
                                 <div className="flex flex-row p-4 items-center justify-between">
                                     <div className="grow sflex flex-col space-y-2">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{subtitle}</p>
+                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>
                                         <h1 className="m-0 text-2xl text-gray-light-12 dark:text-gray-dark-12 tracking-[-.02em] font-bold">
-                                            rv{collateralSymbol}
-                                            {debtSymbol}
+                                            rv{metadata.collateralSymbol}
+                                            {metadata.debtSymbol}
                                         </h1>
                                     </div>
-                                    <img className="sm:hidden" src={vaultLogo} alt={`rv${collateralSymbol}${debtSymbol}`} />
+                                    <img className="sm:hidden" src={metadata.vaultLogo} alt={`rv${metadata.collateralSymbol}${metadata.debtSymbol}`} />
                                 </div>
 
                                 {/* Supply & Borrow APY Chart */}
                                 <VaultChart address={metadata.vaultAddress} chainID={chain.id} />
 
-                                {/* Mint & Redeem Button */}
+                                {/* Deposit and Withdraw button */}
                                 <div className="p-4">
-                                    {/* Wallet not connected; Display disabled button */}
-                                    {!account && (
-                                        <button disabled className="bg-gray-light-4 dark:bg-gray-dark-4 border border-gray-light-5 dark:border-0 text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-10 rounded-full cursor-not-allowed w-full py-[11px] dark:py-[12px]">
-                                            Connect wallet to Deposit or Withdraw
-                                        </button>
+                                    {/* Show Connect wallet to mint or redeem */}
+                                    {showConnectWallet && <ButtonDisabled full>Connect wallet to Deposit or Withdraw</ButtonDisabled>}
+
+                                    {/* Show switch netwoek */}
+                                    {showSwitchNetwork && (
+                                        <ButtonSwitchNetwork
+                                            onClick={() => {
+                                                if (switchNetwork) {
+                                                    switchNetwork(chain.id);
+                                                } else {
+                                                    toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);
+                                                }
+                                            }}
+                                            chainName={chain.name}
+                                        />
                                     )}
-                                    {/* Wallet connected; Display mint and redeem button */}
-                                    {/* TODO (bayu): handle connected wallet */}
-                                    {account && <button>Deposit or Withdraw</button>}
+
+                                    {/* Show mint or redeem */}
+                                    {showAction && <ButtonMintOrRedeem address={ethriseAddress} />}
                                 </div>
                             </div>
 
@@ -331,7 +278,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     <h2 className="text-base leading-4 font-bold text-gray-light-12 dark:text-gray-dark-12">Information</h2>
                                 </div>
                                 <div className="">
-                                    <p className="text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">{vaultInformationText}</p>
+                                    <p className="text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">{metadata.vaultInformationText}</p>
                                 </div>
                                 <div className="flex flex-col space-y-6">
                                     <div className="flex flex-row justify-between">
