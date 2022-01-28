@@ -1,17 +1,15 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { ethers } from "ethers";
 import { chain as Chains, useNetwork } from "wagmi";
 import * as Tabs from "@radix-ui/react-tabs";
-import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 import toast, { Toaster } from "react-hot-toast";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
 import { useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
-import { Timeframe, useMarket, useVaultData3Months } from "../../../utils/snapshot";
+import { useMarket } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import Logo from "../Logo";
@@ -25,15 +23,12 @@ import ButtonSwitchNetwork from "./Buttons/SwitchNetwork";
 import LeveragedTokenChart from "./LeveragedTokenChart";
 import ButtonMintOrRedeem from "./ButtonMintOrRedeem";
 import MarketDetailPageMeta from "./MarketDetailPageMeta";
+import VaultChart from "./VaultChart";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
     [Chains.kovan.id]: { token: "0xc4676f88663360155c2bc6d2A482E34121a50b3b", vault: "0x42B6BAE111D9300E19F266Abf58cA215f714432c" },
 };
-
-// Vault ABIs
-
-const ERC20ABI = new ethers.utils.Interface(["function allowance(address owner, address spender) external view returns (uint256 amount)", "function approve(address spender, uint256 amount) external"]);
 
 /**
  * ETHRISEPageProps is a React Component properties that passed to React Component ETHRISEPage
@@ -50,7 +45,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const [connectedChain, switchNetwork] = useNetwork();
 
     const ethriseAddress = ETHRISEAddresses[chain.id].token;
-    const vaultAddress = ETHRISEAddresses[chain.id].vault;
 
     // Get ETHRISE metadata
     const metadata = Metadata[chain.id][ethriseAddress];
@@ -66,7 +60,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const path = metadata.path;
 
     // Get price external data from Risedle Snapshot
-    const { vaultHistoricalData, vaultHistoricalDataIsLoading, vaultHistoricalDataIsError } = useVaultData3Months(chain.id, vaultAddress);
     const { market, marketIsLoading, marketIsError } = useMarket(chain.id, ethriseAddress);
 
     // Allowances
@@ -110,23 +103,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     // console.debug("onchainOracle", onchainOracle);
     // console.debug("onchainTotalAvailableCash", onchainTotalAvailableCash);
 
-    // States
-    const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
-    const [supplyAPY, setSupplyAPY] = useState(0);
-    const [initialSupplyAPY, setInitialSupplyAPY] = useState(0);
-    const [borrowAPY, setBorrowAPY] = useState(0);
-    const [initialBorrowAPY, setInitialBorrowAPY] = useState(0);
-
-    const [currentVaultData, setCurrentVaultData] = useState(vaultHistoricalData);
-
-    // Action states
-
-    if (!currentVaultData && vaultHistoricalData) {
-        setCurrentVaultData(vaultHistoricalData);
-    }
-
-    const activeTimeframeClasses = "bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full font-semibold text-gray-light-12 dark:text-gray-dark-12";
-
     // Main button states
     const showConnectWalletToMintOrRedeem = !account || !connectedChain.data || !connectedChain.data.chain;
     const showSwitchNetwork = !showConnectWalletToMintOrRedeem && connectedChain.data.chain && connectedChain.data.chain.id != chain.id ? true : false;
@@ -150,7 +126,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                 <Head>
                     {/* <!-- HTML Meta Tags --> */}
                     <title>{title} Market | Risedle Protocol</title>
-                    <meta name="description" content="Leverage ETH or earn yield from your idle USDC"/> 
+                    <meta name="description" content="Leverage ETH or earn yield from your idle USDC" />
                     <MarketDetailPageMeta title={title} path={path} />
                 </Head>
                 <Favicon />
@@ -332,134 +308,8 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     <img className="sm:hidden" src={vaultLogo} alt={`rv${collateralSymbol}${debtSymbol}`} />
                                 </div>
 
-                                {/* Supply APY and Borrow APY */}
-                                <div className="flex flex-row space-x-4 px-4">
-                                    <div className="flex flex-col space-y-2">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 ">Supply APY</p>
-                                        {(vaultHistoricalDataIsLoading || vaultHistoricalDataIsError) && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
-                                        {!vaultHistoricalDataIsLoading && vaultHistoricalData && <p className="font-ibm font-semibold text-sm leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{supplyAPY.toFixed(2) + "%"}</p>}
-                                    </div>
-                                    <div className="flex flex-col space-y-2">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 ">Borrow APY</p>
-                                        {(vaultHistoricalDataIsLoading || vaultHistoricalDataIsError) && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
-                                        {!vaultHistoricalDataIsLoading && vaultHistoricalData && <p className="font-ibm font-semibold text-sm leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{borrowAPY.toFixed(2) + "%"}</p>}
-                                    </div>
-                                </div>
-
-                                {/* APYs chart */}
-                                <div className="w-full h-[192px] mt-8">
-                                    {(vaultHistoricalDataIsLoading || vaultHistoricalDataIsError) && <div className="h-[192px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse mb-2"></div>}
-                                    {!vaultHistoricalDataIsLoading && vaultHistoricalData && (
-                                        <ResponsiveContainer width="100%" height="100%" className="h-full">
-                                            <AreaChart
-                                                data={currentVaultData}
-                                                margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-                                                onMouseLeave={() => {
-                                                    setSupplyAPY(initialSupplyAPY);
-                                                    setBorrowAPY(initialBorrowAPY);
-                                                }}
-                                            >
-                                                <defs>
-                                                    <linearGradient id="supplyGradient" x1="0" y1="0" x2="0" y2="1">
-                                                        <stop offset="0%" stopColor="rgba(37, 208, 171)" stopOpacity={0.4} />
-                                                        <stop offset="100%" stopColor="rgba(37, 208, 171)" stopOpacity={0} />
-                                                    </linearGradient>
-                                                    <linearGradient id="borrowGradient" x1="0" y1="0" x2="0" y2="1">
-                                                        <stop offset="0%" stopColor="rgb(205, 43, 49)" stopOpacity={0.4} />
-                                                        <stop offset="100%" stopColor="rgb(205, 43, 49)" stopOpacity={0} />
-                                                    </linearGradient>
-                                                </defs>
-                                                <Tooltip
-                                                    position={{ y: 0 }}
-                                                    content={({ active, payload }) => {
-                                                        if (active && payload && payload.length) {
-                                                            const selectedData = payload[0].payload;
-                                                            const timestamp = selectedData.timestamp;
-                                                            const date = new Date(timestamp);
-                                                            const formattedDate = new Intl.DateTimeFormat("en-US", { hour: "numeric", day: "numeric", month: "numeric", year: "numeric", minute: "numeric" }).format(date);
-
-                                                            setSupplyAPY(selectedData.supply_apy);
-                                                            setBorrowAPY(selectedData.borrow_apy);
-
-                                                            return <div className="text-xs text-gray-light-10 dark:text-gray-dark-10">{formattedDate}</div>;
-                                                        }
-                                                        return null;
-                                                    }}
-                                                />
-                                                <YAxis hide={true} type="number" domain={["dataMin - 5", "dataMax + 5"]} />
-                                                <Area type="monotoneX" dataKey="supply_apy" stroke="#4CC38A" fill="url(#supplyGradient)" strokeWidth={2} />
-                                                <Area type="monotoneX" dataKey="borrow_apy" stroke="#CD2B31" fill="url(#borrowGradient)" strokeWidth={2} />
-                                            </AreaChart>
-                                        </ResponsiveContainer>
-                                    )}
-                                </div>
-
-                                {/* Timeframe selector */}
-                                <div className="flex flex-row items-center px-4 mt-2">
-                                    <div className="basis-1/5 text-center">
-                                        <button
-                                            className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Daily ? activeTimeframeClasses : ""}`}
-                                            onClick={() => {
-                                                setCurrentTimeframe(Timeframe.Daily);
-                                                if (vaultHistoricalData) {
-                                                    setCurrentVaultData(vaultHistoricalData.slice(vaultHistoricalData.length - 24, vaultHistoricalData.length));
-                                                }
-                                            }}
-                                        >
-                                            1D
-                                        </button>
-                                    </div>
-                                    <div className="basis-1/5 text-center">
-                                        <button
-                                            className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Weekly ? activeTimeframeClasses : ""}`}
-                                            onClick={() => {
-                                                setCurrentTimeframe(Timeframe.Weekly);
-                                                if (vaultHistoricalData) {
-                                                    setCurrentVaultData(vaultHistoricalData.slice(vaultHistoricalData.length - 24 * 7, vaultHistoricalData.length));
-                                                }
-                                            }}
-                                        >
-                                            1W
-                                        </button>
-                                    </div>
-                                    <div className="basis-1/5 text-center">
-                                        <button
-                                            className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.TwoWeekly ? activeTimeframeClasses : ""}`}
-                                            onClick={() => {
-                                                setCurrentTimeframe(Timeframe.TwoWeekly);
-                                                if (vaultHistoricalData) {
-                                                    setCurrentVaultData(vaultHistoricalData.slice(vaultHistoricalData.length - 24 * 7 * 2, vaultHistoricalData.length));
-                                                }
-                                            }}
-                                        >
-                                            2W
-                                        </button>
-                                    </div>
-                                    <div className="basis-1/5 text-center">
-                                        <button
-                                            className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
-                                            onClick={() => {
-                                                setCurrentTimeframe(Timeframe.Monthly);
-                                                if (vaultHistoricalData) {
-                                                    setCurrentVaultData(vaultHistoricalData.slice(vaultHistoricalData.length - 24 * 7 * 2 * 4, vaultHistoricalData.length));
-                                                }
-                                            }}
-                                        >
-                                            1M
-                                        </button>
-                                    </div>
-                                    <div className="basis-1/5 text-center">
-                                        <button
-                                            className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
-                                            onClick={() => {
-                                                setCurrentTimeframe(Timeframe.ThreeMonthly);
-                                                setCurrentVaultData(vaultHistoricalData);
-                                            }}
-                                        >
-                                            3M
-                                        </button>
-                                    </div>
-                                </div>
+                                {/* Supply & Borrow APY Chart */}
+                                <VaultChart address={metadata.vaultAddress} chainID={chain.id} />
 
                                 {/* Mint & Redeem Button */}
                                 <div className="p-4">
