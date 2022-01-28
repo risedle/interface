@@ -6,6 +6,7 @@ export type Metadata = {
     vaultLogo: string;
     vaultAddress: string;
     title: string;
+    vaultTitle: string;
     subtitle: string;
     path: string;
     description: string;
@@ -25,11 +26,12 @@ export type MarketMetadataRecord = Record<number, MarketMetadata>;
 export const Metadata: MarketMetadataRecord = {
     [Chains.kovan.id]: {
         ["0xc4676f88663360155c2bc6d2A482E34121a50b3b"]: {
-            title: "ETHRISE",
+            title: "DEMOETHRISE",
             subtitle: "ETH Leverage Market",
             logo: "/markets/ethrise.svg",
             vaultLogo: "/markets/usdc.svg",
             vaultAddress: "0x42B6BAE111D9300E19F266Abf58cA215f714432c",
+            vaultTitle: "DEMOrvETHUSDC",
             path: "/markets/ethrise",
             description:
                 "Enjoy leveraged ETH without risk of liquidation or earn yield from your idle USDC",

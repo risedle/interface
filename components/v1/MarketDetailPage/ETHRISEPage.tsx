@@ -24,6 +24,7 @@ import ButtonMintOrRedeem from "./ButtonMintOrRedeem";
 import MarketDetailPageMeta from "./MarketDetailPageMeta";
 import VaultChart from "./VaultChart";
 import ButtonDisabled from "../Buttons/ButtonDisabled";
+import ButtonDepositOrWithdraw from "./ButtonDepositOrWithdraw";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -237,10 +238,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 <div className="flex flex-row p-4 items-center justify-between">
                                     <div className="grow sflex flex-col space-y-2">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>
-                                        <h1 className="m-0 text-2xl text-gray-light-12 dark:text-gray-dark-12 tracking-[-.02em] font-bold">
-                                            rv{metadata.collateralSymbol}
-                                            {metadata.debtSymbol}
-                                        </h1>
+                                        <h1 className="m-0 text-2xl text-gray-light-12 dark:text-gray-dark-12 tracking-[-.02em] font-bold">{metadata.vaultTitle}</h1>
                                     </div>
                                     <img className="sm:hidden" src={metadata.vaultLogo} alt={`rv${metadata.collateralSymbol}${metadata.debtSymbol}`} />
                                 </div>
@@ -268,7 +266,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     )}
 
                                     {/* Show mint or redeem */}
-                                    {showAction && <ButtonMintOrRedeem address={ethriseAddress} />}
+                                    {showAction && <ButtonDepositOrWithdraw address={ethriseAddress} />}
                                 </div>
                             </div>
 
