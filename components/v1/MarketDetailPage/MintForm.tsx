@@ -224,7 +224,7 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                                                         Successfully minted {parseFloat(confirmedRedeemendAmount).toFixed(3)} {metadata.title}
                                                     </ToastSuccess>
                                                 ));
-                                                setMintState({ ...mintState, minting: false, hash: undefined });
+                                                setMintState({ ...mintState, amount: 0, minting: false, hash: undefined });
                                             } else {
                                                 setMintState({ ...mintState, error: new Error("Something wrong with the receipt"), hash: undefined, minting: false });
                                                 toast.custom((t) => <ToastError>Something wrong with the receipt</ToastError>);
