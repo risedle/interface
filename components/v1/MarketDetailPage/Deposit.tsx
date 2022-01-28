@@ -35,7 +35,7 @@ const Deposit: FunctionComponent<DepositProps> = ({ address }) => {
     const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
-    const [, getSigner] = useSigner({ skip: true });
+    const [signerData] = useSigner();
 
     // Initialize contracts
     const tokenContract = new ethers.Contract(metadata.debtAddress, erc20ABI, provider);
@@ -60,10 +60,10 @@ const Deposit: FunctionComponent<DepositProps> = ({ address }) => {
     });
 
     // UI States
-    const showLoading = allowanceState.loading ? true : false;
-    const showError = !showLoading && allowanceState.error ? true : false;
+    const showLoading = allowanceState.loading || signerData.loading ? true : false;
+    const showError = !showLoading && allowanceState.error && signerData.error ? true : false;
     const showApprovalOrDeposit = !showLoading && !showError && allowanceState.response ? true : false;
-    const showApproval = showApprovalOrDeposit && allowanceState.response && balanceState.response && !allowanceState.response.gt(balanceState.response) && !approvalState.approved ? true : false;
+    const showApproval = showApprovalOrDeposit && allowanceState.response && balanceState.response && signerData.data && !allowanceState.response.gt(balanceState.response) && !approvalState.approved ? true : false;
     const showDeposit = !showApproval || approvalState.approved ? true : false;
 
     return (
@@ -83,17 +83,9 @@ const Deposit: FunctionComponent<DepositProps> = ({ address }) => {
                                         full
                                         onClick={async () => {
                                             setApprovalState({ approving: true });
-                                            // Get signer otherwise return early
-                                            const signer = await getSigner();
-                                            if (!signer) {
-                                                toast.remove();
-                                                toast.custom((t) => <ToastError>No signer detected</ToastError>);
-                                                setApprovalState({ error: new Error("Signer is not detected") });
-                                                return;
-                                            }
-
                                             try {
-                                                const connectedContract = tokenContract.connect(signer);
+                                                if (!signerData.data) return setApprovalState({ approving: false });
+                                                const connectedContract = tokenContract.connect(signerData.data);
                                                 const result = await connectedContract.approve(metadata.vaultAddress, ethers.constants.MaxUint256);
                                                 setApprovalState({ approving: true, hash: result.hash });
                                                 toast.remove();
@@ -102,6 +94,7 @@ const Deposit: FunctionComponent<DepositProps> = ({ address }) => {
                                                 toast.remove();
                                                 toast.custom((t) => <ToastSuccess>{metadata.debtSymbol} approved</ToastSuccess>);
                                                 setApprovalState({ approving: false, hash: result.hash, approved: true });
+                                                setAllowanceState({ loading: true }); // Reload component
                                             } catch (e) {
                                                 console.error(e);
                                                 const error = e as Error;

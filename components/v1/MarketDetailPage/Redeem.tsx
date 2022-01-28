@@ -36,7 +36,7 @@ const Redeem: FunctionComponent<RedeemProps> = ({ address }) => {
     const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
-    const [, getSigner] = useSigner({ skip: true });
+    const [signerData] = useSigner();
 
     // Initialize contracts
     const leveragedTokenContract = new ethers.Contract(address, erc20ABI, provider);
@@ -65,9 +65,9 @@ const Redeem: FunctionComponent<RedeemProps> = ({ address }) => {
     });
 
     // UI States
-    const showLoading = allowanceState.loading || navState.loading || collateralPriceState.loading ? true : false;
-    const showError = !showLoading && (allowanceState.error || navState.error || collateralPriceState.error) ? true : false;
-    const showApprovalOrRedeem = !showLoading && !showError && allowanceState.response && navState.response && collateralPriceState.response ? true : false;
+    const showLoading = allowanceState.loading || navState.loading || collateralPriceState.loading || signerData.loading ? true : false;
+    const showError = !showLoading && (allowanceState.error || navState.error || collateralPriceState.error || signerData.error) ? true : false;
+    const showApprovalOrRedeem = !showLoading && !showError && allowanceState.response && navState.response && collateralPriceState.response && signerData.data ? true : false;
     const showApproval = showApprovalOrRedeem && allowanceState.response && !allowanceState.response.eq(ethers.constants.MaxUint256) && !approval.approved ? true : false;
     const showRedeem = !showApproval || approval.approved ? true : false;
 
@@ -92,16 +92,9 @@ const Redeem: FunctionComponent<RedeemProps> = ({ address }) => {
                                         full
                                         onClick={async () => {
                                             setApproval({ approving: true });
-                                            // Get signer otherwise return early
-                                            const signer = await getSigner();
-                                            if (!signer) {
-                                                toast.custom((t) => <ToastError>No signer detected</ToastError>);
-                                                setApproval({ error: new Error("Signer is not detected") });
-                                                return;
-                                            }
-
                                             try {
-                                                const connectedContract = leveragedTokenContract.connect(signer);
+                                                if (!signerData.data) return setApproval({ approving: false });
+                                                const connectedContract = leveragedTokenContract.connect(signerData.data);
                                                 const result = await connectedContract.approve(metadata.vaultAddress, ethers.constants.MaxUint256);
                                                 setApproval({ approving: true, hash: result.hash });
                                                 toast.custom((t) => <ToastTransaction hash={result.hash}>Approving</ToastTransaction>, { duration: 10000 });
@@ -109,6 +102,9 @@ const Redeem: FunctionComponent<RedeemProps> = ({ address }) => {
                                                 toast.remove();
                                                 toast.custom((t) => <ToastSuccess>{metadata.title} approved</ToastSuccess>);
                                                 setApproval({ approving: false, hash: result.hash, approved: true });
+                                                setAllowanceState({ loading: true });
+                                                setCollateralPriceState({ loading: true });
+                                                setNAVState({ loading: true });
                                             } catch (e) {
                                                 console.error(e);
                                                 const error = e as Error;

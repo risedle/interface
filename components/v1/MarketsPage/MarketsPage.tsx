@@ -34,7 +34,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
             <Head>
                 {/* <!-- HTML Meta Tags --> */}
                 <title>Risedle Protocol</title>
-                <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol"/>
+                <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
                 <MarketsPageMeta />
             </Head>
             <Favicon />
@@ -67,18 +67,18 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
 
             <div className="flex flex-col z-10 min-h-screen">
                 {/* Headers */}
-                <div className="container px-4 mx-auto max-w-4xl mt-8 sm:mt-16">
-                    <div className="flex flex-col sm:flex-row sm:items-center space-y-6 sm:space-y-0 sm:justify-between border-b border-gray-light-9 dark:border-gray-dark-9 border-dashed pb-6">
+                <div className="container px-4 mx-auto max-w-[540px] mt-8 sm:mt-16">
+                    <div className="flex flex-col space-y-6 border-b border-gray-light-9 dark:border-gray-dark-9 border-dashed pb-6">
                         <div className="text-center">
                             <h1 className="text-2xl sm:text-[32px] font-bold leading-8 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12">Leveraged Token Market</h1>
                         </div>
-                        <div className="flex flex-row space-x-6 mx-auto sm:m-0">
-                            <div className="flex flex-col space-y-2 text-center sm:text-right">
+                        <div className="flex flex-row space-x-6 mx-auto">
+                            <div className="flex flex-col space-y-2 text-center">
                                 <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">AUM</p>
                                 {(marketsIsLoading || marketsIsError) && <div className="h-[16px] w-[100px] bg-gray-light-3 dark:bg-gray-dark-3 rounded-full animate-pulse"></div>}
                                 {!marketsIsLoading && markets && <p className="font-ibm font-semibold text-sm sm:text-base leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(markets.aum)}</p>}
                             </div>
-                            <div className="flex flex-col space-y-2 text-center sm:text-right">
+                            <div className="flex flex-col space-y-2 text-center">
                                 <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">TVL</p>
                                 {(marketsIsLoading || marketsIsError) && <div className="h-[16px] w-[100px] bg-gray-light-3 dark:bg-gray-dark-3 rounded-full animate-pulse"></div>}
                                 {!marketsIsLoading && markets && <p className="font-ibm font-semibold text-sm sm:text-base leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(markets.tvl)}</p>}
@@ -88,10 +88,10 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                 </div>
 
                 {/* Cards */}
-                <div className="container px-4 mx-auto max-w-4xl mt-6 sm:mt-8">
+                <div className="container px-4 mx-auto max-w-[400px] mt-6 sm:mt-8">
                     {/* Cards loading state */}
                     {(marketsIsLoading || marketsIsError) && (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4">
                             <div className="flex flex-col p-4 bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px]">
                                 <div className="flex flex-row space-x-4 items-center pb-4">
                                     <div className="h-12 w-12 flex-none rounded-full bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
@@ -126,7 +126,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                     )}
                     {/* Cards display state */}
                     {markets && (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4">
                             {markets.markets.map((market) => {
                                 return (
                                     <div key={market.leveraged_token_address}>

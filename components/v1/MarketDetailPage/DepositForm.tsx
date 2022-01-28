@@ -34,7 +34,7 @@ const DepositForm: FunctionComponent<DepositFormProps> = ({ address }) => {
     const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
-    const [, getSigner] = useSigner({ skip: true });
+    const [signerData] = useSigner();
 
     // Initialize contract
     const tokenContract = new ethers.Contract(metadata.debtAddress, erc20ABI, provider);
@@ -194,18 +194,9 @@ const DepositForm: FunctionComponent<DepositFormProps> = ({ address }) => {
                                         e.preventDefault();
                                         // Set redeeming in progress
                                         setDepositState({ ...depositState, depositing: true });
-
-                                        // Get signer otherwise return early
-                                        const signer = await getSigner();
-                                        if (!signer) {
-                                            toast.remove();
-                                            toast.custom((t) => <ToastError>No signer detected</ToastError>);
-                                            setDepositState({ ...depositState, depositing: false, error: new Error("Signer is not detected") });
-                                            return;
-                                        }
-
                                         try {
-                                            const connectedContract = vaultContract.connect(signer);
+                                            if (!signerData.data) return setDepositState({ depositing: false });
+                                            const connectedContract = vaultContract.connect(signerData.data);
                                             const result = await connectedContract.addSupply(ethers.utils.parseUnits(depositState.amount ? depositState.amount.toString() : "0", metadata.debtDecimals));
                                             setDepositState({ ...depositState, depositing: true, hash: result.hash });
                                             toast.remove();

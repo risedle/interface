@@ -28,7 +28,8 @@ import ButtonDepositOrWithdraw from "./ButtonDepositOrWithdraw";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
-    [Chains.kovan.id]: { token: "0xc4676f88663360155c2bc6d2A482E34121a50b3b", vault: "0x42B6BAE111D9300E19F266Abf58cA215f714432c" },
+    [Chains.kovan.id]: "0xc4676f88663360155c2bc6d2A482E34121a50b3b",
+    [Chains.arbitrumOne.id]: "0x46D06cf8052eA6FdbF71736AF33eD23686eA1452",
 };
 
 /**
@@ -45,7 +46,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const { chain, account } = useWalletContext();
     const [connectedChain, switchNetwork] = useNetwork();
 
-    const ethriseAddress = ETHRISEAddresses[chain.id].token;
+    const ethriseAddress = ETHRISEAddresses[chain.id];
 
     // Get ETHRISE metadata
     const metadata = Metadata[chain.id][ethriseAddress];
