@@ -7,7 +7,7 @@
         @apply focus:outline outline-offset-2 outline-2 dark:outline-white/30 outline-black/30 transition-all ease-in-out duration-200 active:scale-95;
     }
     .basic {
-        @apply text-gray-light-12 dark:text-gray-dark-12 bg-gray-light-2 hover:bg-gray-light-3 dark:bg-gray-dark-2 dark:hover:bg-gray-dark-3 border border-gray-light-5 dark:border-gray-dark-5 text-sm font-semibold h-[40px] px-[24px] py-[12px] rounded-full flex justify-center items-center;
+        @apply text-gray-light-12 dark:text-gray-dark-12 bg-gray-light-2 hover:bg-gray-light-3 dark:bg-gray-dark-2 dark:hover:bg-gray-dark-3 border border-gray-light-5 dark:border-gray-dark-5 text-sm font-semibold h-[40px] rounded-full flex justify-center items-center;
     }
     .hero-text {
         @apply text-5xl sm:text-6xl md:text-7xl font-bold m-0 text-gray-light-12 dark:text-gray-dark-12 max-w-2xl text-center tracking-tight;
