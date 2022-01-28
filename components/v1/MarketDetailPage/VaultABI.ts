@@ -11,6 +11,7 @@ export const VaultABI = new ethers.utils.Interface([
     "function mint(address token) external payable",
     "function redeem(address token, uint256 amount) external",
     "function addSupply(uint256 amount) external",
+    "function removeSupply(uint256 amount) external",
 ]);
 
 export default VaultABI;
