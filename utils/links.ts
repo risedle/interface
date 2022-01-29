@@ -4,4 +4,5 @@ export default {
     twitter: "https://twitter.com/risedle",
     github: "https://github.com/risedle",
     docs: "https://docs.risedle.com",
+    blog: "https://mirror.xyz/risedle.eth",
 };
