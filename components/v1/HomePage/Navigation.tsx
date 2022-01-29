@@ -9,15 +9,14 @@ import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
 
 // Import logos
 
-
 // Import utils
-import RisedleLinks from '../../../utils/links';
+import RisedleLinks from "../../../utils/links";
 
 // Import popper
-import { usePopper } from 'react-popper';
+import { usePopper } from "react-popper";
 
 // Import headless ui
-import { Popover, Transition } from '@headlessui/react';
+import { Popover, Transition } from "@headlessui/react";
 
 /**
  * NavigationProps is a React Component properties that passed to React Component Navigation
@@ -32,27 +31,30 @@ type NavigationProps = {};
 const Navigation: FunctionComponent<NavigationProps> = ({}) => {
     let [referenceElement1, setReferenceElement1] = useState<HTMLButtonElement | null>();
     let [popperElement1, setPopperElement1] = useState<HTMLDivElement | null>();
-    let popper1 = usePopper(referenceElement1, popperElement1, { modifiers: 
-    [
-        {
-            name: "offset",
-            options: {
-                offset: [0, 16],
+    let popper1 = usePopper(referenceElement1, popperElement1, {
+        modifiers: [
+            {
+                name: "offset",
+                options: {
+                    offset: [0, 16],
+                },
             },
-        }
-    ]});
+        ],
+    });
 
     let [referenceElement2, setReferenceElement2] = useState<HTMLButtonElement | null>();
     let [popperElement2, setPopperElement2] = useState<HTMLDivElement | null>();
-    let popper2 = usePopper(referenceElement2, popperElement2, { placement: 'bottom-end', modifiers: 
-    [
-        {
-            name: "offset",
-            options: {
-                offset: [0, 16],
+    let popper2 = usePopper(referenceElement2, popperElement2, {
+        placement: "bottom-end",
+        modifiers: [
+            {
+                name: "offset",
+                options: {
+                    offset: [0, 16],
+                },
             },
-        }
-    ]});
+        ],
+    });
     return (
         <div className="flex flex-row p-4 items-center justify-between sticky top-0 dark:bg-gray-dark-1/90 bg-gray-light-1/90 backdrop-blur-lg z-40">
             <div className="flex-none md:w-[162.8px]">
@@ -67,28 +69,21 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                 <Link href={RisedleLinks.docs}>
                     <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">Docs &#8599;</a>
                 </Link>
-                <Link href="#">
+                <Link href={RisedleLinks.blog}>
                     <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">Blog &#8599;</a>
                 </Link>
-                
+
                 <Popover>
-                    {({open}) => {
-                        return(
+                    {({ open }) => {
+                        return (
                             <>
                                 <Popover.Button ref={setReferenceElement1} className={`flex items-center text-sm ${open ? "text-gray-light-10 dark:text-gray-dark-10" : "text-gray-light-12 dark:text-gray-dark-12"} sm:self-center transition`}>
-                                    Communities 
+                                    Communities
                                     <svg className={`${open ? "stroke-gray-light-10 dark:stroke-gray-dark-10" : "stroke-gray-light-12 dark:stroke-gray-dark-12"}`} xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M6 9l6 6 6-6"/>
+                                        <path d="M6 9l6 6 6-6" />
                                     </svg>
                                 </Popover.Button>
-                                <Transition
-                                    enter="transition ease-out duration-133"
-                                    enterFrom="opacity-0"
-                                    enterTo="opacity-100"
-                                    leave="transition ease-in duration-100"
-                                    leaveFrom="opacity-100"
-                                    leaveTo="opacity-0"
-                                >
+                                <Transition enter="transition ease-out duration-133" enterFrom="opacity-0" enterTo="opacity-100" leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
                                     <Popover.Panel ref={setPopperElement1} style={popper1.styles.popper} {...popper1.attributes.popper} className="min-w-[161px] bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 flex flex-col p-[8px] rounded-[16px]">
                                         <a href={RisedleLinks.twitter} className="flex items-center text-sm p-[8px] rounded-[8px] text-gray-light-12 dark:text-gray-dark-12 hover:bg-gray-light-3 hover:dark:bg-gray-dark-3 transition">
                                             <span className="grow text-left">
@@ -105,7 +100,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                                         <a href={RisedleLinks.discord} className="flex items-center text-sm p-[8px] rounded-[8px] text-gray-light-12 dark:text-gray-dark-12 hover:bg-gray-light-3 hover:dark:bg-gray-dark-3 transition">
                                             <span className="grow text-left">
                                                 Discord <span className="text-gray-light-10 dark:text-gray-dark-10">&#8599;</span>
-                                            </span> 
+                                            </span>
                                             <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
                                                 <g clipPath="url(#clip0_481_19437)">
                                                     <path
@@ -123,60 +118,57 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                                         </a>
                                     </Popover.Panel>
                                 </Transition>
-
                             </>
-                        )
+                        );
                     }}
                 </Popover>
-                
+
                 <Popover>
-                    {({open}) => {
-                        return(
+                    {({ open }) => {
+                        return (
                             <>
                                 <Popover.Button ref={setReferenceElement2} className={`flex items-center text-sm ${open ? "text-gray-light-10 dark:text-gray-dark-10" : "text-gray-light-12 dark:text-gray-dark-12"} sm:self-center transition`}>
-                                    Resources 
+                                    Resources
                                     <svg className={`${open ? "stroke-gray-light-10 dark:stroke-gray-dark-10" : "stroke-gray-light-12 dark:stroke-gray-dark-12"}`} xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M6 9l6 6 6-6"/>
+                                        <path d="M6 9l6 6 6-6" />
                                     </svg>
                                 </Popover.Button>
-                                <Transition
-                                    enter="transition ease-out duration-133"
-                                    enterFrom="opacity-0"
-                                    enterTo="opacity-100"
-                                    leave="transition ease-in duration-100"
-                                    leaveFrom="opacity-100"
-                                    leaveTo="opacity-0"
-                                >
+                                <Transition enter="transition ease-out duration-133" enterFrom="opacity-0" enterTo="opacity-100" leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
                                     <Popover.Panel ref={setPopperElement2} style={popper2.styles.popper} {...popper2.attributes.popper} className="min-w-[161px] bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 flex flex-col p-[8px] rounded-[16px]">
                                         <a href={RisedleLinks.github} className="flex items-center text-sm p-[8px] rounded-[8px] text-gray-light-12 dark:text-gray-dark-12 hover:bg-gray-light-3 hover:dark:bg-gray-dark-3 transition">
                                             <span className="grow text-left">
                                                 Github <span className="text-gray-light-10 dark:text-gray-dark-10">&#8599;</span>
                                             </span>
                                             <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
-                                                <path fillRule="evenodd" 
-                                                clipRule="evenodd" 
-                                                d="M7.499 1.3501C3.8273 1.3501 0.849609 4.3274 0.849609 8.00032C0.849609 10.938 2.75486 13.4307 5.39739 14.3105C5.7301 14.3713 5.85135 14.1659 5.85135 13.9896C5.85135 13.8316 5.84563 13.4135 5.84237 12.8588C3.99264 13.2605 3.60236 11.9672 3.60236 11.9672C3.29986 11.1989 2.86386 10.9943 2.86386 10.9943C2.26008 10.582 2.90958 10.5902 2.90958 10.5902C3.57705 10.6371 3.92814 11.2756 3.92814 11.2756C4.52131 12.2917 5.48475 11.9982 5.8636 11.828C5.92402 11.3985 6.09588 11.1054 6.28571 10.9392C4.80911 10.771 3.25659 10.2007 3.25659 7.6525C3.25659 6.92624 3.51582 6.33307 3.9412 5.86809C3.87262 5.69989 3.64441 5.02384 4.00652 4.10816C4.00652 4.10816 4.56458 3.92935 5.83502 4.78951C6.36532 4.64213 6.9344 4.56865 7.49981 4.56579C8.06482 4.56865 8.63349 4.64213 9.16461 4.78951C10.4342 3.92935 10.9915 4.10816 10.9915 4.10816C11.3544 5.02384 11.1262 5.69989 11.058 5.86809C11.4842 6.33307 11.7414 6.92624 11.7414 7.6525C11.7414 10.2073 10.1864 10.7694 8.70534 10.9339C8.94375 11.1393 9.15645 11.545 9.15645 12.1656C9.15645 13.0543 9.14828 13.7716 9.14828 13.9896C9.14828 14.1676 9.26831 14.3745 9.60551 14.3096C12.246 13.4282 14.1496 10.9376 14.1496 8.00032C14.1496 4.3274 11.1719 1.3501 7.499 1.3501Z"/>
+                                                <path
+                                                    fillRule="evenodd"
+                                                    clipRule="evenodd"
+                                                    d="M7.499 1.3501C3.8273 1.3501 0.849609 4.3274 0.849609 8.00032C0.849609 10.938 2.75486 13.4307 5.39739 14.3105C5.7301 14.3713 5.85135 14.1659 5.85135 13.9896C5.85135 13.8316 5.84563 13.4135 5.84237 12.8588C3.99264 13.2605 3.60236 11.9672 3.60236 11.9672C3.29986 11.1989 2.86386 10.9943 2.86386 10.9943C2.26008 10.582 2.90958 10.5902 2.90958 10.5902C3.57705 10.6371 3.92814 11.2756 3.92814 11.2756C4.52131 12.2917 5.48475 11.9982 5.8636 11.828C5.92402 11.3985 6.09588 11.1054 6.28571 10.9392C4.80911 10.771 3.25659 10.2007 3.25659 7.6525C3.25659 6.92624 3.51582 6.33307 3.9412 5.86809C3.87262 5.69989 3.64441 5.02384 4.00652 4.10816C4.00652 4.10816 4.56458 3.92935 5.83502 4.78951C6.36532 4.64213 6.9344 4.56865 7.49981 4.56579C8.06482 4.56865 8.63349 4.64213 9.16461 4.78951C10.4342 3.92935 10.9915 4.10816 10.9915 4.10816C11.3544 5.02384 11.1262 5.69989 11.058 5.86809C11.4842 6.33307 11.7414 6.92624 11.7414 7.6525C11.7414 10.2073 10.1864 10.7694 8.70534 10.9339C8.94375 11.1393 9.15645 11.545 9.15645 12.1656C9.15645 13.0543 9.14828 13.7716 9.14828 13.9896C9.14828 14.1676 9.26831 14.3745 9.60551 14.3096C12.246 13.4282 14.1496 10.9376 14.1496 8.00032C14.1496 4.3274 11.1719 1.3501 7.499 1.3501Z"
+                                                />
                                             </svg>
                                         </a>
                                         <a href="#" className="flex items-center text-sm p-[8px] rounded-[8px] text-gray-light-12 dark:text-gray-dark-12 hover:bg-gray-light-3 hover:dark:bg-gray-dark-3 transition">
                                             <span className="grow text-left">
                                                 CoinGecko <span className="text-gray-light-10 dark:text-gray-dark-10">&#8599;</span>
-                                            </span> 
+                                            </span>
                                             <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
-                                                <path fillRule="evenodd" clipRule="evenodd" d="M7.50039 2.2999C4.35237 2.2999 1.80039 4.85188 1.80039 7.9999C1.80039 11.1479 4.35237 13.6999 7.50039 13.6999C10.6484 13.6999 13.2004 11.1479 13.2004 7.9999C13.2004 4.85188 10.6484 2.2999 7.50039 2.2999ZM0.900391 7.9999C0.900391 4.35482 3.85531 1.3999 7.50039 1.3999C11.1455 1.3999 14.1004 4.35482 14.1004 7.9999C14.1004 11.645 11.1455 14.5999 7.50039 14.5999C3.85531 14.5999 0.900391 11.645 0.900391 7.9999Z"/>
-                                                <path fillRule="evenodd" clipRule="evenodd" d="M13.5004 8.39985H1.50037V7.59985H13.5004V8.39985Z"/>
-                                                <path fillRule="evenodd" clipRule="evenodd" d="M7.10034 13.9999V1.99988H7.90034V13.9999H7.10034Z"/>
-                                                <path fillRule="evenodd" clipRule="evenodd" d="M10.3754 7.99986C10.3754 5.82712 9.59407 3.67766 8.06226 2.25644L8.53836 1.74329C10.24 3.32206 11.0754 5.67261 11.0754 7.99986C11.0754 10.3271 10.24 12.6777 8.53836 14.2564L8.06226 13.7433C9.59407 12.3221 10.3754 10.1726 10.3754 7.99986Z"/>
-                                                <path fillRule="evenodd" clipRule="evenodd" d="M4.00012 7.99988C4.00012 5.67599 4.80829 3.32666 6.45811 1.74707L6.9422 2.25269C5.45863 3.6731 4.70012 5.82377 4.70012 7.99988C4.70013 10.176 5.45865 12.3267 6.94222 13.7471L6.45812 14.2527C4.80831 12.6731 4.00013 10.3238 4.00012 7.99988Z"/>
-                                                <path fillRule="evenodd" clipRule="evenodd" d="M7.50038 4.45789C9.66971 4.45789 11.8757 4.85903 13.3711 5.69436C13.5398 5.78863 13.6002 6.00185 13.5059 6.1706C13.4117 6.33936 13.1985 6.39974 13.0297 6.30548C11.6798 5.55143 9.60842 5.15789 7.50038 5.15789C5.39234 5.15789 3.32095 5.55143 1.97107 6.30548C1.80231 6.39974 1.58909 6.33936 1.49482 6.1706C1.40055 6.00185 1.46094 5.78863 1.62969 5.69436C3.12509 4.85903 5.33106 4.45789 7.50038 4.45789Z"/>
-                                                <path fillRule="evenodd" clipRule="evenodd" d="M7.50038 11.3499C9.66971 11.3499 11.8757 10.9487 13.3711 10.1134C13.5398 10.0191 13.6002 9.80589 13.5059 9.63714C13.4117 9.46838 13.1985 9.408 13.0297 9.50226C11.6798 10.2563 9.60842 10.6499 7.50038 10.6499C5.39234 10.6499 3.32095 10.2563 1.97107 9.50226C1.80231 9.408 1.58909 9.46838 1.49482 9.63714C1.40055 9.80589 1.46094 10.0191 1.62969 10.1134C3.12509 10.9487 5.33106 11.3499 7.50038 11.3499Z"/>
+                                                <path
+                                                    fillRule="evenodd"
+                                                    clipRule="evenodd"
+                                                    d="M7.50039 2.2999C4.35237 2.2999 1.80039 4.85188 1.80039 7.9999C1.80039 11.1479 4.35237 13.6999 7.50039 13.6999C10.6484 13.6999 13.2004 11.1479 13.2004 7.9999C13.2004 4.85188 10.6484 2.2999 7.50039 2.2999ZM0.900391 7.9999C0.900391 4.35482 3.85531 1.3999 7.50039 1.3999C11.1455 1.3999 14.1004 4.35482 14.1004 7.9999C14.1004 11.645 11.1455 14.5999 7.50039 14.5999C3.85531 14.5999 0.900391 11.645 0.900391 7.9999Z"
+                                                />
+                                                <path fillRule="evenodd" clipRule="evenodd" d="M13.5004 8.39985H1.50037V7.59985H13.5004V8.39985Z" />
+                                                <path fillRule="evenodd" clipRule="evenodd" d="M7.10034 13.9999V1.99988H7.90034V13.9999H7.10034Z" />
+                                                <path fillRule="evenodd" clipRule="evenodd" d="M10.3754 7.99986C10.3754 5.82712 9.59407 3.67766 8.06226 2.25644L8.53836 1.74329C10.24 3.32206 11.0754 5.67261 11.0754 7.99986C11.0754 10.3271 10.24 12.6777 8.53836 14.2564L8.06226 13.7433C9.59407 12.3221 10.3754 10.1726 10.3754 7.99986Z" />
+                                                <path fillRule="evenodd" clipRule="evenodd" d="M4.00012 7.99988C4.00012 5.67599 4.80829 3.32666 6.45811 1.74707L6.9422 2.25269C5.45863 3.6731 4.70012 5.82377 4.70012 7.99988C4.70013 10.176 5.45865 12.3267 6.94222 13.7471L6.45812 14.2527C4.80831 12.6731 4.00013 10.3238 4.00012 7.99988Z" />
+                                                <path fillRule="evenodd" clipRule="evenodd" d="M7.50038 4.45789C9.66971 4.45789 11.8757 4.85903 13.3711 5.69436C13.5398 5.78863 13.6002 6.00185 13.5059 6.1706C13.4117 6.33936 13.1985 6.39974 13.0297 6.30548C11.6798 5.55143 9.60842 5.15789 7.50038 5.15789C5.39234 5.15789 3.32095 5.55143 1.97107 6.30548C1.80231 6.39974 1.58909 6.33936 1.49482 6.1706C1.40055 6.00185 1.46094 5.78863 1.62969 5.69436C3.12509 4.85903 5.33106 4.45789 7.50038 4.45789Z" />
+                                                <path fillRule="evenodd" clipRule="evenodd" d="M7.50038 11.3499C9.66971 11.3499 11.8757 10.9487 13.3711 10.1134C13.5398 10.0191 13.6002 9.80589 13.5059 9.63714C13.4117 9.46838 13.1985 9.408 13.0297 9.50226C11.6798 10.2563 9.60842 10.6499 7.50038 10.6499C5.39234 10.6499 3.32095 10.2563 1.97107 9.50226C1.80231 9.408 1.58909 9.46838 1.49482 9.63714C1.40055 9.80589 1.46094 10.0191 1.62969 10.1134C3.12509 10.9487 5.33106 11.3499 7.50038 11.3499Z" />
                                             </svg>
                                         </a>
                                     </Popover.Panel>
                                 </Transition>
-
                             </>
-                        )
+                        );
                     }}
                 </Popover>
             </div>
