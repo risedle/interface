@@ -25,6 +25,7 @@ import MarketDetailPageMeta from "./MarketDetailPageMeta";
 import VaultChart from "./VaultChart";
 import ButtonDisabled from "../Buttons/ButtonDisabled";
 import ButtonDepositOrWithdraw from "./ButtonDepositOrWithdraw";
+import ButtonTertiary from "../Buttons/ButtonTertiary";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -90,6 +91,14 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 <ButtonConnectWalletDesktop />
                             </div>
 
+                            <div className="sm:hidden">
+                                <Link href={"/markets"}>
+                                    <a>
+                                        <ButtonTertiary><span className="mr-2">&#8592;</span>Markets</ButtonTertiary>
+                                    </a>
+                                </Link>
+                            </div>
+
                             <div className="inline-block h-[40px]">
                                 <ButtonThemeSwitcher />
                             </div>
@@ -111,7 +120,28 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
 
                     {/* Market tabs and content */}
                     <Tabs.Root defaultValue="leverage" className="px-4 outline-0">
-                        <Tabs.List aria-label="ETHRISE" className="bg-gray-light-3 dark:bg-gray-dark-2 rounded-[12px] flex flex-row p-1 mx-auto sm:max-w-[253px] mb-6">
+                        <div className="hidden sm:grid grid-cols-4 gap-2 sm:max-w-[540px] mx-auto mb-6 place-content-between">
+                            <div className="place-self-center">
+                                <Link href={"/markets"}>
+                                    <a>
+                                        <ButtonTertiary><span className="mr-2">&#8592;</span>Markets</ButtonTertiary>
+                                    </a>
+                                </Link>
+                            </div>
+                            <div className="col-span-2 mx-auto">
+                                <Tabs.List aria-label="ETHRISE" className="bg-gray-light-3 dark:bg-gray-dark-2 rounded-[12px] flex flex-row p-1 sm:min-w-[253px] sm:max-w-[253px]">
+                                    <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 state-active:text-gray-light-12 state-active:dark:text-gray-dark-12 state-active:font-bold state-active:py-[12px] state-active:dark:bg-gray-dark-4 state-active:bg-gray-light-1">
+                                        Leverage
+                                    </Tabs.Trigger>
+                                    <Tabs.Trigger value="earn" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 state-active:text-gray-light-12 state-active:dark:text-gray-dark-12 state-active:font-bold state-active:py-[12px] state-active:dark:bg-gray-dark-4 state-active:bg-gray-light-1">
+                                        Earn
+                                    </Tabs.Trigger>
+                                </Tabs.List>
+                            </div>
+                        </div>
+
+                        {/* For Mobile Layout */}
+                        <Tabs.List aria-label="ETHRISE" className="sm:hidden bg-gray-light-3 dark:bg-gray-dark-2 rounded-[12px] flex flex-row p-1 mx-auto sm:max-w-[253px] mb-6">
                             <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 state-active:text-gray-light-12 state-active:dark:text-gray-dark-12 state-active:font-bold state-active:py-[12px] state-active:dark:bg-gray-dark-4 state-active:bg-gray-light-1">
                                 Leverage
                             </Tabs.Trigger>
@@ -119,6 +149,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 Earn
                             </Tabs.Trigger>
                         </Tabs.List>
+                        
 
                         {/* Leverage tab */}
                         <Tabs.Content value="leverage" className="outline-0 flex flex-col mx-auto sm:max-w-[540px] space-y-6">
