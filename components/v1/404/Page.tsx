@@ -1,10 +1,10 @@
 import Head from "next/head";
 import Link from "next/link";
 import type { FunctionComponent } from "react";
-import Favicon from "./Favicon";
-import Footer from "./Footer";
-import Navigation from "./HomePage/Navigation";
-import ButtonSpecials from "./Buttons/ButtonSpecials"
+import Favicon from "../Favicon";
+import Footer from "../Footer";
+import Navigation from "../HomePage/Navigation";
+import ButtonSpecials from "../Buttons/ButtonSpecials"
 
 /**
  * PageNotFoundProps is a React Component properties that passed to React Component PageNotFound
