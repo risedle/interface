@@ -15,30 +15,11 @@ type ButtonBlueLinkProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const ButtonBlueLink: FunctionComponent<ButtonBlueLinkProps> = ({
-    title,
-    url,
-}) => {
-    const tailwind = [
-        "text-white",
-        "font-extrabold",
-        "bg-blue",
-        "px-6",
-        "text-sm",
-        "rounded-full",
-        "hover:opacity-95",
-        "transform active:scale-95",
-        "transition duration-300 ease-in-out",
-        "inline-block",
-        "align-middle",
-        "text-center",
-    ];
+const ButtonBlueLink: FunctionComponent<ButtonBlueLinkProps> = ({ title, url }) => {
+    const tailwind = ["text-white", "font-extrabold", "bg-blue", "px-6", "text-sm", "rounded-full", "hover:opacity-95", "transform active:scale-95", "transition duration-300 ease-in-out", "inline-block", "align-middle", "text-center"];
     return (
         <Link href={url}>
-            <a
-                className={tailwind.join(" ")}
-                style={{ height: "40px", width: "120px", lineHeight: "40px" }}
-            >
+            <a className={tailwind.join(" ")} style={{ height: "40px", width: "120px", lineHeight: "40px" }}>
                 {title}
             </a>
         </Link>

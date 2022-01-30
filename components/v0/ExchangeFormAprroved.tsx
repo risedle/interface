@@ -34,19 +34,7 @@ type ExchangeFormApprovedProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const ExchangeFormApproved: FunctionComponent<ExchangeFormApprovedProps> = ({
-    backTitle,
-    backURL,
-    title,
-    subTitle,
-    formTitle,
-    formPlaceholder,
-    formInputToken,
-    formInputTokenBalance,
-    formOutputToken,
-    formSubmitTitle,
-    onClickSubmit,
-}) => {
+const ExchangeFormApproved: FunctionComponent<ExchangeFormApprovedProps> = ({ backTitle, backURL, title, subTitle, formTitle, formPlaceholder, formInputToken, formInputTokenBalance, formOutputToken, formSubmitTitle, onClickSubmit }) => {
     // Input states
     const [depositAmount, setDepositAmount] = useState("0");
 
@@ -60,32 +48,16 @@ const ExchangeFormApproved: FunctionComponent<ExchangeFormApprovedProps> = ({
                 </p>
             </div>
             <div>
-                <h1 className="text-white font-extrabold text-4xl m-0 leading-normal">
-                    {title}
-                </h1>
-                <p className="text-grey font-semibold text-2xl m-0 leading-normal">
-                    {subTitle}
-                </p>
+                <h1 className="text-white font-extrabold text-4xl m-0 leading-normal">{title}</h1>
+                <p className="text-grey font-semibold text-2xl m-0 leading-normal">{subTitle}</p>
             </div>
             <div className="mt-8">
-                <label className="text-white font-extrabold m-0 leading-normal">
-                    {formTitle}
-                </label>
-                <div
-                    className="w-full flex border-b-2 border-white border-opacity-20 items-center mt-2"
-                    style={{ height: "40px" }}
-                >
+                <label className="text-white font-extrabold m-0 leading-normal">{formTitle}</label>
+                <div className="w-full flex border-b-2 border-white border-opacity-20 items-center mt-2" style={{ height: "40px" }}>
                     <div className="w-10/12">
-                        <input
-                            type="text"
-                            className="w-full focus:outline-none font-extrabold text-grey bg-black"
-                            placeholder={formPlaceholder}
-                            onChange={(e) => setDepositAmount(e.target.value)}
-                        />
+                        <input type="text" className="w-full focus:outline-none font-extrabold text-grey bg-black" placeholder={formPlaceholder} onChange={(e) => setDepositAmount(e.target.value)} />
                     </div>
-                    <div className="w-2/12 font-extrabold text-grey bg-black text-right">
-                        {formInputToken}
-                    </div>
+                    <div className="w-2/12 font-extrabold text-grey bg-black text-right">{formInputToken}</div>
                 </div>
 
                 <p className="text-grey font-extrabold mt-4">

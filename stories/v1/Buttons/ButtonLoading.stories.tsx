@@ -7,9 +7,5 @@ export default {
 };
 
 export const Loading = () => {
-    return(
-        <ButtonLoading>
-            Label...
-        </ButtonLoading>
-    )
-}
+    return <ButtonLoading>Label...</ButtonLoading>;
+};

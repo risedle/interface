@@ -7,6 +7,4 @@ export default {
     title: "Risedle V1/Toasts/Success",
 };
 
-export const Success = () => (
-    <ToastSuccess>Successfully minted 2.34 ETHRISE</ToastSuccess>
-);
+export const Success = () => <ToastSuccess>Successfully minted 2.34 ETHRISE</ToastSuccess>;

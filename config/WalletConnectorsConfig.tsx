@@ -1,6 +1,6 @@
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { chain } from 'wagmi'
+import { InjectedConnector } from "wagmi/connectors/injected";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import { chain } from "wagmi";
 
 let kovanURL = "";
 if (process.env.NEXT_PUBLIC_KOVAN_URL) {
@@ -13,8 +13,8 @@ if (process.env.NEXT_PUBLIC_ARBITRUM_URL) {
 }
 
 export const injected_connector = new InjectedConnector({
-    chains: [chain.kovan, chain.arbitrumOne]
-})
+    chains: [chain.kovan, chain.arbitrumOne],
+});
 
 export const getWCConnector = (_chainId: number) => {
     return new WalletConnectConnector({
@@ -25,7 +25,7 @@ export const getWCConnector = (_chainId: number) => {
             rpc: {
                 [chain.kovan.id]: kovanURL,
                 [chain.arbitrumOne.id]: arbitrumURL,
-            }
-        }
-    })
-}
+            },
+        },
+    });
+};
