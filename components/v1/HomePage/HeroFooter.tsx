@@ -13,18 +13,18 @@ type HeroFooterProps = {};
  */
 const HeroFooter: FunctionComponent<HeroFooterProps> = ({}) => {
     return (
-        <div className="relative w-full flex justify-center items-center my-20 sm:my-40">
-            <div className="relative z-10 flex flex-col px-4 text-center max-w-screen-md w-full gap-8 items-center">
+        <div className="relative my-20 flex w-full items-center justify-center sm:my-40">
+            <div className="relative z-10 flex w-full max-w-screen-md flex-col items-center gap-8 px-4 text-center">
                 <h1 className="hero-text">
                     Learn More <br />
-                    About <span className="bg-clip-text text-transparent gradient move-gradient bg-[length:250%_250%]">Risedle</span>
+                    About <span className="gradient move-gradient bg-[length:250%_250%] bg-clip-text text-transparent">Risedle</span>
                 </h1>
                 <div>
-                    <h2 className="text-base text-gray-light-10 dark:text-gray-dark-10 mb-6">These are links to help you dive deeper into Risedle labs and the products.</h2>
+                    <h2 className="mb-6 text-base text-gray-light-10 dark:text-gray-dark-10">These are links to help you dive deeper into Risedle labs and the products.</h2>
                 </div>
                 <Resources />
             </div>
-            <svg width="100%" height="100%" viewBox="0 0 375 463" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-0 absolute top-0 left-1/2 -translate-x-1/2  fill-gray-light-12 dark:fill-white sm:scale-150">
+            <svg width="100%" height="100%" viewBox="0 0 375 463" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute top-0 left-1/2 z-0 -translate-x-1/2  fill-gray-light-12 dark:fill-white sm:scale-150">
                 <g filter="url(#filter0_f_488_28293)">
                     <rect x="42" y="208.087" width="14.5306" height="134.487" transform="rotate(-16.0921 42 208.087)" fill="#5FD4F4" />
                 </g>

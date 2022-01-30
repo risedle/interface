@@ -50,13 +50,13 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
 
     return (
         <>
-            <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="fixed z-20 inset-0 overflow-y-auto">
-                <div className="flex items-center justify-center min-h-screen">
-                    <Dialog.Overlay className="fixed inset-0 bg-gray-dark-1/60 dark:bg-black/60 backdrop-blur" />
+            <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="fixed inset-0 z-20 overflow-y-auto">
+                <div className="flex min-h-screen items-center justify-center">
+                    <Dialog.Overlay className="fixed inset-0 bg-gray-dark-1/60 backdrop-blur dark:bg-black/60" />
 
-                    <div className="flex flex-col relative bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px] w-[342px] mx-auto">
-                        <Dialog.Title className="flex flex-row items-center px-4 py-4 justify-between border-b border-gray-light-3 dark:border-gray-dark-3 border-dashed m-0">
-                            <span className="grow text-center pl-[40px] text-base leading-none font-bold text-gray-light-12 dark:text-gray-dark-12">Switch a Network</span>
+                    <div className="relative mx-auto flex w-[342px] flex-col rounded-[24px] border border-gray-light-3 bg-gray-light-1 dark:border-gray-dark-3 dark:bg-gray-dark-1">
+                        <Dialog.Title className="m-0 flex flex-row items-center justify-between border-b border-dashed border-gray-light-3 px-4 py-4 dark:border-gray-dark-3">
+                            <span className="grow pl-[40px] text-center text-base font-bold leading-none text-gray-light-12 dark:text-gray-dark-12">Switch a Network</span>
                             <ButtonClose
                                 onClick={() => {
                                     setIsOpen(false);
@@ -64,27 +64,27 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                             />
                         </Dialog.Title>
 
-                        <div className="flex flex-col max-w-[342px] p-4 space-y-2">
+                        <div className="flex max-w-[342px] flex-col space-y-2 p-4">
                             {supportedChains.map((c) => {
                                 return (
                                     <button
-                                        className="flex flex-row space-x-4 items-center bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-5 dark:border-gray-dark-5 rounded-[12px] py-[11px] px-[11px] text-left w-full m-0"
+                                        className="m-0 flex w-full flex-row items-center space-x-4 rounded-[12px] border border-gray-light-5 bg-gray-light-2 py-[11px] px-[11px] text-left dark:border-gray-dark-5 dark:bg-gray-dark-2"
                                         onClick={() => {
                                             switchToNetwork(c);
                                         }}
                                         key={c.id}
                                     >
-                                        <img src={getChainIconPath(c)} alt={c.name} className="w-[32px] h-[32px]" />
-                                        <span className="text-sm leading-4 text-gray-light-12 dark:text-gray-dark-12 font-semibold tracking-[-0.02em]">{c.name}</span>
+                                        <img src={getChainIconPath(c)} alt={c.name} className="h-[32px] w-[32px]" />
+                                        <span className="text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12">{c.name}</span>
                                     </button>
                                 );
                             })}
                         </div>
 
-                        <div className="text-center p-4 border-t border-gray-light-3 dark:border-gray-dark-3 border-dashed m-0">
-                            <p className="text-gray-light-11 dark:text-gray-dark-11 text-xs leading-1">
+                        <div className="m-0 border-t border-dashed border-gray-light-3 p-4 text-center dark:border-gray-dark-3">
+                            <p className="leading-1 text-xs text-gray-light-11 dark:text-gray-dark-11">
                                 Don&apos;t see you network? Chat us on{" "}
-                                <a className="underline text-gray-light-12 dark:text-gray-dark-12" target="_blank" rel="noreferrer" href={RisedleLinks.discord}>
+                                <a className="text-gray-light-12 underline dark:text-gray-dark-12" target="_blank" rel="noreferrer" href={RisedleLinks.discord}>
                                     discord
                                 </a>
                                 .
@@ -95,7 +95,7 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
             </Dialog>
 
             <button className="button basic p-0" onClick={() => setIsOpen(true)}>
-                <img src={getChainIconPath(chain)} alt={chain.name} className="w-[16px] h-[16px] m-[11px]" />
+                <img src={getChainIconPath(chain)} alt={chain.name} className="m-[11px] h-[16px] w-[16px]" />
             </button>
         </>
     );

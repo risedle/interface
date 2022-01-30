@@ -48,19 +48,19 @@ const ExchangeFormApproved: FunctionComponent<ExchangeFormApprovedProps> = ({ ba
                 </p>
             </div>
             <div>
-                <h1 className="text-white font-extrabold text-4xl m-0 leading-normal">{title}</h1>
-                <p className="text-grey font-semibold text-2xl m-0 leading-normal">{subTitle}</p>
+                <h1 className="m-0 text-4xl font-extrabold leading-normal text-white">{title}</h1>
+                <p className="m-0 text-2xl font-semibold leading-normal text-grey">{subTitle}</p>
             </div>
             <div className="mt-8">
-                <label className="text-white font-extrabold m-0 leading-normal">{formTitle}</label>
-                <div className="w-full flex border-b-2 border-white border-opacity-20 items-center mt-2" style={{ height: "40px" }}>
+                <label className="m-0 font-extrabold leading-normal text-white">{formTitle}</label>
+                <div className="mt-2 flex w-full items-center border-b-2 border-white border-opacity-20" style={{ height: "40px" }}>
                     <div className="w-10/12">
-                        <input type="text" className="w-full focus:outline-none font-extrabold text-grey bg-black" placeholder={formPlaceholder} onChange={(e) => setDepositAmount(e.target.value)} />
+                        <input type="text" className="w-full bg-black font-extrabold text-grey focus:outline-none" placeholder={formPlaceholder} onChange={(e) => setDepositAmount(e.target.value)} />
                     </div>
-                    <div className="w-2/12 font-extrabold text-grey bg-black text-right">{formInputToken}</div>
+                    <div className="w-2/12 bg-black text-right font-extrabold text-grey">{formInputToken}</div>
                 </div>
 
-                <p className="text-grey font-extrabold mt-4">
+                <p className="mt-4 font-extrabold text-grey">
                     <span>Balance </span>
                     <span className="text-white">
                         {formInputTokenBalance} {formInputToken}

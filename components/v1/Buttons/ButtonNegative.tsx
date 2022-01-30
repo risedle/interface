@@ -18,7 +18,7 @@ type ButtonNegativeProps = {
 const ButtonNegative: FunctionComponent<ButtonNegativeProps> = ({ onClick, full, children }) => {
     return (
         <button
-            className={`button bg-red-light-10 dark:bg-red-dark-10 border border-red-light-11 dark:border-red-dark-11 rounded-full text-sm leading-4 tracking-[-0.02em] text-gray-light-1 dark:text-blue-light-1 font-semibold py-[12px] px-[24px] transition ease-out duration-300 hover:bg-red-light-9 hover:dark:bg-red-dark-9 hover:border-red-light-10 hover:dark:border-red-dark-10 active:bg-red-light-8 active:dark:bg-red-dark-8 active:border-red-light-9 active:dark:border-red-dark-9 ${
+            className={`button rounded-full border border-red-light-11 bg-red-light-10 py-[12px] px-[24px] text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-1 transition duration-300 ease-out hover:border-red-light-10 hover:bg-red-light-9 active:border-red-light-9 active:bg-red-light-8 dark:border-red-dark-11 dark:bg-red-dark-10 dark:text-blue-light-1 hover:dark:border-red-dark-10 hover:dark:bg-red-dark-9 active:dark:border-red-dark-9 active:dark:bg-red-dark-8 ${
                 full ? "w-full" : ""
             }`}
             onClick={onClick}

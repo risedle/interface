@@ -20,7 +20,7 @@ const PageNotFound: FunctionComponent<PageNotFoundProps> = ({}) => {
     // By default use dark theme
 
     return (
-        <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter overflow-clip">
+        <div className="h-full w-full overflow-clip bg-gray-light-1 font-inter dark:bg-gray-dark-1">
             <Head>
                 {/* <!-- HTML Meta Tags --> */}
                 <title>Risedle Protocol</title>
@@ -29,15 +29,15 @@ const PageNotFound: FunctionComponent<PageNotFoundProps> = ({}) => {
             <Favicon />
             <Navigation />
             <div className="relative w-full justify-center overflow-hidden">
-                <div className="z-10 relative flex flex-col px-4 text-center max-w-screen-md m-auto align-middle py-32 items-center gap-8">
+                <div className="relative z-10 m-auto flex max-w-screen-md flex-col items-center gap-8 px-4 py-32 text-center align-middle">
                     <div>
-                        <p className="text-xs font-semibold text-gray-light-10 dark:text-gray-dark-10 uppercase text-center tracking-widest">Page not Found</p>
+                        <p className="text-center text-xs font-semibold uppercase tracking-widest text-gray-light-10 dark:text-gray-dark-10">Page not Found</p>
                     </div>
                     <div className="flex items-center">
                         <h1 className="hero-text">404</h1>
                     </div>
-                    <div className="max-w-lg mx-auto">
-                        <h2 className="text-base text-gray-light-10 dark:text-gray-dark-10 leading-relaxed">Uh oh, seems the page you&apos;re searching is not there</h2>
+                    <div className="mx-auto max-w-lg">
+                        <h2 className="text-base leading-relaxed text-gray-light-10 dark:text-gray-dark-10">Uh oh, seems the page you&apos;re searching is not there</h2>
                     </div>
                     <div className="mt-6">
                         <Link href={"/"}>
@@ -49,14 +49,14 @@ const PageNotFound: FunctionComponent<PageNotFoundProps> = ({}) => {
                         </Link>
                     </div>
                 </div>
-                <svg width="100%" viewBox="0 0 1159 1027" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-0 absolute sm:fixed top-[10%] sm:top-[18%] left-1/2 -translate-x-1/2 stroke-gray-light-12 dark:stroke-white w-[679px] opacity-50" style={{ minWidth: "619px" }}>
+                <svg width="100%" viewBox="0 0 1159 1027" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute top-[10%] left-1/2 z-0 w-[679px] -translate-x-1/2 stroke-gray-light-12 opacity-50 dark:stroke-white sm:fixed sm:top-[18%]" style={{ minWidth: "619px" }}>
                     <circle opacity="0.1" cx="579.5" cy="447.5" r="222.549" />
                     <circle opacity="0.1" cx="579.5" cy="447.5" r="299.389" />
                     <circle opacity="0.05" cx="579.5" cy="447.5" r="389.035" />
                     <circle opacity="0.1" cx="579.5" cy="447.5" r="579" />
                 </svg>
             </div>
-            <div className="mt-16 sm:absolute sm:bottom-0 sm:inset-x-0">
+            <div className="mt-16 sm:absolute sm:inset-x-0 sm:bottom-0">
                 <Footer />
             </div>
         </div>

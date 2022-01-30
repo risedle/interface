@@ -24,7 +24,7 @@ const HomePage: FunctionComponent<HomePageProps> = ({}) => {
     // By default use dark theme
 
     return (
-        <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter overflow-clip">
+        <div className="h-full w-full overflow-clip bg-gray-light-1 font-inter dark:bg-gray-dark-1">
             <Head>
                 {/* <!-- HTML Meta Tags --> */}
                 <title>Risedle Protocol</title>

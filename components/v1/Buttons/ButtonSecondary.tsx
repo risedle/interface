@@ -18,7 +18,7 @@ type ButtonSecondaryProps = {
 const ButtonSecondary: FunctionComponent<ButtonSecondaryProps> = ({ onClick, full, children }) => {
     return (
         <button
-            className={`button bg-blue-light-2 dark:bg-blue-dark-2 border border-blue-light-5 dark:border-blue-dark-5 rounded-full text-sm leading-4 tracking-[-0.02em] text-blue-light-11 dark:text-blue-dark-11 font-semibold py-[12px] px-[24px] transition ease-out duration-300 hover:bg-blue-light-3 hover:dark:bg-blue-dark-3 hover:border-blue-light-6 hover:dark:border-blue-dark-6 active:bg-blue-light-4 active:dark:bg-blue-dark-4 active:border-blue-light-7 active:dark:border-blue-dark-7 ${
+            className={`button rounded-full border border-blue-light-5 bg-blue-light-2 py-[12px] px-[24px] text-sm font-semibold leading-4 tracking-[-0.02em] text-blue-light-11 transition duration-300 ease-out hover:border-blue-light-6 hover:bg-blue-light-3 active:border-blue-light-7 active:bg-blue-light-4 dark:border-blue-dark-5 dark:bg-blue-dark-2 dark:text-blue-dark-11 hover:dark:border-blue-dark-6 hover:dark:bg-blue-dark-3 active:dark:border-blue-dark-7 active:dark:bg-blue-dark-4 ${
                 full ? "w-full" : ""
             }`}
             onClick={onClick}

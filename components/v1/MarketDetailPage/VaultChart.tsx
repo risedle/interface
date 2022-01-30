@@ -36,21 +36,21 @@ const VaultChart: FunctionComponent<VaultChartProps> = ({ chainID, address }) =>
         <div>
             {/* Supply & Borrow APY */}
             <div className="flex flex-row space-x-4 px-4">
-                <div className="flex flex-col space-y-2 w-[80px]">
+                <div className="flex w-[80px] flex-col space-y-2">
                     <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 ">Supply APY</p>
-                    {showSkeleton && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
-                    {showRealData && <p className="font-ibm font-semibold text-sm leading-4 tracking-[-.02em] text-green-light-11 dark:text-green-dark-11">{supplyAPY.toFixed(3) + "%"}</p>}
+                    {showSkeleton && <div className="h-4 animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></div>}
+                    {showRealData && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-green-light-11 dark:text-green-dark-11">{supplyAPY.toFixed(3) + "%"}</p>}
                 </div>
                 <div className="flex flex-col space-y-2">
                     <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 ">Borrow APY</p>
-                    {showSkeleton && <div className="h-4 bg-gray-light-3 dark:bg-gray-dark-3 rounded-[8px] animate-pulse"></div>}
-                    {showRealData && <p className="font-ibm font-semibold text-sm leading-4 tracking-[-.02em] text-red-light-10 dark:text-red-dark-10">{borrowAPY.toFixed(3) + "%"}</p>}
+                    {showSkeleton && <div className="h-4 animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></div>}
+                    {showRealData && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-red-light-10 dark:text-red-dark-10">{borrowAPY.toFixed(3) + "%"}</p>}
                 </div>
             </div>
 
             {/* Price chart */}
-            <div className="w-full h-[192px] mt-8 z-0">
-                {showSkeleton && <div className="h-[192px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse mb-2"></div>}
+            <div className="z-0 mt-8 h-[192px] w-full">
+                {showSkeleton && <div className="mb-2 h-[192px] animate-pulse bg-gray-light-3 dark:bg-gray-dark-3"></div>}
                 {showRealData && (
                     <ResponsiveContainer width="100%" height="100%" className="h-full">
                         <AreaChart
@@ -97,10 +97,10 @@ const VaultChart: FunctionComponent<VaultChartProps> = ({ chainID, address }) =>
             </div>
 
             {/* Timeframe selector */}
-            <div className="flex flex-row items-center px-4 mt-2">
+            <div className="mt-2 flex flex-row items-center px-4">
                 <div className="basis-1/5 text-center">
                     <button
-                        className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Daily ? activeTimeframeClasses : ""}`}
+                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Daily ? activeTimeframeClasses : ""}`}
                         onClick={() => {
                             setCurrentTimeframe(Timeframe.Daily);
                             if (data.daily) {
@@ -115,7 +115,7 @@ const VaultChart: FunctionComponent<VaultChartProps> = ({ chainID, address }) =>
                 </div>
                 <div className="basis-1/5 text-center">
                     <button
-                        className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Weekly ? activeTimeframeClasses : ""}`}
+                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Weekly ? activeTimeframeClasses : ""}`}
                         onClick={() => {
                             setCurrentTimeframe(Timeframe.Weekly);
                             if (data.weekly) {
@@ -130,7 +130,7 @@ const VaultChart: FunctionComponent<VaultChartProps> = ({ chainID, address }) =>
                 </div>
                 <div className="basis-1/5 text-center">
                     <button
-                        className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.TwoWeekly ? activeTimeframeClasses : ""}`}
+                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.TwoWeekly ? activeTimeframeClasses : ""}`}
                         onClick={() => {
                             setCurrentTimeframe(Timeframe.TwoWeekly);
                             if (data.twoWeekly) {
@@ -145,7 +145,7 @@ const VaultChart: FunctionComponent<VaultChartProps> = ({ chainID, address }) =>
                 </div>
                 <div className="basis-1/5 text-center">
                     <button
-                        className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
+                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
                         onClick={() => {
                             setCurrentTimeframe(Timeframe.Monthly);
                             if (data.monthly) {
@@ -160,7 +160,7 @@ const VaultChart: FunctionComponent<VaultChartProps> = ({ chainID, address }) =>
                 </div>
                 <div className="basis-1/5 text-center">
                     <button
-                        className={`text-xs leading-4 py-[7px] px-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
+                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
                         onClick={() => {
                             setCurrentTimeframe(Timeframe.ThreeMonthly);
                             if (data.threeMonthly) {

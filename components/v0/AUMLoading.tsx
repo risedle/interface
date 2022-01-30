@@ -12,10 +12,10 @@ type AUMLoadingProps = {};
  */
 const AUMLoading: FunctionComponent<AUMLoadingProps> = ({}) => {
     return (
-        <p className="text-grey font-semibold text-2xl m-0 leading-normal align-middle">
-            <span className="inline-block align-middle mr-2">AUM</span>
+        <p className="m-0 align-middle text-2xl font-semibold leading-normal text-grey">
+            <span className="mr-2 inline-block align-middle">AUM</span>
             <span>
-                <svg className="fill-current text-grey inline-block align-middle animate-spin" width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className="inline-block animate-spin fill-current align-middle text-grey" width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12.02 9.38436C12.4592 9.38436 13.777 3.19468 13.817 1.47754C13.8569 0.678868 13.0183 0 12.02 0C11.0216 0 10.183 0.638935 10.223 1.47754C10.3028 3.19468 11.5807 9.38436 12.02 9.38436Z" />
                     <path d="M9.38436 12.02C9.38436 11.5807 3.19468 10.2629 1.47754 10.223C0.678868 10.183 0 11.0216 0 12.02C0 13.0183 0.638935 13.8569 1.47754 13.817C3.19468 13.7371 9.38436 12.4592 9.38436 12.02Z" />
                     <path d="M10.183 9.10482L3.35441 3.3544L9.14476 10.183C9.42429 9.78368 9.78369 9.42428 10.183 9.10482Z" />

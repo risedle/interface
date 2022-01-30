@@ -18,7 +18,7 @@ type ButtonPositiveProps = {
 const ButtonPositive: FunctionComponent<ButtonPositiveProps> = ({ onClick, full, children }) => {
     return (
         <button
-            className={`button bg-green-light-10 dark:bg-green-dark-10 border border-green-light-11 dark:border-green-dark-11 rounded-full text-sm leading-4 tracking-[-0.02em] text-gray-light-1 dark:text-blue-light-1 font-semibold py-[12px] px-[24px] transition ease-out duration-300 hover:bg-green-light-9 hover:dark:bg-green-dark-9 hover:border-green-light-10 hover:dark:border-green-dark-10 active:bg-green-light-8 active:dark:bg-green-dark-8 active:border-green-light-9 active:dark:border-green-dark-9 ${
+            className={`button rounded-full border border-green-light-11 bg-green-light-10 py-[12px] px-[24px] text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-1 transition duration-300 ease-out hover:border-green-light-10 hover:bg-green-light-9 active:border-green-light-9 active:bg-green-light-8 dark:border-green-dark-11 dark:bg-green-dark-10 dark:text-blue-light-1 hover:dark:border-green-dark-10 hover:dark:bg-green-dark-9 active:dark:border-green-dark-9 active:dark:bg-green-dark-8 ${
                 full ? "w-full" : ""
             }`}
             onClick={onClick}

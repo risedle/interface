@@ -167,7 +167,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
 
     return (
         <>
-            <div className="fixed bottom-0 px-4 py-3 h-[64px] bg-gray-light-1 dark:bg-gray-dark-1 border-t border-gray-light-3 dark:border-gray-dark-3 w-full flex flex-row space-x-2">
+            <div className="fixed bottom-0 flex h-[64px] w-full flex-row space-x-2 border-t border-gray-light-3 bg-gray-light-1 px-4 py-3 dark:border-gray-dark-3 dark:bg-gray-dark-1">
                 {/* Network switcher popover */}
                 <Popover id="popover-1">
                     {({ open }) => {
@@ -183,27 +183,27 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         }
                         return (
                             <>
-                                <Popover.Button ref={setReferenceElement1} className="outline-0 button basic w-[40px] p-2">
+                                <Popover.Button ref={setReferenceElement1} className="button basic w-[40px] p-2 outline-0">
                                     <img src={getChainIconPath(chain)} alt={chain.name} className="flex-shrink-0" />
                                 </Popover.Button>
 
-                                <Popover.Panel ref={setPopperElement1} style={popper1.styles.popper} {...popper1.attributes.popper} className="bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 flex flex-col p-4 rounded-[16px] min-w-[241px]">
+                                <Popover.Panel ref={setPopperElement1} style={popper1.styles.popper} {...popper1.attributes.popper} className="flex min-w-[241px] flex-col rounded-[16px] border border-gray-light-4 bg-gray-light-2 p-4 dark:border-gray-dark-4 dark:bg-gray-dark-2">
                                     {({ close }) => {
                                         return (
                                             <>
-                                                <div className="text-xs text-gray-light-9 dark:text-gray-dark-9 pb-2 border-b border-gray-light-3 dark:border-gray-dark-3 border-dashed">Switch network</div>
+                                                <div className="border-b border-dashed border-gray-light-3 pb-2 text-xs text-gray-light-9 dark:border-gray-dark-3 dark:text-gray-dark-9">Switch network</div>
                                                 <div className="mt-2 flex flex-col space-y-4 text-left">
                                                     {supportedChains.map((c) => {
                                                         return (
                                                             <button
-                                                                className="w-full m-0 text-left flex flex-row items-center justify-between"
+                                                                className="m-0 flex w-full flex-row items-center justify-between text-left"
                                                                 onClick={() => {
                                                                     switchToNetwork(c);
                                                                     close();
                                                                 }}
                                                                 key={c.id}
                                                             >
-                                                                <span className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-normal m-0 leading-none">{c.name}</span>
+                                                                <span className="m-0 text-sm font-normal leading-none text-gray-light-12 dark:text-gray-dark-12">{c.name}</span>
 
                                                                 <img src={getChainIconPath(c)} alt={c.name} className="inline-block self-center" />
                                                             </button>
@@ -214,7 +214,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                         );
                                     }}
                                 </Popover.Panel>
-                                <Popover.Overlay className={`${open ? "opacity-100 fixed inset-0 bg-gray-dark-1/60 dark:bg-black/60 backdrop-blur" : "opacity-0"} z-[-1]`} />
+                                <Popover.Overlay className={`${open ? "fixed inset-0 bg-gray-dark-1/60 opacity-100 backdrop-blur dark:bg-black/60" : "opacity-0"} z-[-1]`} />
                             </>
                         );
                     }}
@@ -238,18 +238,18 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                 {/* If account is not connected then display the connect wallet button */}
                                 {(!account || !connectedChain.data || !connectedChain.data.chain) && (
                                     <>
-                                        <Popover.Button ref={setReferenceElement2} className="outline-0 text-gray-light-1 dark:text-gray-dark-1 text-sm font-semibold py-3 px-4 rounded-full leading-4 inline-block w-full button gradient bg-[length:300%_300%] tracking-tight bg-center hover:bg-left hover:shadow-xl hover:shadow-blue-400/20">
+                                        <Popover.Button ref={setReferenceElement2} className="button gradient inline-block w-full rounded-full bg-[length:300%_300%] bg-center py-3 px-4 text-sm font-semibold leading-4 tracking-tight text-gray-light-1 outline-0 hover:bg-left hover:shadow-xl hover:shadow-blue-400/20 dark:text-gray-dark-1">
                                             Connect Wallet
                                         </Popover.Button>
 
                                         <Popover.Panel ref={setPopperElement2} style={popper2.styles.popper} {...popper2.attributes.popper} className="container">
                                             {({ close }) => {
                                                 return (
-                                                    <div className="bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px] mx-4">
-                                                        <div className="text-center pr-4 py-4 pl-[49px] border-b border-gray-light-3 dark:border-gray-dark-3 border-dashed m-0">
-                                                            <span className="text-base leading-none font-bold text-gray-light-12 dark:text-gray-dark-12">{isConnecting ? "Connecting..." : "Connect Wallet"}</span>
-                                                            <button className="float-right bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full align-middle self-center" onClick={() => close()}>
-                                                                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="align-middle inline-block fill-gray-light-12 dark:fill-gray-dark-12 m-2">
+                                                    <div className="mx-4 rounded-[24px] border border-gray-light-3 bg-gray-light-1 dark:border-gray-dark-3 dark:bg-gray-dark-1">
+                                                        <div className="m-0 border-b border-dashed border-gray-light-3 py-4 pr-4 pl-[49px] text-center dark:border-gray-dark-3">
+                                                            <span className="text-base font-bold leading-none text-gray-light-12 dark:text-gray-dark-12">{isConnecting ? "Connecting..." : "Connect Wallet"}</span>
+                                                            <button className="float-right self-center rounded-full border border-gray-light-4 bg-gray-light-2 align-middle dark:border-gray-dark-4 dark:bg-gray-dark-2" onClick={() => close()}>
+                                                                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="m-2 inline-block fill-gray-light-12 align-middle dark:fill-gray-dark-12">
                                                                     <path
                                                                         fillRule="evenodd"
                                                                         clipRule="evenodd"
@@ -259,9 +259,9 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                             </button>
                                                         </div>
 
-                                                        <div className="flex flex-col p-4 space-y-2">
+                                                        <div className="flex flex-col space-y-2 p-4">
                                                             <button
-                                                                className={`bg-orange-light-2 dark:bg-orange-dark-2 border border-orange-light-5 dark:border-orange-dark-5 rounded-[12px] py-[11px] px-[12px] text-left m-0 flex flex-row items-center justify-between transition ease-in-out duration-300 active:scale-95 hover:bg-orange-light-3 dark:hover:bg-orange-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
+                                                                className={`m-0 flex flex-row items-center justify-between rounded-[12px] border border-orange-light-5 bg-orange-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-orange-light-3 active:scale-95 dark:border-orange-dark-5 dark:bg-orange-dark-2 dark:hover:bg-orange-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
                                                                 disabled={isConnecting && connectorName ? true : false}
                                                                 onClick={async () => {
                                                                     await connectWallet(MetaMaskConnector);
@@ -269,11 +269,11 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                 }}
                                                             >
                                                                 <div>
-                                                                    <img src="/wallet/Metamask.svg" alt="MetaMask" className="inline-block self-center  mr-4" />
-                                                                    <span className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-semibold font-inter m-0 leading-none">Metamask</span>
+                                                                    <img src="/wallet/Metamask.svg" alt="MetaMask" className="mr-4 inline-block  self-center" />
+                                                                    <span className="m-0 font-inter text-sm font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12">Metamask</span>
                                                                 </div>
                                                                 {isConnecting && connectorName === "MetaMask" && (
-                                                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="animate-spin inline-block float-right">
+                                                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="float-right inline-block animate-spin">
                                                                         <path opacity="0.2" d="M28 16.0005C28 22.6279 22.6274 28.0005 16 28.0005C9.37258 28.0005 4 22.6279 4 16.0005C4 9.37307 9.37258 4.00049 16 4.00049C22.6274 4.00049 28 9.37307 28 16.0005ZM6.4 16.0005C6.4 21.3024 10.6981 25.6005 16 25.6005C21.3019 25.6005 25.6 21.3024 25.6 16.0005C25.6 10.6986 21.3019 6.40049 16 6.40049C10.6981 6.40049 6.4 10.6986 6.4 16.0005Z" className="fill-gray-light-12 dark:fill-gray-dark-12" />
                                                                         <path
                                                                             d="M26.8 16.0005C27.4627 16.0005 28.0062 16.5391 27.9401 17.1985C27.7286 19.3064 26.9618 21.3285 25.7082 23.0539C24.2187 25.1041 22.1183 26.6301 19.7082 27.4132C17.2981 28.1963 14.7019 28.1963 12.2918 27.4132C10.2635 26.7541 8.45455 25.5689 7.04447 23.9879C6.60334 23.4933 6.72645 22.7381 7.26262 22.3486C7.79879 21.959 8.5442 22.0841 8.99756 22.5675C10.1008 23.7439 11.4874 24.6283 13.0334 25.1306C14.9615 25.7571 17.0385 25.7571 18.9666 25.1306C20.8947 24.5042 22.5749 23.2834 23.7666 21.6432C24.722 20.3281 25.324 18.7975 25.5251 17.1974C25.6077 16.5398 26.1373 16.0005 26.8 16.0005Z"
@@ -283,7 +283,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                 )}
                                                             </button>
                                                             <button
-                                                                className={`bg-blue-light-2 dark:bg-blue-dark-2 border border-blue-light-5 dark:border-blue-dark-5 rounded-[12px] py-[11px] px-[12px] text-left m-0 flex flex-row items-center justify-between transition ease-in-out duration-300 active:scale-95 hover:bg-blue-light-3 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
+                                                                className={`m-0 flex flex-row items-center justify-between rounded-[12px] border border-blue-light-5 bg-blue-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-blue-light-3 active:scale-95 dark:border-blue-dark-5 dark:bg-blue-dark-2 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
                                                                 disabled={isConnecting && connectorName ? true : false}
                                                                 onClick={async () => {
                                                                     await connectWallet(WCConnector);
@@ -291,11 +291,11 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                 }}
                                                             >
                                                                 <div>
-                                                                    <img src="/wallet/WalletConnect.svg" alt="WalletConnect" className="inline-block self-center  mr-4" />
-                                                                    <span className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-semibold font-inter m-0 leading-none">Wallet Connect</span>
+                                                                    <img src="/wallet/WalletConnect.svg" alt="WalletConnect" className="mr-4 inline-block  self-center" />
+                                                                    <span className="m-0 font-inter text-sm font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12">Wallet Connect</span>
                                                                 </div>
                                                                 {isConnecting && connectorName === "WalletConnect" && (
-                                                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="animate-spin inline-block float-right">
+                                                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="float-right inline-block animate-spin">
                                                                         <path opacity="0.2" d="M28 16.0005C28 22.6279 22.6274 28.0005 16 28.0005C9.37258 28.0005 4 22.6279 4 16.0005C4 9.37307 9.37258 4.00049 16 4.00049C22.6274 4.00049 28 9.37307 28 16.0005ZM6.4 16.0005C6.4 21.3024 10.6981 25.6005 16 25.6005C21.3019 25.6005 25.6 21.3024 25.6 16.0005C25.6 10.6986 21.3019 6.40049 16 6.40049C10.6981 6.40049 6.4 10.6986 6.4 16.0005Z" className="fill-gray-light-12 dark:fill-gray-dark-12" />
                                                                         <path
                                                                             d="M26.8 16.0005C27.4627 16.0005 28.0062 16.5391 27.9401 17.1985C27.7286 19.3064 26.9618 21.3285 25.7082 23.0539C24.2187 25.1041 22.1183 26.6301 19.7082 27.4132C17.2981 28.1963 14.7019 28.1963 12.2918 27.4132C10.2635 26.7541 8.45455 25.5689 7.04447 23.9879C6.60334 23.4933 6.72645 22.7381 7.26262 22.3486C7.79879 21.959 8.5442 22.0841 8.99756 22.5675C10.1008 23.7439 11.4874 24.6283 13.0334 25.1306C14.9615 25.7571 17.0385 25.7571 18.9666 25.1306C20.8947 24.5042 22.5749 23.2834 23.7666 21.6432C24.722 20.3281 25.324 18.7975 25.5251 17.1974C25.6077 16.5398 26.1373 16.0005 26.8 16.0005Z"
@@ -306,10 +306,10 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                             </button>
                                                         </div>
 
-                                                        <div className="text-center p-4 border-t border-gray-light-3 dark:border-gray-dark-3 border-dashed m-0">
-                                                            <p className="text-gray-light-11 dark:text-gray-dark-11 text-xs leading-1">
+                                                        <div className="m-0 border-t border-dashed border-gray-light-3 p-4 text-center dark:border-gray-dark-3">
+                                                            <p className="leading-1 text-xs text-gray-light-11 dark:text-gray-dark-11">
                                                                 By connecting your wallet to Residle you&apos;re agree with our{" "}
-                                                                <a href="#" className="underline text-gray-light-12 dark:text-gray-dark-12" target="_blank" rel="noreferrer">
+                                                                <a href="#" className="text-gray-light-12 underline dark:text-gray-dark-12" target="_blank" rel="noreferrer">
                                                                     Terms and Conditions
                                                                 </a>
                                                             </p>
@@ -324,7 +324,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                 {/* If account is connected and connected chain is not the same as current chain then display the switch network button */}
                                 {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id != chain.id && (
                                     <button
-                                        className="w-full bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 text-blue-dark-1 dark:text-blue-light-1 text-sm leading-4 font-semibold py-[11px] px-4 rounded-full leading-4 inline-block tracking-tighter"
+                                        className="inline-block w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1"
                                         onClick={() => {
                                             if (switchNetwork) {
                                                 switchNetwork(chain.id);
@@ -333,7 +333,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                             }
                                         }}
                                     >
-                                        <span className="w-[8px] h-[8px] rounded-full bg-red-light-10 dark:bg-red-dark-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:shadow-red-dark-10 inline-block mr-2"></span>
+                                        <span className="mr-2 inline-block h-[8px] w-[8px] rounded-full bg-red-light-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:bg-red-dark-10 dark:shadow-red-dark-10"></span>
                                         Switch to {chain.name}
                                     </button>
                                 )}
@@ -341,20 +341,20 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                 {/* If account is connected and connected chain is the same as current chain then display account information */}
                                 {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id === chain.id && (
                                     <>
-                                        <Popover.Button ref={setReferenceElement2} className="w-full bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 text-blue-dark-1 dark:text-blue-light-1 text-sm font-semibold py-[11px] px-4 rounded-full leading-4 inline-block tracking-tighter">
-                                            <span className="w-[8px] h-[8px] rounded-full bg-sky-light-10 dark:bg-sky-dark-10 shadow-[0px_0px_12px] shadow-sky-light-10 inline-block mr-2"></span>
+                                        <Popover.Button ref={setReferenceElement2} className="inline-block w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1">
+                                            <span className="mr-2 inline-block h-[8px] w-[8px] rounded-full bg-sky-light-10 shadow-[0px_0px_12px] shadow-sky-light-10 dark:bg-sky-dark-10"></span>
                                             {formatAddress(account)}
                                         </Popover.Button>
 
-                                        <Popover.Panel ref={setPopperElement2} style={popper2.styles.popper} {...popper2.attributes.popper} className="bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 w-[241px] mt-2 rounded-[16px] flex flex-col">
+                                        <Popover.Panel ref={setPopperElement2} style={popper2.styles.popper} {...popper2.attributes.popper} className="mt-2 flex w-[241px] flex-col rounded-[16px] border border-gray-light-4 bg-gray-light-2 dark:border-gray-dark-4 dark:bg-gray-dark-2">
                                             {({ close }) => {
                                                 return (
                                                     <>
-                                                        <div className="text-xs leading-4 mx-4 pt-4 pb-2 text-gray-light-9 dark:text-gray-dark-9 border-b border-gray-light-5 dark:border-gray-dark-3 border-dashed">Connected via {connectorName}</div>
+                                                        <div className="mx-4 border-b border-dashed border-gray-light-5 pt-4 pb-2 text-xs leading-4 text-gray-light-9 dark:border-gray-dark-3 dark:text-gray-dark-9">Connected via {connectorName}</div>
                                                         <div className="mt-2 flex flex-col space-y-4 pb-4">
-                                                            <div className="px-4 text-sm leading-4 flex flex-row justify-between">
+                                                            <div className="flex flex-row justify-between px-4 text-sm leading-4">
                                                                 <Link href={getEtherscanAddressURL(chain, account)}>
-                                                                    <a className="hover:underline text-gray-light-12 dark:text-gray-dark-12" target="_blank" rel="noopener noreferrer">
+                                                                    <a className="text-gray-light-12 hover:underline dark:text-gray-dark-12" target="_blank" rel="noopener noreferrer">
                                                                         View on Explorer <span className="text-gray-light-9 dark:text-gray-dark-9">&#8599;</span>
                                                                     </a>
                                                                 </Link>
@@ -381,9 +381,9 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                     />
                                                                 </svg>
                                                             </div>
-                                                            <div className="px-4 text-sm leading-4 flex flex-row justify-between">
+                                                            <div className="flex flex-row justify-between px-4 text-sm leading-4">
                                                                 <button
-                                                                    className="hover:underline text-gray-light-12 dark:text-gray-dark-12"
+                                                                    className="text-gray-light-12 hover:underline dark:text-gray-dark-12"
                                                                     onClick={() => {
                                                                         navigator.clipboard.writeText(account);
                                                                         toast.custom((t) => <ToastSuccess>Address Copied</ToastSuccess>);
@@ -399,9 +399,9 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                     />
                                                                 </svg>
                                                             </div>
-                                                            <div className="px-4 text-sm leading-4 flex flex-row justify-between">
+                                                            <div className="flex flex-row justify-between px-4 text-sm leading-4">
                                                                 <button
-                                                                    className="hover:underline text-red-light-10 dark:text-red-dark-10"
+                                                                    className="text-red-light-10 hover:underline dark:text-red-dark-10"
                                                                     onClick={() => {
                                                                         logout();
                                                                         toast.custom((t) => <ToastSuccess>{connectorName} disconnected</ToastSuccess>);
@@ -424,7 +424,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                         </Popover.Panel>
                                     </>
                                 )}
-                                <Popover.Overlay className={`${open ? "opacity-100 fixed inset-0 bg-gray-dark-1/60 dark:bg-black/60 backdrop-blur" : "opacity-0"} -z-[1]`} />
+                                <Popover.Overlay className={`${open ? "fixed inset-0 bg-gray-dark-1/60 opacity-100 backdrop-blur dark:bg-black/60" : "opacity-0"} -z-[1]`} />
                             </>
                         );
                     }}
@@ -445,7 +445,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         }
                         return (
                             <>
-                                <Popover.Button ref={setReferenceElement3} className="outline-0 button basic w-[40px]">
+                                <Popover.Button ref={setReferenceElement3} className="button basic w-[40px] outline-0">
                                     {open && (
                                         <svg className="flex-shrink-0 fill-gray-light-12 dark:fill-gray-dark-12" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -466,31 +466,31 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                     )}
                                 </Popover.Button>
 
-                                <Popover.Panel ref={setPopperElement3} style={popper3.styles.popper} {...popper3.attributes.popper} className="bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 flex flex-col p-4 rounded-[16px] min-w-[161px]">
+                                <Popover.Panel ref={setPopperElement3} style={popper3.styles.popper} {...popper3.attributes.popper} className="flex min-w-[161px] flex-col rounded-[16px] border border-gray-light-4 bg-gray-light-2 p-4 dark:border-gray-dark-4 dark:bg-gray-dark-2">
                                     {({ close }) => {
                                         return (
                                             <>
-                                                <div className="text-xs text-gray-light-9 dark:text-gray-dark-9 pb-2">Navigation</div>
+                                                <div className="pb-2 text-xs text-gray-light-9 dark:text-gray-dark-9">Navigation</div>
                                                 <div className="mt-2 flex flex-col space-y-4 text-left">
                                                     <Link href="/">
-                                                        <a className="w-full m-0 text-left flex flex-row items-center justify-between">
-                                                            <span className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-normal m-0 leading-none">Home</span>
+                                                        <a className="m-0 flex w-full flex-row items-center justify-between text-left">
+                                                            <span className="m-0 text-sm font-normal leading-none text-gray-light-12 dark:text-gray-dark-12">Home</span>
                                                         </a>
                                                     </Link>
                                                     <Link href="/">
-                                                        <a className="w-full m-0 text-left flex flex-row items-center justify-between">
-                                                            <span className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-normal m-0 leading-none">Markets</span>
+                                                        <a className="m-0 flex w-full flex-row items-center justify-between text-left">
+                                                            <span className="m-0 text-sm font-normal leading-none text-gray-light-12 dark:text-gray-dark-12">Markets</span>
                                                         </a>
                                                     </Link>
                                                 </div>
 
-                                                <div className="text-xs text-gray-light-9 dark:text-gray-dark-9 pb-2 pt-4">Socials</div>
+                                                <div className="pb-2 pt-4 text-xs text-gray-light-9 dark:text-gray-dark-9">Socials</div>
                                                 <div className="mt-2 flex flex-col space-y-4 text-left">
                                                     <Link href={RisedleLinks.twitter}>
-                                                        <a className="w-full m-0 text-left flex flex-row items-center justify-between" target="_blank" rel="noreferrer">
+                                                        <a className="m-0 flex w-full flex-row items-center justify-between text-left" target="_blank" rel="noreferrer">
                                                             <div>
-                                                                <span className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-normal m-0 leading-none">Twitter</span>
-                                                                <span className="text-sm text-gray-light-9 dark:text-gray-dark-9 font-normal m-0 leading-none">&#8599;</span>
+                                                                <span className="m-0 text-sm font-normal leading-none text-gray-light-12 dark:text-gray-dark-12">Twitter</span>
+                                                                <span className="m-0 text-sm font-normal leading-none text-gray-light-9 dark:text-gray-dark-9">&#8599;</span>
                                                             </div>
                                                             <svg className="fill-gray-light-12 dark:fill-gray-dark-12" width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg">
                                                                 <path
@@ -502,10 +502,10 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                         </a>
                                                     </Link>
                                                     <Link href={RisedleLinks.discord}>
-                                                        <a className="w-full m-0 text-left flex flex-row items-center justify-between" target="_blank" rel="noreferrer">
+                                                        <a className="m-0 flex w-full flex-row items-center justify-between text-left" target="_blank" rel="noreferrer">
                                                             <div>
-                                                                <span className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-normal m-0 leading-none">Discord</span>
-                                                                <span className="text-sm text-gray-light-9 dark:text-gray-dark-9 font-normal m-0 leading-none">&#8599;</span>
+                                                                <span className="m-0 text-sm font-normal leading-none text-gray-light-12 dark:text-gray-dark-12">Discord</span>
+                                                                <span className="m-0 text-sm font-normal leading-none text-gray-light-9 dark:text-gray-dark-9">&#8599;</span>
                                                             </div>
                                                             <svg className="fill-gray-light-12 dark:fill-gray-dark-12" width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg">
                                                                 <g clipPath="url(#clip0_389_4649)">
@@ -524,10 +524,10 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                         </a>
                                                     </Link>
                                                     <Link href={RisedleLinks.github}>
-                                                        <a className="w-full m-0 text-left flex flex-row items-center justify-between" target="_blank" rel="noreferrer">
+                                                        <a className="m-0 flex w-full flex-row items-center justify-between text-left" target="_blank" rel="noreferrer">
                                                             <div>
-                                                                <span className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-normal m-0 leading-none">Github</span>
-                                                                <span className="text-sm text-gray-light-9 dark:text-gray-dark-9 font-normal m-0 leading-none">&#8599;</span>
+                                                                <span className="m-0 text-sm font-normal leading-none text-gray-light-12 dark:text-gray-dark-12">Github</span>
+                                                                <span className="m-0 text-sm font-normal leading-none text-gray-light-9 dark:text-gray-dark-9">&#8599;</span>
                                                             </div>
 
                                                             <svg className="fill-gray-light-12 dark:fill-gray-dark-12" width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg">
@@ -541,13 +541,13 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                     </Link>
                                                 </div>
 
-                                                <div className="text-xs text-gray-light-9 dark:text-gray-dark-9 pb-2 pt-4">Others</div>
+                                                <div className="pb-2 pt-4 text-xs text-gray-light-9 dark:text-gray-dark-9">Others</div>
                                                 <div className="mt-2 flex flex-col space-y-4 text-left">
                                                     <Link href={RisedleLinks.docs}>
-                                                        <a className="w-full m-0 text-left flex flex-row items-center justify-between" target="_blank" rel="noreferrer">
+                                                        <a className="m-0 flex w-full flex-row items-center justify-between text-left" target="_blank" rel="noreferrer">
                                                             <div>
-                                                                <span className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-normal m-0 leading-none">Docs</span>
-                                                                <span className="text-sm text-gray-light-9 dark:text-gray-dark-9 font-normal m-0 leading-none">&#8599;</span>
+                                                                <span className="m-0 text-sm font-normal leading-none text-gray-light-12 dark:text-gray-dark-12">Docs</span>
+                                                                <span className="m-0 text-sm font-normal leading-none text-gray-light-9 dark:text-gray-dark-9">&#8599;</span>
                                                             </div>
                                                             <svg className="fill-gray-light-12 dark:fill-gray-dark-12" width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg">
                                                                 <path d="M3.25781 3.61684C3.67771 3.95796 3.83523 3.93193 4.62369 3.87933L12.0571 3.43299C12.2147 3.43299 12.0836 3.27571 12.0311 3.24957L10.7965 2.35711C10.56 2.17347 10.2448 1.96315 9.64083 2.01576L2.44308 2.54074C2.18059 2.56677 2.12815 2.69801 2.2327 2.80322L3.25781 3.61684ZM3.7041 5.34917V13.1704C3.7041 13.5907 3.91415 13.748 4.38693 13.722L12.5562 13.2493C13.0292 13.2233 13.0819 12.9341 13.0819 12.5927V4.82397C13.0819 4.48306 12.9508 4.29921 12.6612 4.32545L4.12422 4.82397C3.80918 4.85044 3.7041 5.00803 3.7041 5.34917ZM11.7688 5.76872C11.8212 6.00518 11.7688 6.24142 11.5319 6.26799L11.1383 6.34641V12.1205C10.7965 12.3042 10.4814 12.4092 10.2188 12.4092C9.79835 12.4092 9.69305 12.2779 9.37812 11.8844L6.80345 7.84249V11.7532L7.61816 11.937C7.61816 11.937 7.61816 12.4092 6.96086 12.4092L5.14879 12.5143C5.09615 12.4092 5.14879 12.147 5.33259 12.0944L5.80546 11.9634V6.79276L5.1489 6.74015C5.09625 6.50369 5.22739 6.16278 5.5954 6.13631L7.53935 6.00528L10.2188 10.0998V6.47765L9.53564 6.39924C9.4832 6.11018 9.69305 5.90028 9.95576 5.87425L11.7688 5.76872ZM1.83874 1.83212L9.32557 1.28079C10.245 1.20193 10.4815 1.25475 11.0594 1.67452L13.4492 3.35424C13.8436 3.64309 13.975 3.72173 13.975 4.03661V13.2493C13.975 13.8266 13.7647 14.1681 13.0293 14.2203L4.33492 14.7454C3.78291 14.7717 3.52019 14.693 3.23111 14.3253L1.47116 12.0419C1.1558 11.6216 1.02466 11.3071 1.02466 10.9392V2.75041C1.02466 2.27825 1.23504 1.88441 1.83874 1.83212Z" />
@@ -559,7 +559,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                         );
                                     }}
                                 </Popover.Panel>
-                                <Popover.Overlay className={`${open ? "opacity-100 fixed inset-0 bg-gray-dark-1/60 dark:bg-black/60 backdrop-blur" : "opacity-0"} -z-[1]`} />
+                                <Popover.Overlay className={`${open ? "fixed inset-0 bg-gray-dark-1/60 opacity-100 backdrop-blur dark:bg-black/60" : "opacity-0"} -z-[1]`} />
                             </>
                         );
                     }}

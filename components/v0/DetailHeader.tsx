@@ -24,15 +24,15 @@ type DetailHeaderProps = {
  */
 const DetailHeader: FunctionComponent<DetailHeaderProps> = ({ image, title, subTitle, leftTitle, leftPath, rightTitle, rightPath }) => {
     return (
-        <div className="flex flex-col mx-auto" style={{ width: "480px" }}>
+        <div className="mx-auto flex flex-col" style={{ width: "480px" }}>
             <div className="text-center">
                 <img src={image} className="inline-block" alt={title} />
             </div>
-            <div className="text-center -mt-6">
-                <h1 className="text-white font-extrabold text-4xl m-0 leading-normal">{title}</h1>
-                <p className="text-grey font-semibold text-2xl m-0 leading-normal">{subTitle}</p>
+            <div className="-mt-6 text-center">
+                <h1 className="m-0 text-4xl font-extrabold leading-normal text-white">{title}</h1>
+                <p className="m-0 text-2xl font-semibold leading-normal text-grey">{subTitle}</p>
             </div>
-            <div className="justify-center flex flex-row gap gap-x-4 mt-8">
+            <div className="gap mt-8 flex flex-row justify-center gap-x-4">
                 <ButtonBlueLink title={leftTitle} url={leftPath} />
                 <ButtonBlueLink title={rightTitle} url={rightPath} />
             </div>

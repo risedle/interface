@@ -17,7 +17,7 @@ type ButtonSpecialsProps = {
 
 const ButtonSpecials: FunctionComponent<ButtonSpecialsProps> = ({ onClick, full, children }) => {
     return (
-        <button className={`text-gray-light-1 dark:text-gray-dark-1 text-sm font-semibold py-[12px] px-[24px] tracking-[-0.02em] rounded-full leading-4 inline-block button gradient bg-[length:300%_300%] tracking-tight bg-center hover:bg-left hover:shadow-xl hover:shadow-blue-400/20 ${full ? "w-full" : ""}`} onClick={onClick}>
+        <button className={`button gradient inline-block rounded-full bg-[length:300%_300%] bg-center py-[12px] px-[24px] text-sm font-semibold leading-4 tracking-[-0.02em] tracking-tight text-gray-light-1 hover:bg-left hover:shadow-xl hover:shadow-blue-400/20 dark:text-gray-dark-1 ${full ? "w-full" : ""}`} onClick={onClick}>
             {children}
         </button>
     );

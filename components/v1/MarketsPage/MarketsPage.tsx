@@ -30,7 +30,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
     const { markets, marketsIsLoading, marketsIsError } = useMarkets(chain.id);
 
     return (
-        <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter min-h-screen flex flex-col overflow-hidden relative">
+        <div className="relative flex h-full min-h-screen w-full flex-col overflow-hidden bg-gray-light-1 font-inter dark:bg-gray-dark-1">
             <Head>
                 {/* <!-- HTML Meta Tags --> */}
                 <title>Risedle Protocol</title>
@@ -39,17 +39,17 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
             </Head>
             <Favicon />
 
-            <div className="container max-w-full mx-auto z-10 sm:z-20">
-                <div className="flex flex-row p-4 items-center justify-between">
+            <div className="container z-10 mx-auto max-w-full sm:z-20">
+                <div className="flex flex-row items-center justify-between p-4">
                     <div className="flex-none">
                         <Link href="/">
                             <a className="flex items-center">
                                 <Logo />
-                                <span className="text-base font-inter font-bold pl-2 traking-tight text-gray-light-12 dark:text-gray-light-1 self-center leading-0">Risedle</span>
+                                <span className="traking-tight leading-0 self-center pl-2 font-inter text-base font-bold text-gray-light-12 dark:text-gray-light-1">Risedle</span>
                             </a>
                         </Link>
                     </div>
-                    <div className="flex-none flex flex-row space-x-2 inline-block">
+                    <div className="inline-block flex flex-none flex-row space-x-2">
                         <div className="hidden sm:inline-block">
                             <ButtonNetworkSwitcher />
                         </div>
@@ -65,61 +65,61 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                 </div>
             </div>
 
-            <div className="flex flex-col z-10 min-h-screen">
+            <div className="z-10 flex min-h-screen flex-col">
                 {/* Headers */}
-                <div className="container px-4 mx-auto max-w-[540px] mt-8 sm:mt-16">
-                    <div className="flex flex-col space-y-6 border-b border-gray-light-9 dark:border-gray-dark-9 border-dashed pb-6">
+                <div className="container mx-auto mt-8 max-w-[540px] px-4 sm:mt-16">
+                    <div className="flex flex-col space-y-6 border-b border-dashed border-gray-light-9 pb-6 dark:border-gray-dark-9">
                         <div className="text-center">
-                            <h1 className="text-2xl sm:text-[32px] font-bold leading-8 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12">Leveraged Token Market</h1>
+                            <h1 className="text-2xl font-bold leading-8 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12 sm:text-[32px]">Leveraged Token Market</h1>
                         </div>
-                        <div className="flex flex-row space-x-6 mx-auto">
+                        <div className="mx-auto flex flex-row space-x-6">
                             <div className="flex flex-col space-y-2 text-center">
                                 <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">AUM</p>
-                                {(marketsIsLoading || marketsIsError) && <div className="h-[16px] w-[100px] bg-gray-light-3 dark:bg-gray-dark-3 rounded-full animate-pulse"></div>}
-                                {!marketsIsLoading && markets && <p className="font-ibm font-semibold text-sm sm:text-base leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(markets.aum)}</p>}
+                                {(marketsIsLoading || marketsIsError) && <div className="h-[16px] w-[100px] animate-pulse rounded-full bg-gray-light-3 dark:bg-gray-dark-3"></div>}
+                                {!marketsIsLoading && markets && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12 sm:text-base">{dollarFormatter.format(markets.aum)}</p>}
                             </div>
                             <div className="flex flex-col space-y-2 text-center">
                                 <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">TVL</p>
-                                {(marketsIsLoading || marketsIsError) && <div className="h-[16px] w-[100px] bg-gray-light-3 dark:bg-gray-dark-3 rounded-full animate-pulse"></div>}
-                                {!marketsIsLoading && markets && <p className="font-ibm font-semibold text-sm sm:text-base leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(markets.tvl)}</p>}
+                                {(marketsIsLoading || marketsIsError) && <div className="h-[16px] w-[100px] animate-pulse rounded-full bg-gray-light-3 dark:bg-gray-dark-3"></div>}
+                                {!marketsIsLoading && markets && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12 sm:text-base">{dollarFormatter.format(markets.tvl)}</p>}
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Cards */}
-                <div className="container px-4 mx-auto max-w-[400px] mt-6 sm:mt-8">
+                <div className="container mx-auto mt-6 max-w-[400px] px-4 sm:mt-8">
                     {/* Cards loading state */}
                     {(marketsIsLoading || marketsIsError) && (
                         <div className="grid grid-cols-1 gap-4">
-                            <div className="flex flex-col p-4 bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px]">
-                                <div className="flex flex-row space-x-4 items-center pb-4">
-                                    <div className="h-12 w-12 flex-none rounded-full bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
-                                    <div className="h-7 grow rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
+                            <div className="flex flex-col rounded-[24px] border border-gray-light-3 bg-gray-light-1 p-4 dark:border-gray-dark-3 dark:bg-gray-dark-1">
+                                <div className="flex flex-row items-center space-x-4 pb-4">
+                                    <div className="h-12 w-12 flex-none animate-pulse rounded-full bg-gray-light-3 dark:bg-gray-dark-3"></div>
+                                    <div className="h-7 grow animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></div>
                                 </div>
-                                <div className="hidden sm:block h-[192px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
-                                <div className="flex flex-row py-4 border-b border-gray-light-3 dark:border-gray-dark-3 border-dashed">
-                                    <div className="h-7 grow rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse "></div>
+                                <div className="hidden h-[192px] animate-pulse bg-gray-light-3 dark:bg-gray-dark-3 sm:block"></div>
+                                <div className="flex flex-row border-b border-dashed border-gray-light-3 py-4 dark:border-gray-dark-3">
+                                    <div className="h-7 grow animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 "></div>
                                 </div>
                                 <div className="flex flex-row space-x-6 pt-4">
-                                    <div className="basis-1/3 h-[40px] rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
-                                    <div className="basis-1/3 h-[40px] rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
-                                    <div className="basis-1/3 h-[40px] rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
+                                    <div className="h-[40px] basis-1/3 animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></div>
+                                    <div className="h-[40px] basis-1/3 animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></div>
+                                    <div className="h-[40px] basis-1/3 animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></div>
                                 </div>
                             </div>
-                            <div className="flex flex-col p-4 bg-gray-light-1 dark:bg-gray-dark-1 border border-gray-light-3 dark:border-gray-dark-3 rounded-[24px]">
-                                <div className="flex flex-row space-x-4 items-center pb-4">
-                                    <div className="h-12 w-12 flex-none rounded-full bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
-                                    <div className="h-7 grow rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
+                            <div className="flex flex-col rounded-[24px] border border-gray-light-3 bg-gray-light-1 p-4 dark:border-gray-dark-3 dark:bg-gray-dark-1">
+                                <div className="flex flex-row items-center space-x-4 pb-4">
+                                    <div className="h-12 w-12 flex-none animate-pulse rounded-full bg-gray-light-3 dark:bg-gray-dark-3"></div>
+                                    <div className="h-7 grow animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></div>
                                 </div>
-                                <div className="hidden sm:block h-[192px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
-                                <div className="flex flex-row py-4 border-b border-gray-light-3 dark:border-gray-dark-3 border-dashed">
-                                    <div className="h-7 grow rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse "></div>
+                                <div className="hidden h-[192px] animate-pulse bg-gray-light-3 dark:bg-gray-dark-3 sm:block"></div>
+                                <div className="flex flex-row border-b border-dashed border-gray-light-3 py-4 dark:border-gray-dark-3">
+                                    <div className="h-7 grow animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 "></div>
                                 </div>
                                 <div className="flex flex-row space-x-6 pt-4">
-                                    <div className="basis-1/3 h-[40px] rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
-                                    <div className="basis-1/3 h-[40px] rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
-                                    <div className="basis-1/3 h-[40px] rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse"></div>
+                                    <div className="h-[40px] basis-1/3 animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></div>
+                                    <div className="h-[40px] basis-1/3 animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></div>
+                                    <div className="h-[40px] basis-1/3 animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></div>
                                 </div>
                             </div>
                         </div>
@@ -142,7 +142,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                 <Footer />
             </div>
 
-            <div className="absolute -top-1/3 sm:-top-1/2 left-1/2 -translate-x-1/2">
+            <div className="absolute -top-1/3 left-1/2 -translate-x-1/2 sm:-top-1/2">
                 <svg className="stroke-black dark:stroke-white" width="679" height="679" viewBox="0 0 679 679" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g opacity="0.5">
                         <circle opacity="0.1" cx="339.5" cy="339.5" r="130.173" />
@@ -208,7 +208,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                 </svg>
             </div>
 
-            <div className="sm:hidden z-10">
+            <div className="z-10 sm:hidden">
                 <ButtonConnectWalletMobile />
             </div>
         </div>

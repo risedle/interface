@@ -35,7 +35,7 @@ const Menu: FunctionComponent<MenuProps> = ({ active }) => {
     }
 
     return (
-        <div className="flex flex-row gap gap-x-6 items-center">
+        <div className="gap flex flex-row items-center gap-x-6">
             <Link href="/products">
                 <a className={investClassNames} style={{ fontSize: "15px", lineHeight: "21px" }}>
                     Products

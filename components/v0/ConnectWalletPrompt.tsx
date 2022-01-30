@@ -25,12 +25,12 @@ const ConnectWalletPrompt: FunctionComponent<ConnectWalletPromptProps> = ({ conn
     return (
         <div className="mx-auto" style={{ width: "480px" }}>
             <div>
-                <h1 className="text-white font-extrabold text-4xl m-0 leading-normal">Connect your wallet</h1>
-                <p className="text-grey font-semibold text-2xl m-0 leading-normal">Click the button below to get started.</p>
+                <h1 className="m-0 text-4xl font-extrabold leading-normal text-white">Connect your wallet</h1>
+                <p className="m-0 text-2xl font-semibold leading-normal text-grey">Click the button below to get started.</p>
             </div>
 
             <div className="mt-8">
-                <h1 className="text-white font-bold text-xl mb-3 leading-normal">1. Choose Network</h1>
+                <h1 className="mb-3 text-xl font-bold leading-normal text-white">1. Choose Network</h1>
                 <div className="flex space-x-3">
                     <ButtonOutline onClick={setKovan} active={network === "kovan"}>
                         Kovan
@@ -42,7 +42,7 @@ const ConnectWalletPrompt: FunctionComponent<ConnectWalletPromptProps> = ({ conn
             </div>
 
             <div className="mt-8">
-                <h1 className="text-white font-bold mb-3 text-xl leading-normal">2. Choose Wallet</h1>
+                <h1 className="mb-3 text-xl font-bold leading-normal text-white">2. Choose Wallet</h1>
                 <div className="flex space-x-3">
                     <ButtonBlue onClick={connectMetamask}>Metamask</ButtonBlue>
                     <ButtonBlue onClick={connectWalletConnect}>WalletConnect</ButtonBlue>
