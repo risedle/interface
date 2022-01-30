@@ -37,18 +37,12 @@ const Menu: FunctionComponent<MenuProps> = ({ active }) => {
     return (
         <div className="flex flex-row gap gap-x-6 items-center">
             <Link href="/products">
-                <a
-                    className={investClassNames}
-                    style={{ fontSize: "15px", lineHeight: "21px" }}
-                >
+                <a className={investClassNames} style={{ fontSize: "15px", lineHeight: "21px" }}>
                     Products
                 </a>
             </Link>
             <Link href="/vault">
-                <a
-                    className={lendClassNames}
-                    style={{ fontSize: "15px", lineHeight: "21px" }}
-                >
+                <a className={lendClassNames} style={{ fontSize: "15px", lineHeight: "21px" }}>
                     Vault
                 </a>
             </Link>
