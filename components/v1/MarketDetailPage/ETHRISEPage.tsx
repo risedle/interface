@@ -167,7 +167,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     <img className="sm:hidden" src={metadata.logo} alt={metadata.title} />
                                 </div>
 
-                                <LeveragedTokenChart chainID={chain.id} leveragedTokenAddress={ethriseAddress} vaultAddress={metadata.vaultAddress} />
+                                <LeveragedTokenChart chainID={chain.id} leveragedTokenAddress={ethriseAddress} />
 
                                 {/* Mint & Redeem Button */}
                                 <div className="p-4">
