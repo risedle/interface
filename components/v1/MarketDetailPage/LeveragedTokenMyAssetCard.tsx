@@ -22,7 +22,7 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address }) => {
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
     const navData = useLeveragedTokenNAV({ tokenAddress: address, vaultAddress: metadata.vaultAddress, provider: provider });
-    const balanceData = account ? useLeveragedTokenBalance({ account: account, address: address, provider: provider }) : { data: 0, isLoading: true, error: undefined };
+    const balanceData = useLeveragedTokenBalance({ account: account, address: address, provider: provider });
 
     // Data
     const nav = parseFloat(ethers.utils.formatUnits(navData.data ? navData.data : 0, metadata.debtDecimals));

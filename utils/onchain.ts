@@ -39,13 +39,14 @@ export function useLeveragedTokenNAV(key: LeveragedTokenNAVFetcherKey) {
 // Leveraged Token Balance
 export type LeveragedTokenBalanceFetcherKey = {
     address: string;
-    account: string;
+    account: string | null;
     provider: ethers.providers.BaseProvider;
 };
 
 const leveragedTokenBalanceFetcher = async (
     key: LeveragedTokenBalanceFetcherKey
 ): Promise<ethers.BigNumber> => {
+    if (!key.account) return ethers.BigNumber.from("0");
     const tokenContract = new ethers.Contract(
         key.address,
         erc20ABI,
