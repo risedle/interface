@@ -26,6 +26,7 @@ import VaultChart from "./VaultChart";
 import ButtonDisabled from "../Buttons/ButtonDisabled";
 import ButtonDepositOrWithdraw from "./ButtonDepositOrWithdraw";
 import ButtonTertiary from "../Buttons/ButtonTertiary";
+import MyAssetCard from "./LeveragedTokenMyAssetCard";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -59,6 +60,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
     const showConnectWallet = !account || !connectedChain.data || !connectedChain.data.chain;
     const showSwitchNetwork = !showConnectWallet && connectedChain.data.chain && connectedChain.data.chain.id != chain.id ? true : false;
     const showAction = !showConnectWallet && !showSwitchNetwork ? true : false;
+    const showMyAsset = !showConnectWallet && !showSwitchNetwork ? true : false;
 
     return (
         <>
@@ -192,6 +194,9 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     {showAction && <ButtonMintOrRedeem address={ethriseAddress} />}
                                 </div>
                             </div>
+
+                            {/* My Asset card */}
+                            {showMyAsset && <MyAssetCard address={ethriseAddress} />}
 
                             {/* Information card */}
                             <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">
