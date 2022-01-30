@@ -37,7 +37,7 @@ const PageNotFound: FunctionComponent<PageNotFoundProps> = ({}) => {
                         <h1 className="hero-text">404</h1>
                     </div>
                     <div className="max-w-lg mx-auto">
-                        <h2 className="text-base text-gray-light-10 dark:text-gray-dark-10 leading-relaxed">Uh oh, seems the page you're searching is not there</h2>
+                        <h2 className="text-base text-gray-light-10 dark:text-gray-dark-10 leading-relaxed">Uh oh, seems the page you&apos;re searching is not there</h2>
                     </div>
                     <div className="mt-6">
                         <Link href={"/"}>
