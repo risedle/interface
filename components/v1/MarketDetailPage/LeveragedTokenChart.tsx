@@ -1,16 +1,24 @@
 import { FunctionComponent, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
+import { useProvider } from "wagmi";
 import { dollarFormatter } from "../../../utils/formatters";
+import { useLeveragedTokenNAV } from "../../../utils/onchain";
 import { Timeframe, useLeveragedTokenHistoricalData } from "../../../utils/snapshot";
 
 export type LeveragedTokenChartProps = {
     chainID: number;
-    address: string;
+    leveragedTokenAddress: string;
+    vaultAddress: string;
 };
 
-const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chainID, address }) => {
+const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chainID, leveragedTokenAddress, vaultAddress }) => {
+    // Fetch onchain data for latest nav
+    const provider = useProvider();
+    const navData = useLeveragedTokenNAV({ tokenAddress: leveragedTokenAddress, provider: provider, vaultAddress: vaultAddress });
+    console.debug("LeveragedTokenChart: navData", navData);
+
     // Fetch data
-    const data = useLeveragedTokenHistoricalData(chainID, address);
+    const data = useLeveragedTokenHistoricalData(chainID, leveragedTokenAddress);
 
     // Component states
     const [currentData, setCurrentData] = useState(data.twoWeekly);

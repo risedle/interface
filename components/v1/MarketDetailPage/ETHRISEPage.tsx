@@ -94,7 +94,9 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             <div className="sm:hidden">
                                 <Link href={"/markets"}>
                                     <a>
-                                        <ButtonTertiary><span className="mr-2">&#8592;</span>Markets</ButtonTertiary>
+                                        <ButtonTertiary>
+                                            <span className="mr-2">&#8592;</span>Markets
+                                        </ButtonTertiary>
                                     </a>
                                 </Link>
                             </div>
@@ -124,7 +126,9 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             <div className="place-self-center">
                                 <Link href={"/markets"}>
                                     <a>
-                                        <ButtonTertiary><span className="mr-2">&#8592;</span>Markets</ButtonTertiary>
+                                        <ButtonTertiary>
+                                            <span className="mr-2">&#8592;</span>Markets
+                                        </ButtonTertiary>
                                     </a>
                                 </Link>
                             </div>
@@ -149,7 +153,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 Earn
                             </Tabs.Trigger>
                         </Tabs.List>
-                        
 
                         {/* Leverage tab */}
                         <Tabs.Content value="leverage" className="outline-0 flex flex-col mx-auto sm:max-w-[540px] space-y-6">
@@ -164,7 +167,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     <img className="sm:hidden" src={metadata.logo} alt={metadata.title} />
                                 </div>
 
-                                <LeveragedTokenChart chainID={chain.id} address={ethriseAddress} />
+                                <LeveragedTokenChart chainID={chain.id} leveragedTokenAddress={ethriseAddress} vaultAddress={metadata.vaultAddress} />
 
                                 {/* Mint & Redeem Button */}
                                 <div className="p-4">
