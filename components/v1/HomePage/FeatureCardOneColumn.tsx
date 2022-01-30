@@ -13,18 +13,18 @@ type FeatureCardOneColumnProps = {};
  */
 const FeatureCardOneColumn: FunctionComponent<FeatureCardOneColumnProps> = ({}) => {
     return (
-        <div className="px-4 max-w-4xl m-auto">
-            <div className="bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-3 dark:border-gray-dark-3 rounded-2xl overflow-hidden flex flex-col sm:flex-row sm:items-center sm:h-64">
-                <div className="px-4 sm:pl-8 py-6 sm:basis-2/4">
-                    <h1 className="m-0 text-base sm:text-lg font-bold mb-4 text-gray-light-12 dark:text-gray-dark-12">Enjoy Leverage Without Liquidations</h1>
-                    <p className="text-sm text-gray-light-10 dark:text-gray-dark-10 leading-6 mb-6">Risedle Leveraged Tokens allows its holder to enjoy increased leverage without risk of liquidation</p>
-                    <p className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-bold leading-6">
+        <div className="m-auto max-w-4xl px-4">
+            <div className="flex flex-col overflow-hidden rounded-2xl border border-gray-light-3 bg-gray-light-2 dark:border-gray-dark-3 dark:bg-gray-dark-2 sm:h-64 sm:flex-row sm:items-center">
+                <div className="px-4 py-6 sm:basis-2/4 sm:pl-8">
+                    <h1 className="m-0 mb-4 text-base font-bold text-gray-light-12 dark:text-gray-dark-12 sm:text-lg">Enjoy Leverage Without Liquidations</h1>
+                    <p className="mb-6 text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">Risedle Leveraged Tokens allows its holder to enjoy increased leverage without risk of liquidation</p>
+                    <p className="text-sm font-bold leading-6 text-gray-light-12 dark:text-gray-dark-12">
                         <Link href="/products">
                             <a>Risedle Leveraged Tokens &#8594;</a>
                         </Link>
                     </p>
                 </div>
-                <div className="sm:basis-2/4 inline-block ">
+                <div className="inline-block sm:basis-2/4 ">
                     <svg height="100%" width="100%" viewBox="0 0 343 336" fill="none" xmlns="http://www.w3.org/2000/svg" className="object-cover sm:-mt-16">
                         <line x1="52.5" y1="2.18557e-08" x2="52.5" y2="382" className="stroke-gray-light-3 dark:stroke-gray-dark-3" />
                         <line x1="132.5" y1="2.18557e-08" x2="132.5" y2="382" className="stroke-gray-light-3 dark:stroke-gray-dark-3" />

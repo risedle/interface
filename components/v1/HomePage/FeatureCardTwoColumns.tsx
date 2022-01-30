@@ -13,18 +13,18 @@ type FeatureCardTwoColumnsProps = {};
  */
 const FeatureCardTwoColumns: FunctionComponent<FeatureCardTwoColumnsProps> = ({}) => {
     return (
-        <div className="px-4 max-w-4xl m-auto flex flex-col sm:flex-row">
-            <div className="basis-1/2 bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-3 dark:border-gray-dark-3 rounded-2xl overflow-hidden flex flex-col mb-4 sm:mb-0 sm:mr-2">
-                <div className="px-4 sm:px-8 py-6 sm:basis-1/3">
-                    <h1 className="m-0 text-base sm:text-lg font-bold mb-4 text-gray-light-12 dark:text-gray-dark-12">0% Management Fees</h1>
-                    <p className="text-sm text-gray-light-10 dark:text-gray-dark-10 leading-6 mb-6">Just like leveraging assets manually using lending protocol, you will not get charged for management fees.</p>
-                    <p className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-bold leading-6">
+        <div className="m-auto flex max-w-4xl flex-col px-4 sm:flex-row">
+            <div className="mb-4 flex basis-1/2 flex-col overflow-hidden rounded-2xl border border-gray-light-3 bg-gray-light-2 dark:border-gray-dark-3 dark:bg-gray-dark-2 sm:mb-0 sm:mr-2">
+                <div className="px-4 py-6 sm:basis-1/3 sm:px-8">
+                    <h1 className="m-0 mb-4 text-base font-bold text-gray-light-12 dark:text-gray-dark-12 sm:text-lg">0% Management Fees</h1>
+                    <p className="mb-6 text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">Just like leveraging assets manually using lending protocol, you will not get charged for management fees.</p>
+                    <p className="text-sm font-bold leading-6 text-gray-light-12 dark:text-gray-dark-12">
                         <Link href="https://docs.risedle.com/What-are-Risedle-Leveraged-Tokens-6ad87257157845e69aa7d11f87af99ec">
                             <a>Risedle Leveraged Tokens Fees &#8594;</a>
                         </Link>
                     </p>
                 </div>
-                <div className="sm:basis-2/3 inline-block ">
+                <div className="inline-block sm:basis-2/3 ">
                     <svg height="100%" width="100%" viewBox="0 0 343 341" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="169" cy="196" r="80.5" className="stroke-gray-light-5 dark:stroke-gray-dark-5" />
                         <path d="M362.5 195C362.5 302.421 275.642 389.5 168.5 389.5C61.358 389.5 -25.5 302.421 -25.5 195C-25.5 87.5794 61.358 0.5 168.5 0.5C275.642 0.5 362.5 87.5794 362.5 195Z" className="stroke-gray-light-5 dark:stroke-gray-dark-5" />
@@ -87,8 +87,8 @@ const FeatureCardTwoColumns: FunctionComponent<FeatureCardTwoColumnsProps> = ({}
                 </div>
             </div>
 
-            <div className="basis-1/2 bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-3 dark:border-gray-dark-3 rounded-2xl overflow-hidden flex flex-col sm:ml-2">
-                <div className="sm:basis-2/3 inline-block ">
+            <div className="flex basis-1/2 flex-col overflow-hidden rounded-2xl border border-gray-light-3 bg-gray-light-2 dark:border-gray-dark-3 dark:bg-gray-dark-2 sm:ml-2">
+                <div className="inline-block sm:basis-2/3 ">
                     <svg height="100%" width="100%" viewBox="0 0 343 341" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0_479_19257)">
                             <path d="M-43 190L81.1444 182.3L134.707 168L203.286 176.8L239.829 168L259.852 147.1H318.921L344.451 130.6L387 124" stroke="#C7C7C7" strokeDasharray="4 4" />
@@ -166,10 +166,10 @@ const FeatureCardTwoColumns: FunctionComponent<FeatureCardTwoColumnsProps> = ({}
                         </defs>
                     </svg>
                 </div>
-                <div className="px-4 sm:px-8 py-6 sm:basis-1/3">
-                    <h1 className="m-0 text-base sm:text-lg font-bold mb-4 text-gray-light-12 dark:text-gray-dark-12">Floating Leverage</h1>
-                    <p className="text-sm text-gray-light-10 dark:text-gray-dark-10 leading-6 mb-6">Risedle&apos;s unique rebalancing mechanism designed to minimize loss due to frequent rebalancing.</p>
-                    <p className="text-sm text-gray-light-12 dark:text-gray-dark-12 font-bold leading-6">
+                <div className="px-4 py-6 sm:basis-1/3 sm:px-8">
+                    <h1 className="m-0 mb-4 text-base font-bold text-gray-light-12 dark:text-gray-dark-12 sm:text-lg">Floating Leverage</h1>
+                    <p className="mb-6 text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">Risedle&apos;s unique rebalancing mechanism designed to minimize loss due to frequent rebalancing.</p>
+                    <p className="text-sm font-bold leading-6 text-gray-light-12 dark:text-gray-dark-12">
                         <Link href="https://docs.risedle.com/What-are-Risedle-Leveraged-Tokens-6ad87257157845e69aa7d11f87af99ec">
                             <a>Rebalancing Mechanism &#8594;</a>
                         </Link>

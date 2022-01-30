@@ -15,7 +15,7 @@ type ButtonCloseProps = {
 const ButtonClose: FunctionComponent<ButtonCloseProps> = ({ onClick }) => {
     return (
         <button className="button basic p-0" onClick={onClick}>
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 w-[16px] h-[16px] m-[11px]">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="m-[11px] h-[16px] w-[16px] fill-gray-light-12 dark:fill-gray-dark-12">
                 <path
                     fillRule="evenodd"
                     clipRule="evenodd"

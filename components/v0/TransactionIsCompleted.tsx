@@ -42,8 +42,8 @@ const TransactionIsCompleted: FunctionComponent<TransactionIsCompletedProps> = (
                 </svg>
             </div>
             <div className="mt-8">
-                <h1 className="text-white font-extrabold text-4xl m-0 leading-normal">{title}</h1>
-                <p className="text-grey font-semibold text-2xl m-0 leading-normal">{subTitle}</p>
+                <h1 className="m-0 text-4xl font-extrabold leading-normal text-white">{title}</h1>
+                <p className="m-0 text-2xl font-semibold leading-normal text-grey">{subTitle}</p>
             </div>
             <div className="mt-8">
                 <span className="mr-4">

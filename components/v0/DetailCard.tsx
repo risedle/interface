@@ -23,14 +23,14 @@ const DetailCard: FunctionComponent<DetailCardProps> = ({ items }) => {
     const list = items.map((item) => {
         return (
             <div key={item.title}>
-                <p className="text-sm font-semibold text-grey m-0 leading-normal">{item.title}</p>
-                <h3 className="text-white text-2xl font-extrabold m-0 leading-normal">{item.value}</h3>
+                <p className="m-0 text-sm font-semibold leading-normal text-grey">{item.title}</p>
+                <h3 className="m-0 text-2xl font-extrabold leading-normal text-white">{item.value}</h3>
             </div>
         );
     });
 
     return (
-        <div className="flex flex-col bg-gradient-to-t from-grey-100 rounded-2xl p-6 gap gap-y-4 mx-auto" style={{ width: "480px" }}>
+        <div className="gap mx-auto flex flex-col gap-y-4 rounded-2xl bg-gradient-to-t from-grey-100 p-6" style={{ width: "480px" }}>
             {list}
         </div>
     );

@@ -74,7 +74,7 @@ const Deposit: FunctionComponent<DepositProps> = ({ address }) => {
                 <div>
                     {showApproval && (
                         <div className="flex flex-col">
-                            <div className="py-4 border-b border-gray-light-5 dark:border-gray-dark-5 border-dashed">
+                            <div className="border-b border-dashed border-gray-light-5 py-4 dark:border-gray-dark-5">
                                 <p className="text-center text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">Allow Risedle to use your {metadata.debtSymbol}</p>
                             </div>
                             <div className="pt-4">
@@ -112,7 +112,7 @@ const Deposit: FunctionComponent<DepositProps> = ({ address }) => {
                             {approvalState.hash && (
                                 <div className="pt-4 text-center">
                                     <Link href={getExplorerLink(chain, approvalState.hash)}>
-                                        <a target="_blank" rel="noreferrer" className="text-sm py-4 text-gray-text-center text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">
+                                        <a target="_blank" rel="noreferrer" className="text-gray-text-center py-4 text-sm text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">
                                             <span className="hover:underline">Goto transaction</span> &#8599;
                                         </a>
                                     </Link>

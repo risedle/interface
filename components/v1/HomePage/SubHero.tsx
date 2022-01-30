@@ -13,16 +13,16 @@ type SubHeroProps = {};
 const SubHero: FunctionComponent<SubHeroProps> = ({}) => {
     return (
         <div className="relative w-full justify-center overflow-hidden">
-            <div className="relative z-10 flex flex-col px-4 text-center max-w-screen-md md:max-w-screen-lg m-auto items-center gap-8">
+            <div className="relative z-10 m-auto flex max-w-screen-md flex-col items-center gap-8 px-4 text-center md:max-w-screen-lg">
                 <div className="mt-20 sm:mt-64">
                     <h1 className="hero-text">
-                        Less <span className="bg-clip-text text-transparent move-gradient gradient bg-[length:480px_400px]">Stressful</span>
+                        Less <span className="move-gradient gradient bg-[length:480px_400px] bg-clip-text text-transparent">Stressful</span>
                         , <br /> Do More With Risedle
                     </h1>
                 </div>
-                <h2 className="text-base text-gray-light-10 dark:text-gray-dark-10 mb-24 sm:mb-32 max-w-lg leading-relaxed">No more tedious collateral health monitoring and stop worying about liquidation.</h2>
+                <h2 className="mb-24 max-w-lg text-base leading-relaxed text-gray-light-10 dark:text-gray-dark-10 sm:mb-32">No more tedious collateral health monitoring and stop worying about liquidation.</h2>
             </div>
-            <svg width="100%" viewBox="0 0 375 312" xmlns="http://www.w3.org/2000/svg" className="z-0 absolute opacity-50 top-24 left-1/2 -translate-x-1/2  fill-gray-light-12 dark:fill-white max-w-3xl scale-75">
+            <svg width="100%" viewBox="0 0 375 312" xmlns="http://www.w3.org/2000/svg" className="absolute top-24 left-1/2 z-0 max-w-3xl -translate-x-1/2  scale-75 fill-gray-light-12 opacity-50 dark:fill-white">
                 <mask id="mask0_479_18846" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="-10" y="0" width="395" height="312">
                     <rect width="394.553" height="312" transform="matrix(1 0 0 -1 -10 312)" fill="url(#paint0_linear_479_18846)" />
                 </mask>
