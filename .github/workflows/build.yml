@@ -1,9 +1,19 @@
-steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-          node-version: "17.3.0"
-          cache: "npm"
-    - run: npm install
-    - run: npm run prettier
-    - run: npm run deploy
+name: GitHub Actions Demo
+on:
+    pull_request:
+        # Sequence of patterns matched against refs/heads
+        branches:
+            - main
+            - v1
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: "17.3.0"
+                  cache: "npm"
+            - run: npm install
+            - run: npm run prettier
+            - run: npm run deploy
