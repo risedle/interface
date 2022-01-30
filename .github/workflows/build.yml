@@ -1,4 +1,4 @@
-name: GitHub Actions Demo
+name: Risedle Interface Build
 on:
     pull_request:
         # Sequence of patterns matched against refs/heads
