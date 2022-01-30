@@ -12,7 +12,7 @@ type LogoProps = {};
  */
 const Logo: FunctionComponent<LogoProps> = ({}) => {
     return (
-        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-white inline-block">
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="inline-block fill-gray-light-12 dark:fill-white">
             <path
                 fillRule="evenodd"
                 clipRule="evenodd"

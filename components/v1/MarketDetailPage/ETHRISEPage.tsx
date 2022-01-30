@@ -62,7 +62,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
 
     return (
         <>
-            <div className="w-full h-full bg-gray-light-1 dark:bg-gray-dark-1 font-inter min-h-screen flex flex-col overflow-hidden">
+            <div className="flex h-full min-h-screen w-full flex-col overflow-hidden bg-gray-light-1 font-inter dark:bg-gray-dark-1">
                 <Head>
                     {/* <!-- HTML Meta Tags --> */}
                     <title>{metadata.title} Market | Risedle Protocol</title>
@@ -72,17 +72,17 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                 <Favicon />
 
                 {/* Navigation */}
-                <div className="container max-w-full mx-auto sm:z-20">
-                    <div className="flex flex-row p-4 items-center justify-between">
+                <div className="container mx-auto max-w-full sm:z-20">
+                    <div className="flex flex-row items-center justify-between p-4">
                         <div className="flex-none">
                             <Link href="/">
                                 <a className="flex items-center">
                                     <Logo />
-                                    <span className="text-base font-inter font-bold pl-2 traking-tight text-gray-light-12 dark:text-gray-light-1 self-center leading-0">Risedle</span>
+                                    <span className="traking-tight leading-0 self-center pl-2 font-inter text-base font-bold text-gray-light-12 dark:text-gray-light-1">Risedle</span>
                                 </a>
                             </Link>
                         </div>
-                        <div className="flex-none flex flex-row space-x-2 inline-block">
+                        <div className="inline-block flex flex-none flex-row space-x-2">
                             <div className="hidden sm:inline-block">
                                 <ButtonNetworkSwitcher />
                             </div>
@@ -108,21 +108,21 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                     </div>
                 </div>
 
-                <div className="sm:z-10 flex flex-col mb-20 sm:mb-0">
+                <div className="mb-20 flex flex-col sm:z-10 sm:mb-0">
                     {/* Market header on the desktop; Only show this on w > 640px */}
-                    <div className="hidden sm:inline-block flex flex-col m-auto text-center space-y-6 mt-12 mb-14">
+                    <div className="m-auto mt-12 mb-14 flex hidden flex-col space-y-6 text-center sm:inline-block">
                         <div>
-                            <img src={metadata.logo} alt={metadata.title} className="w-[64px] h-[64px] inline-block" />
+                            <img src={metadata.logo} alt={metadata.title} className="inline-block h-[64px] w-[64px]" />
                         </div>
                         <div className="flex flex-col space-y-2">
-                            <h1 className="m-0 text-[32px] leading-none tracking-[-.02em] font-bold text-gray-light-12 dark:text-gray-dark-12">{metadata.title} Market</h1>
+                            <h1 className="m-0 text-[32px] font-bold leading-none tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.title} Market</h1>
                             <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">{metadata.description}</p>
                         </div>
                     </div>
 
                     {/* Market tabs and content */}
                     <Tabs.Root defaultValue="leverage" className="px-4 outline-0">
-                        <div className="hidden sm:grid grid-cols-4 gap-2 sm:max-w-[540px] mx-auto mb-6 place-content-between">
+                        <div className="mx-auto mb-6 hidden grid-cols-4 place-content-between gap-2 sm:grid sm:max-w-[540px]">
                             <div className="place-self-center">
                                 <Link href={"/markets"}>
                                     <a>
@@ -133,11 +133,11 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 </Link>
                             </div>
                             <div className="col-span-2 mx-auto">
-                                <Tabs.List aria-label="ETHRISE" className="bg-gray-light-3 dark:bg-gray-dark-2 rounded-[12px] flex flex-row p-1 sm:min-w-[253px] sm:max-w-[253px]">
-                                    <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 state-active:text-gray-light-12 state-active:dark:text-gray-dark-12 state-active:font-bold state-active:py-[12px] state-active:dark:bg-gray-dark-4 state-active:bg-gray-light-1">
+                                <Tabs.List aria-label="ETHRISE" className="flex flex-row rounded-[12px] bg-gray-light-3 p-1 dark:bg-gray-dark-2 sm:min-w-[253px] sm:max-w-[253px]">
+                                    <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
                                         Leverage
                                     </Tabs.Trigger>
-                                    <Tabs.Trigger value="earn" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 state-active:text-gray-light-12 state-active:dark:text-gray-dark-12 state-active:font-bold state-active:py-[12px] state-active:dark:bg-gray-dark-4 state-active:bg-gray-light-1">
+                                    <Tabs.Trigger value="earn" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
                                         Earn
                                     </Tabs.Trigger>
                                 </Tabs.List>
@@ -145,24 +145,24 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                         </div>
 
                         {/* For Mobile Layout */}
-                        <Tabs.List aria-label="ETHRISE" className="sm:hidden bg-gray-light-3 dark:bg-gray-dark-2 rounded-[12px] flex flex-row p-1 mx-auto sm:max-w-[253px] mb-6">
-                            <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 state-active:text-gray-light-12 state-active:dark:text-gray-dark-12 state-active:font-bold state-active:py-[12px] state-active:dark:bg-gray-dark-4 state-active:bg-gray-light-1">
+                        <Tabs.List aria-label="ETHRISE" className="mx-auto mb-6 flex flex-row rounded-[12px] bg-gray-light-3 p-1 dark:bg-gray-dark-2 sm:hidden sm:max-w-[253px]">
+                            <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
                                 Leverage
                             </Tabs.Trigger>
-                            <Tabs.Trigger value="earn" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 state-active:text-gray-light-12 state-active:dark:text-gray-dark-12 state-active:font-bold state-active:py-[12px] state-active:dark:bg-gray-dark-4 state-active:bg-gray-light-1">
+                            <Tabs.Trigger value="earn" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
                                 Earn
                             </Tabs.Trigger>
                         </Tabs.List>
 
                         {/* Leverage tab */}
-                        <Tabs.Content value="leverage" className="outline-0 flex flex-col mx-auto sm:max-w-[540px] space-y-6">
+                        <Tabs.Content value="leverage" className="mx-auto flex flex-col space-y-6 outline-0 sm:max-w-[540px]">
                             {/* Price info card */}
-                            <div className="flex flex-col bg-gray-light-2 dark:bg-gray-dark-2 rounded-[16px] w-full ">
+                            <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2 ">
                                 {/* Title, subtitle and lgoo */}
-                                <div className="flex flex-row p-4 items-center justify-between">
-                                    <div className="grow sflex flex-col space-y-2">
+                                <div className="flex flex-row items-center justify-between p-4">
+                                    <div className="sflex grow flex-col space-y-2">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>
-                                        <h1 className="m-0 text-2xl text-gray-light-12 dark:text-gray-dark-12 tracking-[-.02em] font-bold">{metadata.title}</h1>
+                                        <h1 className="m-0 text-2xl font-bold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.title}</h1>
                                     </div>
                                     <img className="sm:hidden" src={metadata.logo} alt={metadata.title} />
                                 </div>
@@ -194,9 +194,9 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             </div>
 
                             {/* Information card */}
-                            <div className="flex flex-col bg-gray-light-2 dark:bg-gray-dark-2 rounded-[16px] w-full space-y-6 px-4 pb-4">
+                            <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">
                                 <div className="pt-4">
-                                    <h2 className="text-base leading-4 font-bold text-gray-light-12 dark:text-gray-dark-12">Information</h2>
+                                    <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">Information</h2>
                                 </div>
                                 <div className="">
                                     <p className="text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">{metadata.informationText}</p>
@@ -204,34 +204,34 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 <div className="flex flex-col space-y-6">
                                     <div className="flex flex-row justify-between">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Market cap</p>
-                                        {(marketIsLoading || marketIsError) && <p className="w-[100px] h-[16px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse rounded-[8px]"></p>}
-                                        {!marketIsLoading && market && <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(market.leveraged_token_market_cap)}</p>}
+                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                        {!marketIsLoading && market && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(market.leveraged_token_market_cap)}</p>}
                                     </div>
                                     <div className="flex flex-row justify-between">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Leverage ratio</p>
-                                        {(marketIsLoading || marketIsError) && <p className="w-[100px] h-[16px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse rounded-[8px]"></p>}
-                                        {!marketIsLoading && market && market.leverage_ratio && <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{market.leverage_ratio.toFixed(2) + "x"}</p>}
+                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                        {!marketIsLoading && market && market.leverage_ratio && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{market.leverage_ratio.toFixed(2) + "x"}</p>}
                                     </div>
                                     <div className="flex flex-row justify-between">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Creation &amp; redemption fees</p>
-                                        <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">0.1%</p>
+                                        <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">0.1%</p>
                                     </div>
                                     <div className="flex flex-row justify-between">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Management fees</p>
-                                        <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-green-light-11 dark:text-green-dark-11">FREE</p>
+                                        <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-green-light-11 dark:text-green-dark-11">FREE</p>
                                     </div>
                                     <div className="flex flex-row justify-between">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Underlying assets</p>
-                                        <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
+                                        <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
                                             {metadata.collateralSymbol}, {metadata.debtSymbol}
                                         </p>
                                     </div>
                                     {/* TODO(bayu): Handle case when capacity is maxed out */}
                                     <div className="flex flex-row justify-between">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Capacity</p>
-                                        {(marketIsLoading || marketIsError) && <p className="w-[100px] h-[16px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse rounded-[8px]"></p>}
+                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
                                         {!marketIsLoading && market && (
-                                            <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
+                                            <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
                                                 <span className="text-green-light-11 dark:text-green-dark-11">{market.leveraged_token_total_collateral.toFixed(2) + metadata.collateralSymbol}</span> / {market.leveraged_token_max_total_collateral > 0 && <span>{market.leveraged_token_max_total_collateral.toFixed(2) + metadata.collateralSymbol}</span>}
                                                 {market.leveraged_token_max_total_collateral <= 0 && <span>&#8734;</span>}
                                             </p>
@@ -241,9 +241,9 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             </div>
 
                             {/* Allocation card */}
-                            <div className="flex flex-col bg-gray-light-2 dark:bg-gray-dark-2 rounded-[16px] w-full space-y-6 px-4 pb-4">
+                            <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">
                                 <div className="pt-4">
-                                    <h2 className="text-base leading-4 font-bold text-gray-light-12 dark:text-gray-dark-12">Allocation</h2>
+                                    <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">Allocation</h2>
                                 </div>
                                 <div className="flex flex-col space-y-6">
                                     <div className="flex flex-row justify-between">
@@ -252,28 +252,28 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     </div>
 
                                     <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.collateralSymbol}</p>
-                                        {(marketIsLoading || marketIsError) && <p className="w-[100px] h-[16px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse rounded-[8px]"></p>}
-                                        {!marketIsLoading && market && market.collateral_per_token && <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{market.collateral_per_token.toFixed(2) + " " + metadata.collateralSymbol}</p>}
+                                        <p className="text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.collateralSymbol}</p>
+                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                        {!marketIsLoading && market && market.collateral_per_token && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{market.collateral_per_token.toFixed(2) + " " + metadata.collateralSymbol}</p>}
                                     </div>
                                     <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.debtSymbol}</p>
-                                        {(marketIsLoading || marketIsError) && <p className="w-[100px] h-[16px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse rounded-[8px]"></p>}
-                                        {!marketIsLoading && market && market.debt_per_token && <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">-{market.debt_per_token.toFixed(2) + " " + metadata.debtSymbol}</p>}
+                                        <p className="text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.debtSymbol}</p>
+                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                        {!marketIsLoading && market && market.debt_per_token && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">-{market.debt_per_token.toFixed(2) + " " + metadata.debtSymbol}</p>}
                                     </div>
                                 </div>
                             </div>
                         </Tabs.Content>
 
                         {/* Earn tab */}
-                        <Tabs.Content value="earn" className="outline-0 flex flex-col mx-auto max-w-[540px] space-y-6">
+                        <Tabs.Content value="earn" className="mx-auto flex max-w-[540px] flex-col space-y-6 outline-0">
                             {/* APY info card */}
-                            <div className="flex flex-col bg-gray-light-2 dark:bg-gray-dark-2 rounded-[16px] w-full">
+                            <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2">
                                 {/* Title, subtitle and lgoo */}
-                                <div className="flex flex-row p-4 items-center justify-between">
-                                    <div className="grow sflex flex-col space-y-2">
+                                <div className="flex flex-row items-center justify-between p-4">
+                                    <div className="sflex grow flex-col space-y-2">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>
-                                        <h1 className="m-0 text-2xl text-gray-light-12 dark:text-gray-dark-12 tracking-[-.02em] font-bold">{metadata.vaultTitle}</h1>
+                                        <h1 className="m-0 text-2xl font-bold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.vaultTitle}</h1>
                                     </div>
                                     <img className="sm:hidden" src={metadata.vaultLogo} alt={`rv${metadata.collateralSymbol}${metadata.debtSymbol}`} />
                                 </div>
@@ -306,9 +306,9 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             </div>
 
                             {/* Information card */}
-                            <div className="flex flex-col bg-gray-light-2 dark:bg-gray-dark-2 rounded-[16px] w-full space-y-6 px-4 pb-4">
+                            <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">
                                 <div className="pt-4">
-                                    <h2 className="text-base leading-4 font-bold text-gray-light-12 dark:text-gray-dark-12">Information</h2>
+                                    <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">Information</h2>
                                 </div>
                                 <div className="">
                                     <p className="text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">{metadata.vaultInformationText}</p>
@@ -316,24 +316,24 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 <div className="flex flex-col space-y-6">
                                     <div className="flex flex-row justify-between">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Utilization rate</p>
-                                        {(marketIsLoading || marketIsError) && <p className="w-[100px] h-[16px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse rounded-[8px]"></p>}
-                                        {!marketIsLoading && market && market.vault_utilization_rate && <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{market.vault_utilization_rate.toFixed(2) + "%"}</p>}
+                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                        {!marketIsLoading && market && market.vault_utilization_rate && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{market.vault_utilization_rate.toFixed(2) + "%"}</p>}
                                     </div>
                                     <div className="flex flex-row justify-between">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Total borrowed</p>
-                                        {(marketIsLoading || marketIsError) && <p className="w-[100px] h-[16px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse rounded-[8px]"></p>}
-                                        {!marketIsLoading && market && <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(market.vault_total_outstanding_debt)}</p>}
+                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                        {!marketIsLoading && market && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(market.vault_total_outstanding_debt)}</p>}
                                     </div>
                                     <div className="flex flex-row justify-between">
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Available to withdraw</p>
-                                        {(marketIsLoading || marketIsError) && <p className="w-[100px] h-[16px] bg-gray-light-3 dark:bg-gray-dark-3 animate-pulse rounded-[8px]"></p>}
-                                        {!marketIsLoading && market && <p className="font-ibm text-sm leading-4 font-semibold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(market.vault_total_available_cash)}</p>}
+                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                        {!marketIsLoading && market && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(market.vault_total_available_cash)}</p>}
                                     </div>
                                 </div>
                             </div>
                         </Tabs.Content>
                     </Tabs.Root>
-                    <div className="hidden sm:inline-block sm:mt-20">
+                    <div className="hidden sm:mt-20 sm:inline-block">
                         <Footer />
                     </div>
                 </div>

@@ -12,7 +12,7 @@ type BackgroundGradientProps = {};
  */
 const BackgroundGradient: FunctionComponent<BackgroundGradientProps> = ({}) => {
     return (
-        <div className="hidden sm:block absolute top-0 left-1/2 -translate-x-1/2">
+        <div className="absolute top-0 left-1/2 hidden -translate-x-1/2 sm:block">
             <svg width="543" height="497" viewBox="0 0 543 497" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_f_1038_34773)">
                     <rect x="126" y="242.087" width="14.5306" height="134.487" transform="rotate(-16.0921 126 242.087)" fill="#A42A12" />

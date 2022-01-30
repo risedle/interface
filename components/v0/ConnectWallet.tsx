@@ -35,7 +35,7 @@ const ConnectWallet: FunctionComponent<ConnectWalletProps> = ({}) => {
 
     if (isAccountConnected) {
         return (
-            <div className="flex flex-row gap gap-x-2">
+            <div className="gap flex flex-row gap-x-2">
                 <div>
                     <ButtonBlueSecondary>{shortAccountAddress}</ButtonBlueSecondary>
                 </div>

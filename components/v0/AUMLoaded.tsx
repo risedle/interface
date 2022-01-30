@@ -14,8 +14,8 @@ type AUMLoadedProps = {
  */
 const AUMLoaded: FunctionComponent<AUMLoadedProps> = ({ text }) => {
     return (
-        <p className="text-grey font-semibold text-2xl m-0 leading-normal align-middle">
-            <span className="inline-block align-middle mr-2">AUM</span>
+        <p className="m-0 align-middle text-2xl font-semibold leading-normal text-grey">
+            <span className="mr-2 inline-block align-middle">AUM</span>
             <span className="inline-block align-middle">{text}</span>
         </p>
     );

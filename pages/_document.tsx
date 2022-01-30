@@ -8,14 +8,14 @@ class RisedleDocument extends Document {
 
     render() {
         return (
-            <Html className="dark font-inter overflow-x-hidden">
+            <Html className="dark overflow-x-hidden font-inter">
                 <Head>
                     <link rel="preconnect" href="https://fonts.googleapis.com" />
                     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
                     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600&display=swap" rel="stylesheet" />
                 </Head>
-                <body className="bg-gray-light-1 dark:bg-gray-dark-1 h-full">
+                <body className="h-full bg-gray-light-1 dark:bg-gray-dark-1">
                     <Main />
                     <NextScript />
                 </body>

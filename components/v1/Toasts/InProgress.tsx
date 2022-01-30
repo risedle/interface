@@ -14,7 +14,7 @@ type ToastInProgressProps = {
  */
 const ToastInProgress: FunctionComponent<ToastInProgressProps> = ({ children }) => {
     return (
-        <div className="bg-green-light-9 dark:bg-green-dark-2 border border-green-light-10 dark:border-green-dark-5 py-[3px] pl-[4px] pr-4 rounded-full inline-block flex flex-row items-center max-w-max">
+        <div className="inline-block flex max-w-max flex-row items-center rounded-full border border-green-light-10 bg-green-light-9 py-[3px] pl-[4px] pr-4 dark:border-green-dark-5 dark:bg-green-dark-2">
             <svg width="31" height="32" viewBox="0 0 31 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="">
                 <rect y="0.5" width="31" height="31" rx="15.5" className="fill-green-light-10 dark:fill-green-dark-5" />
                 <path
@@ -25,7 +25,7 @@ const ToastInProgress: FunctionComponent<ToastInProgressProps> = ({ children }) 
                 />
             </svg>
 
-            <span className="text-green-light-1 dark:text-green-dark-12 text-xs font-semibold inline-block leading-4 ml-2">{children}</span>
+            <span className="ml-2 inline-block text-xs font-semibold leading-4 text-green-light-1 dark:text-green-dark-12">{children}</span>
         </div>
     );
 };

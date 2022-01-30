@@ -19,7 +19,7 @@ const Logo: FunctionComponent<LogoProps> = ({}) => {
     return (
         <div className="inline-block align-middle">
             <Link href="/">
-                <a className="inline-block transform active:scale-95 transition duration-300 ease-in-out">
+                <a className="inline-block transform transition duration-300 ease-in-out active:scale-95">
                     <img src={RisedleLogo.src} alt="Risedle" />
                 </a>
             </Link>

@@ -11,7 +11,7 @@ type ButtonMintOrRedeemProps = {};
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const ButtonMintOrRedeem: FunctionComponent<ButtonMintOrRedeemProps> = ({}) => {
-    return <button className="flex flex-row text-center justify-center items-center space-x-2 bg-blue-light-10 dark:bg-blue-dark-10 border border-blue-light-11 dark:border-blue-dark-11 text-gray-light-1 dark:text-blue-light-1 text-sm leading-4 font-semibold py-[11px] px-4 rounded-full leading-4 inline-block tracking-[-0.02em] w-full">Mint or Redeem</button>;
+    return <button className="inline-block flex w-full flex-row items-center justify-center space-x-2 rounded-full border border-blue-light-11 bg-blue-light-10 py-[11px] px-4 text-center text-sm font-semibold leading-4 leading-4 tracking-[-0.02em] text-gray-light-1 dark:border-blue-dark-11 dark:bg-blue-dark-10 dark:text-blue-light-1">Mint or Redeem</button>;
 };
 
 export default ButtonMintOrRedeem;

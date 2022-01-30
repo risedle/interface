@@ -56,16 +56,16 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
         ],
     });
     return (
-        <div className="flex flex-row p-4 items-center justify-between sticky top-0 dark:bg-gray-dark-1/90 bg-gray-light-1/90 backdrop-blur-lg z-40">
+        <div className="sticky top-0 z-40 flex flex-row items-center justify-between bg-gray-light-1/90 p-4 backdrop-blur-lg dark:bg-gray-dark-1/90">
             <div className="flex-none md:w-[162.8px]">
                 <Link href="/">
                     <a className="flex items-center">
                         <Logo />
-                        <span className="text-base font-inter font-bold pl-2 traking-tight text-gray-light-12 dark:text-gray-light-1 self-center leading-0">Risedle</span>
+                        <span className="traking-tight leading-0 self-center pl-2 font-inter text-base font-bold text-gray-light-12 dark:text-gray-light-1">Risedle</span>
                     </a>
                 </Link>
             </div>
-            <div className="hidden sm:flex flex-none flex-row gap-8 text-center">
+            <div className="hidden flex-none flex-row gap-8 text-center sm:flex">
                 <Link href={RisedleLinks.docs}>
                     <a className="text-sm text-gray-light-12 dark:text-gray-dark-12 sm:self-center">Docs &#8599;</a>
                 </Link>
@@ -77,19 +77,19 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                     {({ open }) => {
                         return (
                             <>
-                                <Popover.Button ref={setReferenceElement1} className={`flex items-center text-sm ${open ? "text-gray-light-10 dark:text-gray-dark-10" : "text-gray-light-12 dark:text-gray-dark-12"} sm:self-center transition`}>
+                                <Popover.Button ref={setReferenceElement1} className={`flex items-center text-sm ${open ? "text-gray-light-10 dark:text-gray-dark-10" : "text-gray-light-12 dark:text-gray-dark-12"} transition sm:self-center`}>
                                     Communities
                                     <svg className={`${open ? "stroke-gray-light-10 dark:stroke-gray-dark-10" : "stroke-gray-light-12 dark:stroke-gray-dark-12"}`} xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M6 9l6 6 6-6" />
                                     </svg>
                                 </Popover.Button>
                                 <Transition enter="transition ease-out duration-133" enterFrom="opacity-0" enterTo="opacity-100" leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-                                    <Popover.Panel ref={setPopperElement1} style={popper1.styles.popper} {...popper1.attributes.popper} className="min-w-[161px] bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 flex flex-col p-[8px] rounded-[16px]">
-                                        <a href={RisedleLinks.twitter} className="flex items-center text-sm p-[8px] rounded-[8px] text-gray-light-12 dark:text-gray-dark-12 hover:bg-gray-light-3 hover:dark:bg-gray-dark-3 transition">
+                                    <Popover.Panel ref={setPopperElement1} style={popper1.styles.popper} {...popper1.attributes.popper} className="flex min-w-[161px] flex-col rounded-[16px] border border-gray-light-4 bg-gray-light-2 p-[8px] dark:border-gray-dark-4 dark:bg-gray-dark-2">
+                                        <a href={RisedleLinks.twitter} className="flex items-center rounded-[8px] p-[8px] text-sm text-gray-light-12 transition hover:bg-gray-light-3 dark:text-gray-dark-12 hover:dark:bg-gray-dark-3">
                                             <span className="grow text-left">
                                                 Twitter <span className="text-gray-light-10 dark:text-gray-dark-10">&#8599;</span>
                                             </span>
-                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
+                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block fill-gray-light-12 dark:fill-gray-dark-12">
                                                 <path
                                                     fillRule="evenodd"
                                                     clipRule="evenodd"
@@ -97,11 +97,11 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                                                 />
                                             </svg>
                                         </a>
-                                        <a href={RisedleLinks.discord} className="flex items-center text-sm p-[8px] rounded-[8px] text-gray-light-12 dark:text-gray-dark-12 hover:bg-gray-light-3 hover:dark:bg-gray-dark-3 transition">
+                                        <a href={RisedleLinks.discord} className="flex items-center rounded-[8px] p-[8px] text-sm text-gray-light-12 transition hover:bg-gray-light-3 dark:text-gray-dark-12 hover:dark:bg-gray-dark-3">
                                             <span className="grow text-left">
                                                 Discord <span className="text-gray-light-10 dark:text-gray-dark-10">&#8599;</span>
                                             </span>
-                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
+                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block fill-gray-light-12 dark:fill-gray-dark-12">
                                                 <g clipPath="url(#clip0_481_19437)">
                                                     <path
                                                         fillRule="evenodd"
@@ -127,19 +127,19 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                     {({ open }) => {
                         return (
                             <>
-                                <Popover.Button ref={setReferenceElement2} className={`flex items-center text-sm ${open ? "text-gray-light-10 dark:text-gray-dark-10" : "text-gray-light-12 dark:text-gray-dark-12"} sm:self-center transition`}>
+                                <Popover.Button ref={setReferenceElement2} className={`flex items-center text-sm ${open ? "text-gray-light-10 dark:text-gray-dark-10" : "text-gray-light-12 dark:text-gray-dark-12"} transition sm:self-center`}>
                                     Resources
                                     <svg className={`${open ? "stroke-gray-light-10 dark:stroke-gray-dark-10" : "stroke-gray-light-12 dark:stroke-gray-dark-12"}`} xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M6 9l6 6 6-6" />
                                     </svg>
                                 </Popover.Button>
                                 <Transition enter="transition ease-out duration-133" enterFrom="opacity-0" enterTo="opacity-100" leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-                                    <Popover.Panel ref={setPopperElement2} style={popper2.styles.popper} {...popper2.attributes.popper} className="min-w-[161px] bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 flex flex-col p-[8px] rounded-[16px]">
-                                        <a href={RisedleLinks.github} className="flex items-center text-sm p-[8px] rounded-[8px] text-gray-light-12 dark:text-gray-dark-12 hover:bg-gray-light-3 hover:dark:bg-gray-dark-3 transition">
+                                    <Popover.Panel ref={setPopperElement2} style={popper2.styles.popper} {...popper2.attributes.popper} className="flex min-w-[161px] flex-col rounded-[16px] border border-gray-light-4 bg-gray-light-2 p-[8px] dark:border-gray-dark-4 dark:bg-gray-dark-2">
+                                        <a href={RisedleLinks.github} className="flex items-center rounded-[8px] p-[8px] text-sm text-gray-light-12 transition hover:bg-gray-light-3 dark:text-gray-dark-12 hover:dark:bg-gray-dark-3">
                                             <span className="grow text-left">
                                                 Github <span className="text-gray-light-10 dark:text-gray-dark-10">&#8599;</span>
                                             </span>
-                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
+                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block fill-gray-light-12 dark:fill-gray-dark-12">
                                                 <path
                                                     fillRule="evenodd"
                                                     clipRule="evenodd"
@@ -147,11 +147,11 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                                                 />
                                             </svg>
                                         </a>
-                                        <a href="#" className="flex items-center text-sm p-[8px] rounded-[8px] text-gray-light-12 dark:text-gray-dark-12 hover:bg-gray-light-3 hover:dark:bg-gray-dark-3 transition">
+                                        <a href="#" className="flex items-center rounded-[8px] p-[8px] text-sm text-gray-light-12 transition hover:bg-gray-light-3 dark:text-gray-dark-12 hover:dark:bg-gray-dark-3">
                                             <span className="grow text-left">
                                                 CoinGecko <span className="text-gray-light-10 dark:text-gray-dark-10">&#8599;</span>
                                             </span>
-                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:fill-gray-dark-12 inline-block">
+                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block fill-gray-light-12 dark:fill-gray-dark-12">
                                                 <path
                                                     fillRule="evenodd"
                                                     clipRule="evenodd"
@@ -172,7 +172,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                     }}
                 </Popover>
             </div>
-            <div className="flex-none flex flex-row text-right space-x-2">
+            <div className="flex flex-none flex-row space-x-2 text-right">
                 <div>
                     <ButtonLaunchBasic />
                 </div>

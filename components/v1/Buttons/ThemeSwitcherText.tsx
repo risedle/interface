@@ -35,20 +35,20 @@ const ButtonThemeSwitcherText: FunctionComponent<ButtonThemeSwitcherTextProps> =
     };
 
     return (
-        <button className="rounded-lg bg-gray-light-3 dark:bg-gray-dark-3 px-4 py-2 flex flex-row" onClick={toggleTheme}>
+        <button className="flex flex-row rounded-lg bg-gray-light-3 px-4 py-2 dark:bg-gray-dark-3" onClick={toggleTheme}>
             <div className="mr-2">
-                <span className="dark:hidden text-gray-light-12 text-sm align-middle">Light</span>
-                <span className="hidden dark:inline-block text-gray-dark-12 text-sm align-middle">Dark</span>
+                <span className="align-middle text-sm text-gray-light-12 dark:hidden">Light</span>
+                <span className="hidden align-middle text-sm text-gray-dark-12 dark:inline-block">Dark</span>
             </div>
             <div className="self-center">
-                <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 dark:hidden align-middle">
+                <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" className="fill-gray-light-12 align-middle dark:hidden">
                     <path
                         fillRule="evenodd"
                         clipRule="evenodd"
                         d="M8 0.5C8.27614 0.5 8.5 0.723858 8.5 1V3C8.5 3.27614 8.27614 3.5 8 3.5C7.72386 3.5 7.5 3.27614 7.5 3V1C7.5 0.723858 7.72386 0.5 8 0.5ZM2.6967 2.6967C2.89196 2.50144 3.20854 2.50144 3.40381 2.6967L4.81802 4.11091C5.01328 4.30617 5.01328 4.62276 4.81802 4.81802C4.62276 5.01328 4.30617 5.01328 4.11091 4.81802L2.6967 3.40381C2.50144 3.20854 2.50144 2.89196 2.6967 2.6967ZM1 7.5C0.723858 7.5 0.5 7.72386 0.5 8C0.5 8.27614 0.723858 8.5 1 8.5H3C3.27614 8.5 3.5 8.27614 3.5 8C3.5 7.72386 3.27614 7.5 3 7.5H1ZM2.6967 13.3033C2.50144 13.108 2.50144 12.7915 2.6967 12.5962L4.11091 11.182C4.30617 10.9867 4.62276 10.9867 4.81802 11.182C5.01328 11.3772 5.01328 11.6938 4.81802 11.8891L3.40381 13.3033C3.20854 13.4986 2.89196 13.4986 2.6967 13.3033ZM13 7.5C12.7239 7.5 12.5 7.72386 12.5 8C12.5 8.27614 12.7239 8.5 13 8.5H15C15.2761 8.5 15.5 8.27614 15.5 8C15.5 7.72386 15.2761 7.5 15 7.5H13ZM11.182 4.81802C10.9867 4.62276 10.9867 4.30617 11.182 4.11091L12.5962 2.6967C12.7915 2.50144 13.108 2.50144 13.3033 2.6967C13.4986 2.89196 13.4986 3.20854 13.3033 3.40381L11.8891 4.81802C11.6938 5.01328 11.3772 5.01328 11.182 4.81802ZM8.5 13C8.5 12.7239 8.27614 12.5 8 12.5C7.72386 12.5 7.5 12.7239 7.5 13V15C7.5 15.2761 7.72386 15.5 8 15.5C8.27614 15.5 8.5 15.2761 8.5 15V13ZM11.182 11.182C11.3772 10.9867 11.6938 10.9867 11.8891 11.182L13.3033 12.5962C13.4986 12.7915 13.4986 13.108 13.3033 13.3033C13.108 13.4986 12.7915 13.4986 12.5962 13.3033L11.182 11.8891C10.9867 11.6938 10.9867 11.3772 11.182 11.182ZM6 8C6 6.89543 6.89543 6 8 6C9.10457 6 10 6.89543 10 8C10 9.10457 9.10457 10 8 10C6.89543 10 6 9.10457 6 8ZM8 5C6.34315 5 5 6.34315 5 8C5 9.65685 6.34315 11 8 11C9.65685 11 11 9.65685 11 8C11 6.34315 9.65685 5 8 5Z"
                     />
                 </svg>
-                <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" className="hidden fill-gray-dark-12 dark:inline-block align-middle">
+                <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" className="hidden fill-gray-dark-12 align-middle dark:inline-block">
                     <path
                         fillRule="evenodd"
                         clipRule="evenodd"

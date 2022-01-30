@@ -28,7 +28,7 @@ const ToastTransaction: FunctionComponent<ToastTransactionProps> = ({ hash, chil
     }
     return (
         <Link href={txLink ? txLink : "#"}>
-            <a target="_blank" rel="noreferrer" className="bg-green-light-9 dark:bg-green-dark-2 border border-green-light-10 dark:border-green-dark-5 py-[3px] pl-[4px] pr-4 rounded-full inline-block flex flex-row items-center max-w-max space-x-2">
+            <a target="_blank" rel="noreferrer" className="inline-block flex max-w-max flex-row items-center space-x-2 rounded-full border border-green-light-10 bg-green-light-9 py-[3px] pl-[4px] pr-4 dark:border-green-dark-5 dark:bg-green-dark-2">
                 <div className="flex flex-row items-center">
                     <svg width="31" height="32" viewBox="0 0 31 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="">
                         <rect y="0.5" width="31" height="31" rx="15.5" className="fill-green-light-10 dark:fill-green-dark-5" />
@@ -39,7 +39,7 @@ const ToastTransaction: FunctionComponent<ToastTransactionProps> = ({ hash, chil
                             className="fill-green-light-1 dark:fill-green-dark-11 "
                         />
                     </svg>
-                    <span className="text-green-light-1 dark:text-green-dark-12 text-xs font-semibold inline-block leading-4 ml-2">
+                    <span className="ml-2 inline-block text-xs font-semibold leading-4 text-green-light-1 dark:text-green-dark-12">
                         {children} {simplifiedHash}
                     </span>
                 </div>
