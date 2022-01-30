@@ -10,19 +10,19 @@ import { Metadata } from "../MarketMetadata";
 
 export type LeveragedTokenChartProps = {
     chainID: number;
-    leveragedTokenAddress: string;
+    address: string;
 };
 
-const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chainID, leveragedTokenAddress }) => {
+const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chainID, address }) => {
     // Get leveaged token metadata
-    const metadata = Metadata[chainID][leveragedTokenAddress];
+    const metadata = Metadata[chainID][address];
 
     // Fetch onchain data for latest nav
     const provider = useProvider();
-    const navData = useLeveragedTokenNAV({ tokenAddress: leveragedTokenAddress, provider: provider, vaultAddress: metadata.vaultAddress });
+    const navData = useLeveragedTokenNAV({ tokenAddress: address, provider: provider, vaultAddress: metadata.vaultAddress });
 
     // Fetch data
-    const data = useLeveragedTokenHistoricalData(chainID, leveragedTokenAddress);
+    const data = useLeveragedTokenHistoricalData(chainID, address);
 
     // Component states
     const [currentData, setCurrentData] = useState(data.twoWeekly);
