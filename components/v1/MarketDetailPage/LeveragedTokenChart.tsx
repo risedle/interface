@@ -1,7 +1,12 @@
+import { ethers } from "ethers";
 import { FunctionComponent, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
+import { useProvider } from "wagmi";
+
 import { dollarFormatter } from "../../../utils/formatters";
+import { useLeveragedTokenNAV } from "../../../utils/onchain";
 import { Timeframe, useLeveragedTokenHistoricalData } from "../../../utils/snapshot";
+import { Metadata } from "../MarketMetadata";
 
 export type LeveragedTokenChartProps = {
     chainID: number;
@@ -9,6 +14,13 @@ export type LeveragedTokenChartProps = {
 };
 
 const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chainID, address }) => {
+    // Get leveaged token metadata
+    const metadata = Metadata[chainID][address];
+
+    // Fetch onchain data for latest nav
+    const provider = useProvider();
+    const navData = useLeveragedTokenNAV({ tokenAddress: address, provider: provider, vaultAddress: metadata.vaultAddress });
+
     // Fetch data
     const data = useLeveragedTokenHistoricalData(chainID, address);
 
@@ -19,15 +31,20 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
     }
     const [nav, setNAV] = useState(0);
     const [navChange, setNAVChange] = useState(0);
+
+    // Value based on states
+    const latestNAV = parseFloat(ethers.utils.formatUnits(navData.data ? navData.data : 0, metadata.debtDecimals));
+    const latestChange = currentData ? ((latestNAV - currentData.oldestNAV) / currentData.oldestNAV) * 100 : 0;
+
     // Set initial data for onMouseLeave event on the price chart
-    if (nav === 0 && navChange === 0 && currentData) {
-        setNAV(currentData.latestNAV);
-        setNAVChange(currentData.change);
+    if (nav === 0 && navChange === 0 && latestNAV != 0 && latestChange != 0) {
+        setNAV(latestNAV);
+        setNAVChange(latestChange);
     }
     const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
 
     // UI states
-    const showSkeleton = data.isLoading || data.error;
+    const showSkeleton = data.isLoading || data.error || navData.isLoading;
     const showRealData = !showSkeleton && currentData;
 
     // Styling for active timeframe selector
@@ -68,8 +85,8 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
                             data={currentData.data}
                             margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
                             onMouseLeave={() => {
-                                setNAV(currentData.latestNAV);
-                                setNAVChange(currentData.change);
+                                setNAV(latestNAV);
+                                setNAVChange(latestChange);
                             }}
                         >
                             <defs>
@@ -116,8 +133,8 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
                             setCurrentTimeframe(Timeframe.Daily);
                             if (data.daily) {
                                 setCurrentData(data.daily);
-                                setNAV(data.daily.latestNAV);
-                                setNAVChange(data.daily.change);
+                                setNAV(latestNAV);
+                                setNAVChange(latestChange);
                             }
                         }}
                     >
@@ -131,8 +148,8 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
                             setCurrentTimeframe(Timeframe.Weekly);
                             if (data.weekly) {
                                 setCurrentData(data.weekly);
-                                setNAV(data.weekly.latestNAV);
-                                setNAVChange(data.weekly.change);
+                                setNAV(latestNAV);
+                                setNAVChange(latestChange);
                             }
                         }}
                     >
@@ -146,8 +163,8 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
                             setCurrentTimeframe(Timeframe.TwoWeekly);
                             if (data.twoWeekly) {
                                 setCurrentData(data.twoWeekly);
-                                setNAV(data.twoWeekly.latestNAV);
-                                setNAVChange(data.twoWeekly.change);
+                                setNAV(latestNAV);
+                                setNAVChange(latestChange);
                             }
                         }}
                     >
@@ -161,8 +178,8 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
                             setCurrentTimeframe(Timeframe.Monthly);
                             if (data.monthly) {
                                 setCurrentData(data.monthly);
-                                setNAV(data.monthly.latestNAV);
-                                setNAVChange(data.monthly.change);
+                                setNAV(latestNAV);
+                                setNAVChange(latestChange);
                             }
                         }}
                     >
@@ -176,8 +193,8 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
                             setCurrentTimeframe(Timeframe.ThreeMonthly);
                             if (data.threeMonthly) {
                                 setCurrentData(data.threeMonthly);
-                                setNAV(data.threeMonthly.latestNAV);
-                                setNAVChange(data.threeMonthly.change);
+                                setNAV(latestNAV);
+                                setNAVChange(latestChange);
                             }
                         }}
                     >
