@@ -4,7 +4,7 @@ import type { FunctionComponent } from "react";
 import Favicon from "../Favicon";
 import Footer from "../Footer";
 import Navigation from "../HomePage/Navigation";
-import ButtonSpecials from "../Buttons/ButtonSpecials"
+import ButtonSpecials from "../Buttons/ButtonSpecials";
 
 /**
  * PageNotFoundProps is a React Component properties that passed to React Component PageNotFound
@@ -24,7 +24,7 @@ const PageNotFound: FunctionComponent<PageNotFoundProps> = ({}) => {
             <Head>
                 {/* <!-- HTML Meta Tags --> */}
                 <title>Risedle Protocol</title>
-                <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol"/>
+                <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
             </Head>
             <Favicon />
             <Navigation />
@@ -34,19 +34,17 @@ const PageNotFound: FunctionComponent<PageNotFoundProps> = ({}) => {
                         <p className="text-xs font-semibold text-gray-light-10 dark:text-gray-dark-10 uppercase text-center tracking-widest">Page not Found</p>
                     </div>
                     <div className="flex items-center">
-                        <h1 className="hero-text">
-                            404
-                        </h1>
+                        <h1 className="hero-text">404</h1>
                     </div>
                     <div className="max-w-lg mx-auto">
-                        <h2 className="text-base text-gray-light-10 dark:text-gray-dark-10 leading-relaxed">
-                            Uh oh, seems the page you're searching is not there
-                        </h2>
+                        <h2 className="text-base text-gray-light-10 dark:text-gray-dark-10 leading-relaxed">Uh oh, seems the page you're searching is not there</h2>
                     </div>
                     <div className="mt-6">
-                        <Link href={'/'}>
+                        <Link href={"/"}>
                             <a>
-                                <ButtonSpecials><span className="mr-2">&#8592;</span> Back to Landing Page</ButtonSpecials>
+                                <ButtonSpecials>
+                                    <span className="mr-2">&#8592;</span> Back to Landing Page
+                                </ButtonSpecials>
                             </a>
                         </Link>
                     </div>

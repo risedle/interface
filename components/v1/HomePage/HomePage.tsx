@@ -28,7 +28,7 @@ const HomePage: FunctionComponent<HomePageProps> = ({}) => {
             <Head>
                 {/* <!-- HTML Meta Tags --> */}
                 <title>Risedle Protocol</title>
-                <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol"/>
+                <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
                 <HomePageMeta />
             </Head>
             <Favicon />

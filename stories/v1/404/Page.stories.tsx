@@ -7,9 +7,5 @@ export default {
 };
 
 export const NotFound = () => {
-    return(
-        <PageNotFound>
-            Label
-        </PageNotFound>
-    )
-}
+    return <PageNotFound>Label</PageNotFound>;
+};
