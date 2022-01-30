@@ -7,9 +7,5 @@ export default {
 };
 
 export const Negative = () => {
-    return(
-        <ButtonNegative>
-            Label
-        </ButtonNegative>
-    )
-}
+    return <ButtonNegative>Label</ButtonNegative>;
+};

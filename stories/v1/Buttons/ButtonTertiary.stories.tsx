@@ -7,9 +7,5 @@ export default {
 };
 
 export const Tertiary = () => {
-    return(
-        <ButtonTertiary>
-            Label
-        </ButtonTertiary>
-    )
-}
+    return <ButtonTertiary>Label</ButtonTertiary>;
+};

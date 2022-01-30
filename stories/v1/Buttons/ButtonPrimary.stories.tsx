@@ -7,9 +7,5 @@ export default {
 };
 
 export const Primary = () => {
-    return(
-        <ButtonPrimary>
-            Label
-        </ButtonPrimary>
-    )
-}
+    return <ButtonPrimary>Label</ButtonPrimary>;
+};

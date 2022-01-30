@@ -12,66 +12,66 @@ if (process.env.NEXT_PUBLIC_KOVAN_URL) {
     kovanURL = process.env.NEXT_PUBLIC_KOVAN_URL;
 }
 
-export const changeToArbitrum = async() => {
-    const metamask = window.ethereum
-    try{
+export const changeToArbitrum = async () => {
+    const metamask = window.ethereum;
+    try {
         await metamask?.request({
-            method: 'wallet_addEthereumChain',
-            params: [
-              {
-                chainId: `0x${chain.arbitrumOne.id.toString(16)}`,
-                chainName: 'Arbitrum Mainnet',
-                nativeCurrency: {
-                  name: 'AETH',
-                  symbol: 'aeth',
-                  decimals: 18,
-                },
-                rpcUrls: [arbitrumURL],
-                blockExplorerUrls: ['https://arbiscan.io/'],
-              },
-            ],
-        })
-    } catch(error) {
-        console.log(error)
-        await metamask?.request({
-            method: 'wallet_switchEthereumChain',
-            params: [
-              {
-                chainId: `0x${chain.arbitrumOne.id.toString(16)}`,
-              },
-            ],
-        })
-    }
-}
-
-export const changeToKovan = async() => {
-    const metamask = window.ethereum
-    try{
-        await metamask?.request({
-            method: 'wallet_addEthereumChain',
+            method: "wallet_addEthereumChain",
             params: [
                 {
-                chainId: `0x${chain.kovan.id.toString(16)}`,
-                chainName: 'Kovan Test Network',
-                nativeCurrency: {
-                    name: 'ETH',
-                    symbol: 'eth',
-                    decimals: 18,
-                },
-                rpcUrls: [kovanURL],
-                blockExplorerUrls: ['https://kovan.etherscan.io/'],
+                    chainId: `0x${chain.arbitrumOne.id.toString(16)}`,
+                    chainName: "Arbitrum Mainnet",
+                    nativeCurrency: {
+                        name: "AETH",
+                        symbol: "aeth",
+                        decimals: 18,
+                    },
+                    rpcUrls: [arbitrumURL],
+                    blockExplorerUrls: ["https://arbiscan.io/"],
                 },
             ],
-        })
-    } catch (error){
-        console.log(error)
+        });
+    } catch (error) {
+        console.log(error);
         await metamask?.request({
-            method: 'wallet_switchEthereumChain',
+            method: "wallet_switchEthereumChain",
             params: [
-              {
-                chainId: `0x${chain.kovan.id.toString(16)}`,
-              },
+                {
+                    chainId: `0x${chain.arbitrumOne.id.toString(16)}`,
+                },
             ],
-        })
+        });
     }
-}
+};
+
+export const changeToKovan = async () => {
+    const metamask = window.ethereum;
+    try {
+        await metamask?.request({
+            method: "wallet_addEthereumChain",
+            params: [
+                {
+                    chainId: `0x${chain.kovan.id.toString(16)}`,
+                    chainName: "Kovan Test Network",
+                    nativeCurrency: {
+                        name: "ETH",
+                        symbol: "eth",
+                        decimals: 18,
+                    },
+                    rpcUrls: [kovanURL],
+                    blockExplorerUrls: ["https://kovan.etherscan.io/"],
+                },
+            ],
+        });
+    } catch (error) {
+        console.log(error);
+        await metamask?.request({
+            method: "wallet_switchEthereumChain",
+            params: [
+                {
+                    chainId: `0x${chain.kovan.id.toString(16)}`,
+                },
+            ],
+        });
+    }
+};

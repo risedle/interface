@@ -7,9 +7,5 @@ export default {
 };
 
 export const Specials = () => {
-    return(
-        <ButtonSpecials>
-            Label
-        </ButtonSpecials>
-    )
-}
+    return <ButtonSpecials>Label</ButtonSpecials>;
+};

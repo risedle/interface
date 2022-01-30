@@ -12,27 +12,10 @@ type ButtonGreyProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const ButtonGrey: FunctionComponent<ButtonGreyProps> = ({
-    onClick,
-    children,
-}) => {
-    const tailwind = [
-        "text-grey",
-        "font-extrabold",
-        "bg-white",
-        "bg-opacity-8",
-        "px-6",
-        "text-sm",
-        "rounded-full",
-        "transform active:scale-95",
-        "transition duration-300 ease-in-out",
-    ];
+const ButtonGrey: FunctionComponent<ButtonGreyProps> = ({ onClick, children }) => {
+    const tailwind = ["text-grey", "font-extrabold", "bg-white", "bg-opacity-8", "px-6", "text-sm", "rounded-full", "transform active:scale-95", "transition duration-300 ease-in-out"];
     return (
-        <button
-            className={tailwind.join(" ")}
-            onClick={onClick}
-            style={{ lineHeight: "40px" }}
-        >
+        <button className={tailwind.join(" ")} onClick={onClick} style={{ lineHeight: "40px" }}>
             {children}
         </button>
     );

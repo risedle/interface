@@ -7,9 +7,5 @@ export default {
 };
 
 export const Disabled = () => {
-    return(
-        <ButtonDisabled>
-            Label
-        </ButtonDisabled>
-    )
-}
+    return <ButtonDisabled>Label</ButtonDisabled>;
+};

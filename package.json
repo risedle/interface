@@ -9,7 +9,9 @@
         "start": "next start",
         "lint": "next lint",
         "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
-        "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook"
+        "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook",
+        "prettier-check": "prettier --check .",
+        "prettier-write": "prettier --write ."
     },
     "dependencies": {
         "@headlessui/react": "1.4.3",

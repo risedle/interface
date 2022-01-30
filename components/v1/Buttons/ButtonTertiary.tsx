@@ -15,16 +15,12 @@ type ButtonTertiaryProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 
-const ButtonTertiary: FunctionComponent<ButtonTertiaryProps> = ({
-    onClick,
-    full,
-    children
-}) => {
-    return(
-        <button className={`button basic px-[24px] py-[12px] ${full ? 'w-full' : ''}`} onClick={onClick}>
+const ButtonTertiary: FunctionComponent<ButtonTertiaryProps> = ({ onClick, full, children }) => {
+    return (
+        <button className={`button basic px-[24px] py-[12px] ${full ? "w-full" : ""}`} onClick={onClick}>
             {children}
         </button>
-    )
-}
+    );
+};
 
 export default ButtonTertiary;
