@@ -6,6 +6,8 @@ export const VaultABI = new ethers.utils.Interface([
     "function getTotalAvailableCash() external view returns (uint256 totalAvailableCash)",
     "function getNAV(address token) external view returns (uint256 nav)",
     "function getExchangeRateInEther() external view returns (uint256)",
+    "function getCollateralPerRiseToken(address token) external view returns (uint256)",
+    "function getDebtPerRiseToken(address token) external view returns (uint256)",
 
     // Writes
     "function mint(address token) external payable",

@@ -4,7 +4,7 @@ import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 import { useProvider } from "wagmi";
 
 import { dollarFormatter } from "../../../utils/formatters";
-import { useLeveragedTokenNAV } from "../../../utils/onchain";
+import { useVault, VaultFetcherQuery } from "../../../utils/onchain";
 import { Timeframe, useLeveragedTokenHistoricalData } from "../../../utils/snapshot";
 import { Metadata } from "../MarketMetadata";
 
@@ -19,7 +19,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
 
     // Fetch onchain data for latest nav
     const provider = useProvider();
-    const navData = useLeveragedTokenNAV({ tokenAddress: address, provider: provider, vaultAddress: metadata.vaultAddress });
+    const navData = useVault({ token: address, vault: metadata.vaultAddress, provider: provider, query: VaultFetcherQuery.GetNAV });
 
     // Fetch data
     const data = useLeveragedTokenHistoricalData(chainID, address);
