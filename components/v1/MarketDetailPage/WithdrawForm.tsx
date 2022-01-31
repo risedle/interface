@@ -16,6 +16,7 @@ import { WithdrawState, RequestState } from "./States";
 import ButtonLoading from "../Buttons/ButtonLoading";
 import { getExplorerLink } from "./Explorer";
 import ToastInProgress from "../Toasts/InProgress";
+import { tokenBalanceFormatter } from "../../../utils/formatters";
 
 /**
  * WithdrawFormProps is a React Component properties that passed to React Component WithdrawForm
@@ -84,8 +85,8 @@ const WithdrawForm: FunctionComponent<WithdrawFormProps> = ({ address }) => {
                             type="number"
                             placeholder="0"
                             min={0}
-                            max={balance.toFixed(3)}
-                            value={withdrawState.amount ? withdrawState.amount.toString() : 0}
+                            max={tokenBalanceFormatter.format(balance)}
+                            value={withdrawState.amount ? tokenBalanceFormatter.format(withdrawState.amount) : 0}
                             step={0.001}
                             onChange={(e) => {
                                 if (e.target.value === "") {
@@ -93,7 +94,7 @@ const WithdrawForm: FunctionComponent<WithdrawFormProps> = ({ address }) => {
                                     return;
                                 }
                                 const value = parseFloat(e.target.value);
-                                setWithdrawState({ ...withdrawState, amount: value });
+                                setWithdrawState({ ...withdrawState, amount: tokenBalanceFormatter.format(value) });
                             }}
                         />
                     </div>
@@ -104,7 +105,7 @@ const WithdrawForm: FunctionComponent<WithdrawFormProps> = ({ address }) => {
                             className="flex flex-row items-center space-x-2 outline-none"
                             onClick={(e) => {
                                 e.preventDefault();
-                                setWithdrawState({ ...withdrawState, amount: balance });
+                                setWithdrawState({ ...withdrawState, amount: tokenBalanceFormatter.format(balance) });
                             }}
                         >
                             <svg width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg" className="fill-green-light-10 dark:fill-green-dark-10">
@@ -122,7 +123,7 @@ const WithdrawForm: FunctionComponent<WithdrawFormProps> = ({ address }) => {
                 {/* Balance information */}
                 <div className="flex flex-row justify-between">
                     <p className="text-left text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">
-                        Balance: {balance.toFixed(3)} {metadata.vaultTitle}
+                        Balance: {tokenBalanceFormatter.format(balance)} {metadata.vaultTitle}
                     </p>
                 </div>
 
@@ -132,12 +133,12 @@ const WithdrawForm: FunctionComponent<WithdrawFormProps> = ({ address }) => {
                     {showNormalSlider && (
                         <Slider.Root
                             min={0}
-                            value={[withdrawState.amount ? withdrawState.amount : 0]}
-                            max={parseFloat(balance.toFixed(3))}
+                            value={[withdrawState.amount ? tokenBalanceFormatter.format(withdrawState.amount) : 0]}
+                            max={tokenBalanceFormatter.format(balance)}
                             step={0.01}
                             className="relative flex w-full flex-row items-center"
                             onValueChange={(value) => {
-                                setWithdrawState({ ...withdrawState, amount: value[0] });
+                                setWithdrawState({ ...withdrawState, amount: tokenBalanceFormatter.format(value[0]) });
                             }}
                         >
                             <Slider.Track className="relative h-[2px] w-full bg-gray-light-4 dark:bg-gray-dark-4">
@@ -151,12 +152,12 @@ const WithdrawForm: FunctionComponent<WithdrawFormProps> = ({ address }) => {
                     {showRedSlider && (
                         <Slider.Root
                             min={0}
-                            value={[balance]}
-                            max={parseFloat(balance.toFixed(3))}
+                            value={[tokenBalanceFormatter.format(balance)]}
+                            max={tokenBalanceFormatter.format(balance)}
                             step={0.01}
                             className="relative flex w-full flex-row items-center"
                             onValueChange={(value) => {
-                                setWithdrawState({ ...withdrawState, amount: value[0] });
+                                setWithdrawState({ ...withdrawState, amount: tokenBalanceFormatter.format(value[0]) });
                             }}
                         >
                             <Slider.Track className="relative h-[2px] w-full bg-gray-light-4 dark:bg-gray-dark-4">
@@ -172,7 +173,7 @@ const WithdrawForm: FunctionComponent<WithdrawFormProps> = ({ address }) => {
                     <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">
                         You will get{" "}
                         <span className="font-semibold text-gray-light-12 dark:text-gray-dark-12">
-                            {withdrawAmount.toFixed(3)} {metadata.debtSymbol}
+                            {tokenBalanceFormatter.format(withdrawAmount)} {metadata.debtSymbol}
                         </span>
                     </p>
                 </div>

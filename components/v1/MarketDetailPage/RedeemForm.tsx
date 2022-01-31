@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import { useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import ToastError from "../Toasts/Error";
-import ToastTransaction from "../Toasts/Transaction";
 import ToastSuccess from "../Toasts/Success";
 
 // ABIs
@@ -17,6 +16,7 @@ import { RedeemState, RequestState } from "./States";
 import ButtonLoading from "../Buttons/ButtonLoading";
 import { getExplorerLink } from "./Explorer";
 import ToastInProgress from "../Toasts/InProgress";
+import { tokenBalanceFormatter } from "../../../utils/formatters";
 
 /**
  * RedeemFormProps is a React Component properties that passed to React Component RedeemForm
@@ -84,8 +84,8 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
                             type="number"
                             placeholder="0"
                             min={0}
-                            max={balance.toFixed(3)}
-                            value={redeem.amount ? redeem.amount.toString() : 0}
+                            max={tokenBalanceFormatter.format(balance)}
+                            value={redeem.amount ? tokenBalanceFormatter.format(redeem.amount) : 0}
                             step={0.001}
                             onChange={(e) => {
                                 if (e.target.value === "") {
@@ -93,7 +93,7 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
                                     return;
                                 }
                                 const value = parseFloat(e.target.value);
-                                setRedeem({ ...redeem, amount: value });
+                                setRedeem({ ...redeem, amount: tokenBalanceFormatter.format(value) });
                             }}
                         />
                     </div>
@@ -104,7 +104,7 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
                             className="flex flex-row items-center space-x-2 outline-none"
                             onClick={(e) => {
                                 e.preventDefault();
-                                setRedeem({ ...redeem, amount: balance });
+                                setRedeem({ ...redeem, amount: tokenBalanceFormatter.format(balance) });
                             }}
                         >
                             <svg width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg" className="fill-green-light-10 dark:fill-green-dark-10">
@@ -122,7 +122,7 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
                 {/* Balance information */}
                 <div className="flex flex-row justify-between">
                     <p className="text-left text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">
-                        Balance: {balance.toFixed(3)} {metadata.title}
+                        Balance: {tokenBalanceFormatter.format(balance)} {metadata.title}
                     </p>
                 </div>
 
@@ -132,12 +132,12 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
                     {showNormalSlider && (
                         <Slider.Root
                             min={0}
-                            value={[redeem.amount ? redeem.amount : 0]}
-                            max={parseFloat(balance.toFixed(3))}
+                            value={[redeem.amount ? tokenBalanceFormatter.format(redeem.amount) : 0]}
+                            max={tokenBalanceFormatter.format(balance)}
                             step={0.01}
                             className="relative flex w-full flex-row items-center"
                             onValueChange={(value) => {
-                                setRedeem({ ...redeem, amount: value[0] });
+                                setRedeem({ ...redeem, amount: tokenBalanceFormatter.format(value[0]) });
                             }}
                         >
                             <Slider.Track className="relative h-[2px] w-full bg-gray-light-4 dark:bg-gray-dark-4">
@@ -151,12 +151,12 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
                     {showRedSlider && (
                         <Slider.Root
                             min={0}
-                            value={[balance]}
-                            max={parseFloat(balance.toFixed(3))}
+                            value={[tokenBalanceFormatter.format(balance)]}
+                            max={tokenBalanceFormatter.format(balance)}
                             step={0.01}
                             className="relative flex w-full flex-row items-center"
                             onValueChange={(value) => {
-                                setRedeem({ ...redeem, amount: value[0] });
+                                setRedeem({ ...redeem, amount: tokenBalanceFormatter.format(value[0]) });
                             }}
                         >
                             <Slider.Track className="relative h-[2px] w-full bg-gray-light-4 dark:bg-gray-dark-4">
@@ -172,7 +172,7 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address, nav, collater
                     <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">
                         You will get{" "}
                         <span className="font-semibold text-gray-light-12 dark:text-gray-dark-12">
-                            {minimalRedeemedValue.toFixed(5)} {metadata.collateralSymbol}
+                            {tokenBalanceFormatter.format(minimalRedeemedValue)} {metadata.collateralSymbol}
                         </span>{" "}
                         at minimum
                     </p>

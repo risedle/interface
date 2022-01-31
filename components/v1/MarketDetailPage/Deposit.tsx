@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 import { useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import ToastError from "../Toasts/Error";
-import ToastTransaction from "../Toasts/Transaction";
 import ToastSuccess from "../Toasts/Success";
 import FormLoading from "./FormLoading";
 import FormLoadingFailed from "./FormLoadingFailed";
@@ -17,6 +16,7 @@ import ButtonLoading from "../Buttons/ButtonLoading";
 import { RequestState, ApprovalState } from "./States";
 import { getExplorerLink } from "./Explorer";
 import DepositForm from "./DepositForm";
+import ToastInProgress from "../Toasts/InProgress";
 
 /**
  * DepositProps is a React Component properties that passed to React Component Deposit
@@ -89,7 +89,7 @@ const Deposit: FunctionComponent<DepositProps> = ({ address }) => {
                                                 const result = await connectedContract.approve(metadata.vaultAddress, ethers.constants.MaxUint256);
                                                 setApprovalState({ approving: true, hash: result.hash });
                                                 toast.remove();
-                                                toast.custom((t) => <ToastTransaction hash={result.hash}>Approving</ToastTransaction>, { duration: 10000 });
+                                                toast.custom((t) => <ToastInProgress>Approving {metadata.debtSymbol}</ToastInProgress>);
                                                 await result.wait();
                                                 toast.remove();
                                                 toast.custom((t) => <ToastSuccess>{metadata.debtSymbol} approved</ToastSuccess>);
