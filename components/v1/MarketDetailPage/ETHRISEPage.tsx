@@ -27,6 +27,7 @@ import ButtonDisabled from "../Buttons/ButtonDisabled";
 import ButtonDepositOrWithdraw from "./ButtonDepositOrWithdraw";
 import ButtonTertiary from "../Buttons/ButtonTertiary";
 import MyAssetCard from "./LeveragedTokenMyAssetCard";
+import BackingCard from "./LeveragedTokenBackingCard";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -245,29 +246,8 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 </div>
                             </div>
 
-                            {/* Allocation card */}
-                            <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">
-                                <div className="pt-4">
-                                    <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">Allocation</h2>
-                                </div>
-                                <div className="flex flex-col space-y-6">
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Asset</p>
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Allocation</p>
-                                    </div>
-
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.collateralSymbol}</p>
-                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
-                                        {!marketIsLoading && market && market.collateral_per_token && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{market.collateral_per_token.toFixed(2) + " " + metadata.collateralSymbol}</p>}
-                                    </div>
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.debtSymbol}</p>
-                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
-                                        {!marketIsLoading && market && market.debt_per_token && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">-{market.debt_per_token.toFixed(2) + " " + metadata.debtSymbol}</p>}
-                                    </div>
-                                </div>
-                            </div>
+                            {/* Backing card */}
+                            <BackingCard address={ethriseAddress} />
                         </Tabs.Content>
 
                         {/* Earn tab */}
