@@ -26,7 +26,7 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address }) => {
 
     // Data
     const nav = parseFloat(ethers.utils.formatUnits(navData.data ? navData.data : 0, metadata.debtDecimals));
-    const balance = parseFloat(ethers.utils.formatUnits(navData.data ? navData.data : 0, metadata.debtDecimals));
+    const balance = parseFloat(ethers.utils.formatUnits(balanceData.data ? balanceData.data : 0, metadata.debtDecimals));
 
     // UI states
     const showLoading = navData.isLoading || balanceData.isLoading ? true : false;
