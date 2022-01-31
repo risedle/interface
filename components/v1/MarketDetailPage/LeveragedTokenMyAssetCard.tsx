@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import type { FunctionComponent } from "react";
 import { useProvider } from "wagmi";
+import { tokenBalanceFormatter } from "../../../utils/formatters";
 import { useLeveragedTokenBalance, useLeveragedTokenNAV } from "../../../utils/onchain";
 import { Metadata } from "../MarketMetadata";
 import { useWalletContext } from "../Wallet";
@@ -44,7 +45,7 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address }) => {
                     {(showLoading || showError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
                     {showData && (
                         <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
-                            {balance.toFixed(3)} {metadata.title}
+                            {tokenBalanceFormatter.format(balance)} {metadata.title}
                         </p>
                     )}
                 </div>
@@ -53,7 +54,7 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address }) => {
                     {(showLoading || showError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
                     {showData && (
                         <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
-                            {(balance * nav).toFixed(3)} {metadata.debtSymbol}
+                            {tokenBalanceFormatter.format(balance * nav)} {metadata.debtSymbol}
                         </p>
                     )}
                 </div>
