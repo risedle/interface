@@ -1,13 +1,9 @@
 import { FunctionComponent, useState } from "react";
 import Link from "next/link";
-import { useWalletContext } from "../Wallet";
-import { Metadata } from "../MarketMetadata";
 import { ethers } from "ethers";
 import { useProvider, useSigner } from "wagmi";
 import * as Slider from "@radix-ui/react-slider";
 import toast from "react-hot-toast";
-import ToastError from "../Toasts/Error";
-import ToastSuccess from "../Toasts/Success";
 
 // ABIs
 import VaultABI from "./VaultABI";
@@ -15,6 +11,11 @@ import { MintState } from "./States";
 import ButtonLoading from "../Buttons/ButtonLoading";
 import { getExplorerLink } from "./Explorer";
 import ToastInProgress from "../Toasts/InProgress";
+import ToastError from "../Toasts/Error";
+import ToastSuccess from "../Toasts/Success";
+import { useWalletContext } from "../Wallet";
+import { Metadata } from "../MarketMetadata";
+import { tokenBalanceFormatter } from "../../../utils/formatters";
 
 /**
  * MintFormProps is a React Component properties that passed to React Component MintForm
@@ -74,15 +75,15 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                             type="number"
                             placeholder="0"
                             min={0}
-                            max={balance.toFixed(3)}
-                            value={mintState.amount ? mintState.amount : 0}
+                            max={tokenBalanceFormatter.format(balance)}
+                            value={mintState.amount ? tokenBalanceFormatter.format(mintState.amount) : 0}
                             step={0.001}
                             onChange={(e) => {
                                 if (e.target.value === "") {
                                     setMintState({ ...mintState, amount: 0 });
                                     return;
                                 }
-                                const value = parseFloat(e.target.value);
+                                const value = tokenBalanceFormatter.format(parseFloat(e.target.value));
                                 setMintState({ ...mintState, amount: value });
                             }}
                         />
@@ -94,7 +95,7 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                             className="flex flex-row items-center space-x-2 outline-none"
                             onClick={(e) => {
                                 e.preventDefault();
-                                setMintState({ ...mintState, amount: balance });
+                                setMintState({ ...mintState, amount: tokenBalanceFormatter.format(balance) });
                             }}
                         >
                             <svg width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg" className="fill-green-light-10 dark:fill-green-dark-10">
@@ -112,7 +113,7 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                 {/* Balance information */}
                 <div className="flex flex-row justify-between">
                     <p className="text-left text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">
-                        Balance: {balance.toFixed(5)} {metadata.collateralSymbol}
+                        Balance: {tokenBalanceFormatter.format(balance)} {metadata.collateralSymbol}
                     </p>
                 </div>
 
@@ -122,8 +123,8 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                     {showNormalSlider && (
                         <Slider.Root
                             min={0}
-                            value={[mintState.amount ? mintState.amount : 0]}
-                            max={parseFloat(balance.toFixed(3))}
+                            value={[mintState.amount ? tokenBalanceFormatter.format(mintState.amount) : 0]}
+                            max={tokenBalanceFormatter.format(balance)}
                             step={0.01}
                             className="relative flex w-full flex-row items-center"
                             onValueChange={(value) => {
@@ -141,12 +142,12 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                     {showRedSlider && (
                         <Slider.Root
                             min={0}
-                            value={[balance]}
-                            max={parseFloat(balance.toFixed(3))}
+                            value={[tokenBalanceFormatter.format(balance)]}
+                            max={tokenBalanceFormatter.format(balance)}
                             step={0.01}
                             className="relative flex w-full flex-row items-center"
                             onValueChange={(value) => {
-                                setMintState({ ...mintState, amount: value[0] });
+                                setMintState({ ...mintState, amount: tokenBalanceFormatter.format(value[0]) });
                             }}
                         >
                             <Slider.Track className="relative h-[2px] w-full bg-gray-light-4 dark:bg-gray-dark-4">
@@ -162,7 +163,7 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address, balance, nav, max
                     <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">
                         You will get{" "}
                         <span className="font-semibold text-gray-light-12 dark:text-gray-dark-12">
-                            {minimalMintedAmount.toFixed(5)} {metadata.title}
+                            {tokenBalanceFormatter.format(minimalMintedAmount)} {metadata.title}
                         </span>{" "}
                         at minimum
                     </p>

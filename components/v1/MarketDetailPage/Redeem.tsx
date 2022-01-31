@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 import { useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import ToastError from "../Toasts/Error";
-import ToastTransaction from "../Toasts/Transaction";
 import ToastSuccess from "../Toasts/Success";
 import FormLoading from "./FormLoading";
 import FormLoadingFailed from "./FormLoadingFailed";
@@ -19,6 +18,7 @@ import { RequestState, ApprovalState } from "./States";
 import VaultABI from "./VaultABI";
 import { getExplorerLink } from "./Explorer";
 import OracleABI from "./OracleABI";
+import ToastInProgress from "../Toasts/InProgress";
 
 /**
  * RedeemProps is a React Component properties that passed to React Component Redeem
@@ -97,7 +97,7 @@ const Redeem: FunctionComponent<RedeemProps> = ({ address }) => {
                                                 const connectedContract = leveragedTokenContract.connect(signerData.data);
                                                 const result = await connectedContract.approve(metadata.vaultAddress, ethers.constants.MaxUint256);
                                                 setApproval({ approving: true, hash: result.hash });
-                                                toast.custom((t) => <ToastTransaction hash={result.hash}>Approving</ToastTransaction>, { duration: 10000 });
+                                                toast.custom((t) => <ToastInProgress>Approving {metadata.title}</ToastInProgress>);
                                                 await result.wait();
                                                 toast.remove();
                                                 toast.custom((t) => <ToastSuccess>{metadata.title} approved</ToastSuccess>);
