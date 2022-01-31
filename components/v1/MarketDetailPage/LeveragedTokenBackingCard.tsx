@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import type { FunctionComponent } from "react";
 import { useProvider } from "wagmi";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
-import { useVault, VaultFetcherQuery } from "../../../utils/onchain";
+import { useVault, FetcherQuery } from "../../../utils/onchain";
 import { Metadata } from "../MarketMetadata";
 import { useWalletContext } from "../Wallet";
 
@@ -22,8 +22,8 @@ const BackingCard: FunctionComponent<BackingCardProps> = ({ address }) => {
     const { chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
-    const collateralPerTokenData = useVault({ token: address, vault: metadata.vaultAddress, provider: provider, query: VaultFetcherQuery.GetCollateralPerLeveragedToken });
-    const debtPerTokenData = useVault({ token: address, vault: metadata.vaultAddress, provider: provider, query: VaultFetcherQuery.GetDebtPerLeveragedToken });
+    const collateralPerTokenData = useVault({ token: address, vault: metadata.vaultAddress, provider: provider, query: FetcherQuery.GetCollateralPerLeveragedToken });
+    const debtPerTokenData = useVault({ token: address, vault: metadata.vaultAddress, provider: provider, query: FetcherQuery.GetDebtPerLeveragedToken });
 
     // Data
     const collateral = parseFloat(ethers.utils.formatUnits(collateralPerTokenData.data ? collateralPerTokenData.data : 0, metadata.collateralDecimals));

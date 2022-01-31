@@ -7,43 +7,38 @@ import VaultABI from "../abis/VaultABI";
 import { erc20ABI } from "wagmi";
 
 // Vault SWR
-export enum VaultFetcherQuery {
+export enum FetcherQuery {
     GetNAV,
     GetCollateralPerLeveragedToken,
     GetDebtPerLeveragedToken,
+    GetBalance,
 }
 
-export type VaultFetcherKey = {
-    token: string;
-    vault: string;
+export type FetcherKey = {
+    token?: string;
+    vault?: string;
     account?: string;
     provider: ethers.providers.BaseProvider;
-    query: VaultFetcherQuery;
+    query: FetcherQuery;
 };
 
-const VaultFetcher = async (
-    key: VaultFetcherKey
-): Promise<ethers.BigNumber> => {
+const VaultFetcher = async (key: FetcherKey): Promise<ethers.BigNumber> => {
+    if (!key.vault) throw new Error("VaultFetcher: vault is undefined");
     const contract = new ethers.Contract(key.vault, VaultABI, key.provider);
-    console.debug("VaultFetcher contract", contract);
-    console.debug("VaultFetcher key", key);
     switch (key.query) {
-        case VaultFetcherQuery.GetNAV:
+        case FetcherQuery.GetNAV:
             return contract.getNAV(key.token);
-        case VaultFetcherQuery.GetCollateralPerLeveragedToken:
+        case FetcherQuery.GetCollateralPerLeveragedToken:
             return contract.getCollateralPerRiseToken(key.token);
-        case VaultFetcherQuery.GetDebtPerLeveragedToken:
+        case FetcherQuery.GetDebtPerLeveragedToken:
             return contract.getDebtPerRiseToken(key.token);
         default:
             throw new Error("Query is not implemented");
     }
 };
 
-export function useVault(key: VaultFetcherKey) {
+export function useVault(key: FetcherKey) {
     const { data, error } = useSWR<ethers.BigNumber, Error>(key, VaultFetcher);
-    console.debug("useVault data", data);
-    console.debug("useVault key", key);
-    console.debug("useVault error", error);
     return {
         data: data,
         isLoading: !data && !error,
@@ -52,23 +47,14 @@ export function useVault(key: VaultFetcherKey) {
 }
 
 // Leveraged token ERC20 SWR
-export enum LeveragedTokenFetcherQuery {
-    GetBalance,
-}
-
-export type LeveragedTokenFetcherKey = {
-    token: string;
-    account?: string;
-    provider: ethers.providers.BaseProvider;
-    query: LeveragedTokenFetcherQuery;
-};
-
 const LeveragedTokenFetcher = async (
-    key: LeveragedTokenFetcherKey
+    key: FetcherKey
 ): Promise<ethers.BigNumber> => {
+    if (!key.token)
+        throw new Error("LeveragedTokenFetcher: token is not defined");
     const contract = new ethers.Contract(key.token, erc20ABI, key.provider);
     switch (key.query) {
-        case LeveragedTokenFetcherQuery.GetBalance:
+        case FetcherQuery.GetBalance:
             if (!key.account)
                 throw new Error("GetBalance: account is not defined");
             return contract.balanceOf(key.account);
@@ -77,7 +63,7 @@ const LeveragedTokenFetcher = async (
     }
 };
 
-export function useLeveragedToken(key: LeveragedTokenFetcherKey) {
+export function useLeveragedToken(key: FetcherKey) {
     const { data, error } = useSWR<ethers.BigNumber, Error>(
         key,
         LeveragedTokenFetcher

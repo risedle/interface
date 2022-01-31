@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import type { FunctionComponent } from "react";
 import { useProvider } from "wagmi";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
-import { useVault, useLeveragedToken, VaultFetcherQuery, LeveragedTokenFetcherQuery } from "../../../utils/onchain";
+import { useVault, useLeveragedToken, FetcherQuery } from "../../../utils/onchain";
 import { Metadata } from "../MarketMetadata";
 import { useWalletContext } from "../Wallet";
 
@@ -22,8 +22,8 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address }) => {
     const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
-    const navData = useVault({ token: address, vault: metadata.vaultAddress, provider: provider, query: VaultFetcherQuery.GetNAV });
-    const balanceData = useLeveragedToken({ token: address, account: account ? account : undefined, provider: provider, query: LeveragedTokenFetcherQuery.GetBalance });
+    const navData = useVault({ token: address, vault: metadata.vaultAddress, provider: provider, query: FetcherQuery.GetNAV });
+    const balanceData = useLeveragedToken({ token: address, account: account ? account : undefined, provider: provider, query: FetcherQuery.GetBalance });
 
     // Data
     const nav = parseFloat(ethers.utils.formatUnits(navData.data ? navData.data : 0, metadata.debtDecimals));
