@@ -42,7 +42,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
     const { account, login, logout, connectorName, setConnectorName, chain } = useWalletContext();
     const [, connect] = useConnect();
     const [connectedChain, switchNetwork] = useNetwork();
-    const [accountData] = useAccount();
+    const [accountData, disconnect] = useAccount();
     let [isOpen, setIsOpen] = useState(false);
     let [isConnecting, setIsConnecting] = useState(false);
 
@@ -261,6 +261,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                                 className="text-red-light-10 hover:underline dark:text-red-dark-10"
                                                 onClick={() => {
                                                     logout();
+                                                    disconnect();
                                                     toast.custom((t) => <ToastSuccess>{connectorName} disconnected</ToastSuccess>);
                                                 }}
                                             >
