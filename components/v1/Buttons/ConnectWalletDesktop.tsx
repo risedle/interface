@@ -4,13 +4,13 @@ import type { FunctionComponent } from "react";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { usePopper } from "react-popper";
-import { Chain, InjectedConnector, useAccount, useConnect, useNetwork } from "wagmi";
+import { Chain, chain as Chains, InjectedConnector, useAccount, useConnect, useNetwork } from "wagmi";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 // Toasts
 import ToastError from "../Toasts/Error";
 import ToastSuccess from "../Toasts/Success";
 // States
-import { MetaMaskConnector, useWalletContext, WCConnector } from "../Wallet";
+import { MetaMaskConnector, useWalletContext, WCConnectorArbitrum, WCConnectorKovan } from "../Wallet";
 import ButtonClose from "./Close";
 
 /**
@@ -82,6 +82,19 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
         setConnectorName(c.name);
 
         const result = await connect(c);
+
+        // Prevent connecting with WalletConnect if network is not right
+        if(c instanceof WalletConnectConnector){
+            if(result?.data?.chain?.unsupported || result?.data?.chain?.id !== chain.id){
+                logout();
+                disconnect();
+                toast.custom((t) => <ToastError>Please choose {chain.name} Network in your wallet!</ToastError>);
+                setIsConnecting(false);
+                setConnectorName(previousConnectorName);
+            }
+            return;
+        }
+
         // Handle the error
         if (result && result.error) {
             // Display error
@@ -152,7 +165,11 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                 className={`m-0 flex w-full flex-row items-center justify-between rounded-[12px] border border-blue-light-5 bg-blue-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-blue-light-3 active:scale-95 dark:border-blue-dark-5 dark:bg-blue-dark-2 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
                                 disabled={isConnecting && connectorName ? true : false}
                                 onClick={async () => {
-                                    await connectWallet(WCConnector);
+                                    if(chain.id === Chains.arbitrumOne.id){
+                                        await connectWallet(WCConnectorArbitrum);
+                                    } else if(chain.id === Chains.kovan.id){
+                                        await connectWallet(WCConnectorKovan);
+                                    }
                                 }}
                             >
                                 <div>
