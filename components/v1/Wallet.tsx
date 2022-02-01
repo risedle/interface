@@ -5,6 +5,7 @@ import { createContext, useContext } from "react";
 import { ethers, providers } from "ethers";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import { getWCConnector } from "../../config/WalletConnectorsConfig";
 
 export const connectorStorageKey = "risedleConnectors.wallet";
 
@@ -16,10 +17,19 @@ export const MetaMaskConnector = new InjectedConnector({
     chains: supportedChains,
 });
 
-export const WCConnector = new WalletConnectConnector({
+export const WCConnectorArbitrum = new WalletConnectConnector({
     chains: supportedChains,
     options: {
         qrcode: true,
+        chainId: Chains.arbitrumOne.id
+    },
+});
+
+export const WCConnectorKovan = new WalletConnectConnector({
+    chains: supportedChains,
+    options: {
+        qrcode: true,
+        chainId: Chains.kovan.id
     },
 });
 
@@ -124,7 +134,7 @@ export const Wallet: FunctionComponent<WalletProps> = ({ children }) => {
 
     return (
         <WalletContext.Provider value={sharedPersistentStates}>
-            <Provider autoConnect={true} connectorStorageKey={connectorStorageKey} connectors={[MetaMaskConnector, WCConnector]} provider={getProvider}>
+            <Provider autoConnect={true} connectorStorageKey={connectorStorageKey} connectors={[MetaMaskConnector, WCConnectorArbitrum, WCConnectorKovan]} provider={getProvider}>
                 {children}
             </Provider>
         </WalletContext.Provider>
