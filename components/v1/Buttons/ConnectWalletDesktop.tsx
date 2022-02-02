@@ -84,8 +84,8 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
         const result = await connect(c);
 
         // Prevent connecting with WalletConnect if network is not right
-        if(c instanceof WalletConnectConnector){
-            if(result?.data?.chain?.unsupported || result?.data?.chain?.id !== chain.id){
+        if (c instanceof WalletConnectConnector) {
+            if (result?.data?.chain?.unsupported || result?.data?.chain?.id !== chain.id) {
                 logout();
                 disconnect();
                 toast.custom((t) => <ToastError>Please choose {chain.name} Network in your wallet!</ToastError>);

@@ -140,8 +140,8 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
         const result = await connect(c);
 
         // Prevent connecting with WalletConnect if network is not right
-        if(c instanceof WalletConnectConnector){
-            if(result?.data?.chain?.unsupported || result?.data?.chain?.id !== chain.id){
+        if (c instanceof WalletConnectConnector) {
+            if (result?.data?.chain?.unsupported || result?.data?.chain?.id !== chain.id) {
                 logout();
                 disconnect();
                 toast.custom((t) => <ToastError>Please choose {chain.name} Network in your wallet!</ToastError>);
@@ -150,7 +150,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
             }
             return;
         }
-        
+
         // Handle the error
         if (result && result.error) {
             // Display error
@@ -569,9 +569,9 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                         </a>
                                                     </Link>
                                                 </div>
-                                                
+
                                                 {account && accountData && (
-                                                    <div className="pb-2 pt-4 text-sm flex flex-row justify-between leading-4">
+                                                    <div className="flex flex-row justify-between pb-2 pt-4 text-sm leading-4">
                                                         <button
                                                             className="text-red-light-10 hover:underline dark:text-red-dark-10"
                                                             onClick={() => {
@@ -591,7 +591,6 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                         </svg>
                                                     </div>
                                                 )}
-                                                
                                             </>
                                         );
                                     }}
