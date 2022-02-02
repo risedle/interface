@@ -11,7 +11,7 @@ import RisedleLinks from "../../../utils/links";
 import ToastError from "../Toasts/Error";
 import ToastSuccess from "../Toasts/Success";
 // States
-import { MetaMaskConnector, supportedChains, useWalletContext, WCConnectorArbitrum, WCConnectorKovan } from "../Wallet";
+import { MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
 
 /**
  * ButtonConnectWalletMobileProps is a React Component properties that passed to React Component ButtonConnectWalletMobile
@@ -299,11 +299,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                 className={`m-0 flex flex-row items-center justify-between rounded-[12px] border border-blue-light-5 bg-blue-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-blue-light-3 active:scale-95 dark:border-blue-dark-5 dark:bg-blue-dark-2 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
                                                                 disabled={isConnecting && connectorName ? true : false}
                                                                 onClick={async () => {
-                                                                    if(chain.id === Chains.arbitrumOne.id){
-                                                                        await connectWallet(WCConnectorArbitrum);
-                                                                    } else if(chain.id === Chains.kovan.id){
-                                                                        await connectWallet(WCConnectorKovan);
-                                                                    }
+                                                                    await connectWallet(WCConnector);
                                                                     close();
                                                                 }}
                                                             >
