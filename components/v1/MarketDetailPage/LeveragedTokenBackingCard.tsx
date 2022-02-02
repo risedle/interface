@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import type { FunctionComponent } from "react";
 import { useProvider } from "wagmi";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
-import { useVault, FetcherQuery } from "../../../utils/onchain";
+import { useCollateralPerLeveragedToken, useDebtPerLeveragedToken } from "../../../utils/onchain";
 import { Metadata } from "../MarketMetadata";
 import { useWalletContext } from "../Wallet";
 
@@ -22,17 +22,17 @@ const BackingCard: FunctionComponent<BackingCardProps> = ({ address }) => {
     const { chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
-    const collateralPerTokenData = useVault({ token: address, vault: metadata.vaultAddress, provider: provider, query: FetcherQuery.GetCollateralPerLeveragedToken });
-    const debtPerTokenData = useVault({ token: address, vault: metadata.vaultAddress, provider: provider, query: FetcherQuery.GetDebtPerLeveragedToken });
+    const collateralPerTokenResponse = useCollateralPerLeveragedToken(address, metadata.vaultAddress, provider);
+    const debtPerTokenResponse = useDebtPerLeveragedToken(address, metadata.vaultAddress, provider);
 
     // Data
-    const collateral = parseFloat(ethers.utils.formatUnits(collateralPerTokenData.data ? collateralPerTokenData.data : 0, metadata.collateralDecimals));
-    const debt = parseFloat(ethers.utils.formatUnits(debtPerTokenData.data ? debtPerTokenData.data : 0, metadata.debtDecimals));
+    const collateral = parseFloat(ethers.utils.formatUnits(collateralPerTokenResponse.data ? collateralPerTokenResponse.data : 0, metadata.collateralDecimals));
+    const debt = parseFloat(ethers.utils.formatUnits(debtPerTokenResponse.data ? debtPerTokenResponse.data : 0, metadata.debtDecimals));
 
     // UI states
-    const showLoading = collateralPerTokenData.isLoading || debtPerTokenData.isLoading ? true : false;
-    const showError = collateralPerTokenData.error || debtPerTokenData.error ? true : false;
-    const showData = !showLoading && !showError && collateralPerTokenData.data && debtPerTokenData.data ? true : false;
+    const showLoading = collateralPerTokenResponse.isLoading || debtPerTokenResponse.isLoading ? true : false;
+    const showError = collateralPerTokenResponse.error || debtPerTokenResponse.error ? true : false;
+    const showData = !showLoading && !showError && collateralPerTokenResponse.data && debtPerTokenResponse.data ? true : false;
 
     return (
         <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">

@@ -20,6 +20,7 @@ export type Metadata = {
     debtAddress: string;
     oracleAddress: string;
     uniswapSwapURL: string;
+    isETH: boolean;
 };
 export type MarketMetadata = Record<string, Metadata>;
 export type MarketMetadataRecord = Record<number, MarketMetadata>;
@@ -33,8 +34,7 @@ export const Metadata: MarketMetadataRecord = {
             vaultAddress: "0x42B6BAE111D9300E19F266Abf58cA215f714432c",
             vaultTitle: "DEMOrvETHUSDC",
             path: "/markets/ethrise",
-            description:
-                "Enjoy leveraged ETH without risk of liquidation or earn yield from your idle USDC",
+            description: "Enjoy leveraged ETH without risk of liquidation or earn yield from your idle USDC",
             informationText:
                 "ETHRISE is a leveraged token that goes 2x long ETH. It generates 1.75x-2.5x leveraged gains when the price of ETH rises.",
             vaultInformationText:
@@ -47,6 +47,7 @@ export const Metadata: MarketMetadataRecord = {
             debtAddress: "0x0af08696cb51e81456dc0a1dee7f8bfad8d82a22",
             uniswapSwapURL: "#",
             oracleAddress: "0x1F6Ec9B472b5EB3c7aA617Ce45ea2ed4f1A2db7D",
+            isETH: true,
         },
     },
     [Chains.arbitrumOne.id]: {
@@ -58,8 +59,7 @@ export const Metadata: MarketMetadataRecord = {
             vaultAddress: "0xf7EDB240DbF7BBED7D321776AFe87D1FBcFD0A94",
             vaultTitle: "rvETHUSDC",
             path: "/markets/ethrise",
-            description:
-                "Enjoy leveraged ETH without risk of liquidation or earn yield from your idle USDC",
+            description: "Enjoy leveraged ETH without risk of liquidation or earn yield from your idle USDC",
             informationText:
                 "ETHRISE is a leveraged token that goes 2x long ETH. It generates 1.75x-2.5x leveraged gains when the price of ETH rises.",
             vaultInformationText:
@@ -72,6 +72,7 @@ export const Metadata: MarketMetadataRecord = {
             debtAddress: "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
             uniswapSwapURL: "#",
             oracleAddress: "0x877bF15cAa17E4EE21236800D2D1a8dDA5B5251C",
+            isETH: true,
         },
     },
 };

@@ -1,7 +1,6 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent } from "react";
 import Link from "next/link";
 import { useProvider } from "wagmi";
-import { Result } from "ethers/lib/utils";
 
 import { useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
@@ -9,11 +8,9 @@ import { ethers } from "ethers";
 import MintForm from "./MintForm";
 import FormLoading from "./FormLoading";
 import FormLoadingFailed from "./FormLoadingFailed";
-import { RequestState } from "./States";
 
 // ABIs
-import VaultABI from "./VaultABI";
-import OracleABI from "./OracleABI";
+import { useLeveragedTokenMetadata } from "../../../utils/onchain";
 
 /**
  * MintProps is a React Component properties that passed to React Component Mint
@@ -29,54 +26,24 @@ type MintProps = {
  */
 const Mint: FunctionComponent<MintProps> = ({ address }) => {
     // Global states
-    const { account, chain } = useWalletContext();
+    const { chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
 
-    // Contracts
-    const vaultContract = new ethers.Contract(metadata.vaultAddress, VaultABI, provider);
-    const oracleContract = new ethers.Contract(metadata.oracleAddress, OracleABI, provider);
+    // Read onchain data
+    // TODO(bayu): If metada.isETH is false, then check allowance and show approval is needed
+    const leveragedTokenMetadataResponse = useLeveragedTokenMetadata(address, metadata.vaultAddress, provider);
 
-    // Local states
-    const [balanceState, setBalanceState] = useState<RequestState>({ loading: true });
-    const [tokenMetadataState, setTokenMetadataState] = useState<RequestState>({ loading: true });
-    const [collateralPriceState, setCollateralPriceState] = useState<RequestState>({ loading: true });
-    const [totalAvailableCashState, setTotalAvailableCashState] = useState<RequestState>({ loading: true });
-    const [navState, setNAVState] = useState<RequestState>({ loading: true });
+    // Parse onchain data
+    const maxTotalCollateral = parseFloat(ethers.utils.formatUnits(leveragedTokenMetadataResponse.data ? leveragedTokenMetadataResponse.data.maxTotalCollateral : 0, metadata.collateralDecimals));
+    const totalCollateralPlusFee = parseFloat(ethers.utils.formatUnits(leveragedTokenMetadataResponse.data ? leveragedTokenMetadataResponse.data.totalCollateralPlusFee : 0, metadata.collateralDecimals));
+    const totalPendingFees = parseFloat(ethers.utils.formatUnits(leveragedTokenMetadataResponse.data ? leveragedTokenMetadataResponse.data.totalPendingFees : 0, metadata.collateralDecimals));
 
-    // Load onchain data
-    const loadData = async () => {
-        if (balanceState.loading && account && tokenMetadataState.loading && collateralPriceState.loading && totalAvailableCashState.loading && navState.loading) {
-            const values = await Promise.all([provider.getBalance(account), vaultContract.getMetadata(address), oracleContract.getPrice(), vaultContract.getTotalAvailableCash(), vaultContract.getNAV(address)]);
-            const balanceResponse = values[0] as unknown as Result;
-            setBalanceState({ response: balanceResponse, loading: false });
-            setTokenMetadataState({ response: values[1], loading: false });
-            setCollateralPriceState({ response: values[2], loading: false });
-            setTotalAvailableCashState({ response: values[3], loading: false });
-            setNAVState({ response: values[4], loading: false });
-        }
-    };
-
-    // This will be executed when component is mounted or updated
-    useEffect(() => {
-        loadData();
-    });
-
-    // Data
-    // First order UI states
-    const showLoading = balanceState.loading || tokenMetadataState.loading || totalAvailableCashState.loading || collateralPriceState.loading || navState.loading ? true : false;
-    const showError = !showLoading && (balanceState.error || tokenMetadataState.error || totalAvailableCashState.error || collateralPriceState.error || navState.error) ? true : false;
+    // UI states
+    const showLoading = leveragedTokenMetadataResponse.isLoading ? true : false;
+    const showError = !showLoading && leveragedTokenMetadataResponse.error ? true : false;
     // TODO: show ApprovalOrMaxCapOrMintForm
-    const showMintFormOrMaxCap = !showLoading && !showError && balanceState.response && tokenMetadataState.response && totalAvailableCashState.response && collateralPriceState.response && navState.response ? true : false;
-
-    // Data
-    const balance = parseFloat(ethers.utils.formatUnits(balanceState.response ? balanceState.response : 0, metadata.collateralDecimals));
-    const maxTotalCollateral = parseFloat(ethers.utils.formatUnits(tokenMetadataState.response ? tokenMetadataState.response.maxTotalCollateral : 0, metadata.collateralDecimals));
-    const totalCollateralPlusFee = parseFloat(ethers.utils.formatUnits(tokenMetadataState.response ? tokenMetadataState.response.totalCollateralPlusFee : 0, metadata.collateralDecimals));
-    const totalPendingFees = parseFloat(ethers.utils.formatUnits(tokenMetadataState.response ? tokenMetadataState.response.totalPendingFees : 0, metadata.collateralDecimals));
-    const collateralPrice = parseFloat(ethers.utils.formatUnits(collateralPriceState.response ? collateralPriceState.response : 0, metadata.debtDecimals));
-    const totalAvailableCash = parseFloat(ethers.utils.formatUnits(totalAvailableCashState.response ? totalAvailableCashState.response : 0, metadata.debtDecimals));
-    const nav = parseFloat(ethers.utils.formatUnits(navState.response ? navState.response : 0, metadata.debtDecimals));
+    const showMintFormOrMaxCap = !showLoading && !showError && leveragedTokenMetadataResponse.data ? true : false;
 
     // Second order UI states
     const showMaxCap = maxTotalCollateral > 0 && totalCollateralPlusFee - totalPendingFees > maxTotalCollateral ? true : false;
@@ -119,7 +86,7 @@ const Mint: FunctionComponent<MintProps> = ({ address }) => {
                     )}
 
                     {/* Show mint input */}
-                    {showMintForm && <MintForm address={address} balance={balance} nav={nav} maxTotalCollateral={maxTotalCollateral} totalCollateralPlusFee={totalCollateralPlusFee} totalPendingFees={totalPendingFees} totalAvailableCash={totalAvailableCash} collateralPrice={collateralPrice} />}
+                    {showMintForm && <MintForm address={address} />}
                 </div>
             )}
         </div>

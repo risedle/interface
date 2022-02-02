@@ -21,8 +21,9 @@ export type RedeemState = {
 };
 
 export type MintState = {
-    amount?: number;
+    amount: number;
     minting?: boolean;
+    confirming?: boolean;
     hash?: string;
     error?: Error;
 };

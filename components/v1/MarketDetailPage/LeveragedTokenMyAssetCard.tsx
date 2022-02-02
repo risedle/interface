@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
 import type { FunctionComponent } from "react";
-import { useProvider } from "wagmi";
+import { useProvider, useToken } from "wagmi";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
-import { useVault, useLeveragedToken, FetcherQuery } from "../../../utils/onchain";
+import { useLeveragedTokenNAV, useTokenBalance } from "../../../utils/onchain";
 import { Metadata } from "../MarketMetadata";
 import { useWalletContext } from "../Wallet";
 
@@ -22,17 +22,19 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address }) => {
     const { account, chain } = useWalletContext();
     const metadata = Metadata[chain.id][address];
     const provider = useProvider();
-    const navData = useVault({ token: address, vault: metadata.vaultAddress, provider: provider, query: FetcherQuery.GetNAV });
-    const balanceData = useLeveragedToken({ token: address, account: account ? account : undefined, provider: provider, query: FetcherQuery.GetBalance });
+
+    // Read on-chain data
+    const navResponse = useLeveragedTokenNAV(address, metadata.vaultAddress, provider);
+    const balanceResponse = useTokenBalance(account ? account : undefined, provider, address);
 
     // Data
-    const nav = parseFloat(ethers.utils.formatUnits(navData.data ? navData.data : 0, metadata.debtDecimals));
-    const balance = parseFloat(ethers.utils.formatUnits(balanceData.data ? balanceData.data : 0, metadata.collateralDecimals));
+    const nav = parseFloat(ethers.utils.formatUnits(navResponse.data ? navResponse.data : 0, metadata.debtDecimals));
+    const balance = parseFloat(ethers.utils.formatUnits(balanceResponse.data ? balanceResponse.data : 0, metadata.collateralDecimals));
 
     // UI states
-    const showLoading = navData.isLoading || balanceData.isLoading ? true : false;
-    const showError = navData.error || balanceData.error ? true : false;
-    const showData = !showLoading && !showError && navData.data && balanceData.data ? true : false;
+    const showLoading = navResponse.isLoading || balanceResponse.isLoading ? true : false;
+    const showError = navResponse.error || balanceResponse.error ? true : false;
+    const showData = !showLoading && !showError && navResponse.data && balanceResponse.data ? true : false;
 
     return (
         <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">

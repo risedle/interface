@@ -43,10 +43,7 @@ export type MarketData = {
 
 export function useMarkets(chainID: number) {
     const endpoint = snapshotEndpoint[chainID];
-    const { data, error } = useSWR<MarketData, Error>(
-        `${endpoint}/v1/markets`,
-        fetcher
-    );
+    const { data, error } = useSWR<MarketData, Error>(`${endpoint}/v1/markets`, fetcher);
 
     return {
         markets: data,
@@ -57,10 +54,7 @@ export function useMarkets(chainID: number) {
 
 export function useMarket(chainID: number, address: string) {
     const endpoint = snapshotEndpoint[chainID];
-    const { data, error } = useSWR<Market, Error>(
-        `${endpoint}/v1/markets/${address}`,
-        fetcher
-    );
+    const { data, error } = useSWR<Market, Error>(`${endpoint}/v1/markets/${address}`, fetcher);
 
     return {
         market: data,
@@ -69,9 +63,7 @@ export function useMarket(chainID: number, address: string) {
     };
 }
 
-function filterOutSameNAV(
-    data: Array<LeveragedTokenHistoricalData> | undefined
-): Array<LeveragedTokenHistoricalData> | undefined {
+function filterOutSameNAV(data: Array<LeveragedTokenHistoricalData> | undefined): Array<LeveragedTokenHistoricalData> | undefined {
     if (!data) return undefined;
     return [...new Map(data.map((item) => [item["nav"], item])).values()];
 }
@@ -100,10 +92,7 @@ export type LeveragedTokenTimeframeData = {
     data: Array<LeveragedTokenHistoricalData>;
 };
 
-export function useLeveragedTokenHistoricalData(
-    chainID: number,
-    leveragedTokenAddress: string
-) {
+export function useLeveragedTokenHistoricalData(chainID: number, leveragedTokenAddress: string) {
     const endpoint = snapshotEndpoint[chainID];
     const { data, error } = useSWR<Array<LeveragedTokenHistoricalData>, Error>(
         `${endpoint}/v1/leveragedTokens/3months/${leveragedTokenAddress}`,
@@ -120,13 +109,11 @@ export function useLeveragedTokenHistoricalData(
     if (cleanedData) {
         // Get daily data
         const dailyTimeframeData = cleanedData.slice(-24); // 1 day = 24 hours
-        const dailyLatestData =
-            dailyTimeframeData[dailyTimeframeData.length - 1];
+        const dailyLatestData = dailyTimeframeData[dailyTimeframeData.length - 1];
         const dailyOldestData = dailyTimeframeData[0];
         const dailyLatestNAV = dailyLatestData.nav;
         const dailyOldestNAV = dailyOldestData.nav;
-        const dailyChange =
-            ((dailyLatestNAV - dailyOldestNAV) / dailyOldestNAV) * 100;
+        const dailyChange = ((dailyLatestNAV - dailyOldestNAV) / dailyOldestNAV) * 100;
         dailyData = {
             latestNAV: dailyLatestNAV,
             oldestNAV: dailyOldestNAV,
@@ -136,13 +123,11 @@ export function useLeveragedTokenHistoricalData(
 
         // Get weekly data
         const weeklyTimeframeData = cleanedData.slice(-168); // 1 week = 168 hours
-        const weeklyLatestData =
-            weeklyTimeframeData[weeklyTimeframeData.length - 1];
+        const weeklyLatestData = weeklyTimeframeData[weeklyTimeframeData.length - 1];
         const weeklyOldestData = weeklyTimeframeData[0];
         const weeklyLatestNAV = weeklyLatestData.nav;
         const weeklyOldestNAV = weeklyOldestData.nav;
-        const weeklyChange =
-            ((weeklyLatestNAV - weeklyOldestNAV) / weeklyOldestNAV) * 100;
+        const weeklyChange = ((weeklyLatestNAV - weeklyOldestNAV) / weeklyOldestNAV) * 100;
         weeklyData = {
             latestNAV: weeklyLatestNAV,
             oldestNAV: weeklyOldestNAV,
@@ -152,14 +137,11 @@ export function useLeveragedTokenHistoricalData(
 
         // Get two weekly data
         const twoWeeklyTimeframeData = cleanedData.slice(-336); // 2 weeks = 336 hours
-        const twoWeeklyLatestData =
-            twoWeeklyTimeframeData[twoWeeklyTimeframeData.length - 1];
+        const twoWeeklyLatestData = twoWeeklyTimeframeData[twoWeeklyTimeframeData.length - 1];
         const twoWeeklyOldestData = twoWeeklyTimeframeData[0];
         const twoWeeklyLatestNAV = twoWeeklyLatestData.nav;
         const twoWeeklyOldestNAV = twoWeeklyOldestData.nav;
-        const twoWeeklyChange =
-            ((twoWeeklyLatestNAV - twoWeeklyOldestNAV) / twoWeeklyOldestNAV) *
-            100;
+        const twoWeeklyChange = ((twoWeeklyLatestNAV - twoWeeklyOldestNAV) / twoWeeklyOldestNAV) * 100;
         twoWeeklyData = {
             latestNAV: twoWeeklyLatestNAV,
             oldestNAV: twoWeeklyOldestNAV,
@@ -169,13 +151,11 @@ export function useLeveragedTokenHistoricalData(
 
         // Get monthly data
         const monthlyTimeframeData = cleanedData.slice(-672); // 1 month = 672 hours
-        const monthlyLatestData =
-            monthlyTimeframeData[monthlyTimeframeData.length - 1];
+        const monthlyLatestData = monthlyTimeframeData[monthlyTimeframeData.length - 1];
         const monthlyOldestData = monthlyTimeframeData[0];
         const monthlyLatestNAV = monthlyLatestData.nav;
         const monthlyOldestNAV = monthlyOldestData.nav;
-        const monthlyChange =
-            ((monthlyLatestNAV - monthlyOldestNAV) / monthlyOldestNAV) * 100;
+        const monthlyChange = ((monthlyLatestNAV - monthlyOldestNAV) / monthlyOldestNAV) * 100;
         monthlyData = {
             latestNAV: monthlyLatestNAV,
             oldestNAV: monthlyOldestNAV,
@@ -185,15 +165,11 @@ export function useLeveragedTokenHistoricalData(
 
         // Get three monthly data
         const threeMonthlyTimeframeData = cleanedData.slice(-2016); // 3 months = 2016 hours
-        const threeMonthlyLatestData =
-            threeMonthlyTimeframeData[threeMonthlyTimeframeData.length - 1];
+        const threeMonthlyLatestData = threeMonthlyTimeframeData[threeMonthlyTimeframeData.length - 1];
         const threeMonthlyOldestData = threeMonthlyTimeframeData[0];
         const threeMonthlyLatestNAV = threeMonthlyLatestData.nav;
         const threeMonthlyOldestNAV = threeMonthlyOldestData.nav;
-        const threeMonthlyChange =
-            ((threeMonthlyLatestNAV - threeMonthlyOldestNAV) /
-                threeMonthlyOldestNAV) *
-            100;
+        const threeMonthlyChange = ((threeMonthlyLatestNAV - threeMonthlyOldestNAV) / threeMonthlyOldestNAV) * 100;
         threeMonthlyData = {
             latestNAV: threeMonthlyLatestNAV,
             oldestNAV: threeMonthlyOldestNAV,
@@ -230,10 +206,7 @@ export type VaultTimeframeData = {
 
 export function useVaultHistoricalData(chainID: number, vaultAddress: string) {
     const endpoint = snapshotEndpoint[chainID];
-    const { data, error } = useSWR<Array<VaultHistoricalData>, Error>(
-        `${endpoint}/v1/vaults/3months/${vaultAddress}`,
-        fetcher
-    );
+    const { data, error } = useSWR<Array<VaultHistoricalData>, Error>(`${endpoint}/v1/vaults/3months/${vaultAddress}`, fetcher);
 
     let dailyData: VaultTimeframeData | undefined = undefined;
     let weeklyData: VaultTimeframeData | undefined = undefined;
@@ -244,8 +217,7 @@ export function useVaultHistoricalData(chainID: number, vaultAddress: string) {
     if (data) {
         // Get daily data
         const dailyTimeframeData = data.slice(-24); // 1 day = 24 hours
-        const dailyLatestData =
-            dailyTimeframeData[dailyTimeframeData.length - 1];
+        const dailyLatestData = dailyTimeframeData[dailyTimeframeData.length - 1];
         const dailyLatestSupplyAPY = dailyLatestData.supply_apy;
         const dailyLatestBorrowAPY = dailyLatestData.borrow_apy;
         dailyData = {
@@ -256,8 +228,7 @@ export function useVaultHistoricalData(chainID: number, vaultAddress: string) {
 
         // Get weekly data
         const weeklyTimeframeData = data.slice(-168); // 1 week = 168 hours
-        const weeklyLatestData =
-            weeklyTimeframeData[weeklyTimeframeData.length - 1];
+        const weeklyLatestData = weeklyTimeframeData[weeklyTimeframeData.length - 1];
         const weeklyLatestSupplyAPY = weeklyLatestData.supply_apy;
         const weeklyLatestBorrowAPY = weeklyLatestData.borrow_apy;
         weeklyData = {
@@ -268,8 +239,7 @@ export function useVaultHistoricalData(chainID: number, vaultAddress: string) {
 
         // Get two weekly data
         const twoWeeklyTimeframeData = data.slice(-336); // 2 weeks = 336 hours
-        const twoWeeklyLatestData =
-            twoWeeklyTimeframeData[twoWeeklyTimeframeData.length - 1];
+        const twoWeeklyLatestData = twoWeeklyTimeframeData[twoWeeklyTimeframeData.length - 1];
         const twoWeeklyLatestSupplyAPY = twoWeeklyLatestData.supply_apy;
         const twoWeeklyLatestBorrowAPY = twoWeeklyLatestData.borrow_apy;
         twoWeeklyData = {
@@ -280,8 +250,7 @@ export function useVaultHistoricalData(chainID: number, vaultAddress: string) {
 
         // Get monthly data
         const monthlyTimeframeData = data.slice(-672); // 1 month = 672 hours
-        const monthlyLatestData =
-            monthlyTimeframeData[monthlyTimeframeData.length - 1];
+        const monthlyLatestData = monthlyTimeframeData[monthlyTimeframeData.length - 1];
         const monthlyLatestSupplyAPY = monthlyLatestData.supply_apy;
         const monthlyLatestBorrowAPY = monthlyLatestData.borrow_apy;
         monthlyData = {
@@ -292,8 +261,7 @@ export function useVaultHistoricalData(chainID: number, vaultAddress: string) {
 
         // Get three monthly data
         const threeMonthlyTimeframeData = data.slice(-2016); // 3 months = 2016 hours
-        const threeMonthlyLatestData =
-            threeMonthlyTimeframeData[threeMonthlyTimeframeData.length - 1];
+        const threeMonthlyLatestData = threeMonthlyTimeframeData[threeMonthlyTimeframeData.length - 1];
         const threeMonthlyLatestSupplyAPY = threeMonthlyLatestData.supply_apy;
         const threeMonthlyLatestBorrowAPY = threeMonthlyLatestData.borrow_apy;
         threeMonthlyData = {
