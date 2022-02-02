@@ -4,7 +4,7 @@ import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 import { useProvider } from "wagmi";
 
 import { dollarFormatter } from "../../../utils/formatters";
-import { useVault, FetcherQuery } from "../../../utils/onchain";
+import { useLeveragedTokenNAV } from "../../../utils/onchain";
 import { Timeframe, useLeveragedTokenHistoricalData } from "../../../utils/snapshot";
 import { Metadata } from "../MarketMetadata";
 
@@ -19,7 +19,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
 
     // Fetch onchain data for latest nav
     const provider = useProvider();
-    const navData = useVault({ token: address, vault: metadata.vaultAddress, provider: provider, query: FetcherQuery.GetNAV });
+    const navResponse = useLeveragedTokenNAV(address, metadata.vaultAddress, provider);
 
     // Fetch data
     const data = useLeveragedTokenHistoricalData(chainID, address);
@@ -33,7 +33,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
     const [navChange, setNAVChange] = useState(0);
 
     // Value based on states
-    const latestNAV = parseFloat(ethers.utils.formatUnits(navData.data ? navData.data : 0, metadata.debtDecimals));
+    const latestNAV = parseFloat(ethers.utils.formatUnits(navResponse.data ? navResponse.data : 0, metadata.debtDecimals));
     const latestChange = currentData ? ((latestNAV - currentData.oldestNAV) / currentData.oldestNAV) * 100 : 0;
 
     // Set initial data for onMouseLeave event on the price chart
@@ -44,7 +44,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
     const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
 
     // UI states
-    const showSkeleton = data.isLoading || data.error || navData.isLoading;
+    const showSkeleton = data.isLoading || data.error || navResponse.isLoading;
     const showRealData = !showSkeleton && currentData;
 
     // Styling for active timeframe selector
