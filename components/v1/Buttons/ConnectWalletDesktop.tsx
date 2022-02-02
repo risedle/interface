@@ -4,7 +4,7 @@ import type { FunctionComponent } from "react";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { usePopper } from "react-popper";
-import { Chain, InjectedConnector, useAccount, useConnect, useNetwork } from "wagmi";
+import { Chain, chain as Chains, InjectedConnector, useAccount, useConnect, useNetwork } from "wagmi";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 // Toasts
 import ToastError from "../Toasts/Error";
@@ -42,7 +42,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
     const { account, login, logout, connectorName, setConnectorName, chain } = useWalletContext();
     const [, connect] = useConnect();
     const [connectedChain, switchNetwork] = useNetwork();
-    const [accountData] = useAccount();
+    const [accountData, disconnect] = useAccount();
     let [isOpen, setIsOpen] = useState(false);
     let [isConnecting, setIsConnecting] = useState(false);
 
@@ -82,6 +82,19 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
         setConnectorName(c.name);
 
         const result = await connect(c);
+
+        // Prevent connecting with WalletConnect if network is not right
+        if (c instanceof WalletConnectConnector) {
+            if (result?.data?.chain?.unsupported || result?.data?.chain?.id !== chain.id) {
+                logout();
+                disconnect();
+                toast.custom((t) => <ToastError>Please choose {chain.name} Network in your wallet!</ToastError>);
+                setIsConnecting(false);
+                setConnectorName(previousConnectorName);
+            }
+            return;
+        }
+
         // Handle the error
         if (result && result.error) {
             // Display error
@@ -261,6 +274,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                                 className="text-red-light-10 hover:underline dark:text-red-dark-10"
                                                 onClick={() => {
                                                     logout();
+                                                    disconnect();
                                                     toast.custom((t) => <ToastSuccess>{connectorName} disconnected</ToastSuccess>);
                                                 }}
                                             >
