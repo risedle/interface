@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
-import { useWalletContext } from "../Wallet";
 import { useMarkets } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
 import MarketCard from "./MarketCard";
@@ -14,6 +13,7 @@ import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
 import Logo from "../Logo";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import MarketsPageMeta from "./MarketsPageMeta";
+import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 
 /**
  * MarketsPageProps is a React Component properties that passed to React Component MarketsPage
@@ -26,8 +26,16 @@ type MarketsPageProps = {};
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
+    // Read global states
     const { chain } = useWalletContext();
-    const { markets, marketsIsLoading, marketsIsError } = useMarkets(chain.id);
+
+    // Read data from Snapshot API
+    const marketsResponse = useMarkets(chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id);
+
+    // UI states
+    const showLoading = marketsResponse.isLoading;
+    const showError = !showLoading && marketsResponse.error;
+    const showData = !showLoading && !showError && marketsResponse.data;
 
     return (
         <div className="relative flex h-full min-h-screen w-full flex-col overflow-hidden bg-gray-light-1 font-inter dark:bg-gray-dark-1">
@@ -75,13 +83,13 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                         <div className="mx-auto flex flex-row space-x-6">
                             <div className="flex flex-col space-y-2 text-center">
                                 <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">AUM</p>
-                                {(marketsIsLoading || marketsIsError) && <div className="h-[16px] w-[100px] animate-pulse rounded-full bg-gray-light-3 dark:bg-gray-dark-3"></div>}
-                                {!marketsIsLoading && markets && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12 sm:text-base">{dollarFormatter.format(markets.aum)}</p>}
+                                {showLoading && <div className="h-[16px] w-[100px] animate-pulse rounded-full bg-gray-light-3 dark:bg-gray-dark-3"></div>}
+                                {showData && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12 sm:text-base">{dollarFormatter.format(marketsResponse.data ? marketsResponse.data.aum : 0)}</p>}
                             </div>
                             <div className="flex flex-col space-y-2 text-center">
                                 <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">TVL</p>
-                                {(marketsIsLoading || marketsIsError) && <div className="h-[16px] w-[100px] animate-pulse rounded-full bg-gray-light-3 dark:bg-gray-dark-3"></div>}
-                                {!marketsIsLoading && markets && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12 sm:text-base">{dollarFormatter.format(markets.tvl)}</p>}
+                                {showLoading && <div className="h-[16px] w-[100px] animate-pulse rounded-full bg-gray-light-3 dark:bg-gray-dark-3"></div>}
+                                {showData && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12 sm:text-base">{dollarFormatter.format(marketsResponse.data ? marketsResponse.data.tvl : 0)}</p>}
                             </div>
                         </div>
                     </div>
@@ -90,7 +98,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                 {/* Cards */}
                 <div className="container mx-auto mt-6 max-w-[400px] px-4 sm:mt-8">
                     {/* Cards loading state */}
-                    {(marketsIsLoading || marketsIsError) && (
+                    {showLoading && (
                         <div className="grid grid-cols-1 gap-4">
                             <div className="flex flex-col rounded-[24px] border border-gray-light-3 bg-gray-light-1 p-4 dark:border-gray-dark-3 dark:bg-gray-dark-1">
                                 <div className="flex flex-row items-center space-x-4 pb-4">
@@ -125,12 +133,12 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                         </div>
                     )}
                     {/* Cards display state */}
-                    {markets && (
+                    {showData && (
                         <div className="grid grid-cols-1 gap-4">
-                            {markets.markets.map((market) => {
+                            {marketsResponse.data?.markets.map((market) => {
                                 return (
                                     <div key={market.leveraged_token_address}>
-                                        <MarketCard chainID={chain.id} address={market.leveraged_token_address} initialNAV={market.nav_last} initialNAVChange={market.leveraged_token_price_change_percent} totalSupply={market.leveraged_token_total_supply} />{" "}
+                                        <MarketCard chainID={chain.chain.id} address={market.leveraged_token_address} initialNAV={market.nav_last} initialNAVChange={market.leveraged_token_price_change_percent} totalSupply={market.leveraged_token_total_supply} />{" "}
                                     </div>
                                 );
                             })}
