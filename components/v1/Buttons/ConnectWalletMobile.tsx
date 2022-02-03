@@ -2,8 +2,9 @@ import { Popover } from "@headlessui/react";
 import Link from "next/link";
 import type { FunctionComponent } from "react";
 import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { usePopper } from "react-popper";
+import createPersistedState from "use-persisted-state";
 import { Chain, chain as Chains, InjectedConnector, useAccount, useConnect, useNetwork } from "wagmi";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import RisedleLinks from "../../../utils/links";
@@ -11,27 +12,12 @@ import RisedleLinks from "../../../utils/links";
 import ToastError from "../Toasts/Error";
 import ToastSuccess from "../Toasts/Success";
 // States
-import { MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
+import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
 
 /**
  * ButtonConnectWalletMobileProps is a React Component properties that passed to React Component ButtonConnectWalletMobile
  */
 type ButtonConnectWalletMobileProps = {};
-
-// Utilities
-const formatAddress = (address: string) => {
-    return `${address.substring(0, 6)}...${address.substring(address.length - 4, address.length)}`;
-};
-
-const getEtherscanAddressURL = (chain: Chain | null, address: string): string => {
-    if (chain) {
-        if (chain.blockExplorers) {
-            return `${chain.blockExplorers[0].url}/address/${address}`;
-        }
-        return "#";
-    }
-    return "#";
-};
 
 /**
  * ButtonConnectWalletMobile is just yet another react component
@@ -39,13 +25,19 @@ const getEtherscanAddressURL = (chain: Chain | null, address: string): string =>
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProps> = ({}) => {
-    const { account, login, logout, connectorName, setConnectorName, chain, switchChain } = useWalletContext();
-    const [, connect] = useConnect();
-    const [connectedChain, switchNetwork] = useNetwork();
-    const [accountData, disconnect] = useAccount();
-    let [isConnecting, setIsConnecting] = useState(false);
+    // Read global states
+    const { chain, account, connectWallet, disconnectWallet, switchNetwork } = useWalletContext();
 
-    // Popover state element
+    // Local states
+    const [isConnecting, setIsConnecting] = useState(false);
+    const [connectorName, setConnectorName] = useState<string | undefined>(undefined);
+
+    // UI States
+    const showConnectWallet = account ? false : true;
+    const showSwitchToDefaultNetwork = !showConnectWallet && chain.unsupported ? true : false;
+    const showAccountData = !showConnectWallet && !showSwitchToDefaultNetwork;
+
+    // Popover
     let [referenceElement1, setReferenceElement1] = useState<HTMLButtonElement | null>();
     let [popperElement1, setPopperElement1] = useState<HTMLDivElement | null>();
     let popper1 = usePopper(referenceElement1, popperElement1, {
@@ -102,12 +94,6 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
         ],
     });
 
-    // Debugs
-    // console.debug("ButtonConnectWalletMobile account", account);
-    // console.debug("ButtonConnectWalletMobile connectorName", connectorName);
-    // console.debug("ButtonConnectWalletMobile chain", chain);
-    // console.debug("ButtonConnectWalletMobile connectedChain", connectedChain);
-
     // Utilities
     const getChainIconPath = (c: Chain): string => {
         switch (c.id) {
@@ -116,66 +102,31 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
             case Chains.kovan.id:
                 return "/networks/Kovan.svg";
         }
-        return "";
+        return "/networks/Arbitrum.svg";
     };
 
-    const switchToNetwork = (c: Chain) => {
-        // If user is connected then use switch network feature
-        if (account && switchNetwork) {
-            switchNetwork(c.id);
-        }
-
-        // Otherwise change manually
-        switchChain(c.id);
-        return;
-    };
-
-    // Set account states
-    const connectWallet = async function (c: InjectedConnector | WalletConnectConnector) {
-        console.debug("================== start wallet =======================");
+    // Connect wallet
+    const connect = async function (c: InjectedConnector | WalletConnectConnector) {
         setIsConnecting(true);
-        const previousConnectorName = connectorName;
         setConnectorName(c.name);
 
-        const result = await connect(c);
-
-        // Prevent connecting with WalletConnect if network is not right
-        if (c instanceof WalletConnectConnector) {
-            if (result?.data?.chain?.unsupported || result?.data?.chain?.id !== chain.id) {
-                logout();
-                disconnect();
-                toast.custom((t) => <ToastError>Please choose {chain.name} Network in your wallet!</ToastError>);
-                setIsConnecting(false);
-                setConnectorName(previousConnectorName);
-            }
-            return;
-        }
+        const result = await connectWallet(c);
 
         // Handle the error
         if (result && result.error) {
             // Display error
+            toast.remove();
             toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
             setIsConnecting(false);
-            // Revert the connector name
-            setConnectorName(previousConnectorName);
+            setConnectorName(undefined);
             return;
         }
 
         // Account connected
+        toast.remove();
         toast.custom((t) => <ToastSuccess>{c.name} connected</ToastSuccess>);
         setIsConnecting(false);
-
-        // Login the user
-        if (result && result.data.account) {
-            login(result.data.account);
-        }
-
-        // If result is undefined; check the account data
-        if (!result && accountData && accountData.data) {
-            login(accountData.data.address);
-        }
-
-        console.debug("connectWallet result", result);
+        setConnectorName(undefined);
     };
 
     return (
@@ -197,7 +148,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         return (
                             <>
                                 <Popover.Button ref={setReferenceElement1} className="button basic w-[40px] p-2 outline-0">
-                                    <img src={getChainIconPath(chain)} alt={chain.name} className="flex-shrink-0" />
+                                    <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="flex-shrink-0" />
                                 </Popover.Button>
 
                                 <Popover.Panel ref={setPopperElement1} style={popper1.styles.popper} {...popper1.attributes.popper} className="flex min-w-[241px] flex-col rounded-[16px] border border-gray-light-4 bg-gray-light-2 p-4 dark:border-gray-dark-4 dark:bg-gray-dark-2">
@@ -210,9 +161,28 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                         return (
                                                             <button
                                                                 className="m-0 flex w-full flex-row items-center justify-between text-left"
-                                                                onClick={() => {
-                                                                    switchToNetwork(c);
-                                                                    close();
+                                                                onClick={async () => {
+                                                                    if (!account) {
+                                                                        toast.remove();
+                                                                        toast.custom((t) => <ToastError>Please connect your wallet first</ToastError>);
+                                                                        return;
+                                                                    }
+
+                                                                    if (switchNetwork) {
+                                                                        const result = await switchNetwork(c.id);
+                                                                        if (result.error) {
+                                                                            toast.remove();
+                                                                            toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
+                                                                            return;
+                                                                        }
+                                                                        toast.remove();
+                                                                        toast.custom((t) => <ToastSuccess>Switched to {c.name}</ToastSuccess>);
+                                                                        return;
+                                                                    } else {
+                                                                        toast.remove();
+                                                                        toast.custom((t) => <ToastError>Cannot switch network automatically in WalletConnect. Please change network directly from your wallet.</ToastError>);
+                                                                        return;
+                                                                    }
                                                                 }}
                                                                 key={c.id}
                                                             >
@@ -249,7 +219,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         return (
                             <>
                                 {/* If account is not connected then display the connect wallet button */}
-                                {(!account || !connectedChain.data || !connectedChain.data.chain) && (
+                                {showConnectWallet && (
                                     <>
                                         <Popover.Button ref={setReferenceElement2} className="button gradient inline-block w-full rounded-full bg-[length:300%_300%] bg-center py-3 px-4 text-sm font-semibold leading-4 tracking-tight text-gray-light-1 outline-0 hover:bg-left hover:shadow-xl hover:shadow-blue-400/20 dark:text-gray-dark-1">
                                             Connect Wallet
@@ -277,7 +247,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                 className={`m-0 flex flex-row items-center justify-between rounded-[12px] border border-orange-light-5 bg-orange-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-orange-light-3 active:scale-95 dark:border-orange-dark-5 dark:bg-orange-dark-2 dark:hover:bg-orange-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
                                                                 disabled={isConnecting && connectorName ? true : false}
                                                                 onClick={async () => {
-                                                                    await connectWallet(MetaMaskConnector);
+                                                                    await connect(MetaMaskConnector);
                                                                     close();
                                                                 }}
                                                             >
@@ -299,7 +269,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                 className={`m-0 flex flex-row items-center justify-between rounded-[12px] border border-blue-light-5 bg-blue-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-blue-light-3 active:scale-95 dark:border-blue-dark-5 dark:bg-blue-dark-2 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
                                                                 disabled={isConnecting && connectorName ? true : false}
                                                                 onClick={async () => {
-                                                                    await connectWallet(WCConnector);
+                                                                    await connect(WCConnector);
                                                                     close();
                                                                 }}
                                                             >
@@ -335,24 +305,25 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                 )}
 
                                 {/* If account is connected and connected chain is not the same as current chain then display the switch network button */}
-                                {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id != chain.id && (
+                                {showSwitchToDefaultNetwork && (
                                     <button
                                         className="inline-block w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1"
                                         onClick={() => {
                                             if (switchNetwork) {
-                                                switchNetwork(chain.id);
+                                                switchNetwork(DEFAULT_CHAIN.id);
                                             } else {
+                                                toast.remove();
                                                 toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);
                                             }
                                         }}
                                     >
                                         <span className="mr-2 inline-block h-[8px] w-[8px] rounded-full bg-red-light-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:bg-red-dark-10 dark:shadow-red-dark-10"></span>
-                                        Switch to {chain.name}
+                                        Switch to {DEFAULT_CHAIN.name}
                                     </button>
                                 )}
 
                                 {/* If account is connected and connected chain is the same as current chain then display account information */}
-                                {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id === chain.id && (
+                                {showAccountData && account && (
                                     <>
                                         <Popover.Button ref={setReferenceElement2} className="inline-block w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1">
                                             <span className="mr-2 inline-block h-[8px] w-[8px] rounded-full bg-sky-light-10 shadow-[0px_0px_12px] shadow-sky-light-10 dark:bg-sky-dark-10"></span>
@@ -366,7 +337,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                         <div className="mx-4 border-b border-dashed border-gray-light-5 pt-4 pb-2 text-xs leading-4 text-gray-light-9 dark:border-gray-dark-3 dark:text-gray-dark-9">Connected via {connectorName}</div>
                                                         <div className="mt-2 flex flex-col space-y-4 pb-4">
                                                             <div className="flex flex-row justify-between px-4 text-sm leading-4">
-                                                                <Link href={getEtherscanAddressURL(chain, account)}>
+                                                                <Link href={getEtherscanAddressURL(chain.chain, account)}>
                                                                     <a className="text-gray-light-12 hover:underline dark:text-gray-dark-12" target="_blank" rel="noopener noreferrer">
                                                                         View on Explorer <span className="text-gray-light-9 dark:text-gray-dark-9">&#8599;</span>
                                                                     </a>
@@ -399,6 +370,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                     className="text-gray-light-12 hover:underline dark:text-gray-dark-12"
                                                                     onClick={() => {
                                                                         navigator.clipboard.writeText(account);
+                                                                        toast.remove();
                                                                         toast.custom((t) => <ToastSuccess>Address Copied</ToastSuccess>);
                                                                     }}
                                                                 >
@@ -416,9 +388,9 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                                 <button
                                                                     className="text-red-light-10 hover:underline dark:text-red-dark-10"
                                                                     onClick={() => {
-                                                                        logout();
-                                                                        disconnect();
-                                                                        toast.custom((t) => <ToastSuccess>{connectorName} disconnected</ToastSuccess>);
+                                                                        disconnectWallet();
+                                                                        toast.remove();
+                                                                        toast.custom((t) => <ToastSuccess>Wallet disconnected</ToastSuccess>);
                                                                     }}
                                                                 >
                                                                     Disconnect
@@ -570,14 +542,14 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                     </Link>
                                                 </div>
 
-                                                {account && accountData && (
+                                                {account && (
                                                     <div className="flex flex-row justify-between pb-2 pt-4 text-sm leading-4">
                                                         <button
                                                             className="text-red-light-10 hover:underline dark:text-red-dark-10"
                                                             onClick={() => {
-                                                                logout();
-                                                                disconnect();
-                                                                toast.custom((t) => <ToastSuccess>{connectorName} disconnected</ToastSuccess>);
+                                                                disconnectWallet();
+                                                                toast.remove();
+                                                                toast.custom((t) => <ToastSuccess>Wallet disconnected</ToastSuccess>);
                                                             }}
                                                         >
                                                             Disconnect
@@ -601,8 +573,6 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                     }}
                 </Popover>
             </div>
-
-            <Toaster position="top-center" />
         </>
     );
 };
