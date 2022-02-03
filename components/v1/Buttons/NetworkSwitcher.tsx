@@ -24,7 +24,7 @@ type ButtonNetworkSwitcherProps = {};
  */
 const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}) => {
     // Read global states
-    const { chain, account, connectWallet, disconnectWallet, switchNetwork } = useWalletContext();
+    const { account, switchNetwork } = useWalletContext();
 
     // Local states
     let [isOpen, setIsOpen] = useState(false);
