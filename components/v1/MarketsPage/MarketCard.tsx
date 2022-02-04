@@ -8,12 +8,12 @@ import { dollarFormatter } from "../../../utils/formatters";
 import { Metadata } from "../MarketMetadata";
 import Link from "next/link";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
+import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 
 /**
  * MarketCardProps is a React Component properties that passed to React Component MarketCard
  */
 type MarketCardProps = {
-    chainID: number;
     address: string;
     initialNAV: number;
     initialNAVChange: number;
@@ -25,7 +25,11 @@ type MarketCardProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const MarketCard: FunctionComponent<MarketCardProps> = ({ chainID, address, initialNAV, initialNAVChange, totalSupply }) => {
+const MarketCard: FunctionComponent<MarketCardProps> = ({ address, initialNAV, initialNAVChange, totalSupply }) => {
+    // Global states
+    const { chain } = useWalletContext();
+    const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
+
     const metadata = Metadata[chainID][address];
     const title = metadata.title;
     const subtitle = metadata.subtitle;

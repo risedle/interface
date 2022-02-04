@@ -138,7 +138,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                             {marketsResponse.data?.markets.map((market) => {
                                 return (
                                     <div key={market.leveraged_token_address}>
-                                        <MarketCard chainID={chain.chain.id} address={market.leveraged_token_address} initialNAV={market.nav_last} initialNAVChange={market.leveraged_token_price_change_percent} totalSupply={market.leveraged_token_total_supply} />{" "}
+                                        <MarketCard address={market.leveraged_token_address} initialNAV={market.nav_last} initialNAVChange={market.leveraged_token_price_change_percent} totalSupply={market.leveraged_token_total_supply} />{" "}
                                     </div>
                                 );
                             })}
