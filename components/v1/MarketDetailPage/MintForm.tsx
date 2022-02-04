@@ -14,11 +14,15 @@ import ToastSuccess from "../Toasts/Success";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
-import { useLeveragedTokenMetadata, useLeveragedTokenNAV, useOraclePrice, useTokenBalance, useTotalAvailableCash } from "../../../utils/onchain";
 import FormLoading from "./FormLoading";
 import FormLoadingFailed from "./FormLoadingFailed";
 import { MintState } from "./States";
 import { useContractWrite } from "wagmi";
+import { useTokenBalance } from "../swr/useTokenBalance";
+import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
+import { useOraclePrice } from "../swr/useCollateralPrice";
+import { useLeveragedTokenMetadata } from "../swr/useLeveragedTokenMetadata";
+import { useTotalAvailableCash } from "../swr/useTotalAvailableCash";
 
 /**
  * MintFormProps is a React Component properties that passed to React Component MintForm
@@ -39,11 +43,11 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address }) => {
     const metadata = Metadata[chainID][address];
 
     // Read onchain data
-    const oracleResponse = useOraclePrice(metadata.oracleAddress, provider);
-    const navResponse = useLeveragedTokenNAV(address);
-    const leveragedTokenMetadataResponse = useLeveragedTokenMetadata(address, metadata.vaultAddress, provider);
-    const balanceResponse = useTokenBalance(account ? account : undefined, provider, leveragedTokenMetadataResponse.data?.isETH ? undefined : metadata.collateralAddress);
-    const totalAvailableCashResponse = useTotalAvailableCash(metadata.vaultAddress, provider);
+    const oracleResponse = useOraclePrice({ oracle: metadata.oracleAddress, provider: provider });
+    const navResponse = useLeveragedTokenNAV({ token: address, vault: metadata.vaultAddress, provider: provider });
+    const leveragedTokenMetadataResponse = useLeveragedTokenMetadata({ token: address, vault: metadata.vaultAddress, provider: provider });
+    const balanceResponse = useTokenBalance({ account: account, provider: provider, token: leveragedTokenMetadataResponse.data?.isETH ? undefined : metadata.collateralAddress });
+    const totalAvailableCashResponse = useTotalAvailableCash({ vault: metadata.vaultAddress, provider: provider });
 
     // Parse onchain data
     const collateralPrice = parseFloat(ethers.utils.formatUnits(oracleResponse.data ? oracleResponse.data : 0, metadata.debtDecimals));

@@ -1,6 +1,5 @@
 import { FunctionComponent } from "react";
 import Link from "next/link";
-import { useProvider } from "wagmi";
 
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
@@ -8,9 +7,7 @@ import { ethers } from "ethers";
 import MintForm from "./MintForm";
 import FormLoading from "./FormLoading";
 import FormLoadingFailed from "./FormLoadingFailed";
-
-// ABIs
-import { useLeveragedTokenMetadata } from "../../../utils/onchain";
+import { useLeveragedTokenMetadata } from "../swr/useLeveragedTokenMetadata";
 
 /**
  * MintProps is a React Component properties that passed to React Component Mint
@@ -32,7 +29,7 @@ const Mint: FunctionComponent<MintProps> = ({ address }) => {
 
     // Read onchain data
     // TODO(bayu): If metada.isETH is false, then check allowance and show approval is needed
-    const leveragedTokenMetadataResponse = useLeveragedTokenMetadata(address, metadata.vaultAddress, provider);
+    const leveragedTokenMetadataResponse = useLeveragedTokenMetadata({ token: address, vault: metadata.vaultAddress, provider: provider });
 
     // Parse onchain data
     const maxTotalCollateral = parseFloat(ethers.utils.formatUnits(leveragedTokenMetadataResponse.data ? leveragedTokenMetadataResponse.data.maxTotalCollateral : 0, metadata.collateralDecimals));
