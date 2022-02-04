@@ -1,29 +1,43 @@
 import { FunctionComponent, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 import { Timeframe, useVaultHistoricalData } from "../../../utils/snapshot";
+import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 
 export type VaultChartProps = {
-    chainID: number;
-    address: string;
+    address: string; // Vault address
 };
 
-const VaultChart: FunctionComponent<VaultChartProps> = ({ chainID, address }) => {
-    // Fetch data
+const VaultChart: FunctionComponent<VaultChartProps> = ({ address }) => {
+    // Global states
+    const { chain } = useWalletContext();
+    const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
+
+    // Read offchain data
     const data = useVaultHistoricalData(chainID, address);
 
-    // Component states
+    // Local states
+    const [currentChainID, setCurrentChainID] = useState(chainID);
     const [currentData, setCurrentData] = useState(data.twoWeekly);
-    if (!currentData && data.twoWeekly) {
-        setCurrentData(data.twoWeekly); // Set current data on load
-    }
     const [supplyAPY, setSupplyAPY] = useState(0);
     const [borrowAPY, setBorrowAPY] = useState(0);
+    const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
+
+    // Make sure the state is correct
+    if (!currentData && data.twoWeekly) {
+        setCurrentData(data.twoWeekly);
+    }
     // Set initial data for onMouseLeave event on the price chart
     if (supplyAPY === 0 && borrowAPY === 0 && currentData) {
         setSupplyAPY(currentData.latestSupplyAPY);
         setBorrowAPY(currentData.latestBorrowAPY);
     }
-    const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
+    // Resert everything when the chain is change
+    if (chainID != currentChainID && currentData) {
+        setSupplyAPY(currentData.latestSupplyAPY);
+        setBorrowAPY(currentData.latestBorrowAPY);
+        setCurrentData(data.twoWeekly);
+        setCurrentChainID(chainID);
+    }
 
     // UI states
     const showSkeleton = data.isLoading || data.error;
