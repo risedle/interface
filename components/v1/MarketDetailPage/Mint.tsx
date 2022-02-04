@@ -2,7 +2,7 @@ import { FunctionComponent } from "react";
 import Link from "next/link";
 import { useProvider } from "wagmi";
 
-import { useWalletContext } from "../Wallet";
+import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import { ethers } from "ethers";
 import MintForm from "./MintForm";
@@ -26,9 +26,9 @@ type MintProps = {
  */
 const Mint: FunctionComponent<MintProps> = ({ address }) => {
     // Global states
-    const { chain } = useWalletContext();
-    const metadata = Metadata[chain.id][address];
-    const provider = useProvider();
+    const { chain, provider } = useWalletContext();
+    const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
+    const metadata = Metadata[chainID][address];
 
     // Read onchain data
     // TODO(bayu): If metada.isETH is false, then check allowance and show approval is needed
