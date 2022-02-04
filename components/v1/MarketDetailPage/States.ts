@@ -11,10 +11,12 @@ export type ApprovalState = {
     approving?: boolean;
     approved?: boolean;
     error?: Error;
+    confirming?: boolean;
 };
 
 export type RedeemState = {
-    amount?: number;
+    amount: number;
+    confirming?: boolean;
     redeeming?: boolean;
     hash?: string;
     error?: Error;
@@ -29,15 +31,17 @@ export type MintState = {
 };
 
 export type DepositState = {
-    amount?: number;
+    amount: number;
     depositing?: boolean;
+    confirming?: boolean;
     hash?: string;
     error?: Error;
 };
 
 export type WithdrawState = {
-    amount?: number;
+    amount: number;
     withdrawing?: boolean;
+    confirming?: boolean;
     hash?: string;
     error?: Error;
 };

@@ -1,16 +1,18 @@
 import { Dialog, Popover } from "@headlessui/react";
 import Link from "next/link";
-import type { FunctionComponent } from "react";
+import { FunctionComponent } from "react";
 import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { usePopper } from "react-popper";
-import { Chain, chain as Chains, InjectedConnector, useAccount, useConnect, useNetwork } from "wagmi";
+import { InjectedConnector } from "wagmi";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+
 // Toasts
 import ToastError from "../Toasts/Error";
 import ToastSuccess from "../Toasts/Success";
+
 // States
-import { MetaMaskConnector, useWalletContext, WCConnector } from "../Wallet";
+import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, useWalletContext, WCConnector } from "../Wallet";
 import ButtonClose from "./Close";
 
 /**
@@ -18,33 +20,24 @@ import ButtonClose from "./Close";
  */
 type ButtonConnectWalletDesktopProps = {};
 
-// Utilities
-const formatAddress = (address: string) => {
-    return `${address.substring(0, 6)}...${address.substring(address.length - 4, address.length)}`;
-};
-
-const getEtherscanAddressURL = (chain: Chain | null, address: string): string => {
-    if (chain) {
-        if (chain.blockExplorers) {
-            return `${chain.blockExplorers[0].url}/address/${address}`;
-        }
-        return "#";
-    }
-    return "#";
-};
-
 /**
  * ButtonConnectWalletDesktop is just yet another react component
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopProps> = ({}) => {
-    const { account, login, logout, connectorName, setConnectorName, chain } = useWalletContext();
-    const [, connect] = useConnect();
-    const [connectedChain, switchNetwork] = useNetwork();
-    const [accountData, disconnect] = useAccount();
-    let [isOpen, setIsOpen] = useState(false);
-    let [isConnecting, setIsConnecting] = useState(false);
+    // Read global states
+    const { chain, account, connectWallet, disconnectWallet, switchNetwork } = useWalletContext();
+
+    // Local states
+    const [isOpen, setIsOpen] = useState(false);
+    const [isConnecting, setIsConnecting] = useState(false);
+    const [connectorName, setConnectorName] = useState<string | undefined>(undefined);
+
+    // UI States
+    const showConnectWallet = account ? false : true;
+    const showSwitchToDefaultNetwork = !showConnectWallet && chain.unsupported ? true : false;
+    const showAccountData = !showConnectWallet && !showSwitchToDefaultNetwork;
 
     // Popover
     let [referenceElement1, setReferenceElement1] = useState<HTMLButtonElement | null>();
@@ -67,60 +60,29 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
         ],
     });
 
-    // Debugs
-    // console.debug("ButtonConnectWalletDesktop connectionData", connectionData);
-    // console.debug("ButtonConnectWalletDesktop account", account);
-    // console.debug("ButtonConnectWalletDesktop connectorName", connectorName);
-    // console.debug("ButtonConnectWalletDesktop chain", chain);
-    // console.debug("ButtonConnectWalletDesktop connectedChain", connectedChain);
-
-    // Set account states
-    const connectWallet = async function (c: InjectedConnector | WalletConnectConnector) {
-        console.debug("================== start wallet =======================");
+    // Connect wallet
+    const connect = async function (c: InjectedConnector | WalletConnectConnector) {
         setIsConnecting(true);
-        const previousConnectorName = connectorName;
         setConnectorName(c.name);
 
-        const result = await connect(c);
-
-        // Prevent connecting with WalletConnect if network is not right
-        if (c instanceof WalletConnectConnector) {
-            if (result?.data?.chain?.unsupported || result?.data?.chain?.id !== chain.id) {
-                logout();
-                disconnect();
-                toast.custom((t) => <ToastError>Please choose {chain.name} Network in your wallet!</ToastError>);
-                setIsConnecting(false);
-                setConnectorName(previousConnectorName);
-            }
-            return;
-        }
+        const result = await connectWallet(c);
 
         // Handle the error
         if (result && result.error) {
             // Display error
+            toast.remove();
             toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
             setIsConnecting(false);
-            // Revert the connector name
-            setConnectorName(previousConnectorName);
+            setConnectorName(undefined);
             return;
         }
 
         // Account connected
+        toast.remove();
         toast.custom((t) => <ToastSuccess>{c.name} connected</ToastSuccess>);
         setIsConnecting(false);
         setIsOpen(false);
-
-        // Login the user
-        if (result && result.data.account) {
-            login(result.data.account);
-        }
-
-        // If result is undefined; check the account data
-        if (!result && accountData && accountData.data) {
-            login(accountData.data.address);
-        }
-
-        console.debug("connectWallet result", result);
+        setConnectorName(undefined);
     };
 
     return (
@@ -144,7 +106,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                 className={`m-0 flex w-full flex-row items-center justify-between rounded-[12px] border border-orange-light-5 bg-orange-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-orange-light-3 active:scale-95 dark:border-orange-dark-5 dark:bg-orange-dark-2 dark:hover:bg-orange-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
                                 disabled={isConnecting && connectorName ? true : false}
                                 onClick={async () => {
-                                    await connectWallet(MetaMaskConnector);
+                                    await connect(MetaMaskConnector);
                                 }}
                             >
                                 <div>
@@ -165,7 +127,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                 className={`m-0 flex w-full flex-row items-center justify-between rounded-[12px] border border-blue-light-5 bg-blue-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-blue-light-3 active:scale-95 dark:border-blue-dark-5 dark:bg-blue-dark-2 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
                                 disabled={isConnecting && connectorName ? true : false}
                                 onClick={async () => {
-                                    await connectWallet(WCConnector);
+                                    await connect(WCConnector);
                                 }}
                             >
                                 <div>
@@ -197,31 +159,32 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
             </Dialog>
 
             {/* If account is not connected then display the connect wallet button */}
-            {(!account || !connectedChain.data || !connectedChain.data.chain) && (
+            {showConnectWallet && (
                 <button className="button gradient inline-block rounded-full bg-[length:300%_300%] bg-center py-3 px-4 text-sm font-semibold leading-4 tracking-tight text-gray-light-1 hover:bg-left hover:shadow-xl hover:shadow-blue-400/20 dark:text-gray-dark-1" onClick={() => setIsOpen(true)}>
                     Connect Wallet
                 </button>
             )}
 
             {/* If account is connected and connected chain is not the same as current chain then display the switch network button */}
-            {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id != chain.id && (
+            {showSwitchToDefaultNetwork && (
                 <button
                     className="inline-block rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1"
                     onClick={() => {
                         if (switchNetwork) {
-                            switchNetwork(chain.id);
+                            switchNetwork(DEFAULT_CHAIN.id);
                         } else {
+                            toast.remove();
                             toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);
                         }
                     }}
                 >
                     <span className="mr-2 inline-block h-[8px] w-[8px] rounded-full bg-red-light-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:bg-red-dark-10 dark:shadow-red-dark-10"></span>
-                    Switch to {chain.name}
+                    Switch to {DEFAULT_CHAIN.name}
                 </button>
             )}
 
             {/* If account is connected and connected chain is the same as current chain then display account information */}
-            {account && connectedChain.data && connectedChain.data.chain && connectedChain.data.chain.id === chain.id && (
+            {showAccountData && account && (
                 <Popover>
                     <Popover.Button ref={setReferenceElement1} className="inline-block rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1">
                         <span className="mr-2 inline-block h-[8px] w-[8px] rounded-full bg-sky-light-10 shadow-[0px_0px_12px] shadow-sky-light-10 dark:bg-sky-dark-10"></span>
@@ -235,7 +198,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                     <div className="mx-4 border-b border-dashed border-gray-light-5 pt-4 pb-2 text-xs leading-4 text-gray-light-9 dark:border-gray-dark-3 dark:text-gray-dark-9">Connected via {connectorName}</div>
                                     <div className="mt-2 flex flex-col space-y-4 pb-4">
                                         <div className="flex flex-row justify-between px-4 text-sm leading-4">
-                                            <Link href={getEtherscanAddressURL(chain, account)}>
+                                            <Link href={getEtherscanAddressURL(chain.chain, account)}>
                                                 <a className="text-gray-light-12 hover:underline dark:text-gray-dark-12" target="_blank" rel="noopener noreferrer">
                                                     View on Explorer <span className="text-gray-light-9 dark:text-gray-dark-9">&#8599;</span>
                                                 </a>
@@ -256,6 +219,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                                 className="text-gray-light-12 hover:underline dark:text-gray-dark-12"
                                                 onClick={() => {
                                                     navigator.clipboard.writeText(account);
+                                                    toast.remove();
                                                     toast.custom((t) => <ToastSuccess>Address Copied</ToastSuccess>);
                                                 }}
                                             >
@@ -273,9 +237,9 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                             <button
                                                 className="text-red-light-10 hover:underline dark:text-red-dark-10"
                                                 onClick={() => {
-                                                    logout();
-                                                    disconnect();
-                                                    toast.custom((t) => <ToastSuccess>{connectorName} disconnected</ToastSuccess>);
+                                                    toast.remove();
+                                                    toast.custom((t) => <ToastSuccess>Wallet disconnected</ToastSuccess>);
+                                                    disconnectWallet();
                                                 }}
                                             >
                                                 Disconnect
@@ -295,8 +259,6 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                     </Popover.Panel>
                 </Popover>
             )}
-
-            <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         </>
     );
 };

@@ -1,10 +1,10 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import Link from "next/link";
 import { ethers } from "ethers";
-import { erc20ABI, useProvider, useSigner } from "wagmi";
+import { erc20ABI, useContractWrite } from "wagmi";
 import toast from "react-hot-toast";
 
-import { useWalletContext } from "../Wallet";
+import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import ToastError from "../Toasts/Error";
 import ToastSuccess from "../Toasts/Success";
@@ -14,11 +14,11 @@ import ButtonPositive from "../Buttons/ButtonPositive";
 import ButtonLoading from "../Buttons/ButtonLoading";
 import RedeemForm from "./RedeemForm";
 
-import { RequestState, ApprovalState } from "./States";
-import VaultABI from "./VaultABI";
+import { ApprovalState } from "./States";
 import { getExplorerLink } from "./Explorer";
-import OracleABI from "./OracleABI";
 import ToastInProgress from "../Toasts/InProgress";
+import { useTokenAllowance } from "../swr/useTokenAllowance";
+import { useTokenBalance } from "../swr/useTokenBalance";
 
 /**
  * RedeemProps is a React Component properties that passed to React Component Redeem
@@ -33,47 +33,41 @@ type RedeemProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const Redeem: FunctionComponent<RedeemProps> = ({ address }) => {
-    const { account, chain } = useWalletContext();
-    const metadata = Metadata[chain.id][address];
-    const provider = useProvider();
-    const [signerData] = useSigner();
+    // Global states
+    const { account, chain, signer, provider } = useWalletContext();
+    const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
+    const metadata = Metadata[chainID][address];
 
-    // Initialize contracts
-    const leveragedTokenContract = new ethers.Contract(address, erc20ABI, provider);
-    const vaultContract = new ethers.Contract(metadata.vaultAddress, VaultABI, provider);
-    const oracleContract = new ethers.Contract(metadata.oracleAddress, OracleABI, provider);
+    // Read onchain data
+    const allowanceResponse = useTokenAllowance({ account: account, token: address, spender: metadata.vaultAddress, provider: provider });
+    const balanceResponse = useTokenBalance({ account: account, token: address, provider: provider });
 
-    // States
-    const [allowanceState, setAllowanceState] = useState<RequestState>({ loading: true });
-    const [navState, setNAVState] = useState<RequestState>({ loading: true });
-    const [collateralPriceState, setCollateralPriceState] = useState<RequestState>({ loading: true });
+    // Parse onchain data
+    const allowance = parseFloat(ethers.utils.formatUnits(allowanceResponse.data ? allowanceResponse.data : 0, metadata.collateralDecimals));
+    const balance = parseFloat(ethers.utils.formatUnits(balanceResponse.data ? balanceResponse.data : 0, metadata.collateralDecimals));
+
+    // Write operations
+    const [, approve] = useContractWrite(
+        {
+            addressOrName: address,
+            contractInterface: erc20ABI,
+            signerOrProvider: signer,
+        },
+        "approve",
+        {
+            args: [metadata.vaultAddress, ethers.constants.MaxUint256],
+        }
+    );
+
+    // Local states
     const [approval, setApproval] = useState<ApprovalState>({});
 
-    // Load onchain data
-    const loadData = async () => {
-        if (allowanceState.loading && navState.loading && collateralPriceState.loading) {
-            const values = await Promise.all([leveragedTokenContract.allowance(account, metadata.vaultAddress), leveragedTokenContract.balanceOf(account), vaultContract.getNAV(address), oracleContract.getPrice()]);
-            setAllowanceState({ response: values[0], loading: false });
-            setNAVState({ response: values[2], loading: false });
-            setCollateralPriceState({ response: values[3], loading: false });
-        }
-    };
-
-    // This will be executed when component is mounted or updated
-    useEffect(() => {
-        loadData();
-    });
-
     // UI States
-    const showLoading = allowanceState.loading || navState.loading || collateralPriceState.loading || signerData.loading ? true : false;
-    const showError = !showLoading && (allowanceState.error || navState.error || collateralPriceState.error || signerData.error) ? true : false;
-    const showApprovalOrRedeem = !showLoading && !showError && allowanceState.response && navState.response && collateralPriceState.response && signerData.data ? true : false;
-    const showApproval = showApprovalOrRedeem && allowanceState.response && !allowanceState.response.eq(ethers.constants.MaxUint256) && !approval.approved ? true : false;
+    const showLoading = allowanceResponse.isLoading || balanceResponse.isLoading ? true : false;
+    const showError = !showLoading && (allowanceResponse.error || balanceResponse.error) ? true : false;
+    const showApprovalOrRedeem = !showLoading && !showError && allowanceResponse.data && balanceResponse.data ? true : false;
+    const showApproval = showApprovalOrRedeem && !(allowance > balance) && !approval.approved ? true : false;
     const showRedeem = !showApproval || approval.approved ? true : false;
-
-    // Data
-    const nav = parseFloat(ethers.utils.formatUnits(navState.response ? navState.response : 0, metadata.debtDecimals));
-    const collateralPrice = parseFloat(ethers.utils.formatUnits(collateralPriceState.response ? collateralPriceState.response : 0, metadata.debtDecimals));
 
     return (
         <div>
@@ -87,42 +81,47 @@ const Redeem: FunctionComponent<RedeemProps> = ({ address }) => {
                                 <p className="text-center text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">Allow Risedle to use your {metadata.title}</p>
                             </div>
                             <div className="pt-4">
-                                {!approval.approving && (
+                                {!approval.approving && !approval.confirming && (
                                     <ButtonPositive
                                         full
                                         onClick={async () => {
-                                            setApproval({ approving: true });
+                                            toast.remove(); // IMPORTANT this is used to prevent metamask popup stuck
+
                                             try {
-                                                if (!signerData.data) return setApproval({ approving: false });
-                                                const connectedContract = leveragedTokenContract.connect(signerData.data);
-                                                const result = await connectedContract.approve(metadata.vaultAddress, ethers.constants.MaxUint256);
-                                                setApproval({ approving: true, hash: result.hash });
-                                                toast.custom((t) => <ToastInProgress>Approving {metadata.title}</ToastInProgress>);
-                                                await result.wait();
+                                                setApproval({ confirming: true, approving: false });
+                                                const result = await approve();
+                                                setApproval({ confirming: false, approving: true });
+                                                if (result.error) {
+                                                    setApproval({ confirming: false, approving: false });
+                                                    toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
+                                                    return;
+                                                }
+                                                setApproval({ confirming: false, approving: true, hash: result.data.hash });
+                                                toast.custom((t) => <ToastInProgress>Approving {metadata.title}...</ToastInProgress>);
+                                                await result.data.wait();
                                                 toast.remove();
                                                 toast.custom((t) => <ToastSuccess>{metadata.title} approved</ToastSuccess>);
-                                                setApproval({ approving: false, hash: result.hash, approved: true });
-                                                setAllowanceState({ loading: true });
-                                                setCollateralPriceState({ loading: true });
-                                                setNAVState({ loading: true });
+                                                setApproval({ approving: false, confirming: false, hash: result.data.hash, approved: true });
                                             } catch (e) {
+                                                // Wallet rejected etc
                                                 console.error(e);
                                                 const error = e as Error;
-                                                setApproval({ approving: false, error });
-                                                toast.custom((t) => <ToastError>Approving failed</ToastError>);
+                                                setApproval({ confirming: false, approving: false, error });
+                                                toast.custom((t) => <ToastError>{error.message}</ToastError>);
                                             }
                                         }}
                                     >
                                         Approve
                                     </ButtonPositive>
                                 )}
+                                {approval.confirming && <ButtonLoading full>Waiting for confirmation...</ButtonLoading>}
                                 {approval.approving && <ButtonLoading full>Approving...</ButtonLoading>}
                             </div>
                             {approval.hash && (
                                 <div className="pt-4 text-center">
-                                    <Link href={getExplorerLink(chain, approval.hash)}>
+                                    <Link href={getExplorerLink(chain.chain, approval.hash)}>
                                         <a target="_blank" rel="noreferrer" className="text-gray-text-center py-4 text-sm text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">
-                                            <span className="hover:underline">Goto transaction</span> &#8599;
+                                            <span className="hover:underline">Transaction is submitted</span> &#8599;
                                         </a>
                                     </Link>
                                 </div>
@@ -130,7 +129,7 @@ const Redeem: FunctionComponent<RedeemProps> = ({ address }) => {
                         </div>
                     )}
 
-                    {showRedeem && <RedeemForm address={address} nav={nav} collateralPrice={collateralPrice} />}
+                    {showRedeem && <RedeemForm address={address} />}
                 </div>
             )}
         </div>

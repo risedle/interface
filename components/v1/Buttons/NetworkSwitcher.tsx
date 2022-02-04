@@ -2,12 +2,15 @@ import type { FunctionComponent } from "react";
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 
-import { chain as Chains, Chain, useNetwork } from "wagmi";
+import { chain as Chains, Chain } from "wagmi";
 
-import { useWalletContext, supportedChains } from "../Wallet";
+import { supportedChains, useWalletContext } from "../Wallet";
 
 import RisedleLinks from "../../../utils/links";
 import ButtonClose from "./Close";
+import toast from "react-hot-toast";
+import ToastError from "../Toasts/Error";
+import ToastSuccess from "../Toasts/Success";
 
 /**
  * ButtonNetworkSwitcherProps is a React Component properties that passed to React Component ButtonNetworkSwitcher
@@ -20,11 +23,11 @@ type ButtonNetworkSwitcherProps = {};
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}) => {
-    const { chain, switchChain, account } = useWalletContext();
-    const [networkData, switchNetwork] = useNetwork();
-    let [isOpen, setIsOpen] = useState(false);
+    // Read global states
+    const { account, chain, switchNetwork } = useWalletContext();
 
-    // console.debug("ButtonNetworkSwitcher chain", chain);
+    // Local states
+    let [isOpen, setIsOpen] = useState(false);
 
     const getChainIconPath = (c: Chain): string => {
         switch (c.id) {
@@ -33,17 +36,25 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
             case Chains.kovan.id:
                 return "/networks/Kovan.svg";
         }
-        return "";
+        return "/networks/Arbitrum.svg";
     };
 
-    const switchToNetwork = (c: Chain) => {
-        // If user is connected then use switch network feature
-        if (account && switchNetwork) {
-            switchNetwork(c.id);
+    const switchToNetwork = async (c: Chain) => {
+        if (switchNetwork) {
+            const result = await switchNetwork(c.id);
+            if (result.error) {
+                toast.remove();
+                toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
+                return;
+            }
+            toast.remove();
+            toast.custom((t) => <ToastSuccess>Switched to {c.name}</ToastSuccess>);
+        } else {
+            toast.remove();
+            toast.custom((t) => <ToastError>Cannot switch network automatically in WalletConnect. Please change network directly from your wallet.</ToastError>);
+            return;
         }
 
-        // Otherwise change manually
-        switchChain(c.id);
         setIsOpen(false);
         return;
     };
@@ -94,8 +105,18 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                 </div>
             </Dialog>
 
-            <button className="button basic p-0" onClick={() => setIsOpen(true)}>
-                <img src={getChainIconPath(chain)} alt={chain.name} className="m-[11px] h-[16px] w-[16px]" />
+            <button
+                className="button basic p-0"
+                onClick={() => {
+                    if (!account) {
+                        toast.remove();
+                        toast.custom((t) => <ToastError>Please connect your wallet first</ToastError>);
+                        return;
+                    }
+                    setIsOpen(true);
+                }}
+            >
+                <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="m-[11px] h-[16px] w-[16px]" />
             </button>
         </>
     );

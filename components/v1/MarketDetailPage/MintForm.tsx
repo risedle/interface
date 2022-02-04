@@ -1,7 +1,6 @@
 import { FunctionComponent, useState } from "react";
 import Link from "next/link";
 import { ethers } from "ethers";
-import { useProvider, useSigner } from "wagmi";
 import * as Slider from "@radix-ui/react-slider";
 import toast from "react-hot-toast";
 
@@ -12,13 +11,18 @@ import { getExplorerLink } from "./Explorer";
 import ToastInProgress from "../Toasts/InProgress";
 import ToastError from "../Toasts/Error";
 import ToastSuccess from "../Toasts/Success";
-import { useWalletContext } from "../Wallet";
+import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
-import { useLeveragedTokenMetadata, useLeveragedTokenNAV, useOraclePrice, useTokenBalance, useTotalAvailableCash } from "../../../utils/onchain";
 import FormLoading from "./FormLoading";
 import FormLoadingFailed from "./FormLoadingFailed";
 import { MintState } from "./States";
+import { useContractWrite } from "wagmi";
+import { useTokenBalance } from "../swr/useTokenBalance";
+import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
+import { useOraclePrice } from "../swr/useCollateralPrice";
+import { useLeveragedTokenMetadata } from "../swr/useLeveragedTokenMetadata";
+import { useTotalAvailableCash } from "../swr/useTotalAvailableCash";
 
 /**
  * MintFormProps is a React Component properties that passed to React Component MintForm
@@ -34,20 +38,16 @@ type MintFormProps = {
  */
 const MintForm: FunctionComponent<MintFormProps> = ({ address }) => {
     // Global states
-    const { chain, account } = useWalletContext();
-    const metadata = Metadata[chain.id][address];
-    const provider = useProvider();
-    const [signerData] = useSigner();
+    const { chain, account, provider, signer } = useWalletContext();
+    const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
+    const metadata = Metadata[chainID][address];
 
     // Read onchain data
-    const oracleResponse = useOraclePrice(metadata.oracleAddress, provider);
-    const navResponse = useLeveragedTokenNAV(address, metadata.vaultAddress, provider);
-    const leveragedTokenMetadataResponse = useLeveragedTokenMetadata(address, metadata.vaultAddress, provider);
-    const balanceResponse = useTokenBalance(account ? account : undefined, provider, leveragedTokenMetadataResponse.data?.isETH ? undefined : metadata.collateralAddress);
-    const totalAvailableCashResponse = useTotalAvailableCash(metadata.vaultAddress, provider);
-
-    // Prepare writing onchain data
-    const vaultContract = new ethers.Contract(metadata.vaultAddress, VaultABI, provider);
+    const oracleResponse = useOraclePrice({ oracle: metadata.oracleAddress, provider: provider });
+    const navResponse = useLeveragedTokenNAV({ token: address, vault: metadata.vaultAddress, provider: provider });
+    const leveragedTokenMetadataResponse = useLeveragedTokenMetadata({ token: address, vault: metadata.vaultAddress, provider: provider });
+    const balanceResponse = useTokenBalance({ account: account, provider: provider, token: leveragedTokenMetadataResponse.data?.isETH ? undefined : metadata.collateralAddress });
+    const totalAvailableCashResponse = useTotalAvailableCash({ vault: metadata.vaultAddress, provider: provider });
 
     // Parse onchain data
     const collateralPrice = parseFloat(ethers.utils.formatUnits(oracleResponse.data ? oracleResponse.data : 0, metadata.debtDecimals));
@@ -60,7 +60,23 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address }) => {
 
     // Local states
     const [mintState, setMintState] = useState<MintState>({ minting: false, amount: 0 });
+    // const vaultContract = new ethers.Contract(metadata.vaultAddress, VaultABI, signer);
+    const [, mint] = useContractWrite(
+        {
+            addressOrName: metadata.vaultAddress,
+            contractInterface: VaultABI,
+            signerOrProvider: signer,
+        },
+        "mint",
+        {
+            args: [address],
+            overrides: {
+                value: ethers.utils.parseUnits(mintState.amount ? mintState.amount.toString() : "0", metadata.collateralDecimals),
+            },
+        }
+    );
 
+    // Realtime user's data
     const mintedAmount = (mintState.amount * collateralPrice) / nav;
     const minimalMintedAmount = mintedAmount - mintedAmount * (5 / 100); // rough estimation
 
@@ -214,7 +230,7 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address }) => {
 
                             {showMintButton && (
                                 <div>
-                                    {!mintState.minting && !mintState.confirming && (
+                                    {!mintState.minting && !mintState.confirming && signer && (
                                         <button
                                             onClick={async (e) => {
                                                 e.preventDefault();
@@ -231,31 +247,30 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address }) => {
 
                                                 // Waiting for the wallet confirmation
                                                 setMintState({ ...mintState, confirming: true, minting: false });
-                                                if (!signerData.data) {
-                                                    toast.custom((t) => <ToastError>Signer data is not found</ToastError>);
-                                                    console.error("MintForm: Signer data is not found");
-                                                    return;
-                                                }
 
                                                 try {
-                                                    const connectedContract = vaultContract.connect(signerData.data);
-                                                    const result = await connectedContract.mint(address, { value: ethers.utils.parseUnits(mintState.amount ? mintState.amount.toString() : "0", metadata.collateralDecimals) });
+                                                    const result = await mint();
+                                                    if (result.error) {
+                                                        setMintState({ ...mintState, confirming: false, minting: false });
+                                                        toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
+                                                        return;
+                                                    }
                                                     // Wallet confirmed
-                                                    setMintState({ ...mintState, minting: true, confirming: false, hash: result.hash });
+                                                    setMintState({ ...mintState, confirming: false, minting: true, hash: result.data.hash });
                                                     toast.custom((t) => (
                                                         <ToastInProgress>
-                                                            Mint with {mintState.amount} {metadata.collateralSymbol}
+                                                            Minting {metadata.title} with {mintState.amount} {metadata.collateralSymbol}
                                                         </ToastInProgress>
                                                     ));
-                                                    const receipt = await result.wait();
+                                                    const receipt = await result.data.wait();
                                                     if (receipt.status === 1) {
                                                         // success
                                                         const event = receipt.logs[receipt.logs.length - 1];
-                                                        const confirmedRedeemendAmount = ethers.utils.formatUnits(event.data, metadata.collateralDecimals);
+                                                        const confirmedRedeemendAmount = parseFloat(ethers.utils.formatUnits(event.data, metadata.collateralDecimals));
                                                         toast.remove();
                                                         toast.custom((t) => (
                                                             <ToastSuccess>
-                                                                Successfully minted {parseFloat(confirmedRedeemendAmount).toFixed(3)} {metadata.title}
+                                                                Successfully minted {tokenBalanceFormatter.format(confirmedRedeemendAmount)} {metadata.title}
                                                             </ToastSuccess>
                                                         ));
                                                         setMintState({ ...mintState, amount: 0, minting: false, hash: undefined });
@@ -267,8 +282,12 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address }) => {
                                                 } catch (e) {
                                                     // Wallet rejected or closed
                                                     const error = e as Error;
-                                                    toast.custom((t) => <ToastError>{error.message}</ToastError>);
-                                                    setMintState({ ...mintState, minting: false, error, hash: undefined });
+                                                    if (error.message) {
+                                                        toast.custom((t) => <ToastError>{error.message}</ToastError>);
+                                                    } else {
+                                                        toast.custom((t) => <ToastError>{error}</ToastError>);
+                                                    }
+                                                    setMintState({ ...mintState, confirming: false, minting: false, error, hash: undefined });
                                                     console.error(e);
                                                 }
                                             }}
@@ -277,7 +296,7 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address }) => {
                                             Mint
                                         </button>
                                     )}
-                                    {mintState.confirming && <ButtonLoading full>Confirming...</ButtonLoading>}
+                                    {mintState.confirming && <ButtonLoading full>Waiting for confirmation...</ButtonLoading>}
                                     {mintState.minting && <ButtonLoading full>Minting...</ButtonLoading>}
                                 </div>
                             )}
@@ -286,9 +305,9 @@ const MintForm: FunctionComponent<MintFormProps> = ({ address }) => {
                         {/* Display transaction hash */}
                         {mintState.hash && (
                             <div className="text-center">
-                                <Link href={getExplorerLink(chain, mintState.hash)}>
+                                <Link href={getExplorerLink(chain.chain, mintState.hash)}>
                                     <a target="_blank" rel="noreferrer" className="text-gray-text-center py-4 text-sm text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">
-                                        <span className="hover:underline">Transaction is submiited</span> &#8599;
+                                        <span className="hover:underline">Transaction is submitted</span> &#8599;
                                     </a>
                                 </Link>
                             </div>
