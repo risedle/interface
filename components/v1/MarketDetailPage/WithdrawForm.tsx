@@ -224,7 +224,7 @@ const WithdrawForm: FunctionComponent<WithdrawFormProps> = ({ address }) => {
                                                         toast.remove();
                                                         toast.custom((t) => (
                                                             <ToastSuccess>
-                                                                Successfully withdraw {withdrawAmount} {metadata.debtSymbol}
+                                                                Successfully withdraw {tokenBalanceFormatter.format(withdrawAmount)} {metadata.debtSymbol}
                                                             </ToastSuccess>
                                                         ));
                                                         setWithdrawState({ ...withdrawState, amount: 0, withdrawing: false, hash: undefined });
