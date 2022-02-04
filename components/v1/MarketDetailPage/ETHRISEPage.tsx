@@ -1,13 +1,13 @@
 import { FunctionComponent } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { chain as Chains, useNetwork } from "wagmi";
+import { chain as Chains } from "wagmi";
 import * as Tabs from "@radix-ui/react-tabs";
 import toast, { Toaster } from "react-hot-toast";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
-import { useWalletContext } from "../Wallet";
+import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import { useMarket } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
@@ -46,20 +46,20 @@ type ETHRISEPageProps = {};
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
-    const { chain, account } = useWalletContext();
-    const [connectedChain, switchNetwork] = useNetwork();
+    const { chain, account, switchNetwork } = useWalletContext();
 
-    const ethriseAddress = ETHRISEAddresses[chain.id];
+    const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
+    const ethriseAddress = ETHRISEAddresses[chainID];
 
     // Get ETHRISE metadata
-    const metadata = Metadata[chain.id][ethriseAddress];
+    const metadata = Metadata[chainID][ethriseAddress];
 
     // Get price external data from Risedle Snapshot
-    const { market, marketIsLoading, marketIsError } = useMarket(chain.id, ethriseAddress);
+    const { market, marketIsLoading, marketIsError } = useMarket(chainID, ethriseAddress);
 
     // Main button states
-    const showConnectWallet = !account || !connectedChain.data || !connectedChain.data.chain;
-    const showSwitchNetwork = !showConnectWallet && connectedChain.data.chain && connectedChain.data.chain.id != chain.id ? true : false;
+    const showConnectWallet = !account;
+    const showSwitchNetwork = !showConnectWallet && chain.unsupported;
     const showAction = !showConnectWallet && !showSwitchNetwork ? true : false;
     const showMyAsset = !showConnectWallet && !showSwitchNetwork ? true : false;
 
@@ -170,24 +170,24 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     <img className="sm:hidden" src={metadata.logo} alt={metadata.title} />
                                 </div>
 
-                                <LeveragedTokenChart chainID={chain.id} address={ethriseAddress} />
+                                <LeveragedTokenChart chainID={chainID} address={ethriseAddress} />
 
                                 {/* Mint & Redeem Button */}
                                 <div className="p-4">
                                     {/* Show Connect wallet to mint or redeem */}
                                     {showConnectWallet && <ButtonDisabled full>Connect wallet to Mint or Redeem</ButtonDisabled>}
 
-                                    {/* Show switch netwoek */}
+                                    {/* Show switch network */}
                                     {showSwitchNetwork && (
                                         <ButtonSwitchNetwork
                                             onClick={() => {
                                                 if (switchNetwork) {
-                                                    switchNetwork(chain.id);
+                                                    switchNetwork(DEFAULT_CHAIN.id);
                                                 } else {
                                                     toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);
                                                 }
                                             }}
-                                            chainName={chain.name}
+                                            chainName={DEFAULT_CHAIN.name}
                                         />
                                     )}
 
@@ -264,7 +264,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 </div>
 
                                 {/* Supply & Borrow APY Chart */}
-                                <VaultChart address={metadata.vaultAddress} chainID={chain.id} />
+                                <VaultChart address={metadata.vaultAddress} chainID={chainID} />
 
                                 {/* Deposit and Withdraw button */}
                                 <div className="p-4">
@@ -276,12 +276,12 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                         <ButtonSwitchNetwork
                                             onClick={() => {
                                                 if (switchNetwork) {
-                                                    switchNetwork(chain.id);
+                                                    switchNetwork(DEFAULT_CHAIN.id);
                                                 } else {
                                                     toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);
                                                 }
                                             }}
-                                            chainName={chain.name}
+                                            chainName={DEFAULT_CHAIN.name}
                                         />
                                     )}
 
