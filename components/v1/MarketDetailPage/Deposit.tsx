@@ -107,7 +107,11 @@ const Deposit: FunctionComponent<DepositProps> = ({ address }) => {
                                                 console.error(e);
                                                 const error = e as Error;
                                                 setApprovalState({ confirming: false, approving: false, error });
-                                                toast.custom((t) => <ToastError>{error.message}</ToastError>);
+                                                if (error.message) {
+                                                    toast.custom((t) => <ToastError>{error.message}</ToastError>);
+                                                } else {
+                                                    toast.custom((t) => <ToastError>{error}</ToastError>);
+                                                }
                                             }
                                         }}
                                     >
