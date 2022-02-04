@@ -2,7 +2,7 @@ import type { FunctionComponent } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Metadata } from "../MarketMetadata";
-import { useWalletContext } from "../Wallet";
+import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import Deposit from "./Deposit";
 import Withdraw from "./Withdraw";
 
@@ -20,7 +20,8 @@ type ButtonDepositOrWithdrawProps = {
  */
 const ButtonDepositOrWithdraw: FunctionComponent<ButtonDepositOrWithdrawProps> = ({ address }) => {
     const { chain } = useWalletContext();
-    const metadata = Metadata[chain.id][address];
+    const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
+    const metadata = Metadata[chainID][address];
 
     return (
         <Dialog.Root>
