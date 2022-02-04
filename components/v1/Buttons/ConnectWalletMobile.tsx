@@ -47,9 +47,9 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
 
     // Listen to wallet address change in metamask
     useEffect(() => {
-        if(account && accountData.data?.address){
+        if (account && accountData.data?.address) {
             logout();
-            login(accountData.data.address)
+            login(accountData.data.address);
         }
     }, [accountData.data?.address]);
 

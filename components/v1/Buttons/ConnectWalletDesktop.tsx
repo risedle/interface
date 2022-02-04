@@ -48,11 +48,11 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
 
     // Listen to wallet address change in metamask
     useEffect(() => {
-        if(account && accountData.data?.address){
+        if (account && accountData.data?.address) {
             logout();
-            login(accountData.data.address)
+            login(accountData.data.address);
         }
-        console.log(accountData.data)
+        console.log(accountData.data);
     }, [accountData.data?.address]);
 
     // Popover
