@@ -7,41 +7,52 @@ import { dollarFormatter } from "../../../utils/formatters";
 import { useLeveragedTokenNAV } from "../../../utils/onchain";
 import { Timeframe, useLeveragedTokenHistoricalData } from "../../../utils/snapshot";
 import { Metadata } from "../MarketMetadata";
+import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 
 export type LeveragedTokenChartProps = {
-    chainID: number;
-    address: string;
+    address: string; // Leveraged token address
 };
 
-const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chainID, address }) => {
+const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ address }) => {
+    // Global states
+    const { chain, provider } = useWalletContext();
+    const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
+
     // Get leveaged token metadata
     const metadata = Metadata[chainID][address];
 
-    // Fetch onchain data for latest nav
-    const provider = useProvider();
-    const navResponse = useLeveragedTokenNAV(address, metadata.vaultAddress, provider);
+    // Read onchain data
+    const navResponse = useLeveragedTokenNAV(address);
 
-    // Fetch data
+    // Read offchain data
     const data = useLeveragedTokenHistoricalData(chainID, address);
 
-    // Component states
+    // Local states
+    const [currentChainID, setCurrentChainID] = useState(chainID);
     const [currentData, setCurrentData] = useState(data.twoWeekly);
-    if (!currentData && data.twoWeekly) {
-        setCurrentData(data.twoWeekly); // Set current data on load
-    }
     const [nav, setNAV] = useState(0);
     const [navChange, setNAVChange] = useState(0);
+    const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
 
-    // Value based on states
+    // Parse data
     const latestNAV = parseFloat(ethers.utils.formatUnits(navResponse.data ? navResponse.data : 0, metadata.debtDecimals));
     const latestChange = currentData ? ((latestNAV - currentData.oldestNAV) / currentData.oldestNAV) * 100 : 0;
 
-    // Set initial data for onMouseLeave event on the price chart
+    // Make sure the state is correct
+    if (!currentData && data.twoWeekly) {
+        setCurrentData(data.twoWeekly); // Set current data on load
+    }
     if (nav === 0 && navChange === 0 && latestNAV != 0 && latestChange != 0) {
         setNAV(latestNAV);
         setNAVChange(latestChange);
     }
-    const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
+    // Resert everything when the chain is change
+    if (chainID != currentChainID) {
+        setNAV(latestNAV);
+        setNAVChange(latestChange);
+        setCurrentData(data.twoWeekly);
+        setCurrentChainID(chainID);
+    }
 
     // UI states
     const showSkeleton = data.isLoading || data.error || navResponse.isLoading;

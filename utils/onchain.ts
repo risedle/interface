@@ -6,11 +6,14 @@ import { ethers } from "ethers";
 import VaultABI from "../abis/VaultABI";
 import OracleABI from "../abis/OracleABI";
 import { erc20ABI } from "wagmi";
+import { useWalletContext } from "../components/v1/Wallet";
+import { Metadata } from "../components/v1/MarketMetadata";
 
 // Global cache namespace for SWR
 // Note: We use global namespace in order to prevent caching key issue on different fetcher on SWR
 export enum SWRCacheNamespace {
     GetBalance,
+    GetAllowance,
     OracleGetPrice,
     VaultGetLeveragedTokenMetadata,
     VaultGetLeveragedTokenNAV,
@@ -67,16 +70,18 @@ export function useLeveragedTokenMetadata(token: string, vault: string, provider
 }
 
 // Leveraged Token NAV fetcher using SWR
-const LeveragedTokenNAVFetcher = async (cacheKey: SWRCacheKey): Promise<ethers.BigNumber> => {
-    if (!cacheKey.vault || !cacheKey.token) throw new Error("LeveragedTokenNAVFetcher: vault or token is undefined");
-    if (cacheKey.namespace != SWRCacheNamespace.VaultGetLeveragedTokenNAV) throw new Error("LeveragedTokenNAVFetcher: namespace invalid");
-    const contract = new ethers.Contract(cacheKey.vault, VaultABI, cacheKey.provider);
-    return contract.getNAV(cacheKey.token);
+const LeveragedTokenNAVFetcher = async (key: SWRCacheKey): Promise<ethers.BigNumber> => {
+    if (key.namespace != SWRCacheNamespace.VaultGetLeveragedTokenNAV) throw new Error("LeveragedTokenNAVFetcher: namespace invalid");
+    if (!key.vault || !key.token) throw new Error("LeveragedTokenNAVFetcher: vault or token is undefined");
+    const contract = new ethers.Contract(key.vault, VaultABI, key.provider);
+    return contract.getNAV(key.token);
 };
 
-export function useLeveragedTokenNAV(token: string, vault: string, provider: ethers.providers.BaseProvider) {
+export function useLeveragedTokenNAV(address: string) {
+    const { chain, provider } = useWalletContext();
+    const metadata = Metadata[chain.chain.id][address];
     const { data, error } = useSWR<ethers.BigNumber, Error>(
-        { token, vault, provider, namespace: SWRCacheNamespace.VaultGetLeveragedTokenNAV },
+        { token: address, vault: metadata.vaultAddress, provider: provider, namespace: SWRCacheNamespace.VaultGetLeveragedTokenNAV },
         LeveragedTokenNAVFetcher
     );
     return {
@@ -183,6 +188,26 @@ export function useTotalAvailableCash(vault: string, provider: ethers.providers.
     const { data, error } = useSWR<ethers.BigNumber, Error>(
         { vault, provider, namespace: SWRCacheNamespace.VaultGetTotalAvailableCash },
         TotalAvailableCashFetcher
+    );
+    return {
+        data: data,
+        isLoading: !data && !error,
+        error: error,
+    };
+}
+
+// Token allowance fetcher using SWR
+const TokenAllowanceFetcher = async (cacheKey: SWRCacheKey): Promise<ethers.BigNumber> => {
+    if (!cacheKey.vault || !cacheKey.token || !cacheKey.account) throw new Error("TotalAvailableCashFetcher: vault, token or account is undefined");
+    if (cacheKey.namespace != SWRCacheNamespace.GetAllowance) throw new Error("TokenAllowanceFetcher: namespace invalid");
+    const contract = new ethers.Contract(cacheKey.token, erc20ABI, cacheKey.provider);
+    return contract.allowance(cacheKey.account, cacheKey.vault);
+};
+
+export function useTokenAllowance(account: string | undefined, token: string, vault: string, provider: ethers.providers.BaseProvider) {
+    const { data, error } = useSWR<ethers.BigNumber, Error>(
+        { account, token, vault, provider, namespace: SWRCacheNamespace.GetAllowance },
+        TokenAllowanceFetcher
     );
     return {
         data: data,
