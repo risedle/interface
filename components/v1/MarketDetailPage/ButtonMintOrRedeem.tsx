@@ -27,7 +27,7 @@ const ButtonMintOrRedeem: FunctionComponent<ButtonMintOrRedeemProps> = ({ addres
         <Dialog.Root>
             <Dialog.Trigger className="w-full w-full rounded-full border border-blue-light-11 bg-blue-light-10 py-[11px] text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-1 dark:border-blue-dark-11 dark:bg-blue-dark-10 dark:text-blue-light-1">Mint or Redeem</Dialog.Trigger>
             <Dialog.Overlay className="fixed inset-0 z-30 bg-gray-dark-1/60 backdrop-blur dark:bg-black/60" />
-            <Dialog.Content className="fixed flex items-center left-0 bottom-0 z-30 w-screen h-screen ">
+            <Dialog.Content className="fixed left-0 bottom-0 z-30 flex h-screen w-screen items-center ">
                 {/* Mint or Redeem container */}
                 <div className="mx-4 mx-auto mb-4 flex-auto flex-col rounded-[24px] border border-gray-light-3 bg-gray-light-1 p-4 dark:border-gray-dark-3 dark:bg-gray-dark-1 sm:m-auto sm:max-w-[376px]">
                     <Dialog.Title className="mb-4 flex flex-row items-center justify-between">
