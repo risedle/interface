@@ -60,7 +60,7 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address }) => {
             contractInterface: VaultABI,
             signerOrProvider: signer,
         },
-        "redeem",
+        "removeSupply",
         {
             args: [address, ethers.utils.parseUnits(redeemState.amount ? redeemState.amount.toString() : "0", metadata.debtDecimals)],
         }
