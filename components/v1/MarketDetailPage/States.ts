@@ -39,8 +39,9 @@ export type DepositState = {
 };
 
 export type WithdrawState = {
-    amount?: number;
+    amount: number;
     withdrawing?: boolean;
+    confirming?: boolean;
     hash?: string;
     error?: Error;
 };
