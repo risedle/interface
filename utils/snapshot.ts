@@ -46,9 +46,9 @@ export function useMarkets(chainID: number) {
     const { data, error } = useSWR<MarketData, Error>(`${endpoint}/v1/markets`, fetcher);
 
     return {
-        markets: data,
-        marketsIsLoading: !error && !data,
-        marketsIsError: error,
+        data: data,
+        isLoading: !error && !data,
+        error: error,
     };
 }
 
