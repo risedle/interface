@@ -1,12 +1,11 @@
 import { ethers } from "ethers";
 import { FunctionComponent, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
-import { useProvider } from "wagmi";
 
 import { dollarFormatter } from "../../../utils/formatters";
-import { useLeveragedTokenNAV } from "../../../utils/onchain";
 import { Timeframe, useLeveragedTokenHistoricalData } from "../../../utils/snapshot";
 import { Metadata } from "../MarketMetadata";
+import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 
 export type LeveragedTokenChartProps = {
@@ -22,7 +21,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
     const metadata = Metadata[chainID][address];
 
     // Read onchain data
-    const navResponse = useLeveragedTokenNAV(address);
+    const navResponse = useLeveragedTokenNAV({ token: address, vault: metadata.vaultAddress, provider: provider });
 
     // Read offchain data
     const data = useLeveragedTokenHistoricalData(chainID, address);

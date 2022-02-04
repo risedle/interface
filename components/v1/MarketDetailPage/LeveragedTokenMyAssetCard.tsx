@@ -1,10 +1,10 @@
 import { ethers } from "ethers";
 import type { FunctionComponent } from "react";
-import { useProvider, useToken } from "wagmi";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
-import { useLeveragedTokenNAV, useTokenBalance } from "../../../utils/onchain";
 import { Metadata } from "../MarketMetadata";
-import { useWalletContext } from "../Wallet";
+import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
+import { useTokenBalance } from "../swr/useTokenBalance";
+import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 
 /**
  * MyAssetCardProps is a React Component properties that passed to React Component MyAssetCard
@@ -19,13 +19,13 @@ type MyAssetCardProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address }) => {
-    const { account, chain } = useWalletContext();
-    const metadata = Metadata[chain.id][address];
-    const provider = useProvider();
+    const { account, chain, provider } = useWalletContext();
+    const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
+    const metadata = Metadata[chainID][address];
 
     // Read on-chain data
-    const navResponse = useLeveragedTokenNAV(address, metadata.vaultAddress, provider);
-    const balanceResponse = useTokenBalance(account ? account : undefined, provider, address);
+    const navResponse = useLeveragedTokenNAV({ token: address, vault: metadata.vaultAddress, provider: provider });
+    const balanceResponse = useTokenBalance({ account: account, token: address, provider: provider });
 
     // Data
     const nav = parseFloat(ethers.utils.formatUnits(navResponse.data ? navResponse.data : 0, metadata.debtDecimals));

@@ -1,10 +1,10 @@
 import { ethers } from "ethers";
 import type { FunctionComponent } from "react";
-import { useProvider } from "wagmi";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
-import { useCollateralPerLeveragedToken, useDebtPerLeveragedToken } from "../../../utils/onchain";
 import { Metadata } from "../MarketMetadata";
-import { useWalletContext } from "../Wallet";
+import { useCollateralPerLeveragedToken } from "../swr/useCollateralPerLeveragedToken";
+import { useDebtPerLeveragedToken } from "../swr/useDebtPerLeveragedToken";
+import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 
 /**
  * BackingCardProps is a React Component properties that passed to React Component BackingCard
@@ -19,11 +19,11 @@ type BackingCardProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const BackingCard: FunctionComponent<BackingCardProps> = ({ address }) => {
-    const { chain } = useWalletContext();
-    const metadata = Metadata[chain.id][address];
-    const provider = useProvider();
-    const collateralPerTokenResponse = useCollateralPerLeveragedToken(address, metadata.vaultAddress, provider);
-    const debtPerTokenResponse = useDebtPerLeveragedToken(address, metadata.vaultAddress, provider);
+    const { chain, provider } = useWalletContext();
+    const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
+    const metadata = Metadata[chainID][address];
+    const collateralPerTokenResponse = useCollateralPerLeveragedToken({ token: address, vault: metadata.vaultAddress, provider: provider });
+    const debtPerTokenResponse = useDebtPerLeveragedToken({ token: address, vault: metadata.vaultAddress, provider: provider });
 
     // Data
     const collateral = parseFloat(ethers.utils.formatUnits(collateralPerTokenResponse.data ? collateralPerTokenResponse.data : 0, metadata.collateralDecimals));
