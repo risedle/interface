@@ -1,7 +1,7 @@
 import { Popover } from "@headlessui/react";
 import Link from "next/link";
 import type { FunctionComponent } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { usePopper } from "react-popper";
 import { Chain, chain as Chains, InjectedConnector, useAccount, useConnect, useNetwork } from "wagmi";
@@ -44,6 +44,14 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
     const [connectedChain, switchNetwork] = useNetwork();
     const [accountData, disconnect] = useAccount();
     let [isConnecting, setIsConnecting] = useState(false);
+
+    // Listen to wallet address change in metamask
+    useEffect(() => {
+        if(account && accountData.data?.address){
+            logout();
+            login(accountData.data.address)
+        }
+    }, [accountData.data?.address]);
 
     // Popover state element
     let [referenceElement1, setReferenceElement1] = useState<HTMLButtonElement | null>();
