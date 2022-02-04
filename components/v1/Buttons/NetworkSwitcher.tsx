@@ -24,7 +24,7 @@ type ButtonNetworkSwitcherProps = {};
  */
 const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}) => {
     // Read global states
-    const { account, switchNetwork } = useWalletContext();
+    const { account, chain, switchNetwork } = useWalletContext();
 
     // Local states
     let [isOpen, setIsOpen] = useState(false);
@@ -36,7 +36,7 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
             case Chains.kovan.id:
                 return "/networks/Kovan.svg";
         }
-        return "";
+        return "/networks/Arbitrum.svg";
     };
 
     const switchToNetwork = async (c: Chain) => {
@@ -116,7 +116,7 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                     setIsOpen(true);
                 }}
             >
-                <img src={getChainIconPath(Chains.arbitrumOne)} alt={Chains.arbitrumOne.name} className="m-[11px] h-[16px] w-[16px]" />
+                <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="m-[11px] h-[16px] w-[16px]" />
             </button>
         </>
     );
