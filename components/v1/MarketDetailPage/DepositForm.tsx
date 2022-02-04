@@ -60,7 +60,7 @@ const DepositForm: FunctionComponent<DepositFormProps> = ({ address }) => {
         },
         "addSupply",
         {
-            args: [ethers.utils.parseUnits(depositState.amount ? depositState.amount.toString() : "0", metadata.collateralDecimals)],
+            args: [ethers.utils.parseUnits(depositState.amount ? depositState.amount.toString() : "0", metadata.debtDecimals)],
         }
     );
 
