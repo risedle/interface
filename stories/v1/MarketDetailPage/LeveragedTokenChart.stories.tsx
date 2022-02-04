@@ -7,4 +7,4 @@ export default {
     title: "Risedle V1/Market Detail Page/Charts/Leveraged Token",
 };
 
-export const LeveragedToken = () => <Chart chainID={42} address="0xc4676f88663360155c2bc6d2A482E34121a50b3b" />;
+export const LeveragedToken = () => <Chart address="0xc4676f88663360155c2bc6d2A482E34121a50b3b" />;

@@ -23,7 +23,6 @@ const TokenAllowanceFetcher = async (args: TokenAllowanceFetcherArgs): Promise<e
 
 // Get token allowance for given account and the spender
 export function useTokenAllowance(req: TokenAllowanceRequest) {
-    if (!req.account) return { data: ethers.BigNumber.from(0), isLoading: false };
     const { data, error } = useSWR<ethers.BigNumber, Error>(
         { account: req.account, token: req.token, spender: req.spender, provider: req.provider, namespace: SWRCacheNamespace.GetAllowance },
         TokenAllowanceFetcher

@@ -170,7 +170,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     <img className="sm:hidden" src={metadata.logo} alt={metadata.title} />
                                 </div>
 
-                                <LeveragedTokenChart chainID={chainID} address={ethriseAddress} />
+                                <LeveragedTokenChart address={ethriseAddress} />
 
                                 {/* Mint & Redeem Button */}
                                 <div className="p-4">
@@ -264,7 +264,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 </div>
 
                                 {/* Supply & Borrow APY Chart */}
-                                <VaultChart address={metadata.vaultAddress} chainID={chainID} />
+                                <VaultChart address={metadata.vaultAddress} />
 
                                 {/* Deposit and Withdraw button */}
                                 <div className="p-4">

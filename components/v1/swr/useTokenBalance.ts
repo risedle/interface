@@ -26,7 +26,6 @@ const TokenBalanceFetcher = async (args: TokenBalanceFetcherArgs): Promise<ether
 
 // Fetch current balance of given acccount for specified token
 export function useTokenBalance(req: TokenBalanceRequest) {
-    if (!req.account) return { data: ethers.BigNumber.from(0), isLoading: false };
     const { data, error } = useSWR<ethers.BigNumber, Error>(
         { account: req.account, token: req.token, provider: req.provider, namespace: SWRCacheNamespace.GetBalance },
         TokenBalanceFetcher
