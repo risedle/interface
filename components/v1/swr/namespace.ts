@@ -9,4 +9,5 @@ export enum SWRCacheNamespace {
     VaultGetCollateralPerLeveragedToken,
     VaultGetDebtPerLeveragedToken,
     VaultGetTotalAvailableCash,
+    VaultGetExchangeRate,
 }
