@@ -1,6 +1,6 @@
 import { FunctionComponent, ReactNode } from "react";
 import createPersistedState from "use-persisted-state";
-import { Chain, Provider, chain as Chains, useAccount, useNetwork, useConnect } from "wagmi";
+import { Chain, Provider, chain as Chains, useAccount, useNetwork, useConnect, useSigner } from "wagmi";
 import { createContext, useContext } from "react";
 import { ethers, providers } from "ethers";
 import { InjectedConnector } from "wagmi/connectors/injected";
@@ -19,31 +19,13 @@ export const MetaMaskConnector = new InjectedConnector({
 export const WCConnector = new WalletConnectConnector({
     chains: supportedChains,
     options: {
+        infuraId: "71cabf633a8c44508d8504859131a1eb",
         qrcode: true,
-        rpc: {
-            [Chains.kovan.id]: "https://eth-kovan.alchemyapi.io/v2/qLbNN95iUDTpQqbm5FzgaSPrPJ908VD-",
-            [Chains.arbitrumOne.id]: "https://arb-mainnet.g.alchemy.com/v2/qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj",
-        },
     },
 });
 
-export const ArbitrumOneProvider = new providers.AlchemyProvider(Chains.arbitrumOne.id, "qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj");
-export const KovanProvider = new providers.AlchemyProvider(Chains.kovan.id, "qLbNN95iUDTpQqbm5FzgaSPrPJ908VD-");
-export const Providers = {
-    [Chains.kovan.id]: KovanProvider,
-    [Chains.arbitrumOne.id]: ArbitrumOneProvider,
-};
-
-const getProvider = (config: { chainId?: number }) => {
-    switch (config.chainId) {
-        case Chains.kovan.id:
-            return KovanProvider;
-        case Chains.arbitrumOne.id:
-            return ArbitrumOneProvider;
-        default:
-            return ethers.getDefaultProvider();
-    }
-};
+export const ArbitrumOneProvider = new providers.JsonRpcProvider("https://arb-mainnet.g.alchemy.com/v2/qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj", Chains.arbitrumOne.id);
+export const KovanProvider = new providers.JsonRpcProvider("https://eth-kovan.alchemyapi.io/v2/qLbNN95iUDTpQqbm5FzgaSPrPJ908VD-", Chains.kovan.id);
 
 export type WalletStates = {
     account: string | undefined;
@@ -51,6 +33,8 @@ export type WalletStates = {
     connectWallet: (c: InjectedConnector | WalletConnectConnector) => Promise<any>;
     disconnectWallet: () => void;
     switchNetwork: ((chaindID: number) => Promise<any>) | undefined;
+    signer: ethers.Signer | undefined;
+    provider: ethers.providers.JsonRpcProvider;
 };
 
 const WalletContext = createContext<WalletStates>({
@@ -59,6 +43,8 @@ const WalletContext = createContext<WalletStates>({
     connectWallet: async (c: InjectedConnector | WalletConnectConnector) => {},
     disconnectWallet: () => {},
     switchNetwork: undefined,
+    signer: undefined,
+    provider: ArbitrumOneProvider,
 });
 
 // Persistent states
@@ -72,11 +58,23 @@ type WalletGlobalStateProps = {
     children: ReactNode;
 };
 
+const getProvider = (config: { chainId?: number }) => {
+    switch (config.chainId) {
+        case Chains.kovan.id:
+            return KovanProvider;
+        case Chains.arbitrumOne.id:
+            return ArbitrumOneProvider;
+        default:
+            return ArbitrumOneProvider;
+    }
+};
+
 const WalletGlobalState: FunctionComponent<WalletGlobalStateProps> = ({ children }) => {
     // Read global states
     const [accountData, disconnect] = useAccount();
     const [, connect] = useConnect();
     const [networkData, switchNetwork] = useNetwork();
+    const [signerData] = useSigner();
 
     // Metamask state, to persist the connect/disconnect status on metamask wallet
     const [metamaskState, setMetamaskState] = useMatamaskState(MetamaskState.NotConnected);
@@ -84,27 +82,33 @@ const WalletGlobalState: FunctionComponent<WalletGlobalStateProps> = ({ children
     // List of action that will change the global states
     // Connect wallet
     const connectWallet = async function (c: InjectedConnector | WalletConnectConnector) {
-        const result = await connect(c);
-        if (result && result.error) return result; // Return error early
+        try {
+            const result = await connect(c);
+            if (result && result.error) return result; // Return error early
 
-        // Persist metamask connection state
-        if (c.name === "MetaMask") {
-            setMetamaskState(MetamaskState.Connected);
-        }
-
-        // Prevent connecting with WalletConnect if network is not right
-        if (c instanceof WalletConnectConnector) {
-            if (result?.data?.chain?.unsupported) {
-                disconnect();
-                return {
-                    data: undefined,
-                    error: new Error(`Please select ${chain.name} from your wallet`),
-                };
+            // Persist metamask connection state
+            if (c.name === "MetaMask") {
+                setMetamaskState(MetamaskState.Connected);
             }
-        }
 
-        // Account connected return result
-        return result;
+            // Prevent connecting with WalletConnect if network is not right
+            if (c instanceof WalletConnectConnector) {
+                if (result?.data?.chain?.unsupported) {
+                    disconnect();
+                    return {
+                        data: undefined,
+                        error: new Error(`Please select ${chain.name} from your wallet`),
+                    };
+                }
+
+                // Reload the page
+                window.location.reload(); // IMPORTANT: Somehow wallectconnect signer connected to mainnet by default, fixed by reloading the page
+            }
+            return result;
+        } catch (e) {
+            console.error("Cannot connect");
+            console.error(e);
+        }
     };
 
     // Disconnect wallet
@@ -119,6 +123,8 @@ const WalletGlobalState: FunctionComponent<WalletGlobalStateProps> = ({ children
 
     // Create derivatives states based on the global states
     const chain = accountData.data && networkData.data ? (networkData.data.chain as Chain) : DEFAULT_CHAIN;
+    const provider = getProvider({ chainId: chain.id });
+    const signer = signerData.data ? signerData.data : provider.getSigner();
     const isChainSupported = supportedChains.map((c) => c.id).includes(chain.id);
 
     // account address is defined only if:
@@ -133,6 +139,8 @@ const WalletGlobalState: FunctionComponent<WalletGlobalStateProps> = ({ children
         connectWallet,
         disconnectWallet,
         switchNetwork,
+        signer,
+        provider,
     };
     return <WalletContext.Provider value={sharedStates}>{children}</WalletContext.Provider>;
 };
