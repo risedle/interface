@@ -1,6 +1,6 @@
 import { Dialog, Popover } from "@headlessui/react";
 import Link from "next/link";
-import type { FunctionComponent } from "react";
+import { FunctionComponent } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { usePopper } from "react-popper";
@@ -62,7 +62,6 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
 
     // Connect wallet
     const connect = async function (c: InjectedConnector | WalletConnectConnector) {
-        console.debug("================== start wallet =======================");
         setIsConnecting(true);
         setConnectorName(c.name);
 
