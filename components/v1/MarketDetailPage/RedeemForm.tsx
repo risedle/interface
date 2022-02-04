@@ -10,7 +10,6 @@ import { Metadata } from "../MarketMetadata";
 import ToastError from "../Toasts/Error";
 import ToastSuccess from "../Toasts/Success";
 
-// ABIs
 import { RedeemState } from "./States";
 import ButtonLoading from "../Buttons/ButtonLoading";
 import { getExplorerLink } from "./Explorer";
@@ -246,7 +245,11 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address }) => {
                                                     // Wallet rejected etc
                                                     const error = e as Error;
                                                     toast.remove();
-                                                    toast.custom((t) => <ToastError>{error.message}</ToastError>);
+                                                    if (error.message) {
+                                                        toast.custom((t) => <ToastError>{error.message}</ToastError>);
+                                                    } else {
+                                                        toast.custom((t) => <ToastError>{error}</ToastError>);
+                                                    }
                                                     setRedeemState({ ...redeemState, redeeming: false, error });
                                                     console.error(e);
                                                 }
