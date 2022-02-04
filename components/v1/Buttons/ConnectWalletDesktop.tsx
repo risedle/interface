@@ -52,7 +52,6 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
             logout();
             login(accountData.data.address);
         }
-        console.log(accountData.data);
     }, [accountData.data?.address]);
 
     // Popover
