@@ -62,7 +62,7 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address }) => {
         },
         "redeem",
         {
-            args: [address, ethers.utils.parseUnits(redeemState.amount ? redeemState.amount.toString() : "0", metadata.debtDecimals)],
+            args: [address, ethers.utils.parseUnits(redeemState.amount ? redeemState.amount.toString() : "0", metadata.collateralDecimals)],
         }
     );
 
