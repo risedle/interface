@@ -19,8 +19,11 @@ export const MetaMaskConnector = new InjectedConnector({
 export const WCConnector = new WalletConnectConnector({
     chains: supportedChains,
     options: {
-        infuraId: "71cabf633a8c44508d8504859131a1eb",
         qrcode: true,
+        rpc: {
+            [Chains.kovan.id]: "https://eth-kovan.alchemyapi.io/v2/qLbNN95iUDTpQqbm5FzgaSPrPJ908VD-",
+            [Chains.arbitrumOne.id]: "https://arb-mainnet.g.alchemy.com/v2/qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj",
+        },
     },
 });
 
