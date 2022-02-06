@@ -144,7 +144,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             if (data.daily) {
                                 setCurrentData(data.daily);
                                 setNAV(latestNAV);
-                                setNAVChange(latestChange);
+                                setNAVChange(((latestNAV - data.daily.oldestNAV) / data.daily.oldestNAV) * 100);
                             }
                         }}
                     >
@@ -159,7 +159,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             if (data.weekly) {
                                 setCurrentData(data.weekly);
                                 setNAV(latestNAV);
-                                setNAVChange(latestChange);
+                                setNAVChange(((latestNAV - data.weekly.oldestNAV) / data.weekly.oldestNAV) * 100);
                             }
                         }}
                     >
@@ -174,7 +174,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             if (data.twoWeekly) {
                                 setCurrentData(data.twoWeekly);
                                 setNAV(latestNAV);
-                                setNAVChange(latestChange);
+                                setNAVChange(((latestNAV - data.twoWeekly.oldestNAV) / data.twoWeekly.oldestNAV) * 100);
                             }
                         }}
                     >
@@ -189,7 +189,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             if (data.monthly) {
                                 setCurrentData(data.monthly);
                                 setNAV(latestNAV);
-                                setNAVChange(latestChange);
+                                setNAVChange(((latestNAV - data.monthly.oldestNAV) / data.monthly.oldestNAV) * 100);
                             }
                         }}
                     >
@@ -204,7 +204,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             if (data.threeMonthly) {
                                 setCurrentData(data.threeMonthly);
                                 setNAV(latestNAV);
-                                setNAVChange(latestChange);
+                                setNAVChange(((latestNAV - data.threeMonthly.oldestNAV) / data.threeMonthly.oldestNAV) * 100);
                             }
                         }}
                     >
