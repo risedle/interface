@@ -144,7 +144,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                             <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>
                                             <h1 className="m-0 text-2xl font-bold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.title}</h1>
                                         </div>
-                                        <img className="sm:hidden" src={metadata.logo} alt={metadata.title} />
+                                        <img src={metadata.logo} alt={metadata.title} />
                                     </div>
 
                                     <LeveragedTokenChart address={ethriseAddress} />
@@ -241,7 +241,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>
                                         <h1 className="m-0 text-2xl font-bold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.vaultTitle}</h1>
                                     </div>
-                                    <img className="sm:hidden" src={metadata.vaultLogo} alt={`rv${metadata.collateralSymbol}${metadata.debtSymbol}`} />
+                                    <img src={metadata.vaultLogo} alt={`rv${metadata.collateralSymbol}${metadata.debtSymbol}`} />
                                 </div>
 
                                 {/* Supply & Borrow APY Chart */}
