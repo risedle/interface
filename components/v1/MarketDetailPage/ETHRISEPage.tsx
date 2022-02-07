@@ -75,33 +75,31 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                 <Favicon />
 
                 {/* Navigation */}
-                <div className="container mx-auto max-w-full sm:z-20">
-                    <div className="flex flex-row items-center justify-between p-4">
-                        <div className="flex-none">
+                <div className="container z-10 mx-auto max-w-full sm:z-20">
+                    <div className="grid grid-cols-3 content-center place-items-center p-4">
+                        <div className="justify-self-start">
                             <Link href="/">
                                 <a className="flex items-center">
                                     <Logo />
-                                    <span className="traking-tight leading-0 self-center pl-2 font-inter text-base font-bold text-gray-light-12 dark:text-gray-light-1">Risedle</span>
+                                    <span className="hidden sm:block traking-tight leading-0 self-center pl-2 font-inter text-base font-bold text-gray-light-12 dark:text-gray-light-1">Risedle</span>
                                 </a>
                             </Link>
                         </div>
-                        <div className="inline-block flex flex-none flex-row space-x-2">
+                        <div className="space-x-4 text-sm text-gray-light-12 dark:text-gray-dark-12">
+                            <Link href="/markets">
+                                <a>Markets</a>
+                            </Link>
+                            <Link href="/portofolio">
+                                <a>Portofolio</a>
+                            </Link>
+                        </div>
+                        <div className="justify-self-end inline-block flex flex-row space-x-2">
                             <div className="hidden sm:inline-block">
                                 <ButtonNetworkSwitcher />
                             </div>
 
                             <div className="hidden sm:inline-block">
                                 <ButtonConnectWalletDesktop />
-                            </div>
-
-                            <div className="sm:hidden">
-                                <Link href={"/markets"}>
-                                    <a>
-                                        <ButtonTertiary>
-                                            <span className="mr-2">&#8592;</span>Markets
-                                        </ButtonTertiary>
-                                    </a>
-                                </Link>
                             </div>
 
                             <div className="inline-block h-[40px]">
