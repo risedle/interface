@@ -76,12 +76,12 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
 
                 {/* Navigation */}
                 <div className="container z-10 mx-auto max-w-full sm:z-20">
-                    <div className="grid grid-cols-3 content-center place-items-center p-4">
+                    <div className="grid grid-cols-3 place-items-center content-center p-4">
                         <div className="justify-self-start">
                             <Link href="/">
                                 <a className="flex items-center">
                                     <Logo />
-                                    <span className="hidden sm:block traking-tight leading-0 self-center pl-2 font-inter text-base font-bold text-gray-light-12 dark:text-gray-light-1">Risedle</span>
+                                    <span className="traking-tight leading-0 hidden self-center pl-2 font-inter text-base font-bold text-gray-light-12 dark:text-gray-light-1 sm:block">Risedle</span>
                                 </a>
                             </Link>
                         </div>
@@ -93,7 +93,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 <a>Portofolio</a>
                             </Link>
                         </div>
-                        <div className="justify-self-end inline-block flex flex-row space-x-2">
+                        <div className="inline-block flex flex-row space-x-2 justify-self-end">
                             <div className="hidden sm:inline-block">
                                 <ButtonNetworkSwitcher />
                             </div>
@@ -109,7 +109,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                     </div>
                 </div>
 
-                <div className="mb-20 flex flex-col sm:mt-12 sm:z-10 sm:mb-0">
+                <div className="mb-20 flex flex-col sm:z-10 sm:mt-12 sm:mb-0">
                     {/* Market header on the desktop; Only show this on w > 640px */}
                     {/* <div className="m-auto mt-12 mb-14 flex hidden flex-col space-y-6 text-center sm:inline-block">
                         <div>
@@ -122,7 +122,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                     </div> */}
 
                     {/* Market tabs and content */}
-                    <Tabs.Root defaultValue="leverage" className="px-4 sm:px-28 outline-0">
+                    <Tabs.Root defaultValue="leverage" className="px-4 outline-0 sm:px-28">
                         <Tabs.List aria-label="ETHRISE" className="mb-6 flex flex-row rounded-[12px] bg-gray-light-3 p-1 dark:bg-gray-dark-2 sm:max-w-[253px]">
                             <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
                                 Leverage
@@ -229,10 +229,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 {/* Backing card */}
                                 <BackingCard address={ethriseAddress} />
                             </div>
-                            
-
-                            
-                            
                         </Tabs.Content>
 
                         {/* Earn tab */}
@@ -303,7 +299,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     </div>
                                 </div>
                             </div>
-                            
                         </Tabs.Content>
                     </Tabs.Root>
                     <div className="hidden sm:mt-20 sm:inline-block">
