@@ -7,7 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
-import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
+import { DEFAULT_CHAIN, useWalletContext, getEtherscanAddressURL, formatAddress } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import { useMarket } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
@@ -242,6 +242,12 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                                 {market.leveraged_token_max_total_collateral <= 0 && <span>&#8734;</span>}
                                             </p>
                                         )}
+                                    </div>
+                                    <div className="flex flex-row justify-between">
+                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Contract Address</p>
+                                        <a href={getEtherscanAddressURL(chain.chain, ethriseAddress)} target="_blank" className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
+                                            {formatAddress(ethriseAddress)} &#8599;
+                                        </a>
                                     </div>
                                 </div>
                             </div>
