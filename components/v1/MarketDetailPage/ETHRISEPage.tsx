@@ -7,7 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
-import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
+import { DEFAULT_CHAIN, useWalletContext, getEtherscanAddressURL, formatAddress } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import { useMarket } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
@@ -140,8 +140,8 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                     <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
                                         Leverage
                                     </Tabs.Trigger>
-                                    <Tabs.Trigger value="earn" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
-                                        Earn
+                                    <Tabs.Trigger value="lend" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
+                                        Lend
                                     </Tabs.Trigger>
                                 </Tabs.List>
                             </div>
@@ -152,8 +152,8 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
                                 Leverage
                             </Tabs.Trigger>
-                            <Tabs.Trigger value="earn" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
-                                Earn
+                            <Tabs.Trigger value="lend" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
+                                Lend
                             </Tabs.Trigger>
                         </Tabs.List>
 
@@ -243,6 +243,12 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                             </p>
                                         )}
                                     </div>
+                                    <div className="flex flex-row justify-between">
+                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Contract Address</p>
+                                        <a href={getEtherscanAddressURL(chain.chain, ethriseAddress)} target="_blank" rel="noopener noreferrer" className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
+                                            {formatAddress(ethriseAddress)} &#8599;
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -250,8 +256,8 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             <BackingCard address={ethriseAddress} />
                         </Tabs.Content>
 
-                        {/* Earn tab */}
-                        <Tabs.Content value="earn" className="mx-auto flex max-w-[540px] flex-col space-y-6 outline-0">
+                        {/* Lend tab */}
+                        <Tabs.Content value="lend" className="mx-auto flex max-w-[540px] flex-col space-y-6 outline-0">
                             {/* APY info card */}
                             <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2">
                                 {/* Title, subtitle and lgoo */}

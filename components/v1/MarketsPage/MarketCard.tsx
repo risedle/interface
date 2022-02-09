@@ -106,7 +106,7 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ address, initialNAV, i
                                         const selectedData = payload[0].payload;
                                         const timestamp = selectedData.timestamp;
                                         const date = new Date(timestamp);
-                                        const formattedDate = new Intl.DateTimeFormat("en-US", { hour: "numeric", day: "numeric", month: "numeric", year: "numeric", minute: "numeric" }).format(date);
+                                        const formattedDate = new Intl.DateTimeFormat("en-US", { hour: "numeric", day: "numeric", month: "short", year: "numeric", minute: "numeric" }).format(date);
 
                                         setNAV(selectedData.nav);
                                         const change = ((selectedData.nav - currentData.oldestNAV) / currentData.oldestNAV) * 100;
