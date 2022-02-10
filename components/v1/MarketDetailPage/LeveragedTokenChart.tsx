@@ -63,10 +63,10 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
 
     // Toast error if chart or nav data is error
     useEffect(() => {
-        if(data.error || navResponse.error){
-            toast.custom((t) => <ToastError>Failed to load data, please try to refresh</ToastError>)
+        if (data.error || navResponse.error) {
+            toast.custom((t) => <ToastError>Failed to load data, please try to refresh</ToastError>);
         }
-    }, [data.error, navResponse.error])
+    }, [data.error, navResponse.error]);
 
     // Styling for active timeframe selector
     const activeTimeframeClasses = "bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full font-semibold text-gray-light-12 dark:text-gray-dark-12";
