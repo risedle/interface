@@ -1,11 +1,13 @@
 import { ethers } from "ethers";
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 
 import { dollarFormatter } from "../../../utils/formatters";
 import { Timeframe, useLeveragedTokenHistoricalData } from "../../../utils/snapshot";
 import { Metadata } from "../MarketMetadata";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
+import ToastError from "../Toasts/Error";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 
 export type LeveragedTokenChartProps = {
@@ -54,8 +56,17 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
     }
 
     // UI states
-    const showSkeleton = data.isLoading || data.error || navResponse.isLoading;
-    const showRealData = !showSkeleton && currentData;
+    const showChartSkeleton = data.isLoading || data.error;
+    const showNAVSkeleton = navResponse.isLoading || navResponse.error;
+    const showRealChartData = !showChartSkeleton && currentData;
+    const showRealNavData = !showNAVSkeleton && nav && navChange;
+
+    // Toast error if chart or nav data is error
+    useEffect(() => {
+        if (data.error || navResponse.error) {
+            toast.custom((t) => <ToastError>Failed to load data, please try to refresh</ToastError>);
+        }
+    }, [data.error, navResponse.error]);
 
     // Styling for active timeframe selector
     const activeTimeframeClasses = "bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full font-semibold text-gray-light-12 dark:text-gray-dark-12";
@@ -66,13 +77,13 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
             <div className="flex flex-row space-x-4 px-4">
                 <div className="flex w-[52px] flex-col space-y-2">
                     <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 ">Price</p>
-                    {showSkeleton && <div className="h-4 animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></div>}
-                    {showRealData && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(nav)}</p>}
+                    {showNAVSkeleton && <div className="h-4 animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></div>}
+                    {showRealNavData && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(nav)}</p>}
                 </div>
                 <div className="flex flex-col space-y-2">
                     <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 ">Change</p>
-                    {showSkeleton && <div className="h-4 animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></div>}
-                    {showRealData && (
+                    {showNAVSkeleton && <div className="h-4 animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></div>}
+                    {showRealNavData && (
                         <div className="flex h-[16px] flex-row items-center">
                             <svg className={navChange > 0 ? "inline-block fill-green-light-11 dark:fill-green-dark-11" : "hidden"} width="14" height="14" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
                                 <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 2.14645C7.34171 1.95118 7.65829 1.95118 7.85355 2.14645L11.8536 6.14645C12.0488 6.34171 12.0488 6.65829 11.8536 6.85355C11.6583 7.04882 11.3417 7.04882 11.1464 6.85355L8 3.70711L8 12.5C8 12.7761 7.77614 13 7.5 13C7.22386 13 7 12.7761 7 12.5L7 3.70711L3.85355 6.85355C3.65829 7.04882 3.34171 7.04882 3.14645 6.85355C2.95118 6.65829 2.95118 6.34171 3.14645 6.14645L7.14645 2.14645Z" />
@@ -88,8 +99,8 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
 
             {/* Price chart */}
             <div className="z-0 mt-8 h-[192px] w-full">
-                {showSkeleton && <div className="mb-2 h-[192px] animate-pulse bg-gray-light-3 dark:bg-gray-dark-3"></div>}
-                {showRealData && (
+                {showChartSkeleton && <div className="mb-2 h-[192px] animate-pulse bg-gray-light-3 dark:bg-gray-dark-3"></div>}
+                {showRealChartData && (
                     <ResponsiveContainer width="100%" height="100%" className="h-full">
                         <AreaChart
                             data={currentData.data}
