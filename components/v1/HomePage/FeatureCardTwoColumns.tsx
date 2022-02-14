@@ -19,7 +19,7 @@ const FeatureCardTwoColumns: FunctionComponent<FeatureCardTwoColumnsProps> = ({}
                     <h1 className="m-0 mb-4 text-base font-bold text-gray-light-12 dark:text-gray-dark-12 sm:text-lg">0% Management Fees</h1>
                     <p className="mb-6 text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">Just like leveraging assets manually using lending protocol, you will not get charged for management fees.</p>
                     <p className="text-sm font-bold leading-6 text-gray-light-12 dark:text-gray-dark-12">
-                        <Link href="https://docs.risedle.com/What-are-Risedle-Leveraged-Tokens-6ad87257157845e69aa7d11f87af99ec">
+                        <Link href="https://docs.risedle.com/leveraged-tokens/ethrise-2x-long-eth/fees">
                             <a>Risedle Leveraged Tokens Fees &#8594;</a>
                         </Link>
                     </p>
@@ -170,7 +170,7 @@ const FeatureCardTwoColumns: FunctionComponent<FeatureCardTwoColumnsProps> = ({}
                     <h1 className="m-0 mb-4 text-base font-bold text-gray-light-12 dark:text-gray-dark-12 sm:text-lg">Floating Leverage</h1>
                     <p className="mb-6 text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">Risedle&apos;s unique rebalancing mechanism designed to minimize loss due to frequent rebalancing.</p>
                     <p className="text-sm font-bold leading-6 text-gray-light-12 dark:text-gray-dark-12">
-                        <Link href="https://docs.risedle.com/What-are-Risedle-Leveraged-Tokens-6ad87257157845e69aa7d11f87af99ec">
+                        <Link href="https://docs.risedle.com/leveraged-tokens/ethrise-2x-long-eth/ethrise-rebalancing-mechanism">
                             <a>Rebalancing Mechanism &#8594;</a>
                         </Link>
                     </p>
