@@ -8,7 +8,7 @@ import { Toaster } from "react-hot-toast";
 function RisedleApp({ Component, pageProps }: AppProps) {
     return (
         <Wallet>
-            <Toaster position="top-center" />
+            <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
             <Component {...pageProps} />
         </Wallet>
     );
