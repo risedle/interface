@@ -19,7 +19,7 @@ const FeatureCardOneColumn: FunctionComponent<FeatureCardOneColumnProps> = ({}) 
                     <h1 className="m-0 mb-4 text-base font-bold text-gray-light-12 dark:text-gray-dark-12 sm:text-lg">Enjoy Leverage Without Liquidations</h1>
                     <p className="mb-6 text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">Risedle Leveraged Tokens allows its holder to enjoy increased leverage without risk of liquidation</p>
                     <p className="text-sm font-bold leading-6 text-gray-light-12 dark:text-gray-dark-12">
-                        <Link href="/products">
+                        <Link href="/markets">
                             <a>Risedle Leveraged Tokens &#8594;</a>
                         </Link>
                     </p>
