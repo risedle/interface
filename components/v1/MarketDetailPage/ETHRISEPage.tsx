@@ -124,7 +124,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                     </div>
 
                     {/* Market tabs and content */}
-                    <Tabs.Root defaultValue="leverage" className="px-4 outline-0">
+                    <Tabs.Root defaultValue="leverage" className="px-4">
                         <div className="mx-auto mb-6 hidden grid-cols-4 place-content-between gap-2 sm:grid sm:max-w-[540px]">
                             <div className="place-self-center">
                                 <Link href={"/markets"}>
@@ -158,7 +158,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                         </Tabs.List>
 
                         {/* Leverage tab */}
-                        <Tabs.Content value="leverage" className="mx-auto flex flex-col space-y-6 outline-0 sm:max-w-[540px]">
+                        <Tabs.Content value="leverage" className="mx-auto flex flex-col space-y-6 focus:outline-none sm:max-w-[540px]">
                             {/* Price info card */}
                             <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2 ">
                                 {/* Title, subtitle and lgoo */}
@@ -257,7 +257,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                         </Tabs.Content>
 
                         {/* Lend tab */}
-                        <Tabs.Content value="lend" className="mx-auto flex max-w-[540px] flex-col space-y-6 outline-0">
+                        <Tabs.Content value="lend" className="mx-auto flex max-w-[540px] flex-col space-y-6 focus:outline-none">
                             {/* APY info card */}
                             <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2">
                                 {/* Title, subtitle and lgoo */}
