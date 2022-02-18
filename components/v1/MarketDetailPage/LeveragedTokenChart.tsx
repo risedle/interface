@@ -30,36 +30,40 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
 
     // Local states
     const [currentChainID, setCurrentChainID] = useState(chainID);
-    const [currentData, setCurrentData] = useState(data.twoWeekly);
+    const [currentData, setCurrentData] = useState(data.monthly);
     const [nav, setNAV] = useState(0);
     const [navChange, setNAVChange] = useState(0);
-    const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.TwoWeekly);
+    const [navPercentChange, setNAVPercentChange] = useState(0);
+    const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.Monthly);
 
     // Parse data
     const latestNAV = parseFloat(ethers.utils.formatUnits(navResponse.data ? navResponse.data : 0, metadata.debtDecimals));
-    const latestChange = currentData ? ((latestNAV - currentData.oldestNAV) / currentData.oldestNAV) * 100 : 0;
+    const latestChange = currentData ? latestNAV - currentData.oldestNAV : 0;
+    const latestPercentChange = currentData ? ((latestNAV - currentData.oldestNAV) / currentData.oldestNAV) * 100 : 0;
 
     // Make sure the state is correct
-    if (!currentData && data.twoWeekly) {
-        setCurrentData(data.twoWeekly); // Set current data on load
+    if (!currentData && data.monthly) {
+        setCurrentData(data.monthly); // Set current data on load
     }
-    if (nav === 0 && navChange === 0 && latestNAV != 0 && latestChange != 0) {
+    if (nav === 0 && navChange === 0 && latestNAV != 0 && latestChange != 0 && latestPercentChange != 0) {
         setNAV(latestNAV);
         setNAVChange(latestChange);
+        setNAVPercentChange(latestPercentChange);
     }
     // Resert everything when the chain is change
     if (chainID != currentChainID) {
         setNAV(latestNAV);
         setNAVChange(latestChange);
-        setCurrentData(data.twoWeekly);
+        setNAVPercentChange(latestPercentChange);
+        setCurrentData(data.monthly);
         setCurrentChainID(chainID);
     }
 
     // UI states
-    const showChartSkeleton = data.isLoading || data.error;
-    const showNAVSkeleton = navResponse.isLoading || navResponse.error;
-    const showRealChartData = !showChartSkeleton && currentData;
-    const showRealNavData = !showNAVSkeleton && nav && navChange;
+    const showChartSkeleton = data.isLoading || data.error ? true : false;
+    const showNAVSkeleton = navResponse.isLoading || navResponse.error ? true : false;
+    const showRealChartData = !showChartSkeleton && currentData ? true : false;
+    const showRealNavData = !showNAVSkeleton ? true : false;
 
     // Toast error if chart or nav data is error
     useEffect(() => {
@@ -91,7 +95,10 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             <svg className={navChange > 0 ? "hidden" : "inline-block fill-red-light-11 dark:fill-red-dark-11"} width="13" height="13" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
                                 <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 12.8536C7.34171 13.0488 7.65829 13.0488 7.85355 12.8536L11.8536 8.85355C12.0488 8.65829 12.0488 8.34171 11.8536 8.14645C11.6583 7.95118 11.3417 7.95118 11.1464 8.14645L8 11.2929L8 2.5C8 2.22386 7.77614 2 7.5 2C7.22386 2 7 2.22386 7 2.5L7 11.2929L3.85355 8.14645C3.65829 7.95118 3.34171 7.95118 3.14645 8.14645C2.95118 8.34171 2.95118 8.65829 3.14645 8.85355L7.14645 12.8536Z" />
                             </svg>
-                            <p className={`font-ibm text-sm font-semibold tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12 ${navChange > 0 ? "text-green-light-11 dark:text-green-dark-11" : "text-red-light-10 dark:text-red-dark-10"}`}>{navChange.toFixed(2) + "%"}</p>
+                            <p className={`font-ibm text-sm font-semibold tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12 ${navChange > 0 ? "text-green-light-11 dark:text-green-dark-11" : "text-red-light-10 dark:text-red-dark-10"}`}>
+                                {navChange > 0 ? "+" : ""}
+                                {dollarFormatter.format(navChange)} ({navPercentChange.toFixed(2) + "%"})
+                            </p>
                         </div>
                     )}
                 </div>
@@ -100,7 +107,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
             {/* Price chart */}
             <div className="z-0 mt-8 h-[192px] w-full">
                 {showChartSkeleton && <div className="mb-2 h-[192px] animate-pulse bg-gray-light-3 dark:bg-gray-dark-3"></div>}
-                {showRealChartData && (
+                {showRealChartData && currentData && (
                     <ResponsiveContainer width="100%" height="100%" className="h-full">
                         <AreaChart
                             data={currentData.data}
@@ -108,6 +115,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             onMouseLeave={() => {
                                 setNAV(latestNAV);
                                 setNAVChange(latestChange);
+                                setNAVPercentChange(latestPercentChange);
                             }}
                         >
                             <defs>
@@ -123,15 +131,17 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             <Tooltip
                                 position={{ y: 0 }}
                                 content={({ active, payload }) => {
-                                    if (active && payload && payload.length) {
+                                    if (active && payload && payload.length && currentData) {
                                         const selectedData = payload[0].payload;
                                         const timestamp = selectedData.timestamp;
                                         const date = new Date(timestamp);
                                         const formattedDate = new Intl.DateTimeFormat("en-US", { hour: "numeric", day: "numeric", month: "short", year: "numeric", minute: "numeric" }).format(date);
 
                                         setNAV(selectedData.nav);
-                                        const change = ((selectedData.nav - currentData.oldestNAV) / currentData.oldestNAV) * 100;
+                                        const change = selectedData.nav - currentData.oldestNAV;
                                         setNAVChange(change);
+                                        const percentChange = ((selectedData.nav - currentData.oldestNAV) / currentData.oldestNAV) * 100;
+                                        setNAVPercentChange(percentChange);
 
                                         return <div className="text-xs text-gray-light-10 dark:text-gray-dark-10">{formattedDate}</div>;
                                     }
@@ -155,7 +165,10 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             if (data.daily) {
                                 setCurrentData(data.daily);
                                 setNAV(latestNAV);
-                                setNAVChange(((latestNAV - data.daily.oldestNAV) / data.daily.oldestNAV) * 100);
+                                const change = latestNAV - data.daily.oldestNAV;
+                                const percentChange = ((latestNAV - data.daily.oldestNAV) / data.daily.oldestNAV) * 100;
+                                setNAVChange(change);
+                                setNAVPercentChange(percentChange);
                             }
                         }}
                     >
@@ -170,7 +183,10 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             if (data.weekly) {
                                 setCurrentData(data.weekly);
                                 setNAV(latestNAV);
-                                setNAVChange(((latestNAV - data.weekly.oldestNAV) / data.weekly.oldestNAV) * 100);
+                                const change = latestNAV - data.weekly.oldestNAV;
+                                const percentChange = ((latestNAV - data.weekly.oldestNAV) / data.weekly.oldestNAV) * 100;
+                                setNAVChange(change);
+                                setNAVPercentChange(percentChange);
                             }
                         }}
                     >
@@ -185,7 +201,10 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             if (data.twoWeekly) {
                                 setCurrentData(data.twoWeekly);
                                 setNAV(latestNAV);
-                                setNAVChange(((latestNAV - data.twoWeekly.oldestNAV) / data.twoWeekly.oldestNAV) * 100);
+                                const change = latestNAV - data.twoWeekly.oldestNAV;
+                                const percentChange = ((latestNAV - data.twoWeekly.oldestNAV) / data.twoWeekly.oldestNAV) * 100;
+                                setNAVChange(change);
+                                setNAVPercentChange(percentChange);
                             }
                         }}
                     >
@@ -200,7 +219,10 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             if (data.monthly) {
                                 setCurrentData(data.monthly);
                                 setNAV(latestNAV);
-                                setNAVChange(((latestNAV - data.monthly.oldestNAV) / data.monthly.oldestNAV) * 100);
+                                const change = latestNAV - data.monthly.oldestNAV;
+                                const percentChange = ((latestNAV - data.monthly.oldestNAV) / data.monthly.oldestNAV) * 100;
+                                setNAVChange(change);
+                                setNAVPercentChange(percentChange);
                             }
                         }}
                     >
@@ -215,7 +237,10 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                             if (data.threeMonthly) {
                                 setCurrentData(data.threeMonthly);
                                 setNAV(latestNAV);
-                                setNAVChange(((latestNAV - data.threeMonthly.oldestNAV) / data.threeMonthly.oldestNAV) * 100);
+                                const change = latestNAV - data.threeMonthly.oldestNAV;
+                                const percentChange = ((latestNAV - data.threeMonthly.oldestNAV) / data.threeMonthly.oldestNAV) * 100;
+                                setNAVChange(change);
+                                setNAVPercentChange(percentChange);
                             }
                         }}
                     >
