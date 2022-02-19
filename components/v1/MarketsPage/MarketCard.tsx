@@ -63,7 +63,7 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ address, initialNAV, i
             {/* Title and metadata */}
             <div className="flex flex-row items-center justify-between px-4 py-4">
                 <div className="flex flex-row items-center space-x-4">
-                    <img src={logo} alt={title} />
+                    <img src={logo} alt={title} className="h-[48px] w-[48px]" />
                     <div className="flex flex-col space-y-1">
                         <h2 className="traking-[-0.02em] text-sm font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">{title}</h2>
                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{subtitle}</p>

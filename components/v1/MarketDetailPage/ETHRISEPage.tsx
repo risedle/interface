@@ -115,7 +115,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                     {/* Market header on the desktop; Only show this on w > 640px */}
                     <div className="m-auto mt-12 mb-14 flex hidden flex-col space-y-6 text-center sm:inline-block">
                         <div>
-                            <img src={metadata.logo} alt={metadata.title} className="inline-block h-[64px] w-[64px]" />
+                            <img src={metadata.logo} alt={metadata.title} className="m-auto h-[64px] w-[64px]" />
                         </div>
                         <div className="flex flex-col space-y-2">
                             <h1 className="m-0 text-[32px] font-bold leading-none tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.title} Market</h1>
@@ -167,7 +167,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>
                                         <h1 className="m-0 text-2xl font-bold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.title}</h1>
                                     </div>
-                                    <img className="sm:hidden" src={metadata.logo} alt={metadata.title} />
+                                    <img className="h-[48px] w-[48px] sm:hidden" src={metadata.logo} alt={metadata.title} />
                                 </div>
 
                                 <LeveragedTokenChart address={ethriseAddress} />
@@ -266,7 +266,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>
                                         <h1 className="m-0 text-2xl font-bold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.vaultTitle}</h1>
                                     </div>
-                                    <img className="sm:hidden" src={metadata.vaultLogo} alt={`rv${metadata.collateralSymbol}${metadata.debtSymbol}`} />
+                                    <img className="h-[48px] w-[48px] sm:hidden" src={metadata.vaultLogo} alt={`rv${metadata.collateralSymbol}${metadata.debtSymbol}`} />
                                 </div>
 
                                 {/* Supply & Borrow APY Chart */}
