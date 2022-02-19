@@ -33,7 +33,7 @@ const ButtonDepositOrWithdraw: FunctionComponent<ButtonDepositOrWithdrawProps> =
                     <Dialog.Title className="mb-4 flex flex-row items-center justify-between">
                         <div className="flex flex-row items-center space-x-4">
                             <div>
-                                <img src={metadata.vaultLogo} alt={metadata.vaultTitle} />
+                                <img src={metadata.vaultLogo} alt={metadata.vaultTitle} className="h-[48px] w-[48px]" />
                             </div>
                             <div>
                                 <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>

@@ -29,8 +29,8 @@ export const Metadata: MarketMetadataRecord = {
         ["0xc4676f88663360155c2bc6d2A482E34121a50b3b"]: {
             title: "DEMOETHRISE",
             subtitle: "ETH Leverage Market",
-            logo: "/markets/ethrise.svg",
-            vaultLogo: "/markets/usdc.svg",
+            logo: "/markets/ethrise.png",
+            vaultLogo: "/markets/usdc.png",
             vaultAddress: "0x42B6BAE111D9300E19F266Abf58cA215f714432c",
             vaultTitle: "DEMOrvETHUSDC",
             path: "/markets/ethrise",
@@ -54,8 +54,8 @@ export const Metadata: MarketMetadataRecord = {
         ["0x46D06cf8052eA6FdbF71736AF33eD23686eA1452"]: {
             title: "ETHRISE",
             subtitle: "ETH Leverage Market",
-            logo: "/markets/ethrise.svg",
-            vaultLogo: "/markets/usdc.svg",
+            logo: "/markets/ethrise.png",
+            vaultLogo: "/markets/usdc.png",
             vaultAddress: "0xf7EDB240DbF7BBED7D321776AFe87D1FBcFD0A94",
             vaultTitle: "rvETHUSDC",
             path: "/markets/ethrise",
