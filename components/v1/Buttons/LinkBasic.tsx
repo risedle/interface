@@ -7,6 +7,7 @@ import type { FunctionComponent, ReactNode } from "react";
 type ButtonLinkBasicProps = {
     children: ReactNode;
     href: string;
+    full?: boolean; // if full is true, then the button will have w-full class
 };
 
 /**
@@ -14,10 +15,10 @@ type ButtonLinkBasicProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const ButtonLinkBasic: FunctionComponent<ButtonLinkBasicProps> = ({ children, href }) => {
+const ButtonLinkBasic: FunctionComponent<ButtonLinkBasicProps> = ({ children, href, full }) => {
     return (
         <Link href={href}>
-            <a className="button basic">{children}</a>
+            <a className={`button basic ${full ? "w-full" : ""}`}>{children}</a>
         </Link>
     );
 };

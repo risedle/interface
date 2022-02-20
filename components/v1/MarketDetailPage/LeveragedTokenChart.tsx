@@ -4,8 +4,9 @@ import toast from "react-hot-toast";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 
 import { dollarFormatter } from "../../../utils/formatters";
-import { Timeframe, useLeveragedTokenHistoricalData } from "../../../utils/snapshot";
 import { Metadata } from "../MarketMetadata";
+import { Timeframe } from "../swr/snapshot";
+import { useLeveragedTokenHistoricalData } from "../swr/useLeveragedTokenHistoricalData";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import ToastError from "../Toasts/Error";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";

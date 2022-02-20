@@ -7,10 +7,8 @@ import toast, { Toaster } from "react-hot-toast";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
-import { DEFAULT_CHAIN, useWalletContext, getEtherscanAddressURL, formatAddress } from "../Wallet";
+import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
-import { useMarket } from "../../../utils/snapshot";
-import { dollarFormatter } from "../../../utils/formatters";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import Logo from "../Logo";
 import ButtonNetworkSwitcher from "../Buttons/NetworkSwitcher";
@@ -28,6 +26,9 @@ import ButtonDepositOrWithdraw from "./ButtonDepositOrWithdraw";
 import ButtonTertiary from "../Buttons/ButtonTertiary";
 import MyAssetCard from "./LeveragedTokenMyAssetCard";
 import BackingCard from "./LeveragedTokenBackingCard";
+import InformationCard from "./LeveragedTokenInformationCard";
+import { useMarket } from "../swr/useMarket";
+import VaultInformationCard from "./VaultInformationCard";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -53,9 +54,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
 
     // Get ETHRISE metadata
     const metadata = Metadata[chainID][ethriseAddress];
-
-    // Get price external data from Risedle Snapshot
-    const { market, marketIsLoading, marketIsError } = useMarket(chainID, ethriseAddress);
 
     // Main button states
     const showConnectWallet = !account;
@@ -200,57 +198,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             {showMyAsset && <MyAssetCard address={ethriseAddress} />}
 
                             {/* Information card */}
-                            <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">
-                                <div className="pt-4">
-                                    <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">Information</h2>
-                                </div>
-                                <div className="">
-                                    <p className="text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">{metadata.informationText}</p>
-                                </div>
-                                <div className="flex flex-col space-y-6">
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Market cap</p>
-                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
-                                        {!marketIsLoading && market && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(market.leveraged_token_market_cap)}</p>}
-                                    </div>
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Leverage ratio</p>
-                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
-                                        {!marketIsLoading && market && market.leverage_ratio && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{market.leverage_ratio.toFixed(2) + "x"}</p>}
-                                    </div>
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Creation &amp; redemption fees</p>
-                                        <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">0.1%</p>
-                                    </div>
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Management fees</p>
-                                        <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-green-light-11 dark:text-green-dark-11">FREE</p>
-                                    </div>
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Underlying assets</p>
-                                        <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
-                                            {metadata.collateralSymbol}, {metadata.debtSymbol}
-                                        </p>
-                                    </div>
-                                    {/* TODO(bayu): Handle case when capacity is maxed out */}
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Capacity</p>
-                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
-                                        {!marketIsLoading && market && (
-                                            <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
-                                                <span className="text-green-light-11 dark:text-green-dark-11">{market.leveraged_token_total_collateral.toFixed(2) + metadata.collateralSymbol}</span> / {market.leveraged_token_max_total_collateral > 0 && <span>{market.leveraged_token_max_total_collateral.toFixed(2) + metadata.collateralSymbol}</span>}
-                                                {market.leveraged_token_max_total_collateral <= 0 && <span>&#8734;</span>}
-                                            </p>
-                                        )}
-                                    </div>
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Contract Address</p>
-                                        <a href={getEtherscanAddressURL(chain.chain, ethriseAddress)} target="_blank" rel="noopener noreferrer" className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
-                                            {formatAddress(ethriseAddress)} &#8599;
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                            <InformationCard address={ethriseAddress} />
 
                             {/* Backing card */}
                             <BackingCard address={ethriseAddress} />
@@ -297,31 +245,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             </div>
 
                             {/* Information card */}
-                            <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">
-                                <div className="pt-4">
-                                    <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">Information</h2>
-                                </div>
-                                <div className="">
-                                    <p className="text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">{metadata.vaultInformationText}</p>
-                                </div>
-                                <div className="flex flex-col space-y-6">
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Utilization rate</p>
-                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
-                                        {!marketIsLoading && market && market.vault_utilization_rate && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{market.vault_utilization_rate.toFixed(2) + "%"}</p>}
-                                    </div>
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Total borrowed</p>
-                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
-                                        {!marketIsLoading && market && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(market.vault_total_outstanding_debt)}</p>}
-                                    </div>
-                                    <div className="flex flex-row justify-between">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Available to withdraw</p>
-                                        {(marketIsLoading || marketIsError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
-                                        {!marketIsLoading && market && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(market.vault_total_available_cash)}</p>}
-                                    </div>
-                                </div>
-                            </div>
+                            <VaultInformationCard address={ethriseAddress} />
                         </Tabs.Content>
                     </Tabs.Root>
                     <div className="hidden sm:mt-20 sm:inline-block">

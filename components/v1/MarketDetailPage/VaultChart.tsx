@@ -1,6 +1,7 @@
 import { FunctionComponent, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
-import { Timeframe, useVaultHistoricalData } from "../../../utils/snapshot";
+import { Timeframe } from "../swr/snapshot";
+import { useVaultHistoricalData } from "../swr/useVaultHistoricalData";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 
 export type VaultChartProps = {
