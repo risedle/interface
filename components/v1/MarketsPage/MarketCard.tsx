@@ -1,14 +1,13 @@
 import { FunctionComponent, useState } from "react";
 
-// Snapshot data
-import { Timeframe, useLeveragedTokenHistoricalData } from "../../../utils/snapshot";
-
 // Formatters
 import { dollarFormatter } from "../../../utils/formatters";
 import { Metadata } from "../MarketMetadata";
 import Link from "next/link";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
+import { useLeveragedTokenHistoricalData } from "../swr/useLeveragedTokenHistoricalData";
+import { Timeframe } from "../swr/snapshot";
 
 /**
  * MarketCardProps is a React Component properties that passed to React Component MarketCard

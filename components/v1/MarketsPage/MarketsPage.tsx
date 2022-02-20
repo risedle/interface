@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
-import { useMarkets } from "../../../utils/snapshot";
 import { dollarFormatter } from "../../../utils/formatters";
 import MarketCard from "./MarketCard";
 import ButtonNetworkSwitcher from "../Buttons/NetworkSwitcher";
@@ -14,6 +13,7 @@ import Logo from "../Logo";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import MarketsPageMeta from "./MarketsPageMeta";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
+import { useMarkets } from "../swr/useMarkets";
 
 /**
  * MarketsPageProps is a React Component properties that passed to React Component MarketsPage
