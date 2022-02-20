@@ -1,6 +1,7 @@
 import { FunctionComponent, useEffect } from "react";
 import toast from "react-hot-toast";
 import { dollarFormatter } from "../../../utils/formatters";
+import LinkBasic from "../Buttons/LinkBasic";
 import { Metadata } from "../MarketMetadata";
 import { useMarket } from "../swr/useMarket";
 import ToastError from "../Toasts/Error";
@@ -86,6 +87,12 @@ const InformationCard: FunctionComponent<InformationCardProps> = ({ address }) =
                     <a href={getEtherscanAddressURL(chain.chain, address)} target="_blank" rel="noopener noreferrer" className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
                         {formatAddress(address)} &#8599;
                     </a>
+                </div>
+                {/* Link to buy on uniswap */}
+                <div className="flex flex-row justify-between">
+                    <LinkBasic href={metadata.uniswapSwapURL} full>
+                        Buy on Uniswap &#8599;
+                    </LinkBasic>
                 </div>
             </div>
         </div>
