@@ -20,7 +20,7 @@ const SubHero: FunctionComponent<SubHeroProps> = ({}) => {
                         , <br /> Do More With Risedle
                     </h1>
                 </div>
-                <h2 className="mb-24 max-w-lg text-base leading-relaxed text-gray-light-10 dark:text-gray-dark-10 sm:mb-32">No more tedious collateral health monitoring and stop worying about liquidation.</h2>
+                <h2 className="mb-24 max-w-lg text-base leading-relaxed text-gray-light-10 dark:text-gray-dark-10 sm:mb-32">No more tedious collateral health monitoring and stop worrying about liquidation.</h2>
             </div>
             <svg width="100%" viewBox="0 0 375 312" xmlns="http://www.w3.org/2000/svg" className="absolute top-24 left-1/2 z-0 max-w-3xl -translate-x-1/2  scale-75 fill-gray-light-12 opacity-50 dark:fill-white">
                 <mask id="mask0_479_18846" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="-10" y="0" width="395" height="312">

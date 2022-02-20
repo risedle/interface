@@ -45,7 +45,7 @@ export const Metadata: MarketMetadataRecord = {
             debtSymbol: "USDC",
             debtDecimals: 6, // USDC is 6 decimals
             debtAddress: "0x0af08696cb51e81456dc0a1dee7f8bfad8d82a22",
-            uniswapSwapURL: "#",
+            uniswapSwapURL: "https://app.uniswap.org/#/swap?outputCurrency=0xc4676f88663360155c2bc6d2A482E34121a50b3b&chain=kovan",
             oracleAddress: "0x1F6Ec9B472b5EB3c7aA617Ce45ea2ed4f1A2db7D",
             isETH: true,
         },
@@ -70,7 +70,7 @@ export const Metadata: MarketMetadataRecord = {
             debtSymbol: "USDC",
             debtDecimals: 6, // USDC is 6 decimals
             debtAddress: "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
-            uniswapSwapURL: "#",
+            uniswapSwapURL: "https://app.uniswap.org/#/swap?outputCurrency=0x46D06cf8052eA6FdbF71736AF33eD23686eA1452&chain=arbitrum",
             oracleAddress: "0x877bF15cAa17E4EE21236800D2D1a8dDA5B5251C",
             isETH: true,
         },
