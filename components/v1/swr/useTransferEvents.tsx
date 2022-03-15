@@ -16,9 +16,9 @@ export interface TransferEventsFetcherArgs extends TransferEventsRequest {
 }
 
 const TransferEventsFetcher = (args: TransferEventsFetcherArgs): Promise<Array<Array<Event>>> => {
-    if(args.namespace != SWRCacheNamespace.TransferEvents ) throw new Error("TransferEventsFetcher: namespace invalid");
+    if (args.namespace != SWRCacheNamespace.TransferEvents) throw new Error("TransferEventsFetcher: namespace invalid");
 
-    const TokenContract = new ethers.Contract(args.contract, erc20ABI , args.provider);
+    const TokenContract = new ethers.Contract(args.contract, erc20ABI, args.provider);
     // List of token transfer events from user's address to any other address (balance decreased)
     const transferOutFilter = TokenContract.filters.Transfer(args.account);
     // List of token transfer events to user's address from any other address (balance added)
@@ -28,16 +28,17 @@ const TransferEventsFetcher = (args: TransferEventsFetcherArgs): Promise<Array<A
     const transferIn = TokenContract.queryFilter(transferInFilter);
 
     return Promise.all([transferOut, transferIn]);
-}
+};
 
-export function useTransferEvents(req: TransferEventsRequest){
-    const { data, error } = useSWR<Array<Array<Event>>, Error>(
-        { account: req.account, contract: req.contract, provider: req.provider, namespace: SWRCacheNamespace.TransferEvents},
-        TransferEventsFetcher
-    );
+export function useTransferEvents(req: TransferEventsRequest) {
+    const { data, error } = useSWR<Array<Array<Event>>, Error>({ account: req.account, contract: req.contract, provider: req.provider, namespace: SWRCacheNamespace.TransferEvents }, TransferEventsFetcher);
     return {
-        data: data && data[0].concat(data[1]).sort((a, b) => { return a.blockNumber - b.blockNumber }),
+        data:
+            data &&
+            data[0].concat(data[1]).sort((a, b) => {
+                return a.blockNumber - b.blockNumber;
+            }),
         isLoading: !data && !error,
         error: error,
-    }
+    };
 }

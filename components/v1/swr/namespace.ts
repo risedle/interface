@@ -11,5 +11,5 @@ export enum SWRCacheNamespace {
     VaultGetTotalAvailableCash,
     VaultGetExchangeRate,
     TransferEvents,
-    TransactionHistory
+    TransactionHistory,
 }

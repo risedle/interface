@@ -32,10 +32,7 @@ function filterOutSameNAV(data: Array<LeveragedTokenDailyData> | undefined): Arr
 
 export function useLeveragedTokenDailyData(chainID: number, leveragedTokenAddress: string) {
     const endpoint = snapshotEndpoint[chainID];
-    const { data, error } = useSWR<Array<LeveragedTokenDailyData>, Error>(
-        `${endpoint}/v1/leveragedTokens/3months/${leveragedTokenAddress}`,
-        fetcher
-    );
+    const { data, error } = useSWR<Array<LeveragedTokenDailyData>, Error>(`${endpoint}/v1/leveragedTokens/3months/${leveragedTokenAddress}`, fetcher);
 
     const cleanedData = filterOutSameNAV(data);
     let dailyData: LeveragedTokenTimeframeData | undefined = undefined;

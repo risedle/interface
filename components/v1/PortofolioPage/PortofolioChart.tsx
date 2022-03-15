@@ -10,7 +10,7 @@ import ToastError from "../Toasts/Error";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { useTransferEvents } from "../swr/useTransferEvents";
 import { useTokenBalance } from "../swr/useTokenBalance";
-import { chain as Chains } from 'wagmi';
+import { chain as Chains } from "wagmi";
 import { useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
 import { Timeframe } from "../swr/snapshot";
 
@@ -40,10 +40,10 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
     const dailyData = useLeveragedTokenDailyData(chainID, address);
 
     // Get ETHRISE transfer Events
-    const ethriseEvents = useTransferEvents({account: account, contract: ethriseAddress, provider: provider});
+    const ethriseEvents = useTransferEvents({ account: account, contract: ethriseAddress, provider: provider });
 
     // Get User's Latest ETHRISE Balance
-    const ethriseBalance = useTokenBalance({account: account, token: ethriseAddress, provider: provider});
+    const ethriseBalance = useTokenBalance({ account: account, token: ethriseAddress, provider: provider });
     const formattedEthriseBalance = tokenBalanceFormatter.format(parseFloat(ethers.utils.formatUnits(ethriseBalance.data ? ethriseBalance.data : 0)));
 
     // Local states
@@ -55,27 +55,27 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
 
     // Parse data
     const latestNAV = parseFloat(ethers.utils.formatUnits(navResponse.data ? navResponse.data : 0, metadata.debtDecimals)) * formattedEthriseBalance;
-    const latestChange = currentData && formattedEthriseBalance !== 0 ? ((latestNAV - (currentData.oldestNAV * formattedEthriseBalance)) / (currentData.oldestNAV * formattedEthriseBalance)) * 100 : 0;
+    const latestChange = currentData && formattedEthriseBalance !== 0 ? ((latestNAV - currentData.oldestNAV * formattedEthriseBalance) / (currentData.oldestNAV * formattedEthriseBalance)) * 100 : 0;
 
     // Compare event data & daily data
     const portofolioData = currentData?.data.map((data) => {
         let portofolioBalance = 0;
-        
+
         ethriseEvents.data?.forEach((event) => {
-            if(event.blockNumber <= data.block_number){
-                if(event.args!.to === account){
-                    portofolioBalance += parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0)) 
-                } else if(event.args!.from === account){
-                    portofolioBalance -= parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0))
+            if (event.blockNumber <= data.block_number) {
+                if (event.args!.to === account) {
+                    portofolioBalance += parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0));
+                } else if (event.args!.from === account) {
+                    portofolioBalance -= parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0));
                 }
             }
-        })
-        
+        });
+
         return {
             nav: portofolioBalance * data.nav,
-            timestamp: data.timestamp
-        }
-    })
+            timestamp: data.timestamp,
+        };
+    });
 
     // Make sure the state is correct
     if (!currentData && dailyData.twoWeekly) {
@@ -168,7 +168,7 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
                                         const formattedDate = new Intl.DateTimeFormat("en-US", { hour: "numeric", day: "numeric", month: "short", year: "numeric", minute: "numeric" }).format(date);
 
                                         setNAV(selectedData.nav);
-                                        const change = formattedEthriseBalance === 0 ? 0 : ((selectedData.nav - (currentData.oldestNAV * formattedEthriseBalance)) / (currentData.oldestNAV * formattedEthriseBalance)) * 100;
+                                        const change = formattedEthriseBalance === 0 ? 0 : ((selectedData.nav - currentData.oldestNAV * formattedEthriseBalance) / (currentData.oldestNAV * formattedEthriseBalance)) * 100;
                                         setNAVChange(change);
 
                                         return <div className="text-xs text-gray-light-10 dark:text-gray-dark-10">{formattedDate}</div>;
@@ -193,7 +193,7 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
                             if (dailyData.daily) {
                                 setCurrentData(dailyData.daily);
                                 setNAV(latestNAV);
-                                setNAVChange(((latestNAV - (dailyData.daily.oldestNAV * formattedEthriseBalance)) / (dailyData.daily.oldestNAV * formattedEthriseBalance)) * 100);
+                                setNAVChange(((latestNAV - dailyData.daily.oldestNAV * formattedEthriseBalance) / (dailyData.daily.oldestNAV * formattedEthriseBalance)) * 100);
                             }
                         }}
                     >
@@ -208,7 +208,7 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
                             if (dailyData.weekly) {
                                 setCurrentData(dailyData.weekly);
                                 setNAV(latestNAV);
-                                setNAVChange(((latestNAV - (dailyData.weekly.oldestNAV * formattedEthriseBalance)) / (dailyData.weekly.oldestNAV * formattedEthriseBalance)) * 100);
+                                setNAVChange(((latestNAV - dailyData.weekly.oldestNAV * formattedEthriseBalance) / (dailyData.weekly.oldestNAV * formattedEthriseBalance)) * 100);
                             }
                         }}
                     >
@@ -223,7 +223,7 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
                             if (dailyData.twoWeekly) {
                                 setCurrentData(dailyData.twoWeekly);
                                 setNAV(latestNAV);
-                                setNAVChange(((latestNAV - (dailyData.twoWeekly.oldestNAV * formattedEthriseBalance)) / (dailyData.twoWeekly.oldestNAV * formattedEthriseBalance)) * 100);
+                                setNAVChange(((latestNAV - dailyData.twoWeekly.oldestNAV * formattedEthriseBalance) / (dailyData.twoWeekly.oldestNAV * formattedEthriseBalance)) * 100);
                             }
                         }}
                     >
@@ -238,7 +238,7 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
                             if (dailyData.monthly) {
                                 setCurrentData(dailyData.monthly);
                                 setNAV(latestNAV);
-                                setNAVChange(((latestNAV - (dailyData.monthly.oldestNAV * formattedEthriseBalance)) / (dailyData.monthly.oldestNAV * formattedEthriseBalance)) * 100);
+                                setNAVChange(((latestNAV - dailyData.monthly.oldestNAV * formattedEthriseBalance) / (dailyData.monthly.oldestNAV * formattedEthriseBalance)) * 100);
                             }
                         }}
                     >
@@ -253,7 +253,7 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
                             if (dailyData.threeMonthly) {
                                 setCurrentData(dailyData.threeMonthly);
                                 setNAV(latestNAV);
-                                setNAVChange(((latestNAV - (dailyData.threeMonthly.oldestNAV * formattedEthriseBalance)) / (dailyData.threeMonthly.oldestNAV * formattedEthriseBalance)) * 100);
+                                setNAVChange(((latestNAV - dailyData.threeMonthly.oldestNAV * formattedEthriseBalance) / (dailyData.threeMonthly.oldestNAV * formattedEthriseBalance)) * 100);
                             }
                         }}
                     >
