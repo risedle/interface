@@ -8,7 +8,7 @@
         "deploy": "next build && next export",
         "start": "next start",
         "lint": "next lint",
-        "storybook": "start-storybook -p 6006",
+        "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
         "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook",
         "prettier-check": "prettier --check .",
         "prettier-write": "prettier --write ."
