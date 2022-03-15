@@ -8,7 +8,7 @@
         "deploy": "next build && next export",
         "start": "next start",
         "lint": "next lint",
-        "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
+        "storybook": "start-storybook -p 6006",
         "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook",
         "prettier-check": "prettier --check .",
         "prettier-write": "prettier --write ."
@@ -24,6 +24,7 @@
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-hot-toast": "2.2.0",
+        "react-popper": "^2.2.5",
         "recharts": "2.1.8",
         "swr": "1.1.2",
         "use-persisted-state": "0.3.3",
