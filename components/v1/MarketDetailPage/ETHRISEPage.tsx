@@ -109,7 +109,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
 
                 <div className="mb-20 flex flex-col sm:z-10 sm:mb-0">
                     {/* Market header on the desktop; Only show this on w > 640px */}
-                    <div className="m-auto mt-12 mb-14 flex hidden flex-col space-y-6 text-center sm:inline-block">
+                    {/* <div className="m-auto mt-12 mb-14 flex hidden flex-col space-y-6 text-center sm:inline-block">
                         <div>
                             <img src={metadata.logo} alt={metadata.title} className="m-auto h-[64px] w-[64px]" />
                         </div>
@@ -117,34 +117,11 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             <h1 className="m-0 text-[32px] font-bold leading-none tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.title} Market</h1>
                             <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">{metadata.description}</p>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Market tabs and content */}
-                    <Tabs.Root defaultValue="leverage" className="px-4">
-                        <div className="mx-auto mb-6 hidden grid-cols-4 place-content-between gap-2 sm:grid sm:max-w-[540px]">
-                            <div className="place-self-center">
-                                <Link href={"/markets"}>
-                                    <a>
-                                        <ButtonTertiary>
-                                            <span className="mr-2">&#8592;</span>Markets
-                                        </ButtonTertiary>
-                                    </a>
-                                </Link>
-                            </div>
-                            <div className="col-span-2 mx-auto">
-                                <Tabs.List aria-label="ETHRISE" className="flex flex-row rounded-[12px] bg-gray-light-3 p-1 dark:bg-gray-dark-2 sm:min-w-[253px] sm:max-w-[253px]">
-                                    <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
-                                        Leverage
-                                    </Tabs.Trigger>
-                                    <Tabs.Trigger value="lend" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
-                                        Lend
-                                    </Tabs.Trigger>
-                                </Tabs.List>
-                            </div>
-                        </div>
-
-                        {/* For Mobile Layout */}
-                        <Tabs.List aria-label="ETHRISE" className="mx-auto mb-6 flex flex-row rounded-[12px] bg-gray-light-3 p-1 dark:bg-gray-dark-2 sm:hidden sm:max-w-[253px]">
+                    <Tabs.Root defaultValue="leverage" className="px-4 sm:px-28 outline-0 sm:mt-10">
+                        <Tabs.List aria-label="ETHRISE" className="mb-6 flex flex-row rounded-[12px] bg-gray-light-3 p-1 dark:bg-gray-dark-2 sm:max-w-[253px]">
                             <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
                                 Leverage
                             </Tabs.Trigger>
@@ -154,56 +131,63 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                         </Tabs.List>
 
                         {/* Leverage tab */}
-                        <Tabs.Content value="leverage" className="mx-auto flex flex-col space-y-6 focus:outline-none sm:max-w-[540px]">
-                            {/* Price info card */}
-                            <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2 ">
-                                {/* Title, subtitle and lgoo */}
-                                <div className="flex flex-row items-center justify-between p-4">
-                                    <div className="sflex grow flex-col space-y-2">
-                                        <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>
-                                        <h1 className="m-0 text-2xl font-bold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.title}</h1>
+                        <Tabs.Content value="leverage" className="mx-auto flex flex-col space-y-6 outline-0 sm:grid sm:grid-cols-2 sm:gap-[24px] sm:space-y-0">
+                            {/* Left Column */}
+                            <div>
+                                {/* Price info card */}
+                                <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2 ">
+                                    {/* Title, subtitle and lgoo */}
+                                    <div className="flex flex-row items-center justify-between p-4">
+                                        <div className="sflex grow flex-col space-y-2">
+                                            <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>
+                                            <h1 className="m-0 text-2xl font-bold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.title}</h1>
+                                        </div>
+                                        <img className="h-[48px] w-[48px]" src={metadata.logo} alt={metadata.title} />
                                     </div>
-                                    <img className="h-[48px] w-[48px] sm:hidden" src={metadata.logo} alt={metadata.title} />
-                                </div>
 
-                                <LeveragedTokenChart address={ethriseAddress} />
+                                    <LeveragedTokenChart address={ethriseAddress} />
 
-                                {/* Mint & Redeem Button */}
-                                <div className="p-4">
-                                    {/* Show Connect wallet to mint or redeem */}
-                                    {showConnectWallet && <ButtonDisabled full>Connect wallet to Mint or Redeem</ButtonDisabled>}
+                                    {/* Mint & Redeem Button */}
+                                    <div className="p-4">
+                                        {/* Show Connect wallet to mint or redeem */}
+                                        {showConnectWallet && <ButtonDisabled full>Connect wallet to Mint or Redeem</ButtonDisabled>}
 
-                                    {/* Show switch network */}
-                                    {showSwitchNetwork && (
-                                        <ButtonSwitchNetwork
-                                            onClick={() => {
-                                                if (switchNetwork) {
-                                                    switchNetwork(DEFAULT_CHAIN.id);
-                                                } else {
-                                                    toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);
-                                                }
-                                            }}
-                                            chainName={DEFAULT_CHAIN.name}
-                                        />
-                                    )}
+                                        {/* Show switch network */}
+                                        {showSwitchNetwork && (
+                                            <ButtonSwitchNetwork
+                                                onClick={() => {
+                                                    if (switchNetwork) {
+                                                        switchNetwork(DEFAULT_CHAIN.id);
+                                                    } else {
+                                                        toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);
+                                                    }
+                                                }}
+                                                chainName={DEFAULT_CHAIN.name}
+                                            />
+                                        )}
 
-                                    {/* Show mint or redeem */}
-                                    {showAction && <ButtonMintOrRedeem address={ethriseAddress} />}
+                                        {/* Show mint or redeem */}
+                                        {showAction && <ButtonMintOrRedeem address={ethriseAddress} />}
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* My Asset card */}
-                            {showMyAsset && <MyAssetCard address={ethriseAddress} />}
+                            {/* Right Column */}
+                            <div className="flex flex-col space-y-6">
+                                {/* My Asset card */}
+                                {showMyAsset && <MyAssetCard address={ethriseAddress} />}
 
-                            {/* Information card */}
-                            <InformationCard address={ethriseAddress} />
+                                {/* Information card */}
+                                <InformationCard address={ethriseAddress} />
 
-                            {/* Backing card */}
-                            <BackingCard address={ethriseAddress} />
+                                {/* Backing card */}
+                                <BackingCard address={ethriseAddress} />
+                            </div>
+                            
                         </Tabs.Content>
 
                         {/* Lend tab */}
-                        <Tabs.Content value="lend" className="mx-auto flex max-w-[540px] flex-col space-y-6 focus:outline-none">
+                        <Tabs.Content value="lend" className="flex flex-col space-y-6 outline-0 sm:grid sm:grid-cols-2 sm:gap-[24px] sm:space-y-0">
                             {/* APY info card */}
                             <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2">
                                 {/* Title, subtitle and lgoo */}
@@ -212,7 +196,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{metadata.subtitle}</p>
                                         <h1 className="m-0 text-2xl font-bold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.vaultTitle}</h1>
                                     </div>
-                                    <img className="h-[48px] w-[48px] sm:hidden" src={metadata.vaultLogo} alt={`rv${metadata.collateralSymbol}${metadata.debtSymbol}`} />
+                                    <img className="h-[48px] w-[48px]" src={metadata.vaultLogo} alt={`rv${metadata.collateralSymbol}${metadata.debtSymbol}`} />
                                 </div>
 
                                 {/* Supply & Borrow APY Chart */}
@@ -243,7 +227,9 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             </div>
 
                             {/* Information card */}
-                            <VaultInformationCard address={ethriseAddress} />
+                            <div>
+                                <VaultInformationCard address={ethriseAddress} />
+                            </div>
                         </Tabs.Content>
                     </Tabs.Root>
                     <div className="hidden sm:mt-20 sm:inline-block">
