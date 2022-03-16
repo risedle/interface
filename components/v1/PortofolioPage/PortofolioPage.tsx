@@ -1,4 +1,4 @@
-import type { FunctionComponent } from "react";
+import { FunctionComponent, useMemo } from "react";
 import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
@@ -68,7 +68,9 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
 
     // Get transaction history
     const transactionHistory = useTransactionHistory({ account: account, contract: ethriseAddress, provider: provider });
-
+    const isHavePortofolio = useMemo(() => {
+        return transactionHistory.data && transactionHistory.data.length > 0;
+    }, [transactionHistory]);
     return (
         <>
             <div className="relative flex h-full min-h-screen w-full flex-col overflow-hidden bg-gray-light-1 font-inter dark:bg-gray-dark-1">
