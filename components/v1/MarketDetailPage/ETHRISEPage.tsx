@@ -88,7 +88,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                     </div> */}
 
                     {/* Market tabs and content */}
-                    <Tabs.Root defaultValue="leverage" className="px-4 sm:px-28 outline-0 sm:mt-10">
+                    <Tabs.Root defaultValue="leverage" className="px-4 outline-0 sm:mt-10 sm:px-28">
                         <Tabs.List aria-label="ETHRISE" className="mb-6 flex flex-row rounded-[12px] bg-gray-light-3 p-1 dark:bg-gray-dark-2 sm:max-w-[253px]">
                             <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
                                 Leverage
@@ -151,7 +151,6 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                 {/* Backing card */}
                                 <BackingCard address={ethriseAddress} />
                             </div>
-                            
                         </Tabs.Content>
 
                         {/* Lend tab */}

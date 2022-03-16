@@ -14,7 +14,7 @@ import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import MarketsPageMeta from "./MarketsPageMeta";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { useMarkets } from "../swr/useMarkets";
-import Navigation from "../Navigation"
+import Navigation from "../Navigation";
 
 /**
  * MarketsPageProps is a React Component properties that passed to React Component MarketsPage
