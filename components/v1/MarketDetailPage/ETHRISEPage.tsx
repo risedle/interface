@@ -73,7 +73,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                 </Head>
                 <Favicon />
 
-                <Navigation marketsActive portofolioActive/>
+                <Navigation marketsActive portofolioActive />
 
                 <div className="mb-20 flex flex-col sm:z-10 sm:mb-0">
                     {/* Market header on the desktop; Only show this on w > 640px */}

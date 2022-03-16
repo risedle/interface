@@ -81,7 +81,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                 </Head>
                 <Favicon />
 
-                <Navigation portofolioActive/>
+                <Navigation portofolioActive />
 
                 <div className="mb-20 flex flex-col px-4 outline-0 sm:z-10 sm:mt-12 sm:mb-0 lg:px-28">
                     <div className="mx-auto flex w-full flex-col space-y-6 outline-0 sm:grid sm:grid-cols-2 sm:gap-[24px] sm:space-y-0">

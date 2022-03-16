@@ -9,8 +9,8 @@ import Logo from "./Logo";
  * NavigationProps is a React Component properties that passed to React Component Navigation
  */
 type NavigationProps = {
-    marketsActive?: boolean,
-    portofolioActive?: boolean
+    marketsActive?: boolean;
+    portofolioActive?: boolean;
 };
 
 /**
@@ -18,7 +18,7 @@ type NavigationProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const Navigation: FunctionComponent<NavigationProps> = ({marketsActive, portofolioActive}) => {
+const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portofolioActive }) => {
     return (
         <div className="container z-10 mx-auto max-w-full sm:z-20">
             <div className="grid grid-cols-3 place-items-center content-center p-4">
@@ -32,14 +32,10 @@ const Navigation: FunctionComponent<NavigationProps> = ({marketsActive, portofol
                 </div>
                 <div className="space-x-4">
                     <Link href="/markets">
-                        <a className={marketsActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>
-                            Markets
-                        </a>
+                        <a className={marketsActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>Markets</a>
                     </Link>
                     <Link href="/portofolio">
-                        <a className={portofolioActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>
-                            Portofolio
-                        </a>
+                        <a className={portofolioActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>Portofolio</a>
                     </Link>
                 </div>
                 <div className="inline-block flex flex-row space-x-2 justify-self-end">

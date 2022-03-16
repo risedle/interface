@@ -48,7 +48,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
             </Head>
             <Favicon />
 
-            <Navigation marketsActive/>
+            <Navigation marketsActive />
 
             <div className="z-10 flex min-h-screen flex-col">
                 {/* Headers */}
