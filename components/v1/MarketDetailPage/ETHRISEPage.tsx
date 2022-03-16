@@ -29,6 +29,7 @@ import BackingCard from "./LeveragedTokenBackingCard";
 import InformationCard from "./LeveragedTokenInformationCard";
 import { useMarket } from "../swr/useMarket";
 import VaultInformationCard from "./VaultInformationCard";
+import Navigation from "../Navigation";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -72,40 +73,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                 </Head>
                 <Favicon />
 
-                {/* Navigation */}
-                <div className="container z-10 mx-auto max-w-full sm:z-20">
-                    <div className="grid grid-cols-3 content-center place-items-center p-4">
-                        <div className="justify-self-start">
-                            <Link href="/">
-                                <a className="flex items-center">
-                                    <Logo />
-                                    <span className="hidden sm:block traking-tight leading-0 self-center pl-2 font-inter text-base font-bold text-gray-light-12 dark:text-gray-light-1">Risedle</span>
-                                </a>
-                            </Link>
-                        </div>
-                        <div className="space-x-4 text-sm text-gray-light-12 dark:text-gray-dark-12">
-                            <Link href="/markets">
-                                <a>Markets</a>
-                            </Link>
-                            <Link href="/portofolio">
-                                <a>Portofolio</a>
-                            </Link>
-                        </div>
-                        <div className="justify-self-end inline-block flex flex-row space-x-2">
-                            <div className="hidden sm:inline-block">
-                                <ButtonNetworkSwitcher />
-                            </div>
-
-                            <div className="hidden sm:inline-block">
-                                <ButtonConnectWalletDesktop />
-                            </div>
-
-                            <div className="inline-block h-[40px]">
-                                <ButtonThemeSwitcher />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Navigation />
 
                 <div className="mb-20 flex flex-col sm:z-10 sm:mb-0">
                     {/* Market header on the desktop; Only show this on w > 640px */}
