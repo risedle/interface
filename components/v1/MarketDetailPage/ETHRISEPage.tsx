@@ -99,7 +99,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                         </Tabs.List>
 
                         {/* Leverage tab */}
-                        <Tabs.Content value="leverage" className="mx-auto flex flex-col space-y-6 outline-0 lg:grid lg:grid-cols-2 sm:gap-[24px] sm:space-y-0">
+                        <Tabs.Content value="leverage" className="mx-auto flex flex-col space-y-6 outline-0 sm:gap-[24px] sm:space-y-0 lg:grid lg:grid-cols-2">
                             {/* Left Column */}
                             <div>
                                 {/* Price info card */}
@@ -154,7 +154,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                         </Tabs.Content>
 
                         {/* Lend tab */}
-                        <Tabs.Content value="lend" className="flex flex-col space-y-6 outline-0 lg:grid lg:grid-cols-2 sm:gap-[24px] sm:space-y-0">
+                        <Tabs.Content value="lend" className="flex flex-col space-y-6 outline-0 sm:gap-[24px] sm:space-y-0 lg:grid lg:grid-cols-2">
                             {/* APY info card */}
                             <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2">
                                 {/* Title, subtitle and lgoo */}
