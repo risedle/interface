@@ -13,6 +13,7 @@ import { useTokenBalance } from "../swr/useTokenBalance";
 import { chain as Chains } from "wagmi";
 import { useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
 import { Timeframe } from "../swr/snapshot";
+import Link from "next/link";
 
 export type PortofolioChartProps = {
     address: string; // Leveraged token address
@@ -200,7 +201,9 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address, isH
             {/* Timeframe selector */}
 
             {!isHavePortofolio ? (
-                <button className="inline-block flex w-full flex-row items-center justify-center space-x-2 rounded-full border border-blue-light-11 bg-blue-light-10 py-[11px] px-4 text-center text-sm font-semibold leading-4 leading-4 tracking-[-0.02em] text-gray-light-1 dark:border-blue-dark-11 dark:bg-blue-dark-10 dark:text-blue-light-1">Open Market</button>
+                <Link href={"/markets"} passHref>
+                    <button className="inline-block flex w-full flex-row items-center justify-center space-x-2 rounded-full border border-blue-light-11 bg-blue-light-10 py-[11px] px-4 text-center text-sm font-semibold leading-4 leading-4 tracking-[-0.02em] text-gray-light-1 dark:border-blue-dark-11 dark:bg-blue-dark-10 dark:text-blue-light-1">Open Market</button>
+                </Link>
             ) : (
                 <div className="mt-2 flex flex-row items-center px-4">
                     <div className="basis-1/5 text-center">
