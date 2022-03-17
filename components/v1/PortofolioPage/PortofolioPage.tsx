@@ -22,6 +22,7 @@ import { ethers } from "ethers";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import { useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
 import Footer from "../Footer";
+import { TablePlaceHolder } from "./TablePlaceHolder";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -128,7 +129,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                         <h1 className="m-0 text-2xl font-bold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">Portofolio</h1>
                                     </div>
                                 </div>
-                                <PortofolioChart address={ethriseAddress} />
+                                <PortofolioChart address={ethriseAddress} isHavePortofolio={isHavePortofolio} />
                             </div>
                         </div>
                         {/* Right Column: Assets Info*/}
@@ -151,17 +152,21 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                         </thead>
                                         <tbody>
                                             {/* TODO(Matthew): Use map if there are more than 1 Leveraged token */}
-                                            <tr className="text-right text-sm font-semibold">
-                                                <td className="flex items-center space-x-4 text-left">
-                                                    <img className="h-[40px] w-[40px]" src={metadata.logo} alt={metadata.title} />
-                                                    <p className="text-gray-light-12 dark:text-gray-dark-12">{metadata.title}</p>
-                                                </td>
-                                                <td className="text-gray-light-10 dark:text-gray-dark-10">
-                                                    {formattedEthriseBalance.toFixed(2)} {metadata.title}
-                                                </td>
-                                                <td className="text-green-light-11 dark:text-green-dark-11">-</td>
-                                                <td className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * formattedEthriseBalance)}</td>
-                                            </tr>
+                                            {isHavePortofolio ? (
+                                                <tr className="text-right text-sm font-semibold ">
+                                                    <td className="flex items-center space-x-4 text-left">
+                                                        <img className="h-[40px] w-[40px]" src={metadata.logo} alt={metadata.title} />
+                                                        <p className="text-gray-light-12 dark:text-gray-dark-12">{metadata.title}</p>
+                                                    </td>
+                                                    <td className="text-gray-light-10 dark:text-gray-dark-10">
+                                                        {formattedEthriseBalance.toFixed(2)} {metadata.title}
+                                                    </td>
+                                                    <td className="text-green-light-11 dark:text-green-dark-11">-</td>
+                                                    <td className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * formattedEthriseBalance)}</td>
+                                                </tr>
+                                            ) : (
+                                                <TablePlaceHolder />
+                                            )}
                                         </tbody>
                                     </table>
                                 </div>
@@ -182,18 +187,22 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {isHavePortofolio ? (
+                                                <tr className="text-right text-sm font-semibold">
+                                                    <td className="flex items-center space-x-4 text-left">
+                                                        <img className="h-[40px] w-[40px]" src={metadata.vaultLogo} alt={metadata.title} />
+                                                        <p className="text-gray-light-12 dark:text-gray-dark-12">{metadata.vaultTitle}</p>
+                                                    </td>
+                                                    <td className="text-gray-light-10 dark:text-gray-dark-10">
+                                                        {formattedRvEthriseUsdcBalance.toFixed(2)} {metadata.vaultTitle}
+                                                    </td>
+                                                    <td className="text-green-light-11 dark:text-green-dark-11">-</td>
+                                                    <td className="text-gray-light-12 dark:text-gray-dark-12">-</td>
+                                                </tr>
+                                            ) : (
+                                                <TablePlaceHolder />
+                                            )}
                                             {/* TODO(Matthew): Use map if there are more than 1 Leveraged token */}
-                                            <tr className="text-right text-sm font-semibold">
-                                                <td className="flex items-center space-x-4 text-left">
-                                                    <img className="h-[40px] w-[40px]" src={metadata.vaultLogo} alt={metadata.title} />
-                                                    <p className="text-gray-light-12 dark:text-gray-dark-12">{metadata.vaultTitle}</p>
-                                                </td>
-                                                <td className="text-gray-light-10 dark:text-gray-dark-10">
-                                                    {formattedRvEthriseUsdcBalance.toFixed(2)} {metadata.vaultTitle}
-                                                </td>
-                                                <td className="text-green-light-11 dark:text-green-dark-11">-</td>
-                                                <td className="text-gray-light-12 dark:text-gray-dark-12">-</td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -213,25 +222,29 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {transactionHistory.data
-                                                ?.sort((a, b) => {
-                                                    return b.date.getTime() - a.date.getTime();
-                                                })
-                                                .map((item) => {
-                                                    return (
-                                                        <tr className="text-right text-sm font-semibold" key={item.date.getTime()}>
-                                                            <td className="flex items-center space-x-4 pb-4 text-left">
-                                                                <img className="h-[40px] w-[40px]" src={metadata.logo} alt={metadata.title} />
-                                                                <div>
-                                                                    <p className="text-gray-light-12 dark:text-gray-dark-12">{item.type}</p>
-                                                                    <p className="text-gray-light-10 dark:text-gray-dark-10">{item.date.toDateString()}</p>
-                                                                </div>
-                                                            </td>
-                                                            <td className="text-gray-light-10 dark:text-gray-dark-10">{item.value}</td>
-                                                            <td className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * parseFloat(item.value))}</td>
-                                                        </tr>
-                                                    );
-                                                })}
+                                            {isHavePortofolio ? (
+                                                transactionHistory.data
+                                                    ?.sort((a, b) => {
+                                                        return b.date.getTime() - a.date.getTime();
+                                                    })
+                                                    .map((item) => {
+                                                        return (
+                                                            <tr className="text-right text-sm font-semibold" key={item.date.getTime()}>
+                                                                <td className="flex items-center space-x-4 pb-4 text-left">
+                                                                    <img className="h-[40px] w-[40px]" src={metadata.logo} alt={metadata.title} />
+                                                                    <div>
+                                                                        <p className="text-gray-light-12 dark:text-gray-dark-12">{item.type}</p>
+                                                                        <p className="text-gray-light-10 dark:text-gray-dark-10">{item.date.toDateString()}</p>
+                                                                    </div>
+                                                                </td>
+                                                                <td className="text-gray-light-10 dark:text-gray-dark-10">{item.value}</td>
+                                                                <td className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * parseFloat(item.value))}</td>
+                                                            </tr>
+                                                        );
+                                                    })
+                                            ) : (
+                                                <TablePlaceHolder />
+                                            )}
                                         </tbody>
                                     </table>
                                 </div>

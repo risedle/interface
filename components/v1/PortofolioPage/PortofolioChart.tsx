@@ -16,6 +16,7 @@ import { Timeframe } from "../swr/snapshot";
 
 export type PortofolioChartProps = {
     address: string; // Leveraged token address
+    isHavePortofolio?: boolean;
 };
 
 // ETHRISE Token ids
@@ -24,7 +25,7 @@ const ETHRISEAddresses = {
     [Chains.arbitrumOne.id]: "0x46D06cf8052eA6FdbF71736AF33eD23686eA1452",
 };
 
-const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) => {
+const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address, isHavePortofolio }) => {
     // Global states
     const { chain, provider, account } = useWalletContext();
     const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
@@ -112,7 +113,7 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
     return (
         <div className="relative">
             {/* Price & Change */}
-            {navChange === 0 && (
+            {!isHavePortofolio && (
                 <div className="absolute top-1/2 left-1/2 m-0 w-full -translate-y-1/2 -translate-x-1/2  text-center">
                     <div className="relative left-1/2 w-fit -translate-x-1/2 rounded-md px-4 py-2 dark:bg-gray-dark-3">
                         <h1 className="text-xs text-gray-light-10">You don’t have any assets</h1>
@@ -131,12 +132,12 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
                     {showNAVSkeleton && <div className="h-4 animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></div>}
                     {showRealNavData && (
                         <div className="flex h-[16px] flex-row items-center">
-                            {navChange !== 0 && (
+                            {isHavePortofolio && (
                                 <>
-                                    <svg className={navChange > 0 ? "inline-block fill-green-light-11 dark:fill-green-dark-11" : "hidden"} width="14" height="14" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
+                                    <svg className={isHavePortofolio ? "inline-block fill-green-light-11 dark:fill-green-dark-11" : "hidden"} width="14" height="14" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
                                         <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 2.14645C7.34171 1.95118 7.65829 1.95118 7.85355 2.14645L11.8536 6.14645C12.0488 6.34171 12.0488 6.65829 11.8536 6.85355C11.6583 7.04882 11.3417 7.04882 11.1464 6.85355L8 3.70711L8 12.5C8 12.7761 7.77614 13 7.5 13C7.22386 13 7 12.7761 7 12.5L7 3.70711L3.85355 6.85355C3.65829 7.04882 3.34171 7.04882 3.14645 6.85355C2.95118 6.65829 2.95118 6.34171 3.14645 6.14645L7.14645 2.14645Z" />
                                     </svg>
-                                    <svg className={navChange > 0 ? "hidden" : "inline-block fill-red-light-11 dark:fill-red-dark-11"} width="13" height="13" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
+                                    <svg className={isHavePortofolio ? "hidden" : "inline-block fill-red-light-11 dark:fill-red-dark-11"} width="13" height="13" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
                                         <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 12.8536C7.34171 13.0488 7.65829 13.0488 7.85355 12.8536L11.8536 8.85355C12.0488 8.65829 12.0488 8.34171 11.8536 8.14645C11.6583 7.95118 11.3417 7.95118 11.1464 8.14645L8 11.2929L8 2.5C8 2.22386 7.77614 2 7.5 2C7.22386 2 7 2.22386 7 2.5L7 11.2929L3.85355 8.14645C3.65829 7.95118 3.34171 7.95118 3.14645 8.14645C2.95118 8.34171 2.95118 8.65829 3.14645 8.85355L7.14645 12.8536Z" />
                                     </svg>
                                 </>
@@ -198,7 +199,7 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
             </div>
             {/* Timeframe selector */}
 
-            {navChange === 0 ? (
+            {!isHavePortofolio ? (
                 <button className="inline-block flex w-full flex-row items-center justify-center space-x-2 rounded-full border border-blue-light-11 bg-blue-light-10 py-[11px] px-4 text-center text-sm font-semibold leading-4 leading-4 tracking-[-0.02em] text-gray-light-1 dark:border-blue-dark-11 dark:bg-blue-dark-10 dark:text-blue-light-1">Open Market</button>
             ) : (
                 <div className="mt-2 flex flex-row items-center px-4">
