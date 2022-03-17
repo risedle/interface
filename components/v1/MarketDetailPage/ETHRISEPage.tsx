@@ -75,21 +75,10 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
 
                 <Navigation marketsActive portofolioActive />
 
-                <div className="mb-20 flex flex-col sm:z-10 sm:mb-0">
-                    {/* Market header on the desktop; Only show this on w > 640px */}
-                    {/* <div className="m-auto mt-12 mb-14 flex hidden flex-col space-y-6 text-center sm:inline-block">
-                        <div>
-                            <img src={metadata.logo} alt={metadata.title} className="m-auto h-[64px] w-[64px]" />
-                        </div>
-                        <div className="flex flex-col space-y-2">
-                            <h1 className="m-0 text-[32px] font-bold leading-none tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.title} Market</h1>
-                            <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">{metadata.description}</p>
-                        </div>
-                    </div> */}
-
+                <div className="mb-20 flex flex-grow flex-col sm:z-10 sm:mb-0">
                     {/* Market tabs and content */}
-                    <Tabs.Root defaultValue="leverage" className="px-4 outline-0 sm:mt-10 sm:px-14 lg:px-28">
-                        <Tabs.List aria-label="ETHRISE" className="mb-6 flex flex-row rounded-[12px] bg-gray-light-3 p-1 dark:bg-gray-dark-2 sm:max-w-[253px]">
+                    <Tabs.Root defaultValue="leverage" className="px-4 outline-0 sm:mx-auto sm:mt-10">
+                        <Tabs.List aria-label="ETHRISE" className="mb-6 flex flex-row rounded-[12px] bg-gray-light-3 p-1 dark:bg-gray-dark-2 sm:max-w-[343px]">
                             <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
                                 Leverage
                             </Tabs.Trigger>
@@ -101,7 +90,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                         {/* Leverage tab */}
                         <Tabs.Content value="leverage" className="mx-auto flex flex-col space-y-6 outline-0 sm:gap-[24px] sm:space-y-0 lg:grid lg:grid-cols-2">
                             {/* Left Column */}
-                            <div>
+                            <div className="max-w-[540px]">
                                 {/* Price info card */}
                                 <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2 ">
                                     {/* Title, subtitle and lgoo */}
@@ -141,7 +130,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             </div>
 
                             {/* Right Column */}
-                            <div className="flex flex-col space-y-6">
+                            <div className="flex max-w-[540px] flex-col space-y-6">
                                 {/* My Asset card */}
                                 {showMyAsset && <MyAssetCard address={ethriseAddress} />}
 
@@ -156,7 +145,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                         {/* Lend tab */}
                         <Tabs.Content value="lend" className="flex flex-col space-y-6 outline-0 sm:gap-[24px] sm:space-y-0 lg:grid lg:grid-cols-2">
                             {/* APY info card */}
-                            <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2">
+                            <div className="flex w-full max-w-[540px] flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2">
                                 {/* Title, subtitle and lgoo */}
                                 <div className="flex flex-row items-center justify-between p-4">
                                     <div className="sflex grow flex-col space-y-2">
@@ -194,16 +183,15 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             </div>
 
                             {/* Information card */}
-                            <div>
+                            <div className="max-w-[540px]">
                                 <VaultInformationCard address={ethriseAddress} />
                             </div>
                         </Tabs.Content>
                     </Tabs.Root>
-                    <div className="hidden sm:mt-20 sm:inline-block">
-                        <Footer />
-                    </div>
                 </div>
-
+                <div className="hidden sm:mt-20 sm:inline-block">
+                    <Footer />
+                </div>
                 <BackgroundGradient />
             </div>
 
