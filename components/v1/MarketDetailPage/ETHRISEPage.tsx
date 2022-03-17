@@ -88,7 +88,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                     </div> */}
 
                     {/* Market tabs and content */}
-                    <Tabs.Root defaultValue="leverage" className="px-4 outline-0 sm:mt-10 sm:px-28">
+                    <Tabs.Root defaultValue="leverage" className="px-4 outline-0 sm:mt-10 sm:px-14 lg:px-28">
                         <Tabs.List aria-label="ETHRISE" className="mb-6 flex flex-row rounded-[12px] bg-gray-light-3 p-1 dark:bg-gray-dark-2 sm:max-w-[253px]">
                             <Tabs.Trigger value="leverage" className="basis-1/2 rounded-[8px] text-sm leading-4 text-gray-light-10 state-active:bg-gray-light-1 state-active:py-[12px] state-active:font-bold state-active:text-gray-light-12 dark:text-gray-dark-10 state-active:dark:bg-gray-dark-4 state-active:dark:text-gray-dark-12">
                                 Leverage
@@ -99,7 +99,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                         </Tabs.List>
 
                         {/* Leverage tab */}
-                        <Tabs.Content value="leverage" className="mx-auto flex flex-col space-y-6 outline-0 sm:grid sm:grid-cols-2 sm:gap-[24px] sm:space-y-0">
+                        <Tabs.Content value="leverage" className="mx-auto flex flex-col space-y-6 outline-0 lg:grid lg:grid-cols-2 sm:gap-[24px] sm:space-y-0">
                             {/* Left Column */}
                             <div>
                                 {/* Price info card */}
@@ -154,7 +154,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                         </Tabs.Content>
 
                         {/* Lend tab */}
-                        <Tabs.Content value="lend" className="flex flex-col space-y-6 outline-0 sm:grid sm:grid-cols-2 sm:gap-[24px] sm:space-y-0">
+                        <Tabs.Content value="lend" className="flex flex-col space-y-6 outline-0 lg:grid lg:grid-cols-2 sm:gap-[24px] sm:space-y-0">
                             {/* APY info card */}
                             <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 dark:bg-gray-dark-2">
                                 {/* Title, subtitle and lgoo */}
