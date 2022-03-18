@@ -22,6 +22,7 @@ import { ethers } from "ethers";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import { useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
 import Footer from "../Footer";
+import Navigation from "../Navigation";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -80,40 +81,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                 </Head>
                 <Favicon />
 
-                {/* Navigation */}
-                <div className="container z-10 mx-auto max-w-full sm:z-20">
-                    <div className="grid grid-cols-3 place-items-center content-center p-4">
-                        <div className="justify-self-start">
-                            <Link href="/">
-                                <a className="flex items-center">
-                                    <Logo />
-                                    <span className="traking-tight leading-0 hidden self-center pl-2 font-inter text-base font-bold text-gray-light-12 dark:text-gray-light-1 sm:block">Risedle</span>
-                                </a>
-                            </Link>
-                        </div>
-                        <div className="space-x-4 text-sm text-gray-light-12 dark:text-gray-dark-12">
-                            <Link href="/markets">
-                                <a>Markets</a>
-                            </Link>
-                            <Link href="/portofolio">
-                                <a>Portofolio</a>
-                            </Link>
-                        </div>
-                        <div className="inline-block flex flex-row space-x-2 justify-self-end">
-                            <div className="hidden sm:inline-block">
-                                <ButtonNetworkSwitcher />
-                            </div>
-
-                            <div className="hidden sm:inline-block">
-                                <ButtonConnectWalletDesktop />
-                            </div>
-
-                            <div className="inline-block h-[40px]">
-                                <ButtonThemeSwitcher />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Navigation portofolioActive />
 
                 <div className="mb-20 flex flex-col px-4 outline-0 sm:z-10 sm:mt-12 sm:mb-0 lg:px-28">
                     <div className="mx-auto flex w-full flex-col space-y-6 outline-0 sm:grid sm:grid-cols-2 sm:gap-[24px] sm:space-y-0">
