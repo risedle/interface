@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import Image from "next/image";
 import type { FunctionComponent } from "react";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
 import { Metadata } from "../MarketMetadata";
@@ -12,6 +13,35 @@ import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 type MyAssetCardProps = {
     address: string;
 };
+
+type AssetsItemProps = {
+    showLoading: boolean;
+    showData: boolean;
+    balance: number;
+    title: string;
+    image: string;
+    assetsName?: string;
+};
+
+const AssetsItem = ({ showData, balance, showLoading, title, image, assetsName }: AssetsItemProps) => {
+    return (
+        <div className="flex flex-row">
+            <div className="mr-3 h-8 w-8 rounded-full bg-gray-light-4 text-center leading-9 dark:bg-gray-800 ">
+                <Image width={16} height={16} src={image} alt={image} />
+            </div>
+            <div>
+                <p className="mb-1 text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{title}</p>
+                {showLoading && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                {showData && (
+                    <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
+                        {tokenBalanceFormatter.format(balance)} {assetsName}
+                    </p>
+                )}
+            </div>
+        </div>
+    );
+};
+// }
 
 /**
  * MyAssetCard is just yet another react component
@@ -41,25 +71,11 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address }) => {
             <div className="pt-4">
                 <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">My Asset</h2>
             </div>
-            <div className="flex flex-col space-y-6">
-                <div className="flex flex-row justify-between">
-                    <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Balance</p>
-                    {(showLoading || showError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
-                    {showData && (
-                        <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
-                            {tokenBalanceFormatter.format(balance)} {metadata.title}
-                        </p>
-                    )}
-                </div>
-                <div className="flex flex-row justify-between">
-                    <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Total value</p>
-                    {(showLoading || showError) && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
-                    {showData && (
-                        <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">
-                            {tokenBalanceFormatter.format(balance * nav)} {metadata.debtSymbol}
-                        </p>
-                    )}
-                </div>
+            <div className="grid grid-cols-2 gap-8">
+                <AssetsItem title="Token Balance" image="/markets/tokenBalanceIcon.svg" balance={balance} showData={showData} showLoading={showLoading || showError} assetsName={metadata.title} />
+                <AssetsItem title="Value (USDC)" image="/markets/returnIcon.svg" balance={balance * nav} showData={showData} showLoading={showLoading || showError} assetsName={metadata.debtSymbol} />
+                <AssetsItem title="Return" image="/markets/returnBalanceIcon.svg" balance={balance * nav} showData={showData} showLoading={showLoading || showError} assetsName={metadata.debtSymbol} />
+                <AssetsItem title="Return (USDC)" image="/markets/balanceIcon.svg" balance={balance * nav} showData={showData} showLoading={showLoading || showError} assetsName={metadata.debtSymbol} />
             </div>
         </div>
     );
