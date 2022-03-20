@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import type { FunctionComponent } from "react";
+import { tokenBalanceFormatter } from "../../../utils/formatters";
 import { Metadata } from "../MarketMetadata";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import { useTokenBalance } from "../swr/useTokenBalance";
@@ -44,10 +45,10 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address }) => {
                 <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">My Asset</h2>
             </div>
             <div className="grid grid-cols-2 gap-8">
-                <AssetsItem title="Token Balance" image="/markets/tokenBalanceIcon.svg" balance={balance} showData={showData} showLoading={showLoading || showError} assetsName={metadata.title} />
-                <AssetsItem title="Value (USDC)" image="/markets/valueIcon.svg" balance={balance * nav} showData={showData} showLoading={showLoading || showError} assetsName={metadata.debtSymbol} />
-                <AssetsItem title="Return" image="/markets/returnIcon.svg" balance={balance * nav} showData={showData} showLoading={showLoading || showError} assetsName={metadata.debtSymbol} />
-                <AssetsItem title="Return (USDC)" image="/markets/returnDollarIcon.svg" balance={balance * nav} showData={showData} showLoading={showLoading || showError} assetsName={metadata.debtSymbol} />
+                <AssetsItem title="Token Balance" image="/markets/tokenBalanceIcon.svg" value={`${tokenBalanceFormatter.format(balance)}`} showData={showData} showLoading={showLoading || showError} />
+                <AssetsItem title="Value (USDC)" image="/markets/valueIcon.svg" value={`${tokenBalanceFormatter.format(balance * nav)}`} showData={showData} showLoading={showLoading || showError} />
+                <AssetsItem title="Return" image="/markets/returnIcon.svg" value={`-`} showData={showData} showLoading={showLoading || showError} />
+                <AssetsItem title="Return (USDC)" image="/markets/returnDollarIcon.svg" value={`-`} showData={showData} showLoading={showLoading || showError} />
             </div>
         </div>
     );
