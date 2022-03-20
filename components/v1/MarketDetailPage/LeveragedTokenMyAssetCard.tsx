@@ -45,9 +45,9 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address }) => {
             </div>
             <div className="grid grid-cols-2 gap-8">
                 <AssetsItem title="Token Balance" image="/markets/tokenBalanceIcon.svg" balance={balance} showData={showData} showLoading={showLoading || showError} assetsName={metadata.title} />
-                <AssetsItem title="Value (USDC)" image="/markets/returnIcon.svg" balance={balance * nav} showData={showData} showLoading={showLoading || showError} assetsName={metadata.debtSymbol} />
-                <AssetsItem title="Return" image="/markets/returnBalanceIcon.svg" balance={balance * nav} showData={showData} showLoading={showLoading || showError} assetsName={metadata.debtSymbol} />
-                <AssetsItem title="Return (USDC)" image="/markets/balanceIcon.svg" balance={balance * nav} showData={showData} showLoading={showLoading || showError} assetsName={metadata.debtSymbol} />
+                <AssetsItem title="Value (USDC)" image="/markets/valueIcon.svg" balance={balance * nav} showData={showData} showLoading={showLoading || showError} assetsName={metadata.debtSymbol} />
+                <AssetsItem title="Return" image="/markets/returnIcon.svg" balance={balance * nav} showData={showData} showLoading={showLoading || showError} assetsName={metadata.debtSymbol} />
+                <AssetsItem title="Return (USDC)" image="/markets/returnDollarIcon.svg" balance={balance * nav} showData={showData} showLoading={showLoading || showError} assetsName={metadata.debtSymbol} />
             </div>
         </div>
     );
