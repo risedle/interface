@@ -14,6 +14,7 @@ import { chain as Chains } from "wagmi";
 import { useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
 import { Timeframe } from "../swr/snapshot";
 import Link from "next/link";
+import { NoPorotoflioWarn } from "./NoPortofolioWarn";
 
 export type PortofolioChartProps = {
     address: string; // Leveraged token address
@@ -114,13 +115,7 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address, isH
     return (
         <div className="relative">
             {/* Price & Change */}
-            {!isHavePortofolio && (
-                <div className="absolute top-1/2 left-1/2 m-0 w-full -translate-y-1/2 -translate-x-1/2  text-center">
-                    <div className="relative left-1/2 w-fit -translate-x-1/2 rounded-md px-4 py-2 dark:bg-gray-dark-3">
-                        <h1 className="text-xs text-gray-light-10">You don’t have any assets</h1>
-                    </div>
-                </div>
-            )}
+            {!isHavePortofolio && <NoPorotoflioWarn type="chart" />}
 
             <div className="flex flex-row space-x-4 px-4">
                 <div className="flex flex-col space-y-2">

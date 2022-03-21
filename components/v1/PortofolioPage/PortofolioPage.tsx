@@ -22,7 +22,7 @@ import { ethers } from "ethers";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import { useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
 import Footer from "../Footer";
-import { TablePlaceHolder } from "./TablePlaceHolder";
+import { NoPorotoflioWarn } from "./NoPortofolioWarn";
 import Navigation from "../Navigation";
 
 // ETHRISE Token ids
@@ -43,7 +43,6 @@ type PortofolioPageProps = {};
  */
 const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
     const { chain, account, switchNetwork } = useWalletContext();
-
     const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
     const ethriseAddress = ETHRISEAddresses[chainID];
 
@@ -70,9 +69,11 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
 
     // Get transaction history
     const transactionHistory = useTransactionHistory({ account: account, contract: ethriseAddress, provider: provider });
+
     const isHavePortofolio = useMemo(() => {
-        return transactionHistory.data && transactionHistory.data.length > 0;
-    }, [transactionHistory]);
+        return formattedEthriseBalance !== 0;
+    }, [formattedEthriseBalance]);
+
     return (
         <>
             <div className="relative flex h-full min-h-screen w-full flex-col overflow-hidden bg-gray-light-1 font-inter dark:bg-gray-dark-1">
@@ -132,11 +133,10 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                                     <td className="text-green-light-11 dark:text-green-dark-11">-</td>
                                                     <td className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * formattedEthriseBalance)}</td>
                                                 </tr>
-                                            ) : (
-                                                <TablePlaceHolder />
-                                            )}
+                                            ) : null}
                                         </tbody>
                                     </table>
+                                    {!isHavePortofolio && <NoPorotoflioWarn />}
                                 </div>
                             </div>
                             {/* Liquidity Vault Assets */}
@@ -167,16 +167,15 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                                     <td className="text-green-light-11 dark:text-green-dark-11">-</td>
                                                     <td className="text-gray-light-12 dark:text-gray-dark-12">-</td>
                                                 </tr>
-                                            ) : (
-                                                <TablePlaceHolder />
-                                            )}
+                                            ) : null}
                                             {/* TODO(Matthew): Use map if there are more than 1 Leveraged token */}
                                         </tbody>
                                     </table>
+                                    {!isHavePortofolio && <NoPorotoflioWarn />}
                                 </div>
                             </div>
                             {/* Transaction History */}
-                            <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 dark:bg-gray-dark-2">
+                            <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">
                                 <div className="pt-4">
                                     <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">Transaction History</h2>
                                 </div>
@@ -190,31 +189,30 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {isHavePortofolio ? (
-                                                transactionHistory.data
-                                                    ?.sort((a, b) => {
-                                                        return b.date.getTime() - a.date.getTime();
-                                                    })
-                                                    .map((item) => {
-                                                        return (
-                                                            <tr className="text-right text-sm font-semibold" key={item.date.getTime()}>
-                                                                <td className="flex items-center space-x-4 pb-4 text-left">
-                                                                    <img className="h-[40px] w-[40px]" src={metadata.logo} alt={metadata.title} />
-                                                                    <div>
-                                                                        <p className="text-gray-light-12 dark:text-gray-dark-12">{item.type}</p>
-                                                                        <p className="text-gray-light-10 dark:text-gray-dark-10">{item.date.toDateString()}</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td className="text-gray-light-10 dark:text-gray-dark-10">{item.value}</td>
-                                                                <td className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * parseFloat(item.value))}</td>
-                                                            </tr>
-                                                        );
-                                                    })
-                                            ) : (
-                                                <TablePlaceHolder />
-                                            )}
+                                            {isHavePortofolio
+                                                ? transactionHistory.data
+                                                      ?.sort((a, b) => {
+                                                          return b.date.getTime() - a.date.getTime();
+                                                      })
+                                                      .map((item) => {
+                                                          return (
+                                                              <tr className="text-right text-sm font-semibold" key={item.date.getTime()}>
+                                                                  <td className="flex items-center space-x-4 pb-4 text-left">
+                                                                      <img className="h-[40px] w-[40px]" src={metadata.logo} alt={metadata.title} />
+                                                                      <div>
+                                                                          <p className="text-gray-light-12 dark:text-gray-dark-12">{item.type}</p>
+                                                                          <p className="text-gray-light-10 dark:text-gray-dark-10">{item.date.toDateString()}</p>
+                                                                      </div>
+                                                                  </td>
+                                                                  <td className="text-gray-light-10 dark:text-gray-dark-10">{item.value}</td>
+                                                                  <td className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * parseFloat(item.value))}</td>
+                                                              </tr>
+                                                          );
+                                                      })
+                                                : null}
                                         </tbody>
                                     </table>
+                                    {!isHavePortofolio && <NoPorotoflioWarn />}
                                 </div>
                             </div>
                         </div>
