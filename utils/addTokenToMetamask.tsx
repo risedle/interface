@@ -4,43 +4,25 @@ import { Metadata } from "../components/v1/MarketMetadata";
 // List of our leveraged token products
 export enum tokenType {
     ETHRISE,
-    rvETHRISEUSDC,
 }
 
+export type TokenRequest = {
+    token: tokenType;
+    chainID: number;
+    isVaultToken?: boolean | undefined;
+};
+
 // List of our leveraged token address in every network
-const tokenDetail = {
+const tokenAddresses = {
     [tokenType.ETHRISE]: {
-        [Chains.kovan.id]: {
-            address: "0xc4676f88663360155c2bc6d2A482E34121a50b3b",
-            symbol: "DEMOETHRISE",
-            decimal: 18,
-            logo: "/markets/ethrise.png",
-        },
-        [Chains.arbitrumOne.id]: {
-            address: "0x46D06cf8052eA6FdbF71736AF33eD23686eA1452",
-            decimal: 18,
-            symbol: "ETHRISE",
-            logo: "/markets/ethrise.png",
-        },
-    },
-    [tokenType.rvETHRISEUSDC]: {
-        [Chains.kovan.id]: {
-            address: "0x42B6BAE111D9300E19F266Abf58cA215f714432c",
-            symbol: "rvETHUSDC", // Max 11 character by Metamask, so DEMOrvETHUSDC is written rvETHUSDC here
-            decimal: 6,
-            logo: "/markets/usdc.png",
-        },
-        [Chains.arbitrumOne.id]: {
-            address: "0xf7EDB240DbF7BBED7D321776AFe87D1FBcFD0A94",
-            symbol: "rvETHUSDC",
-            decimal: 6,
-            logo: "/markets/usdc.png",
-        },
+        [Chains.kovan.id]: "0xc4676f88663360155c2bc6d2A482E34121a50b3b",
+        [Chains.arbitrumOne.id]: "0x46D06cf8052eA6FdbF71736AF33eD23686eA1452",
     },
 };
 
-export const addTokenToMetamask = async (token: tokenType, chainID: number) => {
-    const tokenData = tokenDetail[token][chainID];
+export const addTokenToMetamask = async (args: TokenRequest) => {
+    const tokenAddress = tokenAddresses[args.token][args.chainID];
+    const metadata = Metadata[args.chainID][tokenAddress];
     const metamask = window.ethereum;
 
     try {
@@ -49,10 +31,10 @@ export const addTokenToMetamask = async (token: tokenType, chainID: number) => {
             params: {
                 type: "ERC20",
                 options: {
-                    address: tokenData.address,
-                    symbol: tokenData.symbol,
-                    decimals: tokenData.decimal,
-                    image: `https://risedle.com/${tokenData.logo}`,
+                    address: args.isVaultToken ? metadata.vaultAddress : tokenAddress,
+                    symbol: args.isVaultToken ? metadata.vaultTitle : metadata.title,
+                    decimals: args.isVaultToken ? metadata.debtDecimals : metadata.collateralDecimals,
+                    image: `https://risedle.com/${args.isVaultToken ? metadata.vaultLogo : metadata.logo}`,
                 },
             },
         });
