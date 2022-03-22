@@ -13,9 +13,12 @@ import { useTokenBalance } from "../swr/useTokenBalance";
 import { chain as Chains } from "wagmi";
 import { useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
 import { Timeframe } from "../swr/snapshot";
+import Link from "next/link";
+import { NoPorotoflioWarn } from "./NoPortofolioWarn";
 
 export type PortofolioChartProps = {
     address: string; // Leveraged token address
+    isHavePortofolio?: boolean;
 };
 
 // ETHRISE Token ids
@@ -24,7 +27,7 @@ const ETHRISEAddresses = {
     [Chains.arbitrumOne.id]: "0x46D06cf8052eA6FdbF71736AF33eD23686eA1452",
 };
 
-const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) => {
+const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address, isHavePortofolio }) => {
     // Global states
     const { chain, provider, account } = useWalletContext();
     const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
@@ -110,36 +113,44 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
     const activeTimeframeClasses = "bg-gray-light-2 dark:bg-gray-dark-2 border border-gray-light-4 dark:border-gray-dark-4 rounded-full font-semibold text-gray-light-12 dark:text-gray-dark-12";
 
     return (
-        <div>
+        <div className="relative">
             {/* Price & Change */}
+            {!isHavePortofolio && <NoPorotoflioWarn type="chart" />}
+
             <div className="flex flex-row space-x-4 px-4">
                 <div className="flex flex-col space-y-2">
                     <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 ">Total Value</p>
                     {showNAVSkeleton && <div className="h-4 animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></div>}
-                    {showRealNavData && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(nav)}</p>}
+                    {showRealNavData && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{nav ? dollarFormatter.format(nav) : "---"}</p>}
                 </div>
                 <div className="flex flex-col space-y-2">
                     <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10 ">Changes</p>
                     {showNAVSkeleton && <div className="h-4 animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></div>}
                     {showRealNavData && (
                         <div className="flex h-[16px] flex-row items-center">
-                            <svg className={navChange > 0 ? "inline-block fill-green-light-11 dark:fill-green-dark-11" : "hidden"} width="14" height="14" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 2.14645C7.34171 1.95118 7.65829 1.95118 7.85355 2.14645L11.8536 6.14645C12.0488 6.34171 12.0488 6.65829 11.8536 6.85355C11.6583 7.04882 11.3417 7.04882 11.1464 6.85355L8 3.70711L8 12.5C8 12.7761 7.77614 13 7.5 13C7.22386 13 7 12.7761 7 12.5L7 3.70711L3.85355 6.85355C3.65829 7.04882 3.34171 7.04882 3.14645 6.85355C2.95118 6.65829 2.95118 6.34171 3.14645 6.14645L7.14645 2.14645Z" />
-                            </svg>
-                            <svg className={navChange > 0 ? "hidden" : "inline-block fill-red-light-11 dark:fill-red-dark-11"} width="13" height="13" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 12.8536C7.34171 13.0488 7.65829 13.0488 7.85355 12.8536L11.8536 8.85355C12.0488 8.65829 12.0488 8.34171 11.8536 8.14645C11.6583 7.95118 11.3417 7.95118 11.1464 8.14645L8 11.2929L8 2.5C8 2.22386 7.77614 2 7.5 2C7.22386 2 7 2.22386 7 2.5L7 11.2929L3.85355 8.14645C3.65829 7.95118 3.34171 7.95118 3.14645 8.14645C2.95118 8.34171 2.95118 8.65829 3.14645 8.85355L7.14645 12.8536Z" />
-                            </svg>
-                            <p className={`font-ibm text-sm font-semibold tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12 ${navChange > 0 ? "text-green-light-11 dark:text-green-dark-11" : "text-red-light-10 dark:text-red-dark-10"}`}>{navChange.toFixed(2) + "%"}</p>
+                            {isHavePortofolio && (
+                                <>
+                                    <svg className={isHavePortofolio ? "inline-block fill-green-light-11 dark:fill-green-dark-11" : "hidden"} width="14" height="14" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
+                                        <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 2.14645C7.34171 1.95118 7.65829 1.95118 7.85355 2.14645L11.8536 6.14645C12.0488 6.34171 12.0488 6.65829 11.8536 6.85355C11.6583 7.04882 11.3417 7.04882 11.1464 6.85355L8 3.70711L8 12.5C8 12.7761 7.77614 13 7.5 13C7.22386 13 7 12.7761 7 12.5L7 3.70711L3.85355 6.85355C3.65829 7.04882 3.34171 7.04882 3.14645 6.85355C2.95118 6.65829 2.95118 6.34171 3.14645 6.14645L7.14645 2.14645Z" />
+                                    </svg>
+                                    <svg className={isHavePortofolio ? "hidden" : "inline-block fill-red-light-11 dark:fill-red-dark-11"} width="13" height="13" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
+                                        <path fillRule="evenodd" clipRule="evenodd" d="M7.14645 12.8536C7.34171 13.0488 7.65829 13.0488 7.85355 12.8536L11.8536 8.85355C12.0488 8.65829 12.0488 8.34171 11.8536 8.14645C11.6583 7.95118 11.3417 7.95118 11.1464 8.14645L8 11.2929L8 2.5C8 2.22386 7.77614 2 7.5 2C7.22386 2 7 2.22386 7 2.5L7 11.2929L3.85355 8.14645C3.65829 7.95118 3.34171 7.95118 3.14645 8.14645C2.95118 8.34171 2.95118 8.65829 3.14645 8.85355L7.14645 12.8536Z" />
+                                    </svg>
+                                </>
+                            )}
+
+                            <p className={`font-ibm text-sm font-semibold tracking-[-0.02em] ${navChange === 0 ? "text-gray-light-12 dark:text-gray-dark-12" : navChange > 0 ? "text-green-light-11 dark:text-green-dark-11" : "text-red-light-10 dark:text-red-dark-10"}`}>{navChange ? navChange.toFixed(2) + "%" : "---"}</p>
                         </div>
                     )}
                 </div>
             </div>
 
             {/* Price chart */}
-            <div className="z-0 mt-8 h-[192px] w-full">
+            <div className="z-0 mt-8 h-[192px] w-full ">
                 {showChartSkeleton && <div className="mb-2 h-[192px] animate-pulse bg-gray-light-3 dark:bg-gray-dark-3"></div>}
+
                 {showRealChartData && (
-                    <ResponsiveContainer width="100%" height="100%" className="h-full">
+                    <ResponsiveContainer width="100%" height="100%" className={`h-full ${navChange === 0 ? "opacity-25" : ""}`}>
                         <AreaChart
                             data={portofolioData}
                             margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
@@ -154,8 +165,8 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
                                     <stop offset="100%" stopColor="rgba(37, 208, 171)" stopOpacity={0} />
                                 </linearGradient>
                                 <linearGradient id="downGradient" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="rgb(205, 43, 49)" stopOpacity={0.4} />
-                                    <stop offset="100%" stopColor="rgb(205, 43, 49)" stopOpacity={0} />
+                                    <stop offset="0%" stopColor="rgb(205, 43, 49)" stopOpacity={0.25} />
+                                    <stop offset="100%" stopColor="rgb(205, 43, 49)" stopOpacity={0.25} />
                                 </linearGradient>
                             </defs>
                             <Tooltip
@@ -182,85 +193,91 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address }) =
                     </ResponsiveContainer>
                 )}
             </div>
-
             {/* Timeframe selector */}
-            <div className="mt-2 flex flex-row items-center px-4">
-                <div className="basis-1/5 text-center">
-                    <button
-                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Daily ? activeTimeframeClasses : ""}`}
-                        onClick={() => {
-                            setCurrentTimeframe(Timeframe.Daily);
-                            if (dailyData.daily) {
-                                setCurrentData(dailyData.daily);
-                                setNAV(latestNAV);
-                                setNAVChange(((latestNAV - dailyData.daily.oldestNAV * formattedEthriseBalance) / (dailyData.daily.oldestNAV * formattedEthriseBalance)) * 100);
-                            }
-                        }}
-                    >
-                        1D
-                    </button>
+
+            {!isHavePortofolio ? (
+                <Link href={"/markets"} passHref>
+                    <button className="inline-block flex w-full flex-row items-center justify-center space-x-2 rounded-full border border-blue-light-11 bg-blue-light-10 py-[11px] px-4 text-center text-sm font-semibold leading-4 leading-4 tracking-[-0.02em] text-gray-light-1 dark:border-blue-dark-11 dark:bg-blue-dark-10 dark:text-blue-light-1">Open Market</button>
+                </Link>
+            ) : (
+                <div className="mt-2 flex flex-row items-center px-4">
+                    <div className="basis-1/5 text-center">
+                        <button
+                            className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Daily ? activeTimeframeClasses : ""}`}
+                            onClick={() => {
+                                setCurrentTimeframe(Timeframe.Daily);
+                                if (dailyData.daily) {
+                                    setCurrentData(dailyData.daily);
+                                    setNAV(latestNAV);
+                                    setNAVChange(((latestNAV - dailyData.daily.oldestNAV * formattedEthriseBalance) / (dailyData.daily.oldestNAV * formattedEthriseBalance)) * 100);
+                                }
+                            }}
+                        >
+                            1D
+                        </button>
+                    </div>
+                    <div className="basis-1/5 text-center">
+                        <button
+                            className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Weekly ? activeTimeframeClasses : ""}`}
+                            onClick={() => {
+                                setCurrentTimeframe(Timeframe.Weekly);
+                                if (dailyData.weekly) {
+                                    setCurrentData(dailyData.weekly);
+                                    setNAV(latestNAV);
+                                    setNAVChange(((latestNAV - dailyData.weekly.oldestNAV * formattedEthriseBalance) / (dailyData.weekly.oldestNAV * formattedEthriseBalance)) * 100);
+                                }
+                            }}
+                        >
+                            1W
+                        </button>
+                    </div>
+                    <div className="basis-1/5 text-center">
+                        <button
+                            className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.TwoWeekly ? activeTimeframeClasses : ""}`}
+                            onClick={() => {
+                                setCurrentTimeframe(Timeframe.TwoWeekly);
+                                if (dailyData.twoWeekly) {
+                                    setCurrentData(dailyData.twoWeekly);
+                                    setNAV(latestNAV);
+                                    setNAVChange(((latestNAV - dailyData.twoWeekly.oldestNAV * formattedEthriseBalance) / (dailyData.twoWeekly.oldestNAV * formattedEthriseBalance)) * 100);
+                                }
+                            }}
+                        >
+                            2W
+                        </button>
+                    </div>
+                    <div className="basis-1/5 text-center">
+                        <button
+                            className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
+                            onClick={() => {
+                                setCurrentTimeframe(Timeframe.Monthly);
+                                if (dailyData.monthly) {
+                                    setCurrentData(dailyData.monthly);
+                                    setNAV(latestNAV);
+                                    setNAVChange(((latestNAV - dailyData.monthly.oldestNAV * formattedEthriseBalance) / (dailyData.monthly.oldestNAV * formattedEthriseBalance)) * 100);
+                                }
+                            }}
+                        >
+                            1M
+                        </button>
+                    </div>
+                    <div className="basis-1/5 text-center">
+                        <button
+                            className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
+                            onClick={() => {
+                                setCurrentTimeframe(Timeframe.ThreeMonthly);
+                                if (dailyData.threeMonthly) {
+                                    setCurrentData(dailyData.threeMonthly);
+                                    setNAV(latestNAV);
+                                    setNAVChange(((latestNAV - dailyData.threeMonthly.oldestNAV * formattedEthriseBalance) / (dailyData.threeMonthly.oldestNAV * formattedEthriseBalance)) * 100);
+                                }
+                            }}
+                        >
+                            3M
+                        </button>
+                    </div>
                 </div>
-                <div className="basis-1/5 text-center">
-                    <button
-                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Weekly ? activeTimeframeClasses : ""}`}
-                        onClick={() => {
-                            setCurrentTimeframe(Timeframe.Weekly);
-                            if (dailyData.weekly) {
-                                setCurrentData(dailyData.weekly);
-                                setNAV(latestNAV);
-                                setNAVChange(((latestNAV - dailyData.weekly.oldestNAV * formattedEthriseBalance) / (dailyData.weekly.oldestNAV * formattedEthriseBalance)) * 100);
-                            }
-                        }}
-                    >
-                        1W
-                    </button>
-                </div>
-                <div className="basis-1/5 text-center">
-                    <button
-                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.TwoWeekly ? activeTimeframeClasses : ""}`}
-                        onClick={() => {
-                            setCurrentTimeframe(Timeframe.TwoWeekly);
-                            if (dailyData.twoWeekly) {
-                                setCurrentData(dailyData.twoWeekly);
-                                setNAV(latestNAV);
-                                setNAVChange(((latestNAV - dailyData.twoWeekly.oldestNAV * formattedEthriseBalance) / (dailyData.twoWeekly.oldestNAV * formattedEthriseBalance)) * 100);
-                            }
-                        }}
-                    >
-                        2W
-                    </button>
-                </div>
-                <div className="basis-1/5 text-center">
-                    <button
-                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
-                        onClick={() => {
-                            setCurrentTimeframe(Timeframe.Monthly);
-                            if (dailyData.monthly) {
-                                setCurrentData(dailyData.monthly);
-                                setNAV(latestNAV);
-                                setNAVChange(((latestNAV - dailyData.monthly.oldestNAV * formattedEthriseBalance) / (dailyData.monthly.oldestNAV * formattedEthriseBalance)) * 100);
-                            }
-                        }}
-                    >
-                        1M
-                    </button>
-                </div>
-                <div className="basis-1/5 text-center">
-                    <button
-                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
-                        onClick={() => {
-                            setCurrentTimeframe(Timeframe.ThreeMonthly);
-                            if (dailyData.threeMonthly) {
-                                setCurrentData(dailyData.threeMonthly);
-                                setNAV(latestNAV);
-                                setNAVChange(((latestNAV - dailyData.threeMonthly.oldestNAV * formattedEthriseBalance) / (dailyData.threeMonthly.oldestNAV * formattedEthriseBalance)) * 100);
-                            }
-                        }}
-                    >
-                        3M
-                    </button>
-                </div>
-            </div>
+            )}
         </div>
     );
 };
