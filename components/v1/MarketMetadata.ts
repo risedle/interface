@@ -32,7 +32,7 @@ export const Metadata: MarketMetadataRecord = {
             logo: "/markets/ethrise.png",
             vaultLogo: "/markets/usdc.png",
             vaultAddress: "0x42B6BAE111D9300E19F266Abf58cA215f714432c",
-            vaultTitle: "DEMOrvETHUSDC",
+            vaultTitle: "DrvETHUSDC",
             path: "/markets/ethrise",
             description: "Enjoy leveraged ETH without risk of liquidation or earn yield from your idle USDC",
             informationText:

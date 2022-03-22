@@ -1,6 +1,8 @@
 import { ethers } from "ethers";
 import type { FunctionComponent } from "react";
+import { addTokenToMetamask, tokenType } from "../../../utils/addTokenToMetamask";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
+import ButtonTertiary from "../Buttons/ButtonTertiary";
 import { Metadata } from "../MarketMetadata";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import { useTokenBalance } from "../swr/useTokenBalance";
@@ -50,6 +52,9 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address }) => {
                 <AssetsItem title="Return" image="/markets/returnIcon.svg" value={`-`} showData={showData} showLoading={showLoading || showError} />
                 <AssetsItem title="Return (USDC)" image="/markets/returnDollarIcon.svg" value={`-`} showData={showData} showLoading={showLoading || showError} />
             </div>
+            <ButtonTertiary full onClick={async () => await addTokenToMetamask({ token: tokenType.ETHRISE, chainID: chain.chain.id })}>
+                Add {metadata.title}
+            </ButtonTertiary>
         </div>
     );
 };

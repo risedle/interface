@@ -101,6 +101,7 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                                         </div>
                                         <img className="h-[48px] w-[48px]" src={metadata.logo} alt={metadata.title} />
                                     </div>
+                                    {console.log(metadata.title)}
 
                                     <LeveragedTokenChart address={ethriseAddress} />
 
