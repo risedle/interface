@@ -13,7 +13,7 @@ const AssetsItem = ({ showData, value, showLoading, title, image }: AssetsItemPr
     return (
         <div className="flex flex-row">
             <div className="mr-3 h-8 w-8 rounded-full bg-gray-light-4 text-center leading-9 dark:bg-gray-800 ">
-                <Image width={16} height={16} src={image} alt={image} />
+                <img className="mx-auto mt-2" width={16} height={16} src={image} alt={image} />
             </div>
             <div>
                 <p className="mb-1 text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{title}</p>
