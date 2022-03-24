@@ -80,12 +80,12 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
 
                 <Navigation portofolioActive />
 
-                <div className="mb-20 flex flex-col px-4 outline-0 sm:z-10 sm:mt-12 sm:mb-0 lg:px-28">
-                    <div className="mx-auto flex w-full flex-col space-y-6 outline-0 sm:grid sm:grid-cols-2 sm:gap-[24px] sm:space-y-0">
+                <div className="mb-20 flex flex-grow flex-col px-4 outline-0 sm:z-10 sm:mt-12 sm:mb-0 sm:mx-auto">
+                    <div className="mx-auto flex w-full flex-col space-y-6 outline-0 lg:grid lg:grid-cols-2 sm:gap-[24px] sm:space-y-0">
                         {/* Left Column: Price info */}
-                        <div>
+                        <div className="sm:max-w-[540px] sm:min-w-[412px]">
                             <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 pb-4 dark:bg-gray-dark-2">
-                                {/* Title, subtitle and lgoo */}
+                                {/* Title, subtitle and logo */}
                                 <div className="flex flex-row items-center justify-between p-4">
                                     <div className="flex grow flex-col space-y-2">
                                         <h1 className="m-0 text-2xl font-bold tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">Portofolio</h1>
@@ -96,7 +96,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                         </div>
                         {/* Right Column: Assets Info*/}
                         {/* TODO (Matthew): Implement mobile layout, currently only desktop layout that has been implemented */}
-                        <div className="flex flex-col space-y-6">
+                        <div className="flex flex-col space-y-6 sm:max-w-[540px] sm:min-w-[412px]">
                             {/* Leveraged Token Assets */}
                             <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">
                                 <div className="pt-4">
