@@ -40,7 +40,7 @@ const VaultInformationCard: FunctionComponent<VaultInformationCardProps> = ({ ad
 
     return (
         <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">
-            <div className=" pt-4">
+            <div className="pt-4">
                 <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">Information</h2>
             </div>
             <div className="">

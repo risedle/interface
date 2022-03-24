@@ -1,6 +1,3 @@
-import Image from "next/image";
-import { tokenBalanceFormatter } from "../../../utils/formatters";
-
 type AssetsItemProps = {
     showLoading: boolean;
     showData: boolean;
