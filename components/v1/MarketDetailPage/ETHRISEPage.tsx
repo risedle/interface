@@ -183,7 +183,9 @@ const ETHRISEPage: FunctionComponent<ETHRISEPageProps> = ({}) => {
                             </div>
 
                             {/* Information card */}
-                            <div className="max-w-[540px]">
+                            <div className="max-w-[540px] flex-col space-y-6">
+                                {showMyAsset && <MyAssetCard isVault address={ethriseAddress} />}
+
                                 <VaultInformationCard address={ethriseAddress} />
                             </div>
                         </Tabs.Content>
