@@ -4,7 +4,7 @@ import MarketsPageMeta from "../MarketsPage/MarketsPageMeta";
 import Favicon from "../Favicon";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import BackgroundGradient from "./BackgroundGradient";
-import { chain as Chains, useProvider, useBalance, erc20ABI, useToken } from "wagmi";
+import { chain as Chains, useProvider } from "wagmi";
 import { useWalletContext, DEFAULT_CHAIN } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import PortofolioChart from "./PortofolioChart";
@@ -17,6 +17,7 @@ import { useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
 import Footer from "../Footer";
 import { NoPorotoflioWarn } from "./NoPortofolioWarn";
 import Navigation from "../Navigation";
+import { useVaultExchangeRate } from "../swr/useVaultExchangeRate";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -50,12 +51,16 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
     const formattedEthriseBalance = tokenBalanceFormatter.format(parseFloat(ethers.utils.formatUnits(ethriseBalance.data ? ethriseBalance.data : 0)));
 
     // Get User's rvETHUSDC Balance
-    const rvEthriseUsdcBalance = useTokenBalance({ account: account, token: metadata.vaultAddress, provider: provider });
-    const formattedRvEthriseUsdcBalance = parseFloat(ethers.utils.formatUnits(rvEthriseUsdcBalance.data ? rvEthriseUsdcBalance.data : 0, metadata.debtDecimals));
+    const rvETHUSDCBalance = useTokenBalance({ account: account, token: metadata.vaultAddress, provider: provider });
+    const formattedRvETHUSDCBalance = parseFloat(ethers.utils.formatUnits(rvETHUSDCBalance.data ? rvETHUSDCBalance.data : 0, metadata.debtDecimals));
 
     // Get Latest ETHRISE NAV
     const latestEthriseNav = useLeveragedTokenNAV({ token: ethriseAddress, vault: metadata.vaultAddress, provider: provider });
     const latestEthriseNavFormatted = parseFloat(ethers.utils.formatUnits(latestEthriseNav.data ? latestEthriseNav.data : 0, metadata.debtDecimals));
+
+    // Get Latest rvETHUSDC Exchange Rate
+    const latestVaultExchangeRate = useVaultExchangeRate({ vault: metadata.vaultAddress, provider: provider });
+    const latestVaultExchangeRateFormatted = parseFloat(ethers.utils.formatUnits(latestVaultExchangeRate.data ? latestVaultExchangeRate.data : 0, metadata.collateralDecimals));
 
     // Get daily ETHRISE NAV
     const dailyData = useLeveragedTokenDailyData(chainID, ethriseAddress);
@@ -66,6 +71,10 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
     const isHavePortofolio = useMemo(() => {
         return formattedEthriseBalance !== 0;
     }, [formattedEthriseBalance]);
+
+    // Tailwind class for return & amount
+    const positiveReturn = "text-green-light-11 dark:text-green-dark-11";
+    const negativeReturn = "text-red-light-10 dark:text-red-dark-10";
 
     return (
         <>
@@ -80,10 +89,10 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
 
                 <Navigation portofolioActive />
 
-                <div className="mb-20 flex flex-grow flex-col px-4 outline-0 sm:z-10 sm:mt-12 sm:mb-0 sm:mx-auto">
-                    <div className="mx-auto flex w-full flex-col space-y-6 outline-0 lg:grid lg:grid-cols-2 sm:gap-[24px] sm:space-y-0">
+                <div className="mb-20 flex flex-grow flex-col px-4 outline-0 sm:z-10 sm:mx-auto sm:mt-12 sm:mb-0">
+                    <div className="mx-auto flex w-full flex-col space-y-6 outline-0 sm:gap-[24px] sm:space-y-0 lg:grid lg:grid-cols-2">
                         {/* Left Column: Price info */}
-                        <div className="sm:max-w-[540px] sm:min-w-[412px]">
+                        <div className="sm:min-w-[412px] sm:max-w-[540px]">
                             <div className="flex w-full flex-col rounded-[16px] bg-gray-light-2 pb-4 dark:bg-gray-dark-2">
                                 {/* Title, subtitle and logo */}
                                 <div className="flex flex-row items-center justify-between p-4">
@@ -96,7 +105,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                         </div>
                         {/* Right Column: Assets Info*/}
                         {/* TODO (Matthew): Implement mobile layout, currently only desktop layout that has been implemented */}
-                        <div className="flex flex-col space-y-6 sm:max-w-[540px] sm:min-w-[412px]">
+                        <div className="flex flex-col space-y-6 sm:min-w-[412px] sm:max-w-[540px]">
                             {/* Leveraged Token Assets */}
                             <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">
                                 <div className="pt-4">
@@ -105,7 +114,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                 <div>
                                     <table className="w-full table-auto">
                                         <thead className="text-right">
-                                            <tr>
+                                            <tr className="hidden lg:contents">
                                                 <th className="w-2/5 pb-4 text-left text-sm font-normal text-gray-light-9 dark:text-gray-dark-9">Token</th>
                                                 <th className="w-1/5 pb-4 text-sm font-normal text-gray-light-9 dark:text-gray-dark-9">Amount</th>
                                                 <th className="w-1/5 pb-4 text-sm font-normal text-gray-light-9 dark:text-gray-dark-9">Return</th>
@@ -115,16 +124,26 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                         <tbody>
                                             {/* TODO(Matthew): Use map if there are more than 1 Leveraged token */}
                                             {isHavePortofolio ? (
-                                                <tr className="text-right text-sm font-semibold ">
+                                                <tr className="text-right text-sm font-semibold">
                                                     <td className="flex items-center space-x-4 text-left">
                                                         <img className="h-[40px] w-[40px]" src={metadata.logo} alt={metadata.title} />
-                                                        <p className="text-gray-light-12 dark:text-gray-dark-12">{metadata.title}</p>
+                                                        <div className="flex flex-col space-y-[8px]">
+                                                            <p className="text-gray-light-12 dark:text-gray-dark-12">{metadata.title}</p>
+                                                            <p className="text-gray-light-10 dark:text-gray-dark-10 lg:hidden">
+                                                                {formattedEthriseBalance.toFixed(2)} {metadata.title}
+                                                            </p>
+                                                        </div>
                                                     </td>
-                                                    <td className="text-gray-light-10 dark:text-gray-dark-10">
+                                                    <td className="hidden text-gray-light-10 dark:text-gray-dark-10 lg:table-cell">
                                                         {formattedEthriseBalance.toFixed(2)} {metadata.title}
                                                     </td>
-                                                    <td className="text-green-light-11 dark:text-green-dark-11">-</td>
-                                                    <td className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * formattedEthriseBalance)}</td>
+                                                    <td className="hidden text-green-light-11 dark:text-green-dark-11 lg:table-cell">+$13.34</td>
+                                                    <td>
+                                                        <div className="flex flex-col space-y-[8px]">
+                                                            <p className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * formattedEthriseBalance)}</p>
+                                                            <p className="text-green-light-11 dark:text-green-dark-11 lg:hidden">+$13.34</p>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             ) : null}
                                         </tbody>
@@ -140,7 +159,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                 <div>
                                     <table className="w-full table-auto">
                                         <thead className="text-right">
-                                            <tr>
+                                            <tr className="hidden lg:contents">
                                                 <th className="w-2/5 pb-4 text-left text-sm font-normal text-gray-light-9 dark:text-gray-dark-9">Token</th>
                                                 <th className="w-1/5 pb-4 text-sm font-normal text-gray-light-9 dark:text-gray-dark-9">Amount</th>
                                                 <th className="w-1/5 pb-4 text-sm font-normal text-gray-light-9 dark:text-gray-dark-9">Return</th>
@@ -152,13 +171,23 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                                 <tr className="text-right text-sm font-semibold">
                                                     <td className="flex items-center space-x-4 text-left">
                                                         <img className="h-[40px] w-[40px]" src={metadata.vaultLogo} alt={metadata.title} />
-                                                        <p className="text-gray-light-12 dark:text-gray-dark-12">{metadata.vaultTitle}</p>
+                                                        <div className="flex flex-col space-y-[8px]">
+                                                            <p className="text-gray-light-12 dark:text-gray-dark-12">{metadata.vaultTitle}</p>
+                                                            <p className="text-gray-light-10 dark:text-gray-dark-10 lg:hidden">
+                                                                {formattedRvETHUSDCBalance.toFixed(2)} {metadata.vaultTitle}
+                                                            </p>
+                                                        </div>
                                                     </td>
-                                                    <td className="text-gray-light-10 dark:text-gray-dark-10">
-                                                        {formattedRvEthriseUsdcBalance.toFixed(2)} {metadata.vaultTitle}
+                                                    <td className="hidden text-gray-light-10 dark:text-gray-dark-10 lg:table-cell">
+                                                        {formattedRvETHUSDCBalance.toFixed(2)} {metadata.vaultTitle}
                                                     </td>
-                                                    <td className="text-green-light-11 dark:text-green-dark-11">-</td>
-                                                    <td className="text-gray-light-12 dark:text-gray-dark-12">-</td>
+                                                    <td className="hidden text-green-light-11 dark:text-green-dark-11 lg:table-cell">+$13.34</td>
+                                                    <td>
+                                                        <div className="flex flex-col space-y-[8px]">
+                                                            <p className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestVaultExchangeRateFormatted * formattedRvETHUSDCBalance)}</p>
+                                                            <p className="text-green-light-11 dark:text-green-dark-11 lg:hidden">+$13.34</p>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             ) : null}
                                             {/* TODO(Matthew): Use map if there are more than 1 Leveraged token */}
@@ -175,7 +204,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                 <div>
                                     <table className="w-full table-auto">
                                         <thead className="text-right">
-                                            <tr>
+                                            <tr className="hidden lg:contents">
                                                 <th className="w-2/5 pb-4 text-left text-sm font-normal text-gray-light-9 dark:text-gray-dark-9">Transaction</th>
                                                 <th className="w-1/5 pb-4 text-sm font-normal text-gray-light-9 dark:text-gray-dark-9">Amount</th>
                                                 <th className="w-1/5 pb-4 text-sm font-normal text-gray-light-9 dark:text-gray-dark-9">Value</th>
@@ -192,13 +221,24 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                                               <tr className="text-right text-sm font-semibold" key={item.date.getTime()}>
                                                                   <td className="flex items-center space-x-4 pb-4 text-left">
                                                                       <img className="h-[40px] w-[40px]" src={metadata.logo} alt={metadata.title} />
-                                                                      <div>
+                                                                      <div className="flex flex-col space-y-[8px]">
                                                                           <p className="text-gray-light-12 dark:text-gray-dark-12">{item.type}</p>
                                                                           <p className="text-gray-light-10 dark:text-gray-dark-10">{item.date.toDateString()}</p>
                                                                       </div>
                                                                   </td>
-                                                                  <td className="text-gray-light-10 dark:text-gray-dark-10">{item.value}</td>
-                                                                  <td className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * parseFloat(item.value))}</td>
+                                                                  <td className={`${item.type == "Mint" ? positiveReturn : negativeReturn} hidden lg:table-cell`}>
+                                                                      {item.type == "Mint" ? "+" : "-"}
+                                                                      {item.value} ETHRISE
+                                                                  </td>
+                                                                  <td>
+                                                                      <div className="flex flex-col space-y-[8px]">
+                                                                          <p className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * parseFloat(item.value))}</p>
+                                                                          <p className={`${item.type == "Mint" ? positiveReturn : negativeReturn} lg:hidden`}>
+                                                                              {item.type == "Mint" ? "+" : "-"}
+                                                                              {item.value} ETHRISE
+                                                                          </p>
+                                                                      </div>
+                                                                  </td>
                                                               </tr>
                                                           );
                                                       })
