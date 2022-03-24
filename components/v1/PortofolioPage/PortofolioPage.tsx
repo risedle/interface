@@ -47,12 +47,12 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
     const provider = useProvider();
 
     // Get User's ETHRISE Balance
-    const ethriseBalance = useTokenBalance({ account: account, token: ethriseAddress, provider: provider });
-    const formattedEthriseBalance = tokenBalanceFormatter.format(parseFloat(ethers.utils.formatUnits(ethriseBalance.data ? ethriseBalance.data : 0)));
+    const ethriseBalanceResponse = useTokenBalance({ account: account, token: ethriseAddress, provider: provider });
+    const ethriseBalance = tokenBalanceFormatter.format(parseFloat(ethers.utils.formatUnits(ethriseBalanceResponse.data ? ethriseBalanceResponse.data : 0)));
 
     // Get User's rvETHUSDC Balance
-    const rvETHUSDCBalance = useTokenBalance({ account: account, token: metadata.vaultAddress, provider: provider });
-    const formattedRvETHUSDCBalance = parseFloat(ethers.utils.formatUnits(rvETHUSDCBalance.data ? rvETHUSDCBalance.data : 0, metadata.debtDecimals));
+    const rvETHUSDCBalanceResponse = useTokenBalance({ account: account, token: metadata.vaultAddress, provider: provider });
+    const rvETHUSDCBalance = parseFloat(ethers.utils.formatUnits(rvETHUSDCBalanceResponse.data ? rvETHUSDCBalanceResponse.data : 0, metadata.debtDecimals));
 
     // Get Latest ETHRISE NAV
     const latestEthriseNav = useLeveragedTokenNAV({ token: ethriseAddress, vault: metadata.vaultAddress, provider: provider });
@@ -69,8 +69,8 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
     const transactionHistory = useTransactionHistory({ account: account, contract: ethriseAddress, provider: provider });
 
     const isHavePortofolio = useMemo(() => {
-        return formattedEthriseBalance !== 0;
-    }, [formattedEthriseBalance]);
+        return ethriseBalance !== 0;
+    }, [ethriseBalance]);
 
     // Tailwind class for return & amount
     const positiveReturn = "text-green-light-11 dark:text-green-dark-11";
@@ -130,17 +130,17 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                                         <div className="flex flex-col space-y-[8px]">
                                                             <p className="text-gray-light-12 dark:text-gray-dark-12">{metadata.title}</p>
                                                             <p className="text-gray-light-10 dark:text-gray-dark-10 lg:hidden">
-                                                                {formattedEthriseBalance.toFixed(2)} {metadata.title}
+                                                                {tokenBalanceFormatter.format(ethriseBalance)} {metadata.title}
                                                             </p>
                                                         </div>
                                                     </td>
                                                     <td className="hidden text-gray-light-10 dark:text-gray-dark-10 lg:table-cell">
-                                                        {formattedEthriseBalance.toFixed(2)} {metadata.title}
+                                                        {tokenBalanceFormatter.format(ethriseBalance)} {metadata.title}
                                                     </td>
                                                     <td className="hidden text-green-light-11 dark:text-green-dark-11 lg:table-cell">+$13.34</td>
                                                     <td>
                                                         <div className="flex flex-col space-y-[8px]">
-                                                            <p className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * formattedEthriseBalance)}</p>
+                                                            <p className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestEthriseNavFormatted * ethriseBalance)}</p>
                                                             <p className="text-green-light-11 dark:text-green-dark-11 lg:hidden">+$13.34</p>
                                                         </div>
                                                     </td>
@@ -174,17 +174,17 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                                         <div className="flex flex-col space-y-[8px]">
                                                             <p className="text-gray-light-12 dark:text-gray-dark-12">{metadata.vaultTitle}</p>
                                                             <p className="text-gray-light-10 dark:text-gray-dark-10 lg:hidden">
-                                                                {formattedRvETHUSDCBalance.toFixed(2)} {metadata.vaultTitle}
+                                                                {tokenBalanceFormatter.format(rvETHUSDCBalance)} {metadata.vaultTitle}
                                                             </p>
                                                         </div>
                                                     </td>
                                                     <td className="hidden text-gray-light-10 dark:text-gray-dark-10 lg:table-cell">
-                                                        {formattedRvETHUSDCBalance.toFixed(2)} {metadata.vaultTitle}
+                                                        {tokenBalanceFormatter.format(rvETHUSDCBalance)} {metadata.vaultTitle}
                                                     </td>
                                                     <td className="hidden text-green-light-11 dark:text-green-dark-11 lg:table-cell">+$13.34</td>
                                                     <td>
                                                         <div className="flex flex-col space-y-[8px]">
-                                                            <p className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestVaultExchangeRateFormatted * formattedRvETHUSDCBalance)}</p>
+                                                            <p className="text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(latestVaultExchangeRateFormatted * rvETHUSDCBalance)}</p>
                                                             <p className="text-green-light-11 dark:text-green-dark-11 lg:hidden">+$13.34</p>
                                                         </div>
                                                     </td>
@@ -197,7 +197,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                 </div>
                             </div>
                             {/* Transaction History */}
-                            <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 dark:bg-gray-dark-2">
+                            <div className="flex w-full flex-col space-y-6 rounded-[16px] bg-gray-light-2 px-4 pb-4 dark:bg-gray-dark-2">
                                 <div className="pt-4">
                                     <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">Transaction History</h2>
                                 </div>
@@ -219,7 +219,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                                       .map((item) => {
                                                           return (
                                                               <tr className="text-right text-sm font-semibold" key={item.date.getTime()}>
-                                                                  <td className="flex items-center space-x-4 pb-4 text-left">
+                                                                  <td className="flex items-center space-x-4 space-y-4 text-left">
                                                                       <img className="h-[40px] w-[40px]" src={metadata.logo} alt={metadata.title} />
                                                                       <div className="flex flex-col space-y-[8px]">
                                                                           <p className="text-gray-light-12 dark:text-gray-dark-12">{item.type}</p>
