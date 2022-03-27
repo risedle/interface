@@ -1,6 +1,6 @@
 import { Popover } from "@headlessui/react";
 import Link from "next/link";
-import type { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { usePopper } from "react-popper";
@@ -13,6 +13,7 @@ import ToastError from "../Toasts/Error";
 import ToastSuccess from "../Toasts/Success";
 // States
 import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
+import { motion } from "framer-motion";
 
 /**
  * ButtonConnectWalletMobileProps is a React Component properties that passed to React Component ButtonConnectWalletMobile
@@ -203,7 +204,6 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                     }}
                 </Popover>
 
-                {/* Connect wallet */}
                 <Popover id="popover-2" className="grow">
                     {({ open }) => {
                         // Weird trick to blur all except this popover
@@ -224,86 +224,86 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                         <Popover.Button ref={setReferenceElement2} className="button gradient inline-block w-full rounded-full bg-[length:300%_300%] bg-center py-3 px-4 text-sm font-semibold leading-4 tracking-tight text-gray-light-1 outline-0 hover:bg-left hover:shadow-xl hover:shadow-blue-400/20 dark:text-gray-dark-1">
                                             Connect Wallet
                                         </Popover.Button>
-
                                         <Popover.Panel ref={setPopperElement2} style={popper2.styles.popper} {...popper2.attributes.popper} className="container">
                                             {({ close }) => {
                                                 return (
-                                                    <div className="mx-4 rounded-[24px] border border-gray-light-3 bg-gray-light-1 dark:border-gray-dark-3 dark:bg-gray-dark-1">
-                                                        <div className="m-0 border-b border-dashed border-gray-light-3 py-4 pr-4 pl-[49px] text-center dark:border-gray-dark-3">
-                                                            <span className="text-base font-bold leading-none text-gray-light-12 dark:text-gray-dark-12">{isConnecting ? "Connecting..." : "Connect Wallet"}</span>
-                                                            <button className="float-right self-center rounded-full border border-gray-light-4 bg-gray-light-2 align-middle dark:border-gray-dark-4 dark:bg-gray-dark-2" onClick={() => close()}>
-                                                                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="m-2 inline-block fill-gray-light-12 align-middle dark:fill-gray-dark-12">
-                                                                    <path
-                                                                        fillRule="evenodd"
-                                                                        clipRule="evenodd"
-                                                                        d="M12.8536 2.85355C13.0488 2.65829 13.0488 2.34171 12.8536 2.14645C12.6583 1.95118 12.3417 1.95118 12.1464 2.14645L7.5 6.79289L2.85355 2.14645C2.65829 1.95118 2.34171 1.95118 2.14645 2.14645C1.95118 2.34171 1.95118 2.65829 2.14645 2.85355L6.79289 7.5L2.14645 12.1464C1.95118 12.3417 1.95118 12.6583 2.14645 12.8536C2.34171 13.0488 2.65829 13.0488 2.85355 12.8536L7.5 8.20711L12.1464 12.8536C12.3417 13.0488 12.6583 13.0488 12.8536 12.8536C13.0488 12.6583 13.0488 12.3417 12.8536 12.1464L8.20711 7.5L12.8536 2.85355Z"
-                                                                    />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-
-                                                        <div className="flex flex-col space-y-2 p-4">
-                                                            <button
-                                                                className={`m-0 flex flex-row items-center justify-between rounded-[12px] border border-orange-light-5 bg-orange-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-orange-light-3 active:scale-95 dark:border-orange-dark-5 dark:bg-orange-dark-2 dark:hover:bg-orange-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
-                                                                disabled={isConnecting && connectorName ? true : false}
-                                                                onClick={async () => {
-                                                                    await connect(MetaMaskConnector);
-                                                                    close();
-                                                                }}
-                                                            >
-                                                                <div>
-                                                                    <img src="/wallet/Metamask.svg" alt="MetaMask" className="mr-4 inline-block  self-center" />
-                                                                    <span className="m-0 font-inter text-sm font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12">Metamask</span>
-                                                                </div>
-                                                                {isConnecting && connectorName === "MetaMask" && (
-                                                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="float-right inline-block animate-spin">
-                                                                        <path opacity="0.2" d="M28 16.0005C28 22.6279 22.6274 28.0005 16 28.0005C9.37258 28.0005 4 22.6279 4 16.0005C4 9.37307 9.37258 4.00049 16 4.00049C22.6274 4.00049 28 9.37307 28 16.0005ZM6.4 16.0005C6.4 21.3024 10.6981 25.6005 16 25.6005C21.3019 25.6005 25.6 21.3024 25.6 16.0005C25.6 10.6986 21.3019 6.40049 16 6.40049C10.6981 6.40049 6.4 10.6986 6.4 16.0005Z" className="fill-gray-light-12 dark:fill-gray-dark-12" />
+                                                    <motion.div key="popover" animate={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }}>
+                                                        <div className="mx-4 rounded-[24px] border border-gray-light-3 bg-gray-light-1 dark:border-gray-dark-3 dark:bg-gray-dark-1">
+                                                            <div className="m-0 border-b border-dashed border-gray-light-3 py-4 pr-4 pl-[49px] text-center dark:border-gray-dark-3">
+                                                                <span className="text-base font-bold leading-none text-gray-light-12 dark:text-gray-dark-12">{isConnecting ? "Connecting..." : "Connect Wallet"}</span>
+                                                                <button className="float-right self-center rounded-full border border-gray-light-4 bg-gray-light-2 align-middle dark:border-gray-dark-4 dark:bg-gray-dark-2" onClick={() => close()}>
+                                                                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="m-2 inline-block fill-gray-light-12 align-middle dark:fill-gray-dark-12">
                                                                         <path
-                                                                            d="M26.8 16.0005C27.4627 16.0005 28.0062 16.5391 27.9401 17.1985C27.7286 19.3064 26.9618 21.3285 25.7082 23.0539C24.2187 25.1041 22.1183 26.6301 19.7082 27.4132C17.2981 28.1963 14.7019 28.1963 12.2918 27.4132C10.2635 26.7541 8.45455 25.5689 7.04447 23.9879C6.60334 23.4933 6.72645 22.7381 7.26262 22.3486C7.79879 21.959 8.5442 22.0841 8.99756 22.5675C10.1008 23.7439 11.4874 24.6283 13.0334 25.1306C14.9615 25.7571 17.0385 25.7571 18.9666 25.1306C20.8947 24.5042 22.5749 23.2834 23.7666 21.6432C24.722 20.3281 25.324 18.7975 25.5251 17.1974C25.6077 16.5398 26.1373 16.0005 26.8 16.0005Z"
-                                                                            className="fill-gray-light-12 dark:fill-gray-dark-12"
+                                                                            fillRule="evenodd"
+                                                                            clipRule="evenodd"
+                                                                            d="M12.8536 2.85355C13.0488 2.65829 13.0488 2.34171 12.8536 2.14645C12.6583 1.95118 12.3417 1.95118 12.1464 2.14645L7.5 6.79289L2.85355 2.14645C2.65829 1.95118 2.34171 1.95118 2.14645 2.14645C1.95118 2.34171 1.95118 2.65829 2.14645 2.85355L6.79289 7.5L2.14645 12.1464C1.95118 12.3417 1.95118 12.6583 2.14645 12.8536C2.34171 13.0488 2.65829 13.0488 2.85355 12.8536L7.5 8.20711L12.1464 12.8536C12.3417 13.0488 12.6583 13.0488 12.8536 12.8536C13.0488 12.6583 13.0488 12.3417 12.8536 12.1464L8.20711 7.5L12.8536 2.85355Z"
                                                                         />
                                                                     </svg>
-                                                                )}
-                                                            </button>
-                                                            <button
-                                                                className={`m-0 flex flex-row items-center justify-between rounded-[12px] border border-blue-light-5 bg-blue-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-blue-light-3 active:scale-95 dark:border-blue-dark-5 dark:bg-blue-dark-2 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
-                                                                disabled={isConnecting && connectorName ? true : false}
-                                                                onClick={async () => {
-                                                                    await connect(WCConnector);
-                                                                    close();
-                                                                }}
-                                                            >
-                                                                <div>
-                                                                    <img src="/wallet/WalletConnect.svg" alt="WalletConnect" className="mr-4 inline-block  self-center" />
-                                                                    <span className="m-0 font-inter text-sm font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12">Wallet Connect</span>
-                                                                </div>
-                                                                {isConnecting && connectorName === "WalletConnect" && (
-                                                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="float-right inline-block animate-spin">
-                                                                        <path opacity="0.2" d="M28 16.0005C28 22.6279 22.6274 28.0005 16 28.0005C9.37258 28.0005 4 22.6279 4 16.0005C4 9.37307 9.37258 4.00049 16 4.00049C22.6274 4.00049 28 9.37307 28 16.0005ZM6.4 16.0005C6.4 21.3024 10.6981 25.6005 16 25.6005C21.3019 25.6005 25.6 21.3024 25.6 16.0005C25.6 10.6986 21.3019 6.40049 16 6.40049C10.6981 6.40049 6.4 10.6986 6.4 16.0005Z" className="fill-gray-light-12 dark:fill-gray-dark-12" />
-                                                                        <path
-                                                                            d="M26.8 16.0005C27.4627 16.0005 28.0062 16.5391 27.9401 17.1985C27.7286 19.3064 26.9618 21.3285 25.7082 23.0539C24.2187 25.1041 22.1183 26.6301 19.7082 27.4132C17.2981 28.1963 14.7019 28.1963 12.2918 27.4132C10.2635 26.7541 8.45455 25.5689 7.04447 23.9879C6.60334 23.4933 6.72645 22.7381 7.26262 22.3486C7.79879 21.959 8.5442 22.0841 8.99756 22.5675C10.1008 23.7439 11.4874 24.6283 13.0334 25.1306C14.9615 25.7571 17.0385 25.7571 18.9666 25.1306C20.8947 24.5042 22.5749 23.2834 23.7666 21.6432C24.722 20.3281 25.324 18.7975 25.5251 17.1974C25.6077 16.5398 26.1373 16.0005 26.8 16.0005Z"
-                                                                            className="fill-gray-light-12 dark:fill-gray-dark-12"
-                                                                        />
-                                                                    </svg>
-                                                                )}
-                                                            </button>
-                                                        </div>
+                                                                </button>
+                                                            </div>
 
-                                                        <div className="m-0 border-t border-dashed border-gray-light-3 p-4 text-center dark:border-gray-dark-3">
-                                                            <p className="leading-1 text-xs text-gray-light-11 dark:text-gray-dark-11">
-                                                                By connecting your wallet to Residle you&apos;re agree with our{" "}
-                                                                <a href="#" className="text-gray-light-12 underline dark:text-gray-dark-12" target="_blank" rel="noreferrer">
-                                                                    Terms and Conditions
-                                                                </a>
-                                                            </p>
+                                                            <div className="flex flex-col space-y-2 p-4">
+                                                                <button
+                                                                    className={`m-0 flex flex-row items-center justify-between rounded-[12px] border border-orange-light-5 bg-orange-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-orange-light-3 active:scale-95 dark:border-orange-dark-5 dark:bg-orange-dark-2 dark:hover:bg-orange-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
+                                                                    disabled={isConnecting && connectorName ? true : false}
+                                                                    onClick={async () => {
+                                                                        await connect(MetaMaskConnector);
+                                                                        close();
+                                                                    }}
+                                                                >
+                                                                    <div>
+                                                                        <img src="/wallet/Metamask.svg" alt="MetaMask" className="mr-4 inline-block  self-center" />
+                                                                        <span className="m-0 font-inter text-sm font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12">Metamask</span>
+                                                                    </div>
+                                                                    {isConnecting && connectorName === "MetaMask" && (
+                                                                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="float-right inline-block animate-spin">
+                                                                            <path opacity="0.2" d="M28 16.0005C28 22.6279 22.6274 28.0005 16 28.0005C9.37258 28.0005 4 22.6279 4 16.0005C4 9.37307 9.37258 4.00049 16 4.00049C22.6274 4.00049 28 9.37307 28 16.0005ZM6.4 16.0005C6.4 21.3024 10.6981 25.6005 16 25.6005C21.3019 25.6005 25.6 21.3024 25.6 16.0005C25.6 10.6986 21.3019 6.40049 16 6.40049C10.6981 6.40049 6.4 10.6986 6.4 16.0005Z" className="fill-gray-light-12 dark:fill-gray-dark-12" />
+                                                                            <path
+                                                                                d="M26.8 16.0005C27.4627 16.0005 28.0062 16.5391 27.9401 17.1985C27.7286 19.3064 26.9618 21.3285 25.7082 23.0539C24.2187 25.1041 22.1183 26.6301 19.7082 27.4132C17.2981 28.1963 14.7019 28.1963 12.2918 27.4132C10.2635 26.7541 8.45455 25.5689 7.04447 23.9879C6.60334 23.4933 6.72645 22.7381 7.26262 22.3486C7.79879 21.959 8.5442 22.0841 8.99756 22.5675C10.1008 23.7439 11.4874 24.6283 13.0334 25.1306C14.9615 25.7571 17.0385 25.7571 18.9666 25.1306C20.8947 24.5042 22.5749 23.2834 23.7666 21.6432C24.722 20.3281 25.324 18.7975 25.5251 17.1974C25.6077 16.5398 26.1373 16.0005 26.8 16.0005Z"
+                                                                                className="fill-gray-light-12 dark:fill-gray-dark-12"
+                                                                            />
+                                                                        </svg>
+                                                                    )}
+                                                                </button>
+                                                                <button
+                                                                    className={`m-0 flex flex-row items-center justify-between rounded-[12px] border border-blue-light-5 bg-blue-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-blue-light-3 active:scale-95 dark:border-blue-dark-5 dark:bg-blue-dark-2 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
+                                                                    disabled={isConnecting && connectorName ? true : false}
+                                                                    onClick={async () => {
+                                                                        await connect(WCConnector);
+                                                                        close();
+                                                                    }}
+                                                                >
+                                                                    <div>
+                                                                        <img src="/wallet/WalletConnect.svg" alt="WalletConnect" className="mr-4 inline-block  self-center" />
+                                                                        <span className="m-0 font-inter text-sm font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12">Wallet Connect</span>
+                                                                    </div>
+                                                                    {isConnecting && connectorName === "WalletConnect" && (
+                                                                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="float-right inline-block animate-spin">
+                                                                            <path opacity="0.2" d="M28 16.0005C28 22.6279 22.6274 28.0005 16 28.0005C9.37258 28.0005 4 22.6279 4 16.0005C4 9.37307 9.37258 4.00049 16 4.00049C22.6274 4.00049 28 9.37307 28 16.0005ZM6.4 16.0005C6.4 21.3024 10.6981 25.6005 16 25.6005C21.3019 25.6005 25.6 21.3024 25.6 16.0005C25.6 10.6986 21.3019 6.40049 16 6.40049C10.6981 6.40049 6.4 10.6986 6.4 16.0005Z" className="fill-gray-light-12 dark:fill-gray-dark-12" />
+                                                                            <path
+                                                                                d="M26.8 16.0005C27.4627 16.0005 28.0062 16.5391 27.9401 17.1985C27.7286 19.3064 26.9618 21.3285 25.7082 23.0539C24.2187 25.1041 22.1183 26.6301 19.7082 27.4132C17.2981 28.1963 14.7019 28.1963 12.2918 27.4132C10.2635 26.7541 8.45455 25.5689 7.04447 23.9879C6.60334 23.4933 6.72645 22.7381 7.26262 22.3486C7.79879 21.959 8.5442 22.0841 8.99756 22.5675C10.1008 23.7439 11.4874 24.6283 13.0334 25.1306C14.9615 25.7571 17.0385 25.7571 18.9666 25.1306C20.8947 24.5042 22.5749 23.2834 23.7666 21.6432C24.722 20.3281 25.324 18.7975 25.5251 17.1974C25.6077 16.5398 26.1373 16.0005 26.8 16.0005Z"
+                                                                                className="fill-gray-light-12 dark:fill-gray-dark-12"
+                                                                            />
+                                                                        </svg>
+                                                                    )}
+                                                                </button>
+                                                            </div>
+
+                                                            <div className="m-0 border-t border-dashed border-gray-light-3 p-4 text-center dark:border-gray-dark-3">
+                                                                <p className="leading-1 text-xs text-gray-light-11 dark:text-gray-dark-11">
+                                                                    By connecting your wallet to Residle you&apos;re agree with our{" "}
+                                                                    <a href="#" className="text-gray-light-12 underline dark:text-gray-dark-12" target="_blank" rel="noreferrer">
+                                                                        Terms and Conditions
+                                                                    </a>
+                                                                </p>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    </motion.div>
                                                 );
                                             }}
                                         </Popover.Panel>
                                     </>
                                 )}
-
                                 {/* If account is connected and connected chain is not the same as current chain then display the switch network button */}
                                 {showSwitchToDefaultNetwork && (
                                     <button
