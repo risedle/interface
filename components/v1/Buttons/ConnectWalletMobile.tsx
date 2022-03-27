@@ -1,6 +1,6 @@
 import { Popover } from "@headlessui/react";
 import Link from "next/link";
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { usePopper } from "react-popper";
