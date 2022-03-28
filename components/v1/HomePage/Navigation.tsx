@@ -61,7 +61,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                     </HoverCard.Trigger>
                     <HoverCard.Content sideOffset={16} className="transition duration-300 ease-out">
                         <div className="flex min-w-[161px] flex-col rounded-[8px] border border-gray-light-4 bg-gray-light-2 p-[8px] dark:border-gray-dark-4 dark:bg-gray-dark-2">
-                            <a href={RisedleLinks.twitter} onClick={() => setTwitterActive(true)} onMouseLeave={() => setTwitterActive(false)} className="flex items-center rounded-[8px] p-[8px] text-sm text-gray-light-12 transition hover:bg-gray-light-3 dark:text-gray-dark-12 hover:dark:bg-gray-dark-3">
+                            <a href={RisedleLinks.twitter} onClick={() => setTwitterActive(true)} onMouseLeave={() => setTwitterActive(false)} className="flex items-center rounded-[8px] p-[8px] text-sm text-gray-light-11 transition hover:bg-gray-light-3 hover:text-gray-light-12 dark:text-gray-dark-11 hover:dark:bg-gray-dark-3 hover:dark:text-gray-dark-12">
                                 <span className="grow text-left">
                                     Twitter <span className="text-gray-light-10 dark:text-gray-dark-10">&#8599;</span>
                                     <span className={`ml-2 ${twitterActive ? "inline-block" : "hidden"}  h-[8px] w-[8px] rounded-full bg-sky-light-10 shadow-[0px_0px_12px] shadow-sky-light-10 dark:bg-sky-dark-10 dark:shadow-sky-dark-10`}></span>
@@ -74,7 +74,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                                     />
                                 </svg>
                             </a>
-                            <a href={RisedleLinks.discord} onClick={() => setDiscordActive(true)} onMouseLeave={() => setDiscordActive(false)} className="flex items-center rounded-[8px] p-[8px] text-sm text-gray-light-12 transition hover:bg-gray-light-3 dark:text-gray-dark-12 hover:dark:bg-gray-dark-3">
+                            <a href={RisedleLinks.discord} onClick={() => setDiscordActive(true)} onMouseLeave={() => setDiscordActive(false)} className="flex items-center rounded-[8px] p-[8px] text-sm text-gray-light-11 transition hover:bg-gray-light-3 hover:text-gray-light-12 dark:text-gray-dark-11 hover:dark:bg-gray-dark-3 hover:dark:text-gray-dark-12">
                                 <span className="grow text-left">
                                     Discord <span className="text-gray-light-10 dark:text-gray-dark-10">&#8599;</span>
                                     <span className={`ml-2 ${discordActive ? "inline-block" : "hidden"}  h-[8px] w-[8px] rounded-full bg-sky-light-10 shadow-[0px_0px_12px] shadow-sky-light-10 dark:bg-sky-dark-10 dark:shadow-sky-dark-10`}></span>
@@ -106,7 +106,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                     </HoverCard.Trigger>
                     <HoverCard.Content side={"bottom"} align={"end"} sideOffset={16} className="transition duration-300 ease-out">
                         <div className="flex min-w-[161px] flex-col rounded-[8px] border border-gray-light-4 bg-gray-light-2 p-[8px] dark:border-gray-dark-4 dark:bg-gray-dark-2">
-                            <a href={RisedleLinks.github} onClick={() => setGitbubActive(true)} onMouseLeave={() => setGitbubActive(false)} className="flex items-center rounded-[8px] p-[8px] text-sm text-gray-light-12 transition hover:bg-gray-light-3 dark:text-gray-dark-12 hover:dark:bg-gray-dark-3">
+                            <a href={RisedleLinks.github} onClick={() => setGitbubActive(true)} onMouseLeave={() => setGitbubActive(false)} className="flex items-center rounded-[8px] p-[8px] text-sm text-gray-light-11 transition hover:bg-gray-light-3 hover:text-gray-light-12 dark:text-gray-dark-11 hover:dark:bg-gray-dark-3 hover:dark:text-gray-dark-12">
                                 <span className="grow text-left">
                                     Github <span className="text-gray-light-10 dark:text-gray-dark-10">&#8599;</span>
                                     <span className={`ml-2 ${githubActive ? "inline-block" : "hidden"}  h-[8px] w-[8px] rounded-full bg-sky-light-10 shadow-[0px_0px_12px] shadow-sky-light-10 dark:bg-sky-dark-10 dark:shadow-sky-dark-10`}></span>
@@ -119,7 +119,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                                     />
                                 </svg>
                             </a>
-                            <a href="#" onClick={() => setCoingeckoActive(true)} onMouseLeave={() => setCoingeckoActive(false)} className="flex items-center rounded-[8px] p-[8px] text-sm text-gray-light-12 transition hover:bg-gray-light-3 dark:text-gray-dark-12 hover:dark:bg-gray-dark-3">
+                            <a href="#" onClick={() => setCoingeckoActive(true)} onMouseLeave={() => setCoingeckoActive(false)} className="flex items-center rounded-[8px] p-[8px] text-sm text-gray-light-11 transition hover:bg-gray-light-3 hover:text-gray-light-12 dark:text-gray-dark-11 hover:dark:bg-gray-dark-3 hover:dark:text-gray-dark-12">
                                 <span className="grow text-left">
                                     CoinGecko <span className="text-gray-light-10 dark:text-gray-dark-10">&#8599;</span>
                                     <span className={`ml-2 ${coingeckoActive ? "inline-block" : "hidden"}  h-[8px] w-[8px] rounded-full bg-sky-light-10 shadow-[0px_0px_12px] shadow-sky-light-10 dark:bg-sky-dark-10 dark:shadow-sky-dark-10`}></span>
