@@ -102,7 +102,7 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
                             </div>
                             <div className="space-y-1">
                                 <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">Changes</p>
-                                <p className={positiveReturn}> &uarr; {totalValue > 0 ? "+" + dollarFormatter.format(13.34) + "(2.43%)" : "---"}</p>
+                                <p className={positiveReturn}> {totalValue > 0 ? "+" + dollarFormatter.format(13.34) + "(2.43%)" : "---"}</p>
                             </div>
                         </div>
                     </div>
