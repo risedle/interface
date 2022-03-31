@@ -29,7 +29,7 @@ const ETHRISEAddresses = {
 
 // Token Changes
 interface TokenChanges {
-    totalChanges: number; 
+    totalChanges: number;
     totalChangesPercentage: number;
 }
 
@@ -75,8 +75,8 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
     const rvETHUSDCHistorical = useVaultHistoricalData(chainID, metadata.vaultAddress);
 
     // Get tokens transfer events
-    const ethriseTransactions = useTransferEvents({account: account, contract: ethriseAddress, provider: provider});
-    const rvETHUSDCTransactions = useTransferEvents({account:account, contract:metadata.vaultAddress, provider:provider});
+    const ethriseTransactions = useTransferEvents({ account: account, contract: ethriseAddress, provider: provider });
+    const rvETHUSDCTransactions = useTransferEvents({ account: account, contract: metadata.vaultAddress, provider: provider });
 
     // Get USD value for each user's token balance
     const ethriseValue = ethriseBalance && latestEthriseNavFormatted ? ethriseBalance * latestEthriseNavFormatted : 0;
@@ -93,48 +93,48 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
         transactionData.forEach((event) => {
             const matchedHistoricalData = historicalData.reduce((a, b) => {
                 return Math.abs(b.block_number - event.blockNumber) < Math.abs(a.block_number - event.blockNumber) ? b : a;
-            })
+            });
 
             if (event.args!.to === account) {
                 let mintAmount = parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0));
                 totalBalance += mintAmount;
-                totalBuyValue += (matchedHistoricalData!.nav * mintAmount)
+                totalBuyValue += matchedHistoricalData!.nav * mintAmount;
             } else if (event.args!.from === account) {
                 let redeemAmount = parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0));
                 let avgBuyValue = totalBuyValue / totalBalance;
                 totalBalance -= parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0));
                 totalBuyValue -= redeemAmount * avgBuyValue;
             }
-        })
-        const totalChanges = (latestNAV * totalBalance) - totalBuyValue
-        const totalChangesPercentage = (latestNAV - (totalBuyValue / totalBalance)) / (totalBuyValue / totalBalance) * 100;
+        });
+        const totalChanges = latestNAV * totalBalance - totalBuyValue;
+        const totalChangesPercentage = ((latestNAV - totalBuyValue / totalBalance) / (totalBuyValue / totalBalance)) * 100;
 
         return {
             totalChanges: totalChanges,
-            totalChangesPercentage: totalChangesPercentage
-        }
-    }
+            totalChangesPercentage: totalChangesPercentage,
+        };
+    };
 
     // Get all time changes for every token
     let ethriseChanges: TokenChanges = {
         totalChanges: 0,
-        totalChangesPercentage: 0
-    }
+        totalChangesPercentage: 0,
+    };
 
-    if(ethriseTransactions.data && ethriseHistorical.threeMonthly?.data){
-        ethriseChanges = calculateTokenAllTimeChanges(ethriseTransactions.data, ethriseHistorical.threeMonthly?.data, latestEthriseNavFormatted)
+    if (ethriseTransactions.data && ethriseHistorical.threeMonthly?.data) {
+        ethriseChanges = calculateTokenAllTimeChanges(ethriseTransactions.data, ethriseHistorical.threeMonthly?.data, latestEthriseNavFormatted);
     }
 
     let rvETHUSDCChanges: TokenChanges = {
         totalChanges: 0,
-        totalChangesPercentage: 0
-    }
+        totalChangesPercentage: 0,
+    };
 
     // if(rvETHUSDCTransactions.data && rvETHUSDCHistorical.threeMonthly?.data){
     //     rvETHUSDCChanges = calculateTokenAllTimeChanges(rvETHUSDCTransactions.data, ethriseHistorical.threeMonthly?.data, latestEthriseNavFormatted)
     // }
-    console.log(rvETHUSDCHistorical)
-    
+    console.log(rvETHUSDCHistorical);
+
     // Tailwind class for return & amount
     const positiveReturn = "text-green-light-11 dark:text-green-dark-11 text-sm";
     const negativeReturn = "text-red-light-10 dark:text-red-dark-10 text-sm";
@@ -171,7 +171,10 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
                             </div>
                             <div className="space-y-1">
                                 <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">Changes</p>
-                                <p className={ethriseChanges.totalChangesPercentage > 0 ? positiveReturn : negativeReturn}> {ethriseChanges.totalChangesPercentage > 0 ? <span>&uarr;</span> : <span>&darr;</span> } {totalValue > 0 ? dollarFormatter.format(ethriseChanges.totalChanges) + " ("+ ethriseChanges.totalChangesPercentage.toFixed(2) + "%)" : "---"}</p>
+                                <p className={ethriseChanges.totalChangesPercentage > 0 ? positiveReturn : negativeReturn}>
+                                    {" "}
+                                    {ethriseChanges.totalChangesPercentage > 0 ? <span>&uarr;</span> : <span>&darr;</span>} {totalValue > 0 ? dollarFormatter.format(ethriseChanges.totalChanges) + " (" + ethriseChanges.totalChangesPercentage.toFixed(2) + "%)" : "---"}
+                                </p>
                             </div>
                         </div>
                     </div>
