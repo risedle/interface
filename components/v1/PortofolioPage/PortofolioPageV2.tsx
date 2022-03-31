@@ -1,4 +1,4 @@
-import { FunctionComponent, useMemo } from "react";
+import { FunctionComponent } from "react";
 import Head from "next/head";
 import MarketsPageMeta from "../MarketsPage/MarketsPageMeta";
 import Favicon from "../Favicon";
@@ -15,12 +15,23 @@ import Footer from "../Footer";
 import { NoPorotoflioWarn } from "./NoPortofolioWarn";
 import Navigation from "../Navigation";
 import { useVaultExchangeRate } from "../swr/useVaultExchangeRate";
+import { useVaultHistoricalData } from "../swr/useVaultHistoricalData";
+import { useLeveragedTokenHistoricalData } from "../swr/useLeveragedTokenHistoricalData";
+import { useTransactionHistory } from "../swr/useTransactionHistory";
+import { useTransferEvents } from "../swr/useTransferEvents";
+import { LeveragedTokenDailyData, useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
     [Chains.kovan.id]: "0xc4676f88663360155c2bc6d2A482E34121a50b3b",
     [Chains.arbitrumOne.id]: "0x46D06cf8052eA6FdbF71736AF33eD23686eA1452",
 };
+
+// Token Changes
+interface TokenChanges {
+    totalChanges: number; 
+    totalChangesPercentage: number;
+}
 
 /**
  * PortofolioPageV2Props is a React Component properties that passed to React Component PortofolioPageV2
@@ -59,6 +70,14 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
     const latestVaultExchangeRate = useVaultExchangeRate({ vault: metadata.vaultAddress, provider: provider });
     const latestVaultExchangeRateFormatted = parseFloat(ethers.utils.formatUnits(latestVaultExchangeRate.data ? latestVaultExchangeRate.data : 0, metadata.collateralDecimals));
 
+    // Get Historical data for leveraged & vault token
+    const ethriseHistorical = useLeveragedTokenDailyData(chainID, ethriseAddress);
+    const rvETHUSDCHistorical = useVaultHistoricalData(chainID, metadata.vaultAddress);
+
+    // Get tokens transfer events
+    const ethriseTransactions = useTransferEvents({account: account, contract: ethriseAddress, provider: provider});
+    const rvETHUSDCTransactions = useTransferEvents({account:account, contract:metadata.vaultAddress, provider:provider});
+
     // Get USD value for each user's token balance
     const ethriseValue = ethriseBalance && latestEthriseNavFormatted ? ethriseBalance * latestEthriseNavFormatted : 0;
     const rvETHUSDCValue = rvETHUSDCBalance && latestVaultExchangeRateFormatted ? rvETHUSDCBalance * latestVaultExchangeRateFormatted : 0;
@@ -66,6 +85,56 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
     // Get Total Portofolio Value
     const totalValue = ethriseValue + rvETHUSDCValue;
 
+    // Function to calculate all time changes for a token
+    const calculateTokenAllTimeChanges = (transactionData: ethers.Event[], historicalData: LeveragedTokenDailyData[], latestNAV: number): TokenChanges => {
+        let totalBuyValue = 0;
+        let totalBalance = 0;
+
+        transactionData.forEach((event) => {
+            const matchedHistoricalData = historicalData.reduce((a, b) => {
+                return Math.abs(b.block_number - event.blockNumber) < Math.abs(a.block_number - event.blockNumber) ? b : a;
+            })
+
+            if (event.args!.to === account) {
+                let mintAmount = parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0));
+                totalBalance += mintAmount;
+                totalBuyValue += (matchedHistoricalData!.nav * mintAmount)
+            } else if (event.args!.from === account) {
+                let redeemAmount = parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0));
+                let avgBuyValue = totalBuyValue / totalBalance;
+                totalBalance -= parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0));
+                totalBuyValue -= redeemAmount * avgBuyValue;
+            }
+        })
+        const totalChanges = (latestNAV * totalBalance) - totalBuyValue
+        const totalChangesPercentage = (latestNAV - (totalBuyValue / totalBalance)) / (totalBuyValue / totalBalance) * 100;
+
+        return {
+            totalChanges: totalChanges,
+            totalChangesPercentage: totalChangesPercentage
+        }
+    }
+
+    // Get all time changes for every token
+    let ethriseChanges: TokenChanges = {
+        totalChanges: 0,
+        totalChangesPercentage: 0
+    }
+
+    if(ethriseTransactions.data && ethriseHistorical.threeMonthly?.data){
+        ethriseChanges = calculateTokenAllTimeChanges(ethriseTransactions.data, ethriseHistorical.threeMonthly?.data, latestEthriseNavFormatted)
+    }
+
+    let rvETHUSDCChanges: TokenChanges = {
+        totalChanges: 0,
+        totalChangesPercentage: 0
+    }
+
+    // if(rvETHUSDCTransactions.data && rvETHUSDCHistorical.threeMonthly?.data){
+    //     rvETHUSDCChanges = calculateTokenAllTimeChanges(rvETHUSDCTransactions.data, ethriseHistorical.threeMonthly?.data, latestEthriseNavFormatted)
+    // }
+    console.log(rvETHUSDCHistorical)
+    
     // Tailwind class for return & amount
     const positiveReturn = "text-green-light-11 dark:text-green-dark-11 text-sm";
     const negativeReturn = "text-red-light-10 dark:text-red-dark-10 text-sm";
@@ -98,11 +167,11 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
                         <div className="flex flex-row items-center space-x-4">
                             <div className="space-y-1">
                                 <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">Total Value</p>
-                                <p className="text-sm font-bold text-gray-light-12 dark:text-gray-dark-12">{totalValue > 0 ? dollarFormatter.format(totalValue) : "---"}</p>
+                                <p className="text-sm font-bold text-gray-light-12 dark:text-gray-dark-12">{totalValue > 0 ? dollarFormatter.format(ethriseValue) : "---"}</p>
                             </div>
                             <div className="space-y-1">
                                 <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">Changes</p>
-                                <p className={positiveReturn}> {totalValue > 0 ? "+" + dollarFormatter.format(13.34) + "(2.43%)" : "---"}</p>
+                                <p className={ethriseChanges.totalChangesPercentage > 0 ? positiveReturn : negativeReturn}> {ethriseChanges.totalChangesPercentage > 0 ? <span>&uarr;</span> : <span>&darr;</span> } {totalValue > 0 ? dollarFormatter.format(ethriseChanges.totalChanges) + " ("+ ethriseChanges.totalChangesPercentage.toFixed(2) + "%)" : "---"}</p>
                             </div>
                         </div>
                     </div>

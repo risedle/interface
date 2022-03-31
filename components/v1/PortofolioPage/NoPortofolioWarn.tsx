@@ -11,7 +11,7 @@ const NoPorotoflioWarn = ({ type = "table" }: NoPorotoflioWarnProps) => {
         return (
             <div className="absolute inset-0 z-10 flex items-center justify-center">
                 <div className="w-fit rounded-md bg-gray-light-3 px-4 py-2 dark:bg-gray-dark-3">
-                    <h1 className="text-center text-xs text-gray-light-10">{account ? "You don't have any assets" : "Seems you're not connected to Risedle"}</h1>
+                    <h1 className="text-center text-xs text-gray-light-10 dark:text-gray-dark-10">{account ? "You don't have any assets" : "Seems you're not connected to Risedle"}</h1>
                 </div>
             </div>
         );
@@ -25,7 +25,7 @@ const NoPorotoflioWarn = ({ type = "table" }: NoPorotoflioWarnProps) => {
                 </div>
                 <div className="absolute inset-0 z-10 flex items-center justify-center">
                     <div className="w-fit rounded-md bg-gray-light-3 px-4 py-2 dark:bg-gray-dark-3">
-                        <h1 className="text-center text-xs text-gray-light-10">{account ? "You don't have any assets" : "Seems you're not connected to Risedle"}</h1>
+                        <h1 className="text-center text-xs text-gray-light-10 dark:text-gray-dark-10">{account ? "You don't have any assets" : "Seems you're not connected to Risedle"}</h1>
                     </div>
                 </div>
             </div>
