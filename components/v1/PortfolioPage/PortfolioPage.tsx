@@ -7,7 +7,7 @@ import BackgroundGradient from "./BackgroundGradient";
 import { chain as Chains, useProvider } from "wagmi";
 import { useWalletContext, DEFAULT_CHAIN } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
-import PortofolioChart from "./PortofolioChart";
+import PortofolioChart from "./PortfolioChart";
 import { useTransactionHistory } from "../swr/useTransactionHistory";
 import { useTokenBalance } from "../swr/useTokenBalance";
 import { tokenBalanceFormatter, dollarFormatter } from "../../../utils/formatters";
@@ -15,7 +15,7 @@ import { ethers } from "ethers";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import { useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
 import Footer from "../Footer";
-import { NoPorotoflioWarn } from "./NoPortofolioWarn";
+import { NoPortfolioWarn } from "./NoPortfolioWarn";
 import Navigation from "../Navigation";
 import { useVaultExchangeRate } from "../swr/useVaultExchangeRate";
 
@@ -87,7 +87,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                 </Head>
                 <Favicon />
 
-                <Navigation portofolioActive />
+                <Navigation portfolioActive />
 
                 <div className="mb-20 flex flex-grow flex-col px-4 outline-0 sm:z-10 sm:mx-auto sm:mt-12 sm:mb-0">
                     <div className="mx-auto flex w-full flex-col space-y-6 outline-0 sm:gap-[24px] sm:space-y-0 lg:grid lg:grid-cols-2">
@@ -148,7 +148,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                             ) : null}
                                         </tbody>
                                     </table>
-                                    {!isHavePortofolio && <NoPorotoflioWarn />}
+                                    {!isHavePortofolio && <NoPortfolioWarn />}
                                 </div>
                             </div>
                             {/* Liquidity Vault Assets */}
@@ -193,7 +193,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                             {/* TODO(Matthew): Use map if there are more than 1 Leveraged token */}
                                         </tbody>
                                     </table>
-                                    {!isHavePortofolio && <NoPorotoflioWarn />}
+                                    {!isHavePortofolio && <NoPortfolioWarn />}
                                 </div>
                             </div>
                             {/* Transaction History */}
@@ -245,7 +245,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                                                 : null}
                                         </tbody>
                                     </table>
-                                    {!isHavePortofolio && <NoPorotoflioWarn />}
+                                    {!isHavePortofolio && <NoPortfolioWarn />}
                                 </div>
                             </div>
                         </div>

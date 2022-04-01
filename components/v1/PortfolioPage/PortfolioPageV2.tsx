@@ -12,7 +12,7 @@ import { tokenBalanceFormatter, dollarFormatter } from "../../../utils/formatter
 import { ethers } from "ethers";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import Footer from "../Footer";
-import { NoPorotoflioWarn } from "./NoPortofolioWarn";
+import { NoPortfolioWarn } from "./NoPortfolioWarn";
 import Navigation from "../Navigation";
 import { useVaultExchangeRate } from "../swr/useVaultExchangeRate";
 import { useVaultHistoricalData } from "../swr/useVaultHistoricalData";
@@ -34,16 +34,16 @@ interface TokenChanges {
 }
 
 /**
- * PortofolioPageV2Props is a React Component properties that passed to React Component PortofolioPageV2
+ * PortfolioPageV2Props is a React Component properties that passed to React Component PortfolioPageV2
  */
-type PortofolioPageV2Props = {};
+type PortfolioPageV2Props = {};
 
 /**
- * PortofolioPageV2 is just yet another react component
+ * PortfolioPageV2 is just yet another react component
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
+const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
     const { chain, account, switchNetwork } = useWalletContext();
     const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
     const ethriseAddress = ETHRISEAddresses[chainID];
@@ -150,7 +150,7 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
                 </Head>
                 <Favicon />
 
-                <Navigation portofolioActive />
+                <Navigation portfolioActive />
 
                 <div className="mb-20 mt-5 flex flex-grow flex-col space-y-6 px-4 outline-0 sm:z-10 sm:mx-auto sm:mt-14 sm:mb-0">
                     {/* Portofolio */}
@@ -161,7 +161,7 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
                                 <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Portofolio</p>
                             </div>
                             <div>
-                                <img src="portofolio/portofolio.png" width={48} height={48} alt="portofolio" />
+                                <img src="portfolio/portfolio.png" width={48} height={48} alt="portfolio" />
                             </div>
                         </div>
                         <div className="flex flex-row items-center space-x-4">
@@ -169,6 +169,10 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
                                 <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Total Value</p>
                                 <p className="text-sm font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">{totalValue > 0 ? dollarFormatter.format(ethriseValue) : "---"}</p>
                             </div>
+                            {/*
+
+                            NOTE: We don't use changes first before it's very tricky to implement using current architecture
+
                             <div className="space-y-2">
                                 <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Changes</p>
                                 <p className={ethriseChanges.totalChangesPercentage > 0 ? positiveReturn : negativeReturn}>
@@ -176,6 +180,8 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
                                     {ethriseChanges.totalChangesPercentage > 0 ? <span>&uarr;</span> : <span>&darr;</span>} {totalValue > 0 ? dollarFormatter.format(ethriseChanges.totalChanges) + " (" + ethriseChanges.totalChangesPercentage.toFixed(2) + "%)" : "---"}
                                 </p>
                             </div>
+
+                            */}
                         </div>
                     </div>
 
@@ -250,7 +256,7 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
                                     : null}
                             </tbody>
                         </table>
-                        {totalValue <= 0 ? <NoPorotoflioWarn /> : null}
+                        {totalValue <= 0 ? <NoPortfolioWarn /> : null}
                     </div>
                 </div>
 
@@ -266,4 +272,4 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
     );
 };
 
-export default PortofolioPageV2;
+export default PortfolioPageV2;
