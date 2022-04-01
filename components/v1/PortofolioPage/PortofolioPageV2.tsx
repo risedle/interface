@@ -152,7 +152,7 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
 
                 <Navigation portofolioActive />
 
-                <div className="mb-20 flex flex-grow flex-col space-y-6 px-4 outline-0 sm:z-10 sm:mx-auto sm:mt-12 sm:mb-0">
+                <div className="mb-20 mt-5 flex flex-grow flex-col space-y-6 px-4 outline-0 sm:z-10 sm:mx-auto sm:mt-14 sm:mb-0">
                     {/* Portofolio */}
                     <div className="space-y-2 rounded-[16px] bg-gray-light-2 p-[16px] dark:bg-gray-dark-2 sm:w-[540px]">
                         <div className="flex flex-row items-center">
