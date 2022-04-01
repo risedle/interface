@@ -1,15 +1,10 @@
 import type { FunctionComponent } from "react";
 import Head from "next/head";
-import Link from "next/link";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
 import { dollarFormatter } from "../../../utils/formatters";
 import MarketCard from "./MarketCard";
-import ButtonNetworkSwitcher from "../Buttons/NetworkSwitcher";
-import ButtonConnectWalletDesktop from "../Buttons/ConnectWalletDesktop";
-import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
-import Logo from "../Logo";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import MarketsPageMeta from "./MarketsPageMeta";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";

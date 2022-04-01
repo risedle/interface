@@ -10,7 +10,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 // Toasts
 import ToastError from "../Toasts/Error";
 import ToastSuccess from "../Toasts/Success";
-// States
+
 import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
 
 /**
@@ -18,6 +18,7 @@ import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector
  */
 type ButtonConnectWalletMobileProps = {};
 type OpenedMenu = "change-chain" | "connect-wallet" | "menu" | "none";
+
 /**
  * ButtonConnectWalletMobile is just yet another react component
  *
@@ -73,6 +74,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
         setConnectorName(undefined);
     };
 
+    // Render content based on the state
     const renderContent = () => {
         switch (isOpen) {
             case "change-chain":
@@ -372,7 +374,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
     };
 
     return (
-        <div className="fixed bottom-0 flex h-[64px] w-full flex-row space-x-2 border-t border-gray-light-3 bg-gray-light-1 px-4 py-3 dark:border-gray-dark-3 dark:bg-gray-dark-1">
+        <div className="fixed bottom-0 flex h-[64px] w-full flex-row border-t border-gray-light-3 bg-gray-light-1 px-4 py-3 dark:border-gray-dark-3 dark:bg-gray-dark-1">
             <Dialog.Root open={isOpen != "none"}>
                 <button
                     className={`button basic w-[40px] flex-none p-2 outline-0 ${isOpen === "change-chain" ? "z-10" : ""}`}
@@ -389,7 +391,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                 </button>
                 {showConnectWallet && (
                     <button
-                        className={`${isOpen === "connect-wallet" ? "z-10" : ""} button gradient inline-block w-full grow rounded-full bg-[length:300%_300%] bg-center py-3 px-4 text-sm font-semibold leading-4 tracking-tight text-gray-light-1 outline-0 hover:bg-left hover:shadow-xl hover:shadow-blue-400/20 dark:text-gray-dark-1`}
+                        className={`${isOpen === "connect-wallet" ? "z-10" : ""} button gradient mx-2 inline-block w-full grow rounded-full bg-[length:300%_300%] bg-center py-3 px-4 text-sm font-semibold leading-4 tracking-tight text-gray-light-1 outline-0 hover:bg-left hover:shadow-xl hover:shadow-blue-400/20 dark:text-gray-dark-1`}
                         onClick={() => {
                             setIsOpen("connect-wallet");
                         }}
@@ -440,6 +442,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         </svg>
                     )}
                 </button>
+
                 <Dialog.Overlay className="fixed inset-0 bg-gray-dark-1/60 backdrop-blur dark:bg-black/60" />
                 <Dialog.Content onPointerDownOutside={() => setIsOpen("none")} onInteractOutside={() => setIsOpen("none")}>
                     {renderContent()}
