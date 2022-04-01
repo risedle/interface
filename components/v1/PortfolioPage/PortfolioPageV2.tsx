@@ -140,37 +140,36 @@ const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
     const negativeReturn = "text-red-light-10 dark:text-red-dark-10 text-sm leading-4";
 
     return (
-        <>
-            <div className="relative flex h-full min-h-screen w-full flex-col overflow-hidden bg-gray-light-1 font-inter dark:bg-gray-dark-1">
-                <Head>
-                    {/* <!-- HTML Meta Tags --> */}
-                    <title>Risedle Protocol</title>
-                    <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
-                    <MarketsPageMeta />
-                </Head>
-                <Favicon />
+        <div className="relative flex h-full min-h-screen w-full flex-col overflow-hidden bg-gray-light-1 font-inter dark:bg-gray-dark-1">
+            <Head>
+                {/* <!-- HTML Meta Tags --> */}
+                <title>Risedle Protocol</title>
+                <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
+                <MarketsPageMeta />
+            </Head>
+            <Favicon />
 
-                <Navigation portfolioActive />
+            <Navigation portfolioActive />
 
-                <div className="mb-20 mt-5 flex flex-grow flex-col space-y-6 px-4 outline-0 sm:z-10 sm:mx-auto sm:mt-14 sm:mb-0">
-                    {/* Portofolio */}
-                    <div className="space-y-4 rounded-[16px] bg-gray-light-2 p-[16px] dark:bg-gray-dark-2 sm:w-[540px]">
-                        <div className="flex flex-row items-center">
-                            <div className="flex-grow">
-                                {account && <p className="mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10">{formatAddress(account)}</p>}
-                                {!account && <p className="mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10">Wallet not connected</p>}
-                                <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Portofolio</p>
-                            </div>
-                            <div>
-                                <img src="portfolio/portfolio.png" width={48} height={48} alt="portfolio" />
-                            </div>
+            <div className="z-10 mb-20 mt-5 flex flex-grow flex-col space-y-6 px-4 outline-0 sm:mx-auto sm:mt-14 sm:mb-0">
+                {/* Portofolio */}
+                <div className="space-y-4 rounded-[16px] bg-gray-light-2 p-[16px] dark:bg-gray-dark-2 sm:w-[540px]">
+                    <div className="flex flex-row items-center">
+                        <div className="flex-grow">
+                            {account && <p className="mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10">{formatAddress(account)}</p>}
+                            {!account && <p className="mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10">Wallet not connected</p>}
+                            <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Portofolio</p>
                         </div>
-                        <div className="flex flex-row items-center space-x-4">
-                            <div className="space-y-2">
-                                <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Total Value</p>
-                                <p className="text-sm font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">{totalValue > 0 ? dollarFormatter.format(ethriseValue) : "---"}</p>
-                            </div>
-                            {/*
+                        <div>
+                            <img src="portfolio/portfolio.png" width={48} height={48} alt="portfolio" />
+                        </div>
+                    </div>
+                    <div className="flex flex-row items-center space-x-4">
+                        <div className="space-y-2">
+                            <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Total Value</p>
+                            <p className="text-sm font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">{totalValue > 0 ? dollarFormatter.format(ethriseValue) : "---"}</p>
+                        </div>
+                        {/*
 
                             NOTE: We don't use changes first before it's very tricky to implement using current architecture
 
@@ -183,93 +182,93 @@ const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
                             </div>
 
                             */}
-                        </div>
                     </div>
+                </div>
 
-                    {/* Holding Assets */}
-                    <div className={`space-y-2 rounded-[16px] bg-gray-light-2 ${totalValue > 0 ? "px-[16px] pt-[16px]" : "p-[16px]"} dark:bg-gray-dark-2 sm:w-[540px]`}>
-                        <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Your Tokens</p>
-                        <table className="table w-full table-fixed">
-                            <thead>
-                                <tr>
-                                    <th className="w-3/5 rounded-l-[8px] bg-gray-light-4 p-[8px] text-left text-[12px] text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10">Token</th>
-                                    <th className="hidden w-1/5 bg-gray-light-4 p-[8px] text-[12px] text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10 sm:table-cell">Amount</th>
-                                    <th className="hidden w-1/5 rounded-r-[8px] bg-gray-light-4 p-[8px] text-right text-[12px] text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10 sm:table-cell">Value (USDC)</th>
-                                    <th className="w-2/5 rounded-r-[8px] bg-gray-light-4 p-[8px] text-right text-[12px] text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10 sm:hidden">Amount/value</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y-2 divide-dashed divide-gray-light-5 dark:divide-gray-dark-5">
-                                {totalValue
-                                    ? Object.values(Metadata[chainID]).map((token) => {
-                                          let leveragedTokenBalance = 0;
-                                          let leveragedTokenValue = 0;
-                                          let vaultTokenBalance = 0;
-                                          let vaultTokenValue = 0;
-                                          switch (token.title) {
-                                              case "DEMOETHRISE" || "ETHRISE": {
-                                                  leveragedTokenBalance = ethriseBalance;
-                                                  leveragedTokenValue = ethriseValue;
-                                                  vaultTokenBalance = rvETHUSDCBalance;
-                                                  vaultTokenValue = rvETHUSDCValue;
-                                                  break;
-                                              }
+                {/* Holding Assets */}
+                <div className={`space-y-2 rounded-[16px] bg-gray-light-2 ${totalValue > 0 ? "px-[16px] pt-[16px]" : "p-[16px]"} dark:bg-gray-dark-2 sm:w-[540px]`}>
+                    <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Your Tokens</p>
+                    <table className="table w-full table-fixed">
+                        <thead>
+                            <tr>
+                                <th className="w-3/5 rounded-l-[8px] bg-gray-light-4 p-[8px] text-left text-[12px] text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10">Token</th>
+                                <th className="hidden w-1/5 bg-gray-light-4 p-[8px] text-[12px] text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10 sm:table-cell">Amount</th>
+                                <th className="hidden w-1/5 rounded-r-[8px] bg-gray-light-4 p-[8px] text-right text-[12px] text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10 sm:table-cell">Value (USDC)</th>
+                                <th className="w-2/5 rounded-r-[8px] bg-gray-light-4 p-[8px] text-right text-[12px] text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10 sm:hidden">Amount/value</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y-2 divide-dashed divide-gray-light-5 dark:divide-gray-dark-5">
+                            {totalValue
+                                ? Object.values(Metadata[chainID]).map((token) => {
+                                      let leveragedTokenBalance = 0;
+                                      let leveragedTokenValue = 0;
+                                      let vaultTokenBalance = 0;
+                                      let vaultTokenValue = 0;
+                                      switch (token.title) {
+                                          case "DEMOETHRISE" || "ETHRISE": {
+                                              leveragedTokenBalance = ethriseBalance;
+                                              leveragedTokenValue = ethriseValue;
+                                              vaultTokenBalance = rvETHUSDCBalance;
+                                              vaultTokenValue = rvETHUSDCValue;
+                                              break;
                                           }
-                                          return (
-                                              <>
-                                                  {/* Vault Token */}
-                                                  <tr>
-                                                      <td className="my-[16px] flex items-center space-x-3 px-[8px] text-left">
-                                                          <img className="h-[24px] w-[24px]" src={token.vaultLogo} alt={token.vaultLogo} />
-                                                          <div className="flex flex-col space-y-[8px]">
-                                                              <p className="text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{token.vaultTitle}</p>
-                                                          </div>
-                                                      </td>
-                                                      <td className="my-[16px] hidden px-[8px] text-center text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">{tokenBalanceFormatter.format(vaultTokenBalance)}</td>
-                                                      <td className="my-[16px] hidden px-[8px] text-right text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">{dollarFormatter.format(vaultTokenValue)}</td>
-                                                      <td className="my-[16px] px-[8px] sm:hidden">
-                                                          <div className="flex flex-col text-right">
-                                                              <p className="text-right text-sm font-semibold text-gray-light-12  dark:text-gray-dark-12">{tokenBalanceFormatter.format(vaultTokenBalance)}</p>
-                                                              <p className="text-right text-[12px] text-gray-light-10  dark:text-gray-dark-10">{dollarFormatter.format(vaultTokenValue)}</p>
-                                                          </div>
-                                                      </td>
-                                                  </tr>
+                                      }
+                                      return (
+                                          <>
+                                              {/* Vault Token */}
+                                              <tr>
+                                                  <td className="my-[16px] flex items-center space-x-3 px-[8px] text-left">
+                                                      <img className="h-[24px] w-[24px]" src={token.vaultLogo} alt={token.vaultLogo} />
+                                                      <div className="flex flex-col space-y-[8px]">
+                                                          <p className="text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{token.vaultTitle}</p>
+                                                      </div>
+                                                  </td>
+                                                  <td className="my-[16px] hidden px-[8px] text-center text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">{tokenBalanceFormatter.format(vaultTokenBalance)}</td>
+                                                  <td className="my-[16px] hidden px-[8px] text-right text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">{dollarFormatter.format(vaultTokenValue)}</td>
+                                                  <td className="my-[16px] px-[8px] sm:hidden">
+                                                      <div className="flex flex-col text-right">
+                                                          <p className="text-right text-sm font-semibold text-gray-light-12  dark:text-gray-dark-12">{tokenBalanceFormatter.format(vaultTokenBalance)}</p>
+                                                          <p className="text-right text-[12px] text-gray-light-10  dark:text-gray-dark-10">{dollarFormatter.format(vaultTokenValue)}</p>
+                                                      </div>
+                                                  </td>
+                                              </tr>
 
-                                                  {/* Leveraged Token */}
-                                                  <tr>
-                                                      <td className="my-[16px] flex items-center space-x-3 px-[8px] text-left">
-                                                          <img className="h-[24px] w-[24px]" src={token.logo} alt={token.logo} />
-                                                          <div className="flex flex-col space-y-[8px]">
-                                                              <p className="text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{token.title}</p>
-                                                          </div>
-                                                      </td>
-                                                      <td className="my-[16px] hidden px-[8px] text-center text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">{tokenBalanceFormatter.format(leveragedTokenBalance)}</td>
-                                                      <td className="my-[16px] hidden px-[8px] text-right text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">{dollarFormatter.format(leveragedTokenValue)}</td>
-                                                      <td className="my-[16px] px-[8px] sm:hidden">
-                                                          <div className="flex flex-col text-right">
-                                                              <p className="text-right text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{tokenBalanceFormatter.format(leveragedTokenBalance)}</p>
-                                                              <p className="text-right text-[12px] text-gray-light-10 dark:text-gray-dark-10">{dollarFormatter.format(leveragedTokenValue)}</p>
-                                                          </div>
-                                                      </td>
-                                                  </tr>
-                                              </>
-                                          );
-                                      })
-                                    : null}
-                            </tbody>
-                        </table>
-                        {totalValue <= 0 ? <NoPortfolioWarn /> : null}
-                    </div>
+                                              {/* Leveraged Token */}
+                                              <tr>
+                                                  <td className="my-[16px] flex items-center space-x-3 px-[8px] text-left">
+                                                      <img className="h-[24px] w-[24px]" src={token.logo} alt={token.logo} />
+                                                      <div className="flex flex-col space-y-[8px]">
+                                                          <p className="text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{token.title}</p>
+                                                      </div>
+                                                  </td>
+                                                  <td className="my-[16px] hidden px-[8px] text-center text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">{tokenBalanceFormatter.format(leveragedTokenBalance)}</td>
+                                                  <td className="my-[16px] hidden px-[8px] text-right text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">{dollarFormatter.format(leveragedTokenValue)}</td>
+                                                  <td className="my-[16px] px-[8px] sm:hidden">
+                                                      <div className="flex flex-col text-right">
+                                                          <p className="text-right text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{tokenBalanceFormatter.format(leveragedTokenBalance)}</p>
+                                                          <p className="text-right text-[12px] text-gray-light-10 dark:text-gray-dark-10">{dollarFormatter.format(leveragedTokenValue)}</p>
+                                                      </div>
+                                                  </td>
+                                              </tr>
+                                          </>
+                                      );
+                                  })
+                                : null}
+                        </tbody>
+                    </table>
+                    {totalValue <= 0 ? <NoPortfolioWarn /> : null}
                 </div>
-
-                <div className="hidden sm:mt-20 sm:inline-block">
-                    <Footer />
-                </div>
-                <BackgroundGradient />
             </div>
-            <div className="sm:hidden">
+
+            <div className="hidden sm:mt-20 sm:inline-block">
+                <Footer />
+            </div>
+            <BackgroundGradient />
+
+            <div className="z-10 sm:hidden">
                 <ButtonConnectWalletMobile />
             </div>
-        </>
+        </div>
     );
 };
 
