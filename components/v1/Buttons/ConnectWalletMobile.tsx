@@ -401,7 +401,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                 )}
                 {showSwitchToDefaultNetwork && (
                     <button
-                        className={`${isOpen === "connect-wallet" ? "z-10" : ""} inline-block w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1`}
+                        className={`${isOpen === "connect-wallet" ? "z-10" : ""} mx-2 inline-block  w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1`}
                         onClick={() => {
                             if (switchNetwork) {
                                 switchNetwork(DEFAULT_CHAIN.id);
@@ -416,7 +416,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                     </button>
                 )}
                 {showAccountData && account && (
-                    <button onClick={() => setIsOpen("connect-wallet")} className={`${isOpen === "connect-wallet" ? "z-10" : ""} inline-block w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1`}>
+                    <button onClick={() => setIsOpen("connect-wallet")} className={`${isOpen === "connect-wallet" ? "z-10" : ""} mx-2 inline-block w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1`}>
                         <span className="mr-2 inline-block h-[8px] w-[8px] rounded-full bg-sky-light-10 shadow-[0px_0px_12px] shadow-sky-light-10 dark:bg-sky-dark-10"></span>
                         {formatAddress(account)}
                     </button>
