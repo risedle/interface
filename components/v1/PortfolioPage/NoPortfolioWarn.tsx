@@ -1,10 +1,10 @@
 import { useWalletContext } from "../Wallet";
 
-type NoPorotoflioWarnProps = {
+type NoPortfolioWarnProps = {
     type?: "chart" | "table";
 };
 
-const NoPorotoflioWarn = ({ type = "table" }: NoPorotoflioWarnProps) => {
+const NoPortfolioWarn = ({ type = "table" }: NoPortfolioWarnProps) => {
     const { account } = useWalletContext();
 
     if (type === "chart") {
@@ -33,4 +33,4 @@ const NoPorotoflioWarn = ({ type = "table" }: NoPorotoflioWarnProps) => {
     }
 };
 
-export { NoPorotoflioWarn };
+export { NoPortfolioWarn };

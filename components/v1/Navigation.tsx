@@ -10,7 +10,7 @@ import Logo from "./Logo";
  */
 type NavigationProps = {
     marketsActive?: boolean;
-    portofolioActive?: boolean;
+    portfolioActive?: boolean;
 };
 
 /**
@@ -18,7 +18,7 @@ type NavigationProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portofolioActive }) => {
+const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfolioActive }) => {
     return (
         <div className="container z-10 mx-auto max-w-full sm:z-20">
             <div className="grid grid-cols-3 place-items-center content-center p-4">
@@ -30,12 +30,12 @@ const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portofo
                         </a>
                     </Link>
                 </div>
-                <div className="space-x-4">
+                <div className="space-x-4 sm:space-x-8">
                     <Link href="/markets">
                         <a className={marketsActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>Markets</a>
                     </Link>
-                    <Link href="/portofolio">
-                        <a className={portofolioActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>Portofolio</a>
+                    <Link href="/portfolio">
+                        <a className={portfolioActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>Portfolio</a>
                     </Link>
                 </div>
                 <div className="inline-block flex flex-row space-x-2 justify-self-end">
