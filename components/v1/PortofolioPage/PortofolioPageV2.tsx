@@ -136,8 +136,8 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
     console.log(rvETHUSDCHistorical);
 
     // Tailwind class for return & amount
-    const positiveReturn = "text-green-light-11 dark:text-green-dark-11 text-sm";
-    const negativeReturn = "text-red-light-10 dark:text-red-dark-10 text-sm";
+    const positiveReturn = "text-green-light-11 dark:text-green-dark-11 text-sm leading-4";
+    const negativeReturn = "text-red-light-10 dark:text-red-dark-10 text-sm leading-4";
 
     return (
         <>
@@ -154,7 +154,7 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
 
                 <div className="mb-20 mt-5 flex flex-grow flex-col space-y-6 px-4 outline-0 sm:z-10 sm:mx-auto sm:mt-14 sm:mb-0">
                     {/* Portofolio */}
-                    <div className="space-y-2 rounded-[16px] bg-gray-light-2 p-[16px] dark:bg-gray-dark-2 sm:w-[540px]">
+                    <div className="space-y-4 rounded-[16px] bg-gray-light-2 p-[16px] dark:bg-gray-dark-2 sm:w-[540px]">
                         <div className="flex flex-row items-center">
                             <div className="flex-grow">
                                 <p className={`mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10 ${!account && "hidden"}`}>{account ? formatAddress(account) : null}</p>
@@ -165,12 +165,12 @@ const PortofolioPageV2: FunctionComponent<PortofolioPageV2Props> = ({}) => {
                             </div>
                         </div>
                         <div className="flex flex-row items-center space-x-4">
-                            <div className="space-y-1">
-                                <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">Total Value</p>
-                                <p className="text-sm font-bold text-gray-light-12 dark:text-gray-dark-12">{totalValue > 0 ? dollarFormatter.format(ethriseValue) : "---"}</p>
+                            <div className="space-y-2">
+                                <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Total Value</p>
+                                <p className="text-sm font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">{totalValue > 0 ? dollarFormatter.format(ethriseValue) : "---"}</p>
                             </div>
-                            <div className="space-y-1">
-                                <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">Changes</p>
+                            <div className="space-y-2">
+                                <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Changes</p>
                                 <p className={ethriseChanges.totalChangesPercentage > 0 ? positiveReturn : negativeReturn}>
                                     {" "}
                                     {ethriseChanges.totalChangesPercentage > 0 ? <span>&uarr;</span> : <span>&darr;</span>} {totalValue > 0 ? dollarFormatter.format(ethriseChanges.totalChanges) + " (" + ethriseChanges.totalChangesPercentage.toFixed(2) + "%)" : "---"}
