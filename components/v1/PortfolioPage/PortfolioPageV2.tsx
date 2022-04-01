@@ -157,7 +157,8 @@ const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
                     <div className="space-y-4 rounded-[16px] bg-gray-light-2 p-[16px] dark:bg-gray-dark-2 sm:w-[540px]">
                         <div className="flex flex-row items-center">
                             <div className="flex-grow">
-                                <p className={`mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10 ${!account && "hidden"}`}>{account ? formatAddress(account) : null}</p>
+                                {account && <p className="mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10">{formatAddress(account)}</p>}
+                                {!account && <p className="mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10">Wallet not connected</p>}
                                 <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Portofolio</p>
                             </div>
                             <div>
@@ -187,7 +188,7 @@ const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
 
                     {/* Holding Assets */}
                     <div className={`space-y-2 rounded-[16px] bg-gray-light-2 ${totalValue > 0 ? "px-[16px] pt-[16px]" : "p-[16px]"} dark:bg-gray-dark-2 sm:w-[540px]`}>
-                        <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Holding Assets</p>
+                        <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Your Tokens</p>
                         <table className="table w-full table-fixed">
                             <thead>
                                 <tr>
