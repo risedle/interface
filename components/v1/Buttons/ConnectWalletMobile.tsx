@@ -268,7 +268,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                     <span className="m-0 text-sm font-normal leading-none text-gray-light-12 dark:text-gray-dark-12">Home</span>
                                 </a>
                             </Link>
-                            <Link href="/">
+                            <Link href="/markets">
                                 <a className="m-0 flex w-full flex-row items-center justify-between text-left">
                                     <span className="m-0 text-sm font-normal leading-none text-gray-light-12 dark:text-gray-dark-12">Markets</span>
                                 </a>
