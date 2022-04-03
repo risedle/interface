@@ -12,26 +12,14 @@ import { tokenBalanceFormatter, dollarFormatter } from "../../../utils/formatter
 import { ethers } from "ethers";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import Footer from "../Footer";
-import { NoPortfolioWarn } from "./NoPortfolioWarn";
 import Navigation from "../Navigation";
 import { useVaultExchangeRate } from "../swr/useVaultExchangeRate";
-import { useVaultHistoricalData } from "../swr/useVaultHistoricalData";
-import { useLeveragedTokenHistoricalData } from "../swr/useLeveragedTokenHistoricalData";
-import { useTransactionHistory } from "../swr/useTransactionHistory";
-import { useTransferEvents } from "../swr/useTransferEvents";
-import { LeveragedTokenDailyData, useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
     [Chains.kovan.id]: "0xc4676f88663360155c2bc6d2A482E34121a50b3b",
     [Chains.arbitrumOne.id]: "0x46D06cf8052eA6FdbF71736AF33eD23686eA1452",
 };
-
-// Token Changes
-interface TokenChanges {
-    totalChanges: number;
-    totalChangesPercentage: number;
-}
 
 /**
  * PortfolioPageV2Props is a React Component properties that passed to React Component PortfolioPageV2
@@ -46,98 +34,46 @@ type PortfolioPageV2Props = {};
 const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
     const { chain, account, switchNetwork } = useWalletContext();
     const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
-    const ethriseAddress = ETHRISEAddresses[chainID];
 
-    // Get ETHRISE metadata
-    const metadata = Metadata[chainID][ethriseAddress];
+    // Tokens
+    const ethriseAddress = ETHRISEAddresses[chainID];
+    const ethriseMetadata = Metadata[chainID][ethriseAddress];
 
     // Get Provider
     const provider = useProvider();
 
-    // Get User's ETHRISE Balance
+    // Get tokens balance
     const ethriseBalanceResponse = useTokenBalance({ account: account, token: ethriseAddress, provider: provider });
-    const ethriseBalance = tokenBalanceFormatter.format(parseFloat(ethers.utils.formatUnits(ethriseBalanceResponse.data ? ethriseBalanceResponse.data : 0)));
+    const ethriseBalance = parseFloat(ethers.utils.formatUnits(ethriseBalanceResponse.data ? ethriseBalanceResponse.data : 0, ethriseMetadata.collateralDecimals));
+    const rvETHUSDCBalanceResponse = useTokenBalance({ account: account, token: ethriseMetadata.vaultAddress, provider: provider });
+    const rvETHUSDCBalance = parseFloat(ethers.utils.formatUnits(rvETHUSDCBalanceResponse.data ? rvETHUSDCBalanceResponse.data : 0, ethriseMetadata.debtDecimals));
 
-    // Get User's rvETHUSDC Balance
-    const rvETHUSDCBalanceResponse = useTokenBalance({ account: account, token: metadata.vaultAddress, provider: provider });
-    const rvETHUSDCBalance = parseFloat(ethers.utils.formatUnits(rvETHUSDCBalanceResponse.data ? rvETHUSDCBalanceResponse.data : 0, metadata.debtDecimals));
-
-    // Get Latest ETHRISE NAV
-    const latestEthriseNav = useLeveragedTokenNAV({ token: ethriseAddress, vault: metadata.vaultAddress, provider: provider });
-    const latestEthriseNavFormatted = parseFloat(ethers.utils.formatUnits(latestEthriseNav.data ? latestEthriseNav.data : 0, metadata.debtDecimals));
-
-    // Get Latest rvETHUSDC Exchange Rate
-    const latestVaultExchangeRate = useVaultExchangeRate({ vault: metadata.vaultAddress, provider: provider });
-    const latestVaultExchangeRateFormatted = parseFloat(ethers.utils.formatUnits(latestVaultExchangeRate.data ? latestVaultExchangeRate.data : 0, metadata.collateralDecimals));
-
-    // Get Historical data for leveraged & vault token
-    const ethriseHistorical = useLeveragedTokenDailyData(chainID, ethriseAddress);
-    const rvETHUSDCHistorical = useVaultHistoricalData(chainID, metadata.vaultAddress);
-
-    // Get tokens transfer events
-    const ethriseTransactions = useTransferEvents({ account: account, contract: ethriseAddress, provider: provider });
-    const rvETHUSDCTransactions = useTransferEvents({ account: account, contract: metadata.vaultAddress, provider: provider });
+    // Get tokens value
+    const latestEthriseNavResponse = useLeveragedTokenNAV({ token: ethriseAddress, vault: ethriseMetadata.vaultAddress, provider: provider });
+    const latestEthriseNav = parseFloat(ethers.utils.formatUnits(latestEthriseNavResponse.data ? latestEthriseNavResponse.data : 0, ethriseMetadata.debtDecimals));
+    const latestVaultExchangeRateResponse = useVaultExchangeRate({ vault: ethriseMetadata.vaultAddress, provider: provider });
+    const latestVaultExchangeRate = parseFloat(ethers.utils.formatUnits(latestVaultExchangeRateResponse.data ? latestVaultExchangeRateResponse.data : 0, ethriseMetadata.debtDecimals));
 
     // Get USD value for each user's token balance
-    const ethriseValue = ethriseBalance && latestEthriseNavFormatted ? ethriseBalance * latestEthriseNavFormatted : 0;
-    const rvETHUSDCValue = rvETHUSDCBalance && latestVaultExchangeRateFormatted ? rvETHUSDCBalance * latestVaultExchangeRateFormatted : 0;
+    const ethriseValue = ethriseBalance * latestEthriseNav;
+    const rvETHUSDCValue = rvETHUSDCBalance * latestVaultExchangeRate;
 
     // Get Total Portofolio Value
     const totalValue = ethriseValue + rvETHUSDCValue;
 
-    // Function to calculate all time changes for a token
-    const calculateTokenAllTimeChanges = (transactionData: ethers.Event[], historicalData: LeveragedTokenDailyData[], latestNAV: number): TokenChanges => {
-        let totalBuyValue = 0;
-        let totalBalance = 0;
+    // UI States
+    const showTotalValueLoading = ethriseBalanceResponse.isLoading || rvETHUSDCBalanceResponse.isLoading || latestEthriseNavResponse.isLoading || latestVaultExchangeRateResponse.isLoading ? true : false;
+    const showTotalValueError = !showTotalValueLoading && (ethriseBalanceResponse.error || rvETHUSDCBalanceResponse.error || latestEthriseNavResponse.error || latestVaultExchangeRateResponse.error) ? true : false;
+    const showTotalValueData = !showTotalValueLoading && !showTotalValueError ? true : false;
 
-        transactionData.forEach((event) => {
-            const matchedHistoricalData = historicalData.reduce((a, b) => {
-                return Math.abs(b.block_number - event.blockNumber) < Math.abs(a.block_number - event.blockNumber) ? b : a;
-            });
+    // TODO: Can we make this more simple?
+    const showBalanceLoading = ethriseBalanceResponse.isLoading || rvETHUSDCBalanceResponse.isLoading ? true : false;
+    const showBalanceError = !showBalanceLoading && (ethriseBalanceResponse.error || rvETHUSDCBalanceResponse.error) ? true : false;
+    const showBalanceData = !showBalanceLoading && !showBalanceError ? true : false;
 
-            if (event.args!.to === account) {
-                let mintAmount = parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0));
-                totalBalance += mintAmount;
-                totalBuyValue += matchedHistoricalData!.nav * mintAmount;
-            } else if (event.args!.from === account) {
-                let redeemAmount = parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0));
-                let avgBuyValue = totalBuyValue / totalBalance;
-                totalBalance -= parseFloat(ethers.utils.formatUnits(event.args!.value ? event.args!.value : 0));
-                totalBuyValue -= redeemAmount * avgBuyValue;
-            }
-        });
-        const totalChanges = latestNAV * totalBalance - totalBuyValue;
-        const totalChangesPercentage = ((latestNAV - totalBuyValue / totalBalance) / (totalBuyValue / totalBalance)) * 100;
-
-        return {
-            totalChanges: totalChanges,
-            totalChangesPercentage: totalChangesPercentage,
-        };
-    };
-
-    // Get all time changes for every token
-    let ethriseChanges: TokenChanges = {
-        totalChanges: 0,
-        totalChangesPercentage: 0,
-    };
-
-    if (ethriseTransactions.data && ethriseHistorical.threeMonthly?.data) {
-        ethriseChanges = calculateTokenAllTimeChanges(ethriseTransactions.data, ethriseHistorical.threeMonthly?.data, latestEthriseNavFormatted);
-    }
-
-    let rvETHUSDCChanges: TokenChanges = {
-        totalChanges: 0,
-        totalChangesPercentage: 0,
-    };
-
-    // if(rvETHUSDCTransactions.data && rvETHUSDCHistorical.threeMonthly?.data){
-    //     rvETHUSDCChanges = calculateTokenAllTimeChanges(rvETHUSDCTransactions.data, ethriseHistorical.threeMonthly?.data, latestEthriseNavFormatted)
-    // }
-    console.log(rvETHUSDCHistorical);
-
-    // Tailwind class for return & amount
-    const positiveReturn = "text-green-light-11 dark:text-green-dark-11 text-sm leading-4";
-    const negativeReturn = "text-red-light-10 dark:text-red-dark-10 text-sm leading-4";
+    const showValueLoading = latestEthriseNavResponse.isLoading || latestVaultExchangeRateResponse.isLoading ? true : false;
+    const showValueError = !showValueLoading && (latestEthriseNavResponse.error || latestVaultExchangeRateResponse.error) ? true : false;
+    const showValueData = !showValueLoading && !showValueError ? true : false;
 
     return (
         <div className="relative flex h-full min-h-screen w-full flex-col overflow-hidden bg-gray-light-1 font-inter dark:bg-gray-dark-1">
@@ -156,9 +92,10 @@ const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
                 <div className="space-y-4 rounded-[16px] bg-gray-light-2 p-[16px] dark:bg-gray-dark-2 sm:w-[540px]">
                     <div className="flex flex-row items-center">
                         <div className="flex-grow">
-                            {account && <p className="mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10">{formatAddress(account)}</p>}
-                            {!account && <p className="mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10">Wallet not connected</p>}
-                            <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Portofolio</p>
+                            {account && !chain.unsupported && <p className="mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10">{formatAddress(account)}</p>}
+                            {account && chain.unsupported && <p className="mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10">Switch network to see yours</p>}
+                            {!account && <p className="mb-2 text-sm text-gray-light-10 dark:text-gray-dark-10">Connect wallet to see yours</p>}
+                            <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Portfolio</p>
                         </div>
                         <div>
                             <img src="portfolio/portfolio.png" width={48} height={48} alt="portfolio" />
@@ -167,102 +104,95 @@ const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
                     <div className="flex flex-row items-center space-x-4">
                         <div className="space-y-2">
                             <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Total Value</p>
-                            <p className="text-sm font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">{totalValue > 0 ? dollarFormatter.format(ethriseValue) : "---"}</p>
+                            {(!account || chain.unsupported) && <p className="block h-[16px] w-full animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                            {account && !chain.unsupported && showBalanceLoading && <p className="block h-[16px] w-full animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                            {account && !chain.unsupported && showTotalValueError && <p className="text-sm font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">Failed to fetch data</p>}
+                            {account && !chain.unsupported && showTotalValueData && <p className="text-sm font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">{dollarFormatter.format(totalValue)}</p>}
                         </div>
-                        {/*
-
-                            NOTE: We don't use changes first before it's very tricky to implement using current architecture
-
-                            <div className="space-y-2">
-                                <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">Changes</p>
-                                <p className={ethriseChanges.totalChangesPercentage > 0 ? positiveReturn : negativeReturn}>
-                                    {" "}
-                                    {ethriseChanges.totalChangesPercentage > 0 ? <span>&uarr;</span> : <span>&darr;</span>} {totalValue > 0 ? dollarFormatter.format(ethriseChanges.totalChanges) + " (" + ethriseChanges.totalChangesPercentage.toFixed(2) + "%)" : "---"}
-                                </p>
-                            </div>
-
-                            */}
                     </div>
                 </div>
 
                 {/* Holding Assets */}
-                <div className={`space-y-2 rounded-[16px] bg-gray-light-2 ${totalValue > 0 ? "px-[16px] pt-[16px]" : "p-[16px]"} dark:bg-gray-dark-2 sm:w-[540px]`}>
-                    <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Your Tokens</p>
-                    <table className="table w-full table-fixed">
+                <div className="rounded-[16px] bg-gray-light-2 p-4 dark:bg-gray-dark-2 sm:w-[540px]">
+                    <p className="text-base font-bold leading-none text-gray-light-12 dark:text-gray-dark-12">My Tokens</p>
+                    <table className="mt-6 table w-full table-fixed">
                         <thead>
                             <tr>
-                                <th className="w-3/5 rounded-l-[8px] bg-gray-light-4 p-[8px] text-left text-[12px] text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10">Token</th>
-                                <th className="hidden w-1/5 bg-gray-light-4 p-[8px] text-[12px] text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10 sm:table-cell">Amount</th>
-                                <th className="hidden w-1/5 rounded-r-[8px] bg-gray-light-4 p-[8px] text-right text-[12px] text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10 sm:table-cell">Value (USDC)</th>
-                                <th className="w-2/5 rounded-r-[8px] bg-gray-light-4 p-[8px] text-right text-[12px] text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10 sm:hidden">Amount/value</th>
+                                <th className="w-3/5 rounded-l-[8px] bg-gray-light-4 p-2 text-left text-xs font-normal leading-4 text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10">Token</th>
+                                <th className="hidden w-1/5 bg-gray-light-4 p-2 text-right text-xs font-normal leading-4 text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10 sm:table-cell">Amount</th>
+                                <th className="hidden w-1/5 rounded-r-[8px] bg-gray-light-4 p-2 text-right text-xs font-normal leading-4 text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10 sm:table-cell">Value (USDC)</th>
+                                <th className="w-2/5 rounded-r-[8px] bg-gray-light-4 p-2 text-right text-xs font-normal leading-4 text-gray-light-10 dark:bg-gray-dark-4 dark:text-gray-dark-10 sm:hidden">Amount/value</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y-2 divide-dashed divide-gray-light-5 dark:divide-gray-dark-5">
-                            {totalValue
-                                ? Object.values(Metadata[chainID]).map((token) => {
-                                      let leveragedTokenBalance = 0;
-                                      let leveragedTokenValue = 0;
-                                      let vaultTokenBalance = 0;
-                                      let vaultTokenValue = 0;
-                                      switch (token.title) {
-                                          case "DEMOETHRISE" || "ETHRISE": {
-                                              leveragedTokenBalance = ethriseBalance;
-                                              leveragedTokenValue = ethriseValue;
-                                              vaultTokenBalance = rvETHUSDCBalance;
-                                              vaultTokenValue = rvETHUSDCValue;
-                                              break;
-                                          }
-                                      }
-                                      return (
-                                          <>
-                                              {/* Vault Token */}
-                                              <tr>
-                                                  <td className="my-[16px] flex items-center space-x-3 px-[8px] text-left">
-                                                      <img className="h-[24px] w-[24px]" src={token.vaultLogo} alt={token.vaultLogo} />
-                                                      <div className="flex flex-col space-y-[8px]">
-                                                          <p className="text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{token.vaultTitle}</p>
-                                                      </div>
-                                                  </td>
-                                                  <td className="my-[16px] hidden px-[8px] text-center text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">{tokenBalanceFormatter.format(vaultTokenBalance)}</td>
-                                                  <td className="my-[16px] hidden px-[8px] text-right text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">{dollarFormatter.format(vaultTokenValue)}</td>
-                                                  <td className="my-[16px] px-[8px] sm:hidden">
-                                                      <div className="flex flex-col text-right">
-                                                          <p className="text-right text-sm font-semibold text-gray-light-12  dark:text-gray-dark-12">{tokenBalanceFormatter.format(vaultTokenBalance)}</p>
-                                                          <p className="text-right text-[12px] text-gray-light-10  dark:text-gray-dark-10">{dollarFormatter.format(vaultTokenValue)}</p>
-                                                      </div>
-                                                  </td>
-                                              </tr>
-
-                                              {/* Leveraged Token */}
-                                              <tr>
-                                                  <td className="my-[16px] flex items-center space-x-3 px-[8px] text-left">
-                                                      <img className="h-[24px] w-[24px]" src={token.logo} alt={token.logo} />
-                                                      <div className="flex flex-col space-y-[8px]">
-                                                          <p className="text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{token.title}</p>
-                                                      </div>
-                                                  </td>
-                                                  <td className="my-[16px] hidden px-[8px] text-center text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">{tokenBalanceFormatter.format(leveragedTokenBalance)}</td>
-                                                  <td className="my-[16px] hidden px-[8px] text-right text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">{dollarFormatter.format(leveragedTokenValue)}</td>
-                                                  <td className="my-[16px] px-[8px] sm:hidden">
-                                                      <div className="flex flex-col text-right">
-                                                          <p className="text-right text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{tokenBalanceFormatter.format(leveragedTokenBalance)}</p>
-                                                          <p className="text-right text-[12px] text-gray-light-10 dark:text-gray-dark-10">{dollarFormatter.format(leveragedTokenValue)}</p>
-                                                      </div>
-                                                  </td>
-                                              </tr>
-                                          </>
-                                      );
-                                  })
-                                : null}
+                        <tbody className="divide-y divide-dashed divide-gray-light-5 dark:divide-gray-dark-5">
+                            {/* rvETHUSDC */}
+                            <tr>
+                                <td className="my-4 flex items-center space-x-3 px-2 text-left">
+                                    <img className="h-[24px] w-[24px]" src={ethriseMetadata.vaultLogo} alt={ethriseMetadata.vaultLogo} />
+                                    <div className="flex flex-col space-y-[8px]">
+                                        <p className="font-ibm text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{ethriseMetadata.vaultTitle}</p>
+                                    </div>
+                                </td>
+                                <td className="my-4 hidden px-2 text-right font-ibm text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">
+                                    {(!account || chain.unsupported) && <p className="block h-[16px] w-full animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                    {account && !chain.unsupported && showBalanceLoading && <p className="block h-[16px] w-full animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                    {account && !chain.unsupported && showBalanceError && "Failed to fetch data"}
+                                    {account && !chain.unsupported && showBalanceData && tokenBalanceFormatter.format(rvETHUSDCBalance)}
+                                </td>
+                                <td className="my-4 hidden px-2 text-right font-ibm text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">
+                                    {(!account || chain.unsupported) && <p className="block h-[16px] w-full animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                    {account && !chain.unsupported && showValueLoading && <p className="block h-[16px] w-full animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                    {account && !chain.unsupported && showValueError && "Failed to fetch data"}
+                                    {account && !chain.unsupported && showValueData && dollarFormatter.format(rvETHUSDCValue)}
+                                </td>
+                                <td className="my-4 px-2 sm:hidden">
+                                    <div className="flex flex-col text-right">
+                                        {(!account || chain.unsupported) && <p className="block h-[16px] w-full animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                        {account && !chain.unsupported && (showBalanceError || showValueError) && "Failed to fetch data"}
+                                        {account && !chain.unsupported && showBalanceData && <p className="text-right text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{tokenBalanceFormatter.format(rvETHUSDCBalance)}</p>}
+                                        {account && !chain.unsupported && showValueData && <p className="text-right text-[12px] text-gray-light-10 dark:text-gray-dark-10">{dollarFormatter.format(rvETHUSDCValue)}</p>}
+                                    </div>
+                                </td>
+                            </tr>
+                            {/* ETHRISE */}
+                            <tr>
+                                <td className="my-4 flex items-center space-x-3 px-2 text-left">
+                                    <img className="h-[24px] w-[24px]" src={ethriseMetadata.logo} alt={ethriseMetadata.logo} />
+                                    <div className="flex flex-col space-y-[8px]">
+                                        <p className="font-ibm text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{ethriseMetadata.title}</p>
+                                    </div>
+                                </td>
+                                <td className="my-4 hidden px-2 text-right font-ibm text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">
+                                    {(!account || chain.unsupported) && <p className="block h-[16px] w-full animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                    {account && !chain.unsupported && showBalanceLoading && <p className="block h-[16px] w-full animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                    {account && !chain.unsupported && showBalanceError && "Failed to fetch data"}
+                                    {account && !chain.unsupported && showBalanceData && tokenBalanceFormatter.format(ethriseBalance)}
+                                </td>
+                                <td className="my-4 hidden px-2 text-right font-ibm text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12 sm:table-cell">
+                                    {(!account || chain.unsupported) && <p className="block h-[16px] w-full animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                    {account && !chain.unsupported && showValueLoading && <p className="block h-[16px] w-full animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                    {account && !chain.unsupported && showValueError && "Failed to fetch data"}
+                                    {account && !chain.unsupported && showValueData && dollarFormatter.format(ethriseValue)}
+                                </td>
+                                <td className="my-4 px-2 sm:hidden">
+                                    <div className="flex flex-col text-right">
+                                        {(!account || chain.unsupported) && <p className="block h-[16px] w-full animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                                        {account && !chain.unsupported && (showBalanceError || showValueError) && "Failed to fetch data"}
+                                        {account && !chain.unsupported && showBalanceData && <p className="text-right text-sm font-semibold text-gray-light-12 dark:text-gray-dark-12">{tokenBalanceFormatter.format(ethriseBalance)}</p>}
+                                        {account && !chain.unsupported && showValueData && <p className="text-right text-[12px] text-gray-light-10 dark:text-gray-dark-10">{dollarFormatter.format(ethriseValue)}</p>}
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
-                    {totalValue <= 0 ? <NoPortfolioWarn /> : null}
+                    {/* {totalValue <= 0 ? <NoPortfolioWarn /> : null} */}
                 </div>
             </div>
 
             <div className="hidden sm:mt-20 sm:inline-block">
                 <Footer />
             </div>
+
             <BackgroundGradient />
 
             <div className="z-10 sm:hidden">
