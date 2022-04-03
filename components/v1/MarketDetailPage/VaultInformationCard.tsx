@@ -5,6 +5,7 @@ import { Metadata } from "../MarketMetadata";
 import { useMarket } from "../swr/useMarket";
 import ToastError from "../Toasts/Error";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
+import MyAssetCard from "./LeveragedTokenMyAssetCard";
 
 /**
  * VaultInformationCardProps is a React Component properties that passed to React Component VaultInformationCard

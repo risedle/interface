@@ -1,19 +1,15 @@
 import type { FunctionComponent } from "react";
 import Head from "next/head";
-import Link from "next/link";
 
 import Favicon from "../Favicon";
 import Footer from "../Footer";
 import { dollarFormatter } from "../../../utils/formatters";
 import MarketCard from "./MarketCard";
-import ButtonNetworkSwitcher from "../Buttons/NetworkSwitcher";
-import ButtonConnectWalletDesktop from "../Buttons/ConnectWalletDesktop";
-import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
-import Logo from "../Logo";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import MarketsPageMeta from "./MarketsPageMeta";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { useMarkets } from "../swr/useMarkets";
+import Navigation from "../Navigation";
 
 /**
  * MarketsPageProps is a React Component properties that passed to React Component MarketsPage
@@ -47,31 +43,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
             </Head>
             <Favicon />
 
-            <div className="container z-10 mx-auto max-w-full sm:z-20">
-                <div className="flex flex-row items-center justify-between p-4">
-                    <div className="flex-none">
-                        <Link href="/">
-                            <a className="flex items-center">
-                                <Logo />
-                                <span className="traking-tight leading-0 self-center pl-2 font-inter text-base font-bold text-gray-light-12 dark:text-gray-light-1">Risedle</span>
-                            </a>
-                        </Link>
-                    </div>
-                    <div className="inline-block flex flex-none flex-row space-x-2">
-                        <div className="hidden sm:inline-block">
-                            <ButtonNetworkSwitcher />
-                        </div>
-
-                        <div className="hidden sm:inline-block">
-                            <ButtonConnectWalletDesktop />
-                        </div>
-
-                        <div className="inline-block h-[40px]">
-                            <ButtonThemeSwitcher />
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Navigation marketsActive />
 
             <div className="z-10 flex min-h-screen flex-col">
                 {/* Headers */}
@@ -146,6 +118,7 @@ const MarketsPage: FunctionComponent<MarketsPageProps> = ({}) => {
                     )}
                 </div>
             </div>
+
             <div className="hidden sm:inline-block">
                 <Footer />
             </div>
