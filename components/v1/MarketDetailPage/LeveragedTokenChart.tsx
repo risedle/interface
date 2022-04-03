@@ -35,6 +35,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
     const [nav, setNAV] = useState(0);
     const [navChange, setNAVChange] = useState(0);
     const [navPercentChange, setNAVPercentChange] = useState(0);
+    const [currentDate, setCurrentDate] = useState("");
     const [currentTimeframe, setCurrentTimeframe] = useState(Timeframe.Monthly);
 
     // Parse data
@@ -104,6 +105,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                     )}
                 </div>
             </div>
+            <span className="mt-4 px-4 text-xs text-gray-light-10 dark:text-gray-dark-10">{currentDate}</span>
 
             {/* Price chart */}
             <div className="z-0 mt-8 h-[192px] w-full">
@@ -117,6 +119,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                                 setNAV(latestNAV);
                                 setNAVChange(latestChange);
                                 setNAVPercentChange(latestPercentChange);
+                                setCurrentDate("");
                             }}
                         >
                             <defs>
@@ -143,8 +146,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ addr
                                         setNAVChange(change);
                                         const percentChange = ((selectedData.nav - currentData.oldestNAV) / currentData.oldestNAV) * 100;
                                         setNAVPercentChange(percentChange);
-
-                                        return <div className="text-xs text-gray-light-10 dark:text-gray-dark-10">{formattedDate}</div>;
+                                        setCurrentDate(formattedDate);
                                     }
                                     return null;
                                 }}
