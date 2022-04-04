@@ -52,7 +52,7 @@ const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
     const latestEthriseNavResponse = useLeveragedTokenNAV({ token: ethriseAddress, vault: ethriseMetadata.vaultAddress, provider: provider });
     const latestEthriseNav = parseFloat(ethers.utils.formatUnits(latestEthriseNavResponse.data ? latestEthriseNavResponse.data : 0, ethriseMetadata.debtDecimals));
     const latestVaultExchangeRateResponse = useVaultExchangeRate({ vault: ethriseMetadata.vaultAddress, provider: provider });
-    const latestVaultExchangeRate = parseFloat(ethers.utils.formatUnits(latestVaultExchangeRateResponse.data ? latestVaultExchangeRateResponse.data : 0, ethriseMetadata.debtDecimals));
+    const latestVaultExchangeRate = parseFloat(ethers.utils.formatUnits(latestVaultExchangeRateResponse.data ? latestVaultExchangeRateResponse.data : 0, ethriseMetadata.collateralDecimals));
 
     // Get USD value for each user's token balance
     const ethriseValue = ethriseBalance * latestEthriseNav;
