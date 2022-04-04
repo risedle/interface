@@ -6,6 +6,7 @@ import ButtonTertiary from "../Buttons/ButtonTertiary";
 import { Metadata } from "../MarketMetadata";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import { useTokenBalance } from "../swr/useTokenBalance";
+import { useVaultExchangeRate } from "../swr/useVaultExchangeRate";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { AssetsItem } from "./AssetsItem";
 
@@ -30,11 +31,14 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address, isVault = f
     const metadata = Metadata[chainID][address];
     // Read on-chain data
     const navResponse = useLeveragedTokenNAV({ token: address, vault: metadata.vaultAddress, provider: provider });
+    const latestVaultExchangeRateResponse = useVaultExchangeRate({ vault: metadata.vaultAddress, provider: provider });
     const balanceResponse = useTokenBalance({ account: account, token: isVault ? metadata.vaultAddress : address, provider: provider });
 
     // Data
     const nav = parseFloat(ethers.utils.formatUnits(navResponse.data ? navResponse.data : 0, metadata.debtDecimals));
+    const latestVaultExchangeRate = parseFloat(ethers.utils.formatUnits(latestVaultExchangeRateResponse.data ? latestVaultExchangeRateResponse.data : 0, metadata.collateralDecimals));
     const balance = parseFloat(ethers.utils.formatUnits(balanceResponse.data ? balanceResponse.data : 0, isVault ? metadata.debtDecimals : metadata.collateralDecimals));
+    const value = (isVault ? latestVaultExchangeRate : nav) * balance
 
     // UI states
     const showLoading = navResponse.isLoading || balanceResponse.isLoading ? true : false;
@@ -48,7 +52,7 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address, isVault = f
                 </div>
                 <div className="grid grid-cols-2 gap-8">
                     <AssetsItem title="Token Balance" image="/markets/tokenBalanceIcon.svg" value={`${tokenBalanceFormatter.format(balance)}`} showData={showData} showLoading={showLoading || showError} />
-                    <AssetsItem title="Value (USDC)" image="/markets/valueIcon.svg" value={`${tokenBalanceFormatter.format(balance * nav)}`} showData={showData} showLoading={showLoading || showError} />
+                    <AssetsItem title="Value (USDC)" image="/markets/valueIcon.svg" value={`${tokenBalanceFormatter.format(value)}`} showData={showData} showLoading={showLoading || showError} />
                     <AssetsItem title="Return" image="/markets/returnIcon.svg" value={`-`} showData={showData} showLoading={showLoading || showError} />
                     <AssetsItem title="Return (USDC)" image="/markets/returnDollarIcon.svg" value={`-`} showData={showData} showLoading={showLoading || showError} />
                 </div>
