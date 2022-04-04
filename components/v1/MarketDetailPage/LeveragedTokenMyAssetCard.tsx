@@ -38,7 +38,7 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address, isVault = f
     const nav = parseFloat(ethers.utils.formatUnits(navResponse.data ? navResponse.data : 0, metadata.debtDecimals));
     const latestVaultExchangeRate = parseFloat(ethers.utils.formatUnits(latestVaultExchangeRateResponse.data ? latestVaultExchangeRateResponse.data : 0, metadata.collateralDecimals));
     const balance = parseFloat(ethers.utils.formatUnits(balanceResponse.data ? balanceResponse.data : 0, isVault ? metadata.debtDecimals : metadata.collateralDecimals));
-    const value = (isVault ? latestVaultExchangeRate : nav) * balance
+    const value = (isVault ? latestVaultExchangeRate : nav) * balance;
 
     // UI states
     const showLoading = navResponse.isLoading || balanceResponse.isLoading ? true : false;
