@@ -98,7 +98,7 @@ const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
                             <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Portfolio</p>
                         </div>
                         <div>
-                            <img src="portfolio/portfolio.png" width={48} height={48} alt="portfolio" />
+                            <img src="/assets/images/portfolio/portfolio.png" width={48} height={48} alt="portfolio" />
                         </div>
                     </div>
                     <div className="flex flex-row items-center space-x-4">
