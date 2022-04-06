@@ -1,0 +1,7 @@
+<!-- className="absolute top-0 left-1/2 z-0 max-w-[1159px] -translate-x-1/2 stroke-gray-light-12 opacity-50 dark:stroke-white md:-top-1/4" style={{ minWidth: "619px" }} -->
+<svg width="100%" viewBox="0 0 1159 1027" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle opacity="0.1" cx="579.5" cy="447.5" r="222.549" />
+    <circle opacity="0.1" cx="579.5" cy="447.5" r="299.389" />
+    <circle opacity="0.05" cx="579.5" cy="447.5" r="389.035" />
+    <circle opacity="0.1" cx="579.5" cy="447.5" r="579" />
+</svg>
