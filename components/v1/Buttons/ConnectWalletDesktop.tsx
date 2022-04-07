@@ -156,7 +156,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                     }}
                 >
                     <span className="mr-2 inline-block h-[8px] w-[8px] rounded-full bg-red-light-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:bg-red-dark-10 dark:shadow-red-dark-10"></span>
-                    Switch to {DEFAULT_CHAIN.name}
+                    Switch Network
                 </button>
             )}
 
