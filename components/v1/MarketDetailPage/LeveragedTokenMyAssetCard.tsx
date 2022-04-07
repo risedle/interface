@@ -50,7 +50,7 @@ const MyAssetCard: FunctionComponent<MyAssetCardProps> = ({ address, isVault = f
                 <div className="pt-4">
                     <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">My Asset</h2>
                 </div>
-                <div className="grid grid-cols-2 gap-8">
+                <div className="grid grid-cols-2 gap-[16px]">
                     <AssetsItem title="Token Balance" image="/markets/tokenBalanceIcon.svg" value={`${tokenBalanceFormatter.format(balance)}`} showData={showData} showLoading={showLoading || showError} />
                     <AssetsItem title="Value (USDC)" image="/markets/valueIcon.svg" value={`${tokenBalanceFormatter.format(value)}`} showData={showData} showLoading={showLoading || showError} />
                     <AssetsItem title="Return" image="/markets/returnIcon.svg" value={`-`} showData={showData} showLoading={showLoading || showError} />
