@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import Head from "next/head";
-import MarketsPageMeta from "../MarketsPage/MarketsPageMeta";
+import PortofolioPageMeta from "./PortfolioPageMeta";
 import Favicon from "../Favicon";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import BackgroundGradient from "./BackgroundGradient";
@@ -81,7 +81,7 @@ const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
                 {/* <!-- HTML Meta Tags --> */}
                 <title>Risedle Protocol</title>
                 <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
-                <MarketsPageMeta />
+                <PortofolioPageMeta />
             </Head>
             <Favicon />
 
@@ -98,7 +98,7 @@ const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
                             <p className="text-xl font-bold text-gray-light-12 dark:text-gray-dark-12">Portfolio</p>
                         </div>
                         <div>
-                            <img src="portfolio/portfolio.png" width={48} height={48} alt="portfolio" />
+                            <img src="/assets/images/portfolio/portfolio.png" width={48} height={48} alt="portfolio" />
                         </div>
                     </div>
                     <div className="flex flex-row items-center space-x-4">
