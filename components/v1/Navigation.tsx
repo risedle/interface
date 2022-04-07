@@ -21,8 +21,8 @@ type NavigationProps = {
 const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfolioActive }) => {
     return (
         <div className="container z-10 mx-auto max-w-full sm:z-20">
-            <div className="grid grid-cols-3 place-items-center content-center p-4">
-                <div className="justify-self-start">
+            <div className="flex flex-row items-center p-4 sm:space-x-16">
+                <div className="w-1/5 sm:w-fit">
                     <Link href="/">
                         <a className="flex items-center">
                             <Logo />
@@ -30,7 +30,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfol
                         </a>
                     </Link>
                 </div>
-                <div className="space-x-4 sm:space-x-8">
+                <div className="w-3/5 flex-grow justify-center space-x-4 text-center sm:w-fit sm:space-x-8 sm:text-left">
                     <Link href="/markets">
                         <a className={marketsActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>Markets</a>
                     </Link>
@@ -38,7 +38,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfol
                         <a className={portfolioActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>Portfolio</a>
                     </Link>
                 </div>
-                <div className="inline-block flex flex-row space-x-2 justify-self-end">
+                <div className="inline-block flex w-1/5 flex-row justify-end space-x-2 sm:w-fit">
                     <div className="hidden sm:inline-block">
                         <ButtonNetworkSwitcher />
                     </div>
