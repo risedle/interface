@@ -1,6 +1,6 @@
 import { FunctionComponent, useMemo } from "react";
 import Head from "next/head";
-import MarketsPageMeta from "../MarketsPage/MarketsPageMeta";
+import PortofolioPageMeta from "./PortfolioPageMeta";
 import Favicon from "../Favicon";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import BackgroundGradient from "./BackgroundGradient";
@@ -83,7 +83,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                     {/* <!-- HTML Meta Tags --> */}
                     <title>Risedle Protocol</title>
                     <meta name="description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
-                    <MarketsPageMeta />
+                    <PortofolioPageMeta />
                 </Head>
                 <Favicon />
 
