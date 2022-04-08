@@ -33,8 +33,6 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
         switch (c.id) {
             case Chains.arbitrumOne.id:
                 return "/networks/Arbitrum.svg";
-            case Chains.kovan.id:
-                return "/networks/Kovan.svg";
         }
         return "/networks/Arbitrum.svg";
     };
