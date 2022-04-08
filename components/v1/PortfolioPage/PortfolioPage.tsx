@@ -21,7 +21,6 @@ import { useVaultExchangeRate } from "../swr/useVaultExchangeRate";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
-    [Chains.kovan.id]: "0xc4676f88663360155c2bc6d2A482E34121a50b3b",
     [Chains.arbitrumOne.id]: "0x46D06cf8052eA6FdbF71736AF33eD23686eA1452",
 };
 
