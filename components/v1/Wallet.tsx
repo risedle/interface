@@ -8,7 +8,7 @@ import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 
 export const connectorStorageKey = "risedleConnectors.wallet";
 
-export const supportedChains = [Chains.arbitrumOne, Chains.kovan];
+export const supportedChains = [Chains.arbitrumOne];
 export const DEFAULT_CHAIN = Chains.arbitrumOne;
 
 // Wallet connectors
@@ -21,14 +21,12 @@ export const WCConnector = new WalletConnectConnector({
     options: {
         qrcode: true,
         rpc: {
-            [Chains.kovan.id]: "https://eth-kovan.alchemyapi.io/v2/qLbNN95iUDTpQqbm5FzgaSPrPJ908VD-",
             [Chains.arbitrumOne.id]: "https://arb-mainnet.g.alchemy.com/v2/qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj",
         },
     },
 });
 
 export const ArbitrumOneProvider = new providers.JsonRpcProvider("https://arb-mainnet.g.alchemy.com/v2/qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj", Chains.arbitrumOne.id);
-export const KovanProvider = new providers.JsonRpcProvider("https://eth-kovan.alchemyapi.io/v2/qLbNN95iUDTpQqbm5FzgaSPrPJ908VD-", Chains.kovan.id);
 
 export type WalletStates = {
     account: string | undefined;
@@ -63,8 +61,6 @@ type WalletGlobalStateProps = {
 
 const getProvider = (config: { chainId?: number }) => {
     switch (config.chainId) {
-        case Chains.kovan.id:
-            return KovanProvider;
         case Chains.arbitrumOne.id:
             return ArbitrumOneProvider;
         default:
