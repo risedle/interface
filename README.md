@@ -4,7 +4,12 @@ This repository contains the interface of Risedle Protocol.
 
 ## Get started
 
-Clone the repository:
+You need to install the following:
+
+    node >= 17.8.0
+    npm >= 8.5.5
+
+Then clone the repository:
 
     git clone git@github.com:risedle/interface.git
     cd interface/
