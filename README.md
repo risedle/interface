@@ -25,12 +25,11 @@ Run the development server:
 The app entrypoint is on the [`pages/_app.tsx`](./pages/_app.tsx).
 
 To changes component for each page, you may go to directly to the page
-component. For example, if you want to update something on the homepage
-go to directly to [`pages/index.tsx`](pages/index.tsx).
+component. For example, if you want to update something on the homepage go to
+directly to [`pages/index.tsx`](pages/index.tsx).
 
 ## Run the storybook
 
 Use the following command to run the storybook:
 
     npm run storybook
-
