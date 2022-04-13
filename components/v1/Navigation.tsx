@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { FunctionComponent } from "react";
+import { useToast } from "../../store/ToastStore";
 import ButtonConnectWalletDesktop from "./Buttons/ConnectWalletDesktop";
 import ButtonNetworkSwitcher from "./Buttons/NetworkSwitcher";
 import ButtonThemeSwitcher from "./Buttons/ThemeSwitcher";
@@ -19,6 +20,7 @@ type NavigationProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfolioActive }) => {
+    const toast = useToast();
     return (
         <div className="container z-10 mx-auto max-w-full sm:z-20">
             <div className="flex flex-row items-center p-4 sm:space-x-12">
@@ -50,6 +52,25 @@ const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfol
                     <div className="inline-block h-[40px]">
                         <ButtonThemeSwitcher />
                     </div>
+                    {/*
+                            just for example              
+                    */}
+                    <button
+                        style={{ color: "white" }}
+                        onClick={() => {
+                            toast({ description: "Test 500", duration: 500 });
+                        }}
+                    >
+                        Test 500
+                    </button>
+                    <button
+                        style={{ color: "white" }}
+                        onClick={() => {
+                            toast({ description: "Test 1000", duration: 1000 });
+                        }}
+                    >
+                        Test 1000
+                    </button>
                 </div>
             </div>
         </div>
