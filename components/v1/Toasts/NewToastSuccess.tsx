@@ -17,6 +17,7 @@ function NewToastSuccess({ description, duration, id }: ToastOption) {
     return (
         <>
             <Toast.Root
+                key={id}
                 duration={duration}
                 onOpenChange={(open) => {
                     console.log(open);
