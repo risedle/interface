@@ -9,8 +9,8 @@ import { supportedChains, useWalletContext } from "../Wallet";
 import RisedleLinks from "../../../utils/links";
 import ButtonClose from "./Close";
 import toast from "react-hot-toast";
-import ToastError from "../Toasts/Error";
-import ToastSuccess from "../Toasts/Success";
+import ToastError from "../../../uikit/toasts/Error";
+import ToastSuccess from "../../../uikit/toasts/Success";
 
 /**
  * ButtonNetworkSwitcherProps is a React Component properties that passed to React Component ButtonNetworkSwitcher

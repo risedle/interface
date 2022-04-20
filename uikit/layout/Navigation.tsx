@@ -3,15 +3,15 @@ import type { FunctionComponent } from "react";
 import { useState } from "react";
 
 // Import components
-import Logo from "../Logo";
-import ButtonLaunchBasic from "../Buttons/LaunchBasic";
-import ButtonThemeSwitcher from "../Buttons/ThemeSwitcher";
 
 // Import utils
-import RisedleLinks from "../../../utils/links";
+import RisedleLinks from "../../utils/links";
 
 // Import radix ui
 import * as HoverCard from "@radix-ui/react-hover-card";
+import Logo from "./Logo";
+import ButtonLaunchBasic from "../../components/v1/Buttons/LaunchBasic";
+import ButtonThemeSwitcher from "../../components/v1/Buttons/ThemeSwitcher";
 
 /**
  * NavigationProps is a React Component properties that passed to React Component Navigation

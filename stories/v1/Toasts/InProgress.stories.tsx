@@ -1,6 +1,6 @@
 import React from "react";
 
-import ToastInProgress from "../../../components/v1/Toasts/InProgress";
+import ToastInProgress from "../../../uikit/toasts/InProgress";
 
 export default {
     component: ToastInProgress,

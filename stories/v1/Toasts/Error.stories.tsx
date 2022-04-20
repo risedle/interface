@@ -1,6 +1,6 @@
 import React from "react";
 
-import ToastError from "../../../components/v1/Toasts/Error";
+import ToastError from "../../../uikit/toasts/Error";
 
 export default {
     component: ToastError,

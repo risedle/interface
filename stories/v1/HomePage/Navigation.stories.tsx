@@ -1,6 +1,5 @@
 import React from "react";
-
-import Navigation from "../../../components/v1/HomePage/Navigation";
+import Navigation from "../../../uikit/layout/Navigation";
 
 export default {
     component: Navigation,

@@ -6,19 +6,19 @@ import toast from "react-hot-toast";
 
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
-import ToastError from "../Toasts/Error";
-import ToastSuccess from "../Toasts/Success";
+import ToastError from "../../../uikit/toasts/Error";
+import ToastSuccess from "../../../uikit/toasts/Success";
 import FormLoading from "./FormLoading";
 import FormLoadingFailed from "./FormLoadingFailed";
-import ButtonPositive from "../Buttons/ButtonPositive";
-import ButtonLoading from "../Buttons/ButtonLoading";
 
 import { ApprovalState } from "./States";
 import { getExplorerLink } from "./Explorer";
 import WithdrawForm from "./WithdrawForm";
-import ToastInProgress from "../Toasts/InProgress";
+import ToastInProgress from "../../../uikit/toasts/InProgress";
 import { useTokenAllowance } from "../swr/useTokenAllowance";
 import { useTokenBalance } from "../swr/useTokenBalance";
+import ButtonLoading from "../../../uikit/button/ButtonLoading";
+import ButtonPositive from "../../../uikit/button/ButtonPositive";
 
 /**
  * WithdrawProps is a React Component properties that passed to React Component Withdraw

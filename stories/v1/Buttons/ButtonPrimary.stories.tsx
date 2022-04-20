@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonPrimary from "../../../components/v1/Buttons/ButtonPrimary";
+import ButtonPrimary from "../../../uikit/button/ButtonPrimary";
 
 export default {
     component: ButtonPrimary,

@@ -7,13 +7,12 @@ import toast from "react-hot-toast";
 
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
-import ToastError from "../Toasts/Error";
-import ToastSuccess from "../Toasts/Success";
+import ToastError from "../../../uikit/toasts/Error";
+import ToastSuccess from "../../../uikit/toasts/Success";
 
 import { RedeemState } from "./States";
-import ButtonLoading from "../Buttons/ButtonLoading";
 import { getExplorerLink } from "./Explorer";
-import ToastInProgress from "../Toasts/InProgress";
+import ToastInProgress from "../../../uikit/toasts/InProgress";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
 import FormLoading from "./FormLoading";
 import FormLoadingFailed from "./FormLoadingFailed";
@@ -21,6 +20,7 @@ import { useOraclePrice } from "../swr/useCollateralPrice";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import { useTokenBalance } from "../swr/useTokenBalance";
 import VaultABI from "../../../abis/VaultABI";
+import ButtonLoading from "../../../uikit/button/ButtonLoading";
 
 /**
  * RedeemFormProps is a React Component properties that passed to React Component RedeemForm

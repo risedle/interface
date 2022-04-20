@@ -1,28 +1,16 @@
 import Head from "next/head";
-import type { FunctionComponent } from "react";
-import Favicon from "../Favicon";
-import FeatureCardOneColumn from "./FeatureCardOneColumn";
-import FeatureCardTwoColumns from "./FeatureCardTwoColumns";
-import Footer from "../Footer";
-import Hero from "./Hero";
-import HeroFooter from "./HeroFooter";
-import Navigation from "./Navigation";
-import SubHero from "./SubHero";
-import HomePageMeta from "./HomePageMeta";
+import FeatureCardOneColumn from "./component/FeatureCardOneColumn";
+import FeatureCardTwoColumns from "./component/FeatureCardTwoColumns";
+import Hero from "./component/Hero";
+import HeroFooter from "./component/HeroFooter";
+import Navigation from "../../uikit/layout/Navigation";
+import SubHero from "./component/SubHero";
+import HomePageMeta from "./component/HomePageMeta";
+import Favicon from "../../uikit/layout/Favicon";
+import Footer from "../../uikit/layout/Footer";
 
-/**
- * HomePageProps is a React Component properties that passed to React Component HomePage
- */
-type HomePageProps = {};
-
-/**
- * HomePage is just yet another react component
- *
- * @link https://fettblog.eu/typescript-react/components/#functional-components
- */
-const HomePage: FunctionComponent<HomePageProps> = ({}) => {
+function HomePageContainer() {
     // By default use dark theme
-
     return (
         <div className="h-full w-full overflow-clip bg-gray-light-1 font-inter dark:bg-gray-dark-1">
             <Head>
@@ -45,6 +33,6 @@ const HomePage: FunctionComponent<HomePageProps> = ({}) => {
             </div>
         </div>
     );
-};
+}
 
-export default HomePage;
+export default HomePageContainer;

@@ -1,8 +1,8 @@
 import type { FunctionComponent } from "react";
 import Head from "next/head";
 
-import Favicon from "../Favicon";
-import Footer from "../Footer";
+import Favicon from "../../../uikit/layout/Favicon";
+import Footer from "../../../uikit/layout/Footer";
 import { dollarFormatter } from "../../../utils/formatters";
 import MarketCard from "./MarketCard";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";

@@ -7,19 +7,19 @@ import toast from "react-hot-toast";
 
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
-import ToastError from "../Toasts/Error";
-import ToastSuccess from "../Toasts/Success";
+import ToastError from "../../../uikit/toasts/Error";
+import ToastSuccess from "../../../uikit/toasts/Success";
 
 import { DepositState } from "./States";
-import ButtonLoading from "../Buttons/ButtonLoading";
 import { getExplorerLink } from "./Explorer";
-import ToastInProgress from "../Toasts/InProgress";
+import ToastInProgress from "../../../uikit/toasts/InProgress";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
 import { VaultABI } from "../../../abis/VaultABI";
 import { useVaultExchangeRate } from "../swr/useVaultExchangeRate";
 import { useTokenBalance } from "../swr/useTokenBalance";
 import FormLoading from "./FormLoading";
 import FormLoadingFailed from "./FormLoadingFailed";
+import ButtonLoading from "../../../uikit/button/ButtonLoading";
 
 /**
  * DepositFormProps is a React Component properties that passed to React Component DepositForm

@@ -1,18 +1,6 @@
-import type { FunctionComponent } from "react";
-// Import components
-import ButtonLaunchGradient from "../Buttons/LaunchGradient";
+import ButtonLaunchGradient from "../../../components/v1/Buttons/LaunchGradient";
 
-/**
- * HeroProps is a React Component properties that passed to React Component Hero
- */
-type HeroProps = {};
-
-/**
- * Hero is just yet another react component
- *
- * @link https://fettblog.eu/typescript-react/components/#functional-components
- */
-const Hero: FunctionComponent<HeroProps> = ({}) => {
+function Hero() {
     return (
         <div className="relative w-full justify-center overflow-hidden">
             <div className="relative z-10 m-auto flex max-w-screen-md flex-col items-center gap-8 px-4 py-32 text-center align-middle">
@@ -39,6 +27,6 @@ const Hero: FunctionComponent<HeroProps> = ({}) => {
             </svg>
         </div>
     );
-};
+}
 
 export default Hero;

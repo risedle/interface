@@ -6,7 +6,7 @@ import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 import { dollarFormatter, tokenBalanceFormatter } from "../../../utils/formatters";
 import { Metadata } from "../MarketMetadata";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
-import ToastError from "../Toasts/Error";
+import ToastError from "../../../uikit/toasts/Error";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { useTransferEvents } from "../swr/useTransferEvents";
 import { useTokenBalance } from "../swr/useTokenBalance";
