@@ -1,6 +1,5 @@
 import React from "react";
-
-import FeatureCardTwoColumns from "../../../components/v1/HomePage/FeatureCardTwoColumns";
+import FeatureCardTwoColumns from "../../../modules/homePage/component/FeatureCardTwoColumns";
 
 export default {
     component: FeatureCardTwoColumns,

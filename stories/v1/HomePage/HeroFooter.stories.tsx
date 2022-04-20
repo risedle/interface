@@ -1,6 +1,5 @@
 import React from "react";
-
-import HeroFooter from "../../../components/v1/HomePage/HeroFooter";
+import HeroFooter from "../../../modules/homePage/component/HeroFooter";
 
 export default {
     component: HeroFooter,

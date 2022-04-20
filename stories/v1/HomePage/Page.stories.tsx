@@ -1,10 +1,9 @@
 import React from "react";
-
-import HomePage from "../../../components/v1/HomePage/HomePage";
+import HomePageContainer from "../../../modules/homePage/HomePageContainer";
 
 export default {
-    component: HomePage,
+    component: HomePageContainer,
     title: "Risedle V1/Home Page/Page",
 };
 
-export const Page = () => <HomePage />;
+export const Page = () => <HomePageContainer />;

@@ -9,8 +9,8 @@ import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import * as Popover from "@radix-ui/react-popover";
 
 // Toasts
-import ToastError from "../Toasts/Error";
-import ToastSuccess from "../Toasts/Success";
+import ToastError from "../../../uikit/toasts/Error";
+import ToastSuccess from "../../../uikit/toasts/Success";
 
 // States
 import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, useWalletContext, WCConnector } from "../Wallet";

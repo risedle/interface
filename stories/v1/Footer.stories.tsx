@@ -1,6 +1,6 @@
 import React from "react";
 
-import Footer from "../../components/v1/Footer";
+import Footer from "../../uikit/layout/Footer";
 
 export default {
     component: Footer,

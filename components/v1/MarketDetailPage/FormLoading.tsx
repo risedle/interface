@@ -1,5 +1,5 @@
 import type { FunctionComponent } from "react";
-import ButtonLoading from "../Buttons/ButtonLoading";
+import ButtonLoading from "../../../uikit/button/ButtonLoading";
 
 /**
  * FormLoadingProps is a React Component properties that passed to React Component FormLoading

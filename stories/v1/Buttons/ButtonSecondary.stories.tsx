@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonSecondary from "../../../components/v1/Buttons/ButtonSecondary";
+import ButtonSecondary from "../../../uikit/button/ButtonSecondary";
 
 export default {
     component: ButtonSecondary,
