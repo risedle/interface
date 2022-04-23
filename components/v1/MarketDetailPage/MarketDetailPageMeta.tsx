@@ -27,7 +27,7 @@ const MarketDetailPage: FunctionComponent<MarketDetailPageProps> = ({ title, pat
             <meta property="og:type" content="website" />
             <meta property="og:title" content={`${title} Market | Risedle Protocol`} />
             <meta property="og:description" content="Leverage ETH or earn yield from your idle USDC" />
-            <meta property="og:image" content={`/assets/images/og/${title}.png`} />
+            <meta property="og:image" content={`https://risedle.com/assets/images/og/${title}.png`} />
 
             {/* <!-- Twitter Meta Tags --> */}
             <meta name="twitter:card" content="summary_large_image" />
@@ -35,7 +35,7 @@ const MarketDetailPage: FunctionComponent<MarketDetailPageProps> = ({ title, pat
             <meta property="twitter:url" content={`https://risedle.com${path}`} />
             <meta name="twitter:title" content={`${title} Market | Risedle Protocol`} />
             <meta name="twitter:description" content="Leverage ETH or earn yield from your idle USDC" />
-            <meta name="twitter:image" content={`/assets/images/og/${title}.png`} />
+            <meta name="twitter:image" content={`https://risedle.com/assets/images/og/${title}.png`} />
         </>
     );
 };

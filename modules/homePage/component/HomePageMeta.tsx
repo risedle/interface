@@ -19,7 +19,7 @@ const HomePageMeta: FunctionComponent<HomePageMetaProps> = ({}) => {
             <meta property="og:type" content="website" />
             <meta property="og:title" content="Risedle Protocol" />
             <meta property="og:description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
-            <meta property="og:image" content="/assets/images/og/Landing.png" />
+            <meta property="og:image" content="https://risedle.com/assets/images/og/Landing.png" />
 
             {/* <!-- Twitter Meta Tags --> */}
             <meta name="twitter:card" content="summary_large_image" />
@@ -27,7 +27,7 @@ const HomePageMeta: FunctionComponent<HomePageMetaProps> = ({}) => {
             <meta property="twitter:url" content="https://risedle.com/" />
             <meta name="twitter:title" content="Risedle Protocol" />
             <meta name="twitter:description" content="Invest, earn and build on the decentralized crypto leveraged ETFs market protocol" />
-            <meta name="twitter:image" content="/assets/images/og/Landing.png" />
+            <meta name="twitter:image" content="https://risedle.com/assets/images/og/Landing.png" />
         </>
     );
 };
