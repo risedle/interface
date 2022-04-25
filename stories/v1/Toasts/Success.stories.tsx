@@ -1,6 +1,6 @@
 import React from "react";
 
-import ToastSuccess from "../../../components/v1/Toasts/Success";
+import ToastSuccess from "../../../uikit/toasts/Success";
 
 export default {
     component: ToastSuccess,

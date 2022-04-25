@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 import Head from "next/head";
 import PortofolioPageMeta from "./PortfolioPageMeta";
-import Favicon from "../Favicon";
+import Favicon from "../../../uikit/layout/Favicon";
 import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
 import BackgroundGradient from "./BackgroundGradient";
 import { chain as Chains, useProvider } from "wagmi";
@@ -11,7 +11,7 @@ import { useTokenBalance } from "../swr/useTokenBalance";
 import { tokenBalanceFormatter, dollarFormatter } from "../../../utils/formatters";
 import { ethers } from "ethers";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
-import Footer from "../Footer";
+import Footer from "../../../uikit/layout/Footer";
 import Navigation from "../Navigation";
 import { useVaultExchangeRate } from "../swr/useVaultExchangeRate";
 

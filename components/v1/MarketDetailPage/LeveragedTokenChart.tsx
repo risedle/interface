@@ -8,7 +8,7 @@ import { Metadata } from "../MarketMetadata";
 import { Timeframe } from "../swr/snapshot";
 import { useLeveragedTokenHistoricalData } from "../swr/useLeveragedTokenHistoricalData";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
-import ToastError from "../Toasts/Error";
+import ToastError from "../../../uikit/toasts/Error";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 
 export type LeveragedTokenChartProps = {

@@ -1,6 +1,5 @@
 import React from "react";
-
-import Resources from "../../../components/v1/HomePage/Resources";
+import Resources from "../../../modules/homePage/component/Resources";
 
 export default {
     component: Resources,

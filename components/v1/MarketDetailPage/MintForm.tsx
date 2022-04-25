@@ -6,11 +6,10 @@ import toast from "react-hot-toast";
 
 // ABIs
 import VaultABI from "../../../abis/VaultABI";
-import ButtonLoading from "../Buttons/ButtonLoading";
 import { getExplorerLink } from "./Explorer";
-import ToastInProgress from "../Toasts/InProgress";
-import ToastError from "../Toasts/Error";
-import ToastSuccess from "../Toasts/Success";
+import ToastInProgress from "../../../uikit/toasts/InProgress";
+import ToastError from "../../../uikit/toasts/Error";
+import ToastSuccess from "../../../uikit/toasts/Success";
 import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
 import { Metadata } from "../MarketMetadata";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
@@ -23,6 +22,7 @@ import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import { useOraclePrice } from "../swr/useCollateralPrice";
 import { useLeveragedTokenMetadata } from "../swr/useLeveragedTokenMetadata";
 import { useTotalAvailableCash } from "../swr/useTotalAvailableCash";
+import ButtonLoading from "../../../uikit/button/ButtonLoading";
 
 /**
  * MintFormProps is a React Component properties that passed to React Component MintForm

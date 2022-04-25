@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
 import type { FunctionComponent } from "react";
+import ButtonTertiary from "../../../uikit/button/ButtonTertiary";
 import { addTokenToMetamask, tokenType } from "../../../utils/addTokenToMetamask";
 import { tokenBalanceFormatter } from "../../../utils/formatters";
-import ButtonTertiary from "../Buttons/ButtonTertiary";
 import { Metadata } from "../MarketMetadata";
 import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import { useTokenBalance } from "../swr/useTokenBalance";

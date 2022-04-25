@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonPositive from "../../../components/v1/Buttons/ButtonPositive";
+import ButtonPositive from "../../../uikit/button/ButtonPositive";
 
 export default {
     component: ButtonPositive,

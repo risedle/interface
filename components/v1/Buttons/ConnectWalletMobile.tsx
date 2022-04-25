@@ -8,8 +8,8 @@ import RisedleLinks from "../../../utils/links";
 import * as Dialog from "@radix-ui/react-dialog";
 
 // Toasts
-import ToastError from "../Toasts/Error";
-import ToastSuccess from "../Toasts/Success";
+import ToastError from "../../../uikit/toasts/Error";
+import ToastSuccess from "../../../uikit/toasts/Success";
 
 import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
 import { MenuMobile } from "./MenuMobile";

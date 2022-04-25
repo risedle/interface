@@ -3,7 +3,7 @@ import type { FunctionComponent } from "react";
 import ButtonConnectWalletDesktop from "./Buttons/ConnectWalletDesktop";
 import ButtonNetworkSwitcher from "./Buttons/NetworkSwitcher";
 import ButtonThemeSwitcher from "./Buttons/ThemeSwitcher";
-import Logo from "./Logo";
+import Logo from "../../uikit/layout/Logo";
 
 /**
  * NavigationProps is a React Component properties that passed to React Component Navigation

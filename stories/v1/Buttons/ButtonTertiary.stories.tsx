@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonTertiary from "../../../components/v1/Buttons/ButtonTertiary";
+import ButtonTertiary from "../../../uikit/button/ButtonTertiary";
 
 export default {
     component: ButtonTertiary,

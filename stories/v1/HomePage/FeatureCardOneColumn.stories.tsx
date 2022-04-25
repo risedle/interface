@@ -1,6 +1,6 @@
 import React from "react";
 
-import FeatureCardOneColumn from "../../../components/v1/HomePage/FeatureCardOneColumn";
+import FeatureCardOneColumn from "../../../modules/homePage/component/FeatureCardOneColumn";
 
 export default {
     component: FeatureCardOneColumn,

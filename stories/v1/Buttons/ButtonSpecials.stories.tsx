@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonSpecials from "../../../components/v1/Buttons/ButtonSpecials";
+import ButtonSpecials from "../../../uikit/button/ButtonSpecials";
 
 export default {
     component: ButtonSpecials,

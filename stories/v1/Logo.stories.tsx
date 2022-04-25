@@ -1,6 +1,6 @@
 import React from "react";
 
-import Logo from "../../components/v1/Logo";
+import Logo from "../../uikit/layout/Logo";
 
 export default {
     component: Logo,

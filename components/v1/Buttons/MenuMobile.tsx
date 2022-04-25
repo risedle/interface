@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import RisedleLinks from "../../../utils/links";
-import ToastSuccess from "../Toasts/Success";
+import ToastSuccess from "../../../uikit/toasts/Success";
 import { useWalletContext } from "../Wallet";
 
 const ActiveDot = () => {

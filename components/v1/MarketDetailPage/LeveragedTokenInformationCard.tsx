@@ -4,7 +4,7 @@ import { dollarFormatter } from "../../../utils/formatters";
 import LinkBasic from "../Buttons/LinkBasic";
 import { Metadata } from "../MarketMetadata";
 import { useMarket } from "../swr/useMarket";
-import ToastError from "../Toasts/Error";
+import ToastError from "../../../uikit/toasts/Error";
 import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, useWalletContext } from "../Wallet";
 
 /**

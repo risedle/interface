@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonLoading from "../../../components/v1/Buttons/ButtonLoading";
+import ButtonLoading from "../../../uikit/button/ButtonLoading";
 
 export default {
     component: ButtonLoading,

@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonDisabled from "../../../components/v1/Buttons/ButtonDisabled";
+import ButtonDisabled from "../../../uikit/button/ButtonDisabled";
 
 export default {
     component: ButtonDisabled,
