@@ -17,7 +17,7 @@
         "prettier-check": "prettier --check .",
         "prettier-write": "prettier --write .",
         "install-husky": "husky install ./husky",
-        "postinstall": "npm run install-husky",
+        "postinstall": "npm run prepare",
         "type-check": "tsc --pretty --noEmit",
         "prepare": "husky install"
     },
