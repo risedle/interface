@@ -16,7 +16,7 @@ type ButtonDisabledProps = {
 
 const ButtonDisabled: FunctionComponent<ButtonDisabledProps> = ({ full, children }) => {
     return (
-        <button disabled className={`button cursor-not-allowed rounded-full border border-gray-light-5 bg-gray-light-4 py-[11px] px-[24px] text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-10 transition duration-300 ease-out dark:border-gray-dark-5 dark:bg-gray-dark-4 dark:text-gray-dark-10 ${full ? "w-full" : ""}`}>
+        <button className={`button cursor-not-allowed rounded-full border border-gray-light-5 bg-gray-light-4 py-[11px] px-[24px] text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-10 transition duration-300 ease-out dark:border-gray-dark-5 dark:bg-gray-dark-4 dark:text-gray-dark-10 ${full ? "w-full" : ""}`} disabled>
             {children}
         </button>
     );

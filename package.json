@@ -15,7 +15,16 @@
         "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
         "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook",
         "prettier-check": "prettier --check .",
-        "prettier-write": "prettier --write ."
+        "prettier-write": "prettier --write .",
+        "install-husky": "husky install ./husky",
+        "postinstall": "npm run install-husky",
+        "type-check": "tsc --pretty --noEmit",
+        "prepare": "husky install"
+    },
+    "lint-staged": {
+        "*.@(ts|tsx)": [
+            "npm run prettier-write"
+        ]
     },
     "dependencies": {
         "@headlessui/react": "1.4.3",
@@ -51,6 +60,8 @@
         "eslint": "^7.32.0",
         "eslint-config-next": "^11.1.2",
         "eslint-plugin-storybook": "^0.5.5",
+        "husky": "^7.0.4",
+        "lint-staged": "^12.4.1",
         "postcss": "^8.3.9",
         "prettier": "2.5.1",
         "prettier-plugin-tailwindcss": "0.1.4",
