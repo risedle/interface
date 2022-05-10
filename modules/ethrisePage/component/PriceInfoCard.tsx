@@ -20,7 +20,7 @@ type PriceInfoCardProps = {
 const PriceInfoCard: FunctionComponent<PriceInfoCardProps> = ({ title, subtitle, logo, tokenAddress }) => {
     return (
         <div className="max-w-[540px]">
-            <InformationCard className="px-0 pb-0 space-y-0">
+            <InformationCard className="space-y-0 px-0 pb-0">
                 <div className="flex flex-row items-center justify-between p-4">
                     <div className="flex grow flex-col space-y-2">
                         <p className="text-sm leading-4 text-gray-light-10 dark:text-gray-dark-10">{subtitle}</p>
