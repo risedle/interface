@@ -1,19 +1,19 @@
 import { FunctionComponent } from "react";
 import Head from "next/head";
-import PortofolioPageMeta from "./PortfolioPageMeta";
-import Favicon from "../../../uikit/layout/Favicon";
-import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
-import BackgroundGradient from "./BackgroundGradient";
+import Favicon from "../../uikit/layout/Favicon";
+import ButtonConnectWalletMobile from "../../components/v1/Buttons/ConnectWalletMobile";
+import BackgroundGradient from "../../uikit/BackgroundGradient";
 import { chain as Chains, useProvider } from "wagmi";
-import { useWalletContext, DEFAULT_CHAIN, formatAddress } from "../Wallet";
-import { Metadata } from "../MarketMetadata";
-import { useTokenBalance } from "../swr/useTokenBalance";
-import { tokenBalanceFormatter, dollarFormatter } from "../../../utils/formatters";
+import { useWalletContext, DEFAULT_CHAIN, formatAddress } from "../../components/v1/Wallet";
+import { Metadata } from "../../components/v1/MarketMetadata";
+import { useTokenBalance } from "../../components/v1/swr/useTokenBalance";
+import { tokenBalanceFormatter, dollarFormatter } from "../../utils/formatters";
 import { ethers } from "ethers";
-import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
-import Footer from "../../../uikit/layout/Footer";
-import Navigation from "../Navigation";
-import { useVaultExchangeRate } from "../swr/useVaultExchangeRate";
+import { useLeveragedTokenNAV } from "../../components/v1/swr/useLeveragedTokenNAV";
+import Footer from "../../uikit/layout/Footer";
+import Navigation from "../../components/v1/Navigation";
+import { useVaultExchangeRate } from "../../components/v1/swr/useVaultExchangeRate";
+import PortofolioPageMeta from "./component/PortfolioPageMeta";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -184,7 +184,6 @@ const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
                             </tr>
                         </tbody>
                     </table>
-                    {/* {totalValue <= 0 ? <NoPortfolioWarn /> : null} */}
                 </div>
             </div>
 

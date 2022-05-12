@@ -1,4 +1,4 @@
-import { useWalletContext } from "../Wallet";
+import { useWalletContext } from "../../../components/v1/Wallet";
 
 type NoPortfolioWarnProps = {
     type?: "chart" | "table";

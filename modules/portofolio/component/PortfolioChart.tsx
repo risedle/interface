@@ -4,17 +4,17 @@ import toast from "react-hot-toast";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 
 import { dollarFormatter, tokenBalanceFormatter } from "../../../utils/formatters";
-import { Metadata } from "../MarketMetadata";
-import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
 import ToastError from "../../../uikit/toasts/Error";
-import { DEFAULT_CHAIN, useWalletContext } from "../Wallet";
-import { useTransferEvents } from "../swr/useTransferEvents";
-import { useTokenBalance } from "../swr/useTokenBalance";
 import { chain as Chains } from "wagmi";
-import { useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
-import { Timeframe } from "../swr/snapshot";
 import Link from "next/link";
 import { NoPortfolioWarn } from "./NoPortfolioWarn";
+import { Metadata } from "../../../components/v1/MarketMetadata";
+import { DEFAULT_CHAIN, useWalletContext } from "../../../components/v1/Wallet";
+import { useLeveragedTokenNAV } from "../../../components/v1/swr/useLeveragedTokenNAV";
+import { useLeveragedTokenDailyData } from "../../../components/v1/swr/useLeveragedTokenDailyData";
+import { useTransferEvents } from "../../../components/v1/swr/useTransferEvents";
+import { useTokenBalance } from "../../../components/v1/swr/useTokenBalance";
+import { Timeframe } from "../../../components/v1/swr/snapshot";
 
 export type PortofolioChartProps = {
     address: string; // Leveraged token address
