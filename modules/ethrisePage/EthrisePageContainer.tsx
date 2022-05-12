@@ -16,6 +16,7 @@ import MyAssetsCard from "./component/MyAssetsCard";
 
 import { chain as Chains } from "wagmi";
 import { Root as TabsRoot } from "@radix-ui/react-tabs";
+import VaultInfoCard from "./component/VaultInfoCard";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {
@@ -50,6 +51,16 @@ function EthrisePageContainer() {
                                 <MyAssetsCard address={ethriseAddress} />
                                 <LeveragedTokenInfoCard address={ethriseAddress} />
                                 <LeveragedTokenBackingCard address={ethriseAddress} />
+                            </div>
+                        </TabsContentGrid>
+
+                        {/* Lend Tab */}
+                        <TabsContentGrid value="lend">
+                            {/* Left Column */}
+                            <PriceInfoCard title={metadata.vaultTitle} subtitle={metadata.subtitle} logo={metadata.vaultLogo} tokenAddress={metadata.vaultAddress} isVault />
+                            <div className="max-w-[540px] flex-col space-y-6">
+                                <MyAssetsCard isVault address={ethriseAddress} />
+                                <VaultInfoCard address={ethriseAddress} />
                             </div>
                         </TabsContentGrid>
                     </TabsRoot>
