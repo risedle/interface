@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
 import LeveragedTokenChart from "./LeveragedTokenChart";
 import VaultChart from "./VaultChart";
+import MainButton from "./MainButton";
 
 /**
  * PriceInfoCardProps is a React Component properties that passed to React Component PriceInfoCard
@@ -30,6 +31,7 @@ const PriceInfoCard: FunctionComponent<PriceInfoCardProps> = ({ title, subtitle,
                     <img className="h-[48px] w-[48px]" src={logo} alt={title} />
                 </div>
                 {isVault ? <VaultChart address={tokenAddress} /> : <LeveragedTokenChart address={tokenAddress} />}
+                <MainButton isVault={isVault} tokenAddress={tokenAddress} />
             </div>
         </div>
     );
