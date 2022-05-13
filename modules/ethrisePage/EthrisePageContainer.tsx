@@ -57,7 +57,7 @@ function EthrisePageContainer() {
                         {/* Lend Tab */}
                         <TabsContentGrid value="lend">
                             {/* Left Column */}
-                            <PriceInfoCard title={metadata.vaultTitle} subtitle={metadata.subtitle} logo={metadata.vaultLogo} tokenAddress={metadata.vaultAddress} isVault />
+                            <PriceInfoCard title={metadata.vaultTitle} subtitle={metadata.subtitle} logo={metadata.vaultLogo} tokenAddress={ethriseAddress} isVault vaultAddress={metadata.vaultAddress} />
 
                             {/* RightColumn */}
                             <div className="max-w-[540px] flex-col space-y-6">

@@ -3,6 +3,7 @@ import ButtonSwitchNetwork from "../../../components/v1/MarketDetailPage/Buttons
 import ButtonDisabled from "../../../uikit/button/ButtonDisabled";
 import { useWalletContext, DEFAULT_CHAIN } from "../../../components/v1/Wallet";
 import ButtonMintOrRedeem from "./ButtonMintOrRedeem";
+import ButtonDepositOrWithdraw from "../../../components/v1/MarketDetailPage/ButtonDepositOrWithdraw";
 
 /**
  * MainButtonProps is a React Component properties that passed to React Component MainButton
@@ -43,6 +44,9 @@ const MainButton: FunctionComponent<MainButtonProps> = ({ isVault, tokenAddress 
 
             {/* Show mint or redeem */}
             {showAction && !isVault && <ButtonMintOrRedeem address={tokenAddress} />}
+
+            {/* Show deposit or withdraw*/}
+            {showAction && isVault && <ButtonDepositOrWithdraw address={tokenAddress} />}
         </div>
     );
 };
