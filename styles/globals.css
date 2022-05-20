@@ -12,6 +12,48 @@
     .hero-text {
         @apply m-0 max-w-2xl text-center text-5xl font-bold tracking-tight text-gray-light-12 dark:text-gray-dark-12 sm:text-6xl md:text-7xl;
     }
+    .heading-h0 {
+        @apply font-inter text-[148px] font-extrabold leading-[136px] tracking-[-0.02em] text-black;
+    }
+    .heading-h1 {
+        @apply font-inter text-[67px] font-extrabold leading-[72px] tracking-[-0.02em] text-black;
+    }
+    .heading-h2 {
+        @apply font-inter text-[50px] font-extrabold leading-[56px] tracking-[-0.02em] text-black;
+    }
+    .heading-h3 {
+        @apply font-inter text-[36px] font-bold leading-[40px] tracking-[-0.02em] text-black;
+    }
+    .heading-h4 {
+        @apply font-inter text-[28px] font-bold leading-[32px] tracking-[-0.02em] text-black;
+    }
+    .heading-h5 {
+        @apply font-inter text-[21px] font-bold leading-[24px] tracking-[-0.02em] text-black;
+    }
+    .heading-h6 {
+        @apply font-inter text-[16px] font-bold leading-[16px] tracking-[-0.02em] text-black;
+    }
+    .heading-h7 {
+        @apply font-inter text-[14px] font-semibold leading-[16px] tracking-[-0.02em] text-black;
+    }
+    .heading-h8 {
+        @apply font-inter text-[12px] font-semibold leading-[16px] tracking-[-0.02em] text-black;
+    }
+    .paragraph-xl {
+        @apply font-inter text-[20px] font-normal leading-[32px] tracking-[-0.03em] text-black;
+    }
+    .paragraph-l {
+        @apply font-inter text-[18px] font-normal leading-[24px] tracking-[-0.03em] text-black;
+    }
+    .paragraph-m {
+        @apply font-inter text-[16px] font-normal leading-[24px] tracking-[-0.03em] text-black;
+    }
+    .paragraph-s {
+        @apply font-inter text-[14px] font-normal leading-[24px] tracking-[-0.03em] text-black;
+    }
+    .paragraph-xs {
+        @apply font-inter text-[12px] font-normal leading-[16px] tracking-[-0.03em] text-black;
+    }
 }
 
 html.dark {
