@@ -8,11 +8,12 @@ import SubHero from "./component/SubHero";
 import HomePageMeta from "./component/HomePageMeta";
 import Favicon from "../../uikit/layout/Favicon";
 import Footer from "../../uikit/layout/Footer";
+import Jumbotron2 from "./component/v2/Jumbotron2";
 
 function HomePageContainer() {
     // By default use dark theme
     return (
-        <div className="h-full w-full overflow-clip bg-gray-light-1 font-inter dark:bg-gray-dark-1">
+        <div className="h-full w-full snap-y snap-mandatory overflow-clip bg-gray-light-1 font-inter dark:bg-gray-dark-1">
             <Head>
                 {/* <!-- HTML Meta Tags --> */}
                 <title>Risedle Protocol</title>
