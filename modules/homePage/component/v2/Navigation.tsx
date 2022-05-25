@@ -17,7 +17,7 @@ type NavigationProps = {};
  */
 const Navigation: FunctionComponent<NavigationProps> = ({}) => {
     return (
-        <div className="flex-column flex items-center gap-11 py-2 px-[192px]">
+        <div className="flex-column fixed inset-x-0 z-40 flex w-full items-center gap-11 bg-dark-background-default/90 py-4 px-4 sm:px-11 xl:px-[76px] 2xl:px-48">
             <LogoV2 />
             <a className="paragraph-s text-dark-neutral-medium">Docs</a>
             <a className="paragraph-s text-dark-neutral-medium">Community</a>

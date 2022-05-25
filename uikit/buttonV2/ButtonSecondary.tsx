@@ -27,7 +27,7 @@ const ButtonSecondary: FunctionComponent<ButtonSecondaryProps> = ({ onClick, siz
             extraClass = "px-5 h-12 heading-h6";
             break;
         case "xl":
-            extraClass = "px-6 h-14 heading-h6";
+            extraClass = "px-6 h-16 heading-h6";
             break;
     }
     return (
