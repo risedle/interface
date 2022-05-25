@@ -185,6 +185,11 @@ module.exports = {
                 15: ".15",
                 95: ".95",
             },
+            boxShadow: {
+                strong: "0px -4px 44px rgba(0, 0, 0, 0.25), 0px 52px 45px rgba(0, 0, 0, 0.4), 0px 12px 29px rgba(0, 0, 0, 0.2)",
+                medium: "0px 25px 50px 4px rgba(0, 0, 0, 0.45)",
+                float: "0px 25px 50px 4px rgba(0, 0, 0, 0.45)",
+            },
         },
     },
     variants: {
