@@ -1,22 +1,11 @@
-import { FunctionComponent } from "react";
-
-/**
- * ButtonSecondaryProps is a React Component properties that passed to React Component ButtonSecondary
- */
+import { ButtonHTMLAttributes, FunctionComponent, HTMLProps } from "react";
 
 type ButtonSecondaryProps = {
-    onClick?: () => void;
-    size: "md" | "lg" | "xl";
-    type: "default" | "fab" | "square";
-};
+    size?: "md" | "lg" | "xl";
+    type?: "default" | "fab" | "square";
+} & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "size" | "type">;
 
-/**
- * ButtonSecondary is just yet another react component
- *
- * @link https://fettblog.eu/typescript-react/components/#functional-components
- */
-
-const ButtonSecondary: FunctionComponent<ButtonSecondaryProps> = ({ onClick, size, type, children }) => {
+const ButtonSecondary: FunctionComponent<ButtonSecondaryProps> = ({ onClick, size = "md", type = "default", children, className, ...restProps }) => {
     let extraClass = "";
     switch (size) {
         case "md":
@@ -30,7 +19,7 @@ const ButtonSecondary: FunctionComponent<ButtonSecondaryProps> = ({ onClick, siz
             break;
     }
     return (
-        <button className={`flex flex-row items-center justify-center gap-2 ${extraClass} bg-light-neutral-subtle/10 py-3 text-dark-neutral-primary ${type == "square" ? "rounded-lg" : "rounded-full"}`} onClick={onClick}>
+        <button className={`flex flex-row items-center justify-center gap-2 ${extraClass} bg-light-neutral-subtle/10 py-3 text-dark-neutral-primary ${type == "square" ? "rounded-lg" : "rounded-full"} ${className}`} onClick={onClick} {...restProps}>
             {children}
         </button>
     );

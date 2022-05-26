@@ -8,6 +8,7 @@ import SubHero from "./component/SubHero";
 import HomePageMeta from "./component/HomePageMeta";
 import Favicon from "../../uikit/layout/Favicon";
 import Footer from "../../uikit/layout/Footer";
+import { Jumbotron2 } from "./component/v2/Jumbotron2";
 
 function HomePageContainer() {
     // By default use dark theme
@@ -22,6 +23,7 @@ function HomePageContainer() {
             <Favicon />
             <Navigation />
             <Hero />
+            <Jumbotron2 />
             <SubHero />
             <FeatureCardOneColumn />
             <div className="my-4">
