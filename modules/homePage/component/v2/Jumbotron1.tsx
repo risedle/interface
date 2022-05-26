@@ -20,7 +20,7 @@ const Jumbotron1: FunctionComponent<Jumbotron1Props> = ({}) => {
             <div className="flex flex-col items-center gap-14 sm:flex-row sm:gap-0">
                 <div className="flex max-w-2xl flex-col items-center gap-12 text-center sm:items-start sm:text-left">
                     <p className="heading-h1 xl:heading-h0 text-dark-neutral-primary drop-shadow-sm">Leverage Everything</p>
-                    <p className="paragraph-m lg:paragraph-l xl:paragraph-xl text-dark-neutral-medium drop-shadow-sm">Boost your exposure to any crypto assets or create your own leverage market on top of Fuse</p>
+                    <p className="paragraph-m lg:paragraph-l xl:paragraph-xl text-dark-neutral-medium/70 drop-shadow-sm">Boost your exposure to any crypto assets or create your own leverage market on top of Fuse</p>
                     <div className="flex flex-row">
                         <ButtonPrimary size="xl" type="default">
                             Explore Risedle
