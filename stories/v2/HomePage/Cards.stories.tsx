@@ -8,7 +8,7 @@ export default {
 
 export const Cards = () => {
     return (
-        <div className="mt-28">
+        <div className="absolute right-1/2 top-1/2 translate-x-1/2 -translate-y-1/2">
             <ThreeCards />
         </div>
     );

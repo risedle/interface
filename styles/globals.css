@@ -74,6 +74,10 @@ html {
     );
 }
 
+.overflow-wrap {
+    overflow-wrap: normal;
+}
+
 .gradient {
     background-image: radial-gradient(
         91.36% 358.74% at 12.29% 100%,
