@@ -2,7 +2,7 @@ import { SecondJumbotronSection } from "./Section";
 
 function SecondJumbotron() {
     return (
-        <div className="w-full px-24">
+        <div className="w-full px-16 md:px-24">
             <SecondJumbotronSection>
                 <SecondJumbotronSection.Section>
                     <SecondJumbotronSection.SmallTitle>TRADER</SecondJumbotronSection.SmallTitle>
@@ -11,6 +11,8 @@ function SecondJumbotron() {
                     <SecondJumbotronSection.Button>Try Boost </SecondJumbotronSection.Button>
                 </SecondJumbotronSection.Section>
                 <SecondJumbotronSection.Section></SecondJumbotronSection.Section>
+            </SecondJumbotronSection>
+            <SecondJumbotronSection>
                 <SecondJumbotronSection.Section>
                     <SecondJumbotronSection.SmallTitle>Liquidity Provider</SecondJumbotronSection.SmallTitle>
                     <SecondJumbotronSection.Title>Earn by Providing Liquidity</SecondJumbotronSection.Title>
@@ -18,6 +20,8 @@ function SecondJumbotron() {
                     <SecondJumbotronSection.Button>Try Fuel </SecondJumbotronSection.Button>
                 </SecondJumbotronSection.Section>
                 <SecondJumbotronSection.Section></SecondJumbotronSection.Section>
+            </SecondJumbotronSection>
+            <SecondJumbotronSection>
                 <SecondJumbotronSection.Section>
                     <SecondJumbotronSection.SmallTitle>Crypto Project</SecondJumbotronSection.SmallTitle>
                     <SecondJumbotronSection.Title>Leverage Liquidity Using Boost Pro</SecondJumbotronSection.Title>
