@@ -1,8 +1,8 @@
 import { SecondJumbotronSection } from "./Section";
 
-function Jumbotron2() {
+function SecondJumbotron() {
     return (
-        <div className="px-24">
+        <div className="w-full px-24">
             <SecondJumbotronSection>
                 <SecondJumbotronSection.Section>
                     <SecondJumbotronSection.SmallTitle>TRADER</SecondJumbotronSection.SmallTitle>
@@ -30,4 +30,4 @@ function Jumbotron2() {
     );
 }
 
-export { Jumbotron2 };
+export { SecondJumbotron };

@@ -4,6 +4,7 @@ import LogoV2 from "../../../../uikit/layout/LogoV2";
 import Command from "../../../../public/assets/icon/homepage/command.svg";
 import Slash from "../../../../public/assets/icon/homepage/slash.svg";
 import Search from "../../../../public/assets/icon/homepage/search.svg";
+import Image from "next/image";
 
 /**
  * NavigationProps is a React Component properties that passed to React Component Navigation
@@ -31,17 +32,17 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                 <div className="flex flex-row items-center gap-[90px] rounded-full bg-light-neutral-subtle/10 p-2 pl-4">
                     {/* Input Box Wrapper */}
                     <div className="flex flex-row items-center gap-2">
-                        <img src={Search} alt="search_logo" />
+                        <Image src={Search} alt="search_logo" />
                         <input type="text" placeholder="Search token name or symbol..." className="paragraph-s bg-transparent text-dark-neutral-primary outline-none" />
                     </div>
 
                     {/* Command + / Wrapper */}
                     <div className="flex flex-row items-start gap-1">
                         <div className="flex h-6 w-6 items-center justify-center gap-2.5 rounded-lg bg-dark-background-elevated p-2">
-                            <img src={Command} alt="command_logo" />
+                            <Image src={Command} alt="command_logo" />
                         </div>
                         <div className="flex h-6 w-6 items-center justify-center gap-2.5 rounded-lg bg-dark-background-elevated p-2">
-                            <img src={Slash} alt="slash_logo" />
+                            <Image src={Slash} alt="slash_logo" />
                         </div>
                     </div>
                 </div>

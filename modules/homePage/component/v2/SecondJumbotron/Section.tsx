@@ -10,7 +10,7 @@ function SecondJumbotronTitle({ children }: { children: React.ReactNode }) {
 }
 
 function Section({ children }: { children?: React.ReactNode }) {
-    return <div className="py-36">{children}</div>;
+    return <div className="py-32">{children}</div>;
 }
 
 function SmallTitle({ children }: { children: React.ReactNode }) {
