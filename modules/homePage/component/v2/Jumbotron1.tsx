@@ -1,4 +1,5 @@
 import type { FunctionComponent } from "react";
+import { useState, useEffect } from "react";
 import ThreeCards from "./ThreeCards";
 import ButtonPrimary from "../../../../uikit/buttonV2/ButtonPrimary";
 import ButtonSecondary from "../../../../uikit/buttonV2/ButtonSecondary";
@@ -14,6 +15,10 @@ type Jumbotron1Props = {};
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const Jumbotron1: FunctionComponent<Jumbotron1Props> = ({}) => {
+    const [screenWidth, setScreenWidth] = useState(0);
+    useEffect(() => {
+        window.addEventListener("resize", () => setScreenWidth(window.screen.availWidth));
+    }, [window.screen.availWidth]);
     return (
         <>
             {/* overflow hidden (x axis) can be handled in homepage container later */}
@@ -22,10 +27,10 @@ const Jumbotron1: FunctionComponent<Jumbotron1Props> = ({}) => {
                     <p className="heading-h1 xl:heading-h0 text-dark-neutral-primary drop-shadow-sm">Leverage Everything</p>
                     <p className="paragraph-m lg:paragraph-l xl:paragraph-xl text-dark-neutral-medium/70 drop-shadow-sm">Boost your exposure to any crypto assets or create your own leverage market on top of Fuse</p>
                     <div className="flex flex-row">
-                        <ButtonPrimary size="xl" type="default">
+                        <ButtonPrimary size={screenWidth >= 1280 ? "xl" : "lg"} type="default">
                             Explore Risedle
                         </ButtonPrimary>
-                        <ButtonSecondary size="xl" type="default">
+                        <ButtonSecondary size={screenWidth >= 1280 ? "xl" : "lg"} type="default">
                             Documentation <span>&rarr;</span>
                         </ButtonSecondary>
                     </div>
