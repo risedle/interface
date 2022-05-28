@@ -1,21 +1,21 @@
 import { FunctionComponent, ButtonHTMLAttributes } from "react";
 
 /**
- * ButtonSecondaryProps is a React Component properties that passed to React Component ButtonSecondary
+ * ButtonPrimaryProps is a React Component properties that passed to React Component ButtonPrimary
  */
 
-type ButtonSecondaryProps = {
+type ButtonPrimaryProps = {
     size?: "md" | "lg" | "xl";
     type?: "default" | "fab" | "square";
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "size" | "type">;
 
 /**
- * ButtonSecondary is just yet another react component
+ * ButtonPrimary is just yet another react component
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 
-const ButtonSecondary: FunctionComponent<ButtonSecondaryProps> = ({ onClick, size = "md", type = "default", children, className, ...restProps }) => {
+const ButtonPrimary: FunctionComponent<ButtonPrimaryProps> = ({ onClick, size = "md", type = "default", children, className, ...restProps }) => {
     let extraClass = "";
     switch (size) {
         case "md":
@@ -29,10 +29,10 @@ const ButtonSecondary: FunctionComponent<ButtonSecondaryProps> = ({ onClick, siz
             break;
     }
     return (
-        <button className={`flex flex-row items-center justify-center gap-2 active:scale-90 ${extraClass} bg-light-neutral-subtle/10 py-3 text-dark-neutral-primary transition ease-out ${type == "square" ? "rounded-lg" : "rounded-full"} ${restProps.disabled ? "opacity-40" : "hover:bg-light-neutral-subtle/20"} ${className}`} onClick={onClick} {...restProps}>
+        <button className={`flex flex-row items-center justify-center gap-2 active:scale-90 ${extraClass} bg-dark-neutral-primary text-dark-background-default transition ease-out ${type == "square" ? "rounded-lg" : "rounded-full"} ${restProps.disabled ? "bg-dark-neutral-primary opacity-40" : "hover:bg-dark-neutral-soft"}`} onClick={onClick} {...restProps}>
             {children}
         </button>
     );
 };
 
-export default ButtonSecondary;
+export default ButtonPrimary;
