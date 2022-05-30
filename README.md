@@ -28,6 +28,9 @@ To changes component for each page, you may go to directly to the page
 component. For example, if you want to update something on the homepage go to
 directly to [`pages/index.tsx`](pages/index.tsx).
 
+Risedle Interface is using [Next.js](https://nextjs.org/) and deployed on
+[Cloudflare Pages](https://developers.cloudflare.com/pages/).
+
 ## Run the storybook
 
 Use the following command to run the storybook:
