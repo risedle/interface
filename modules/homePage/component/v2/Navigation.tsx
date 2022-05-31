@@ -28,7 +28,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
             {/* Action Wrapper */}
             <div className="flex flex-row items-start gap-2">
                 {/* Search Bar */}
-                <div className="flex flex-row items-center gap-[90px] rounded-full bg-light-neutral-subtle/10 p-2 pl-4">
+                {/* <div className="flex flex-row items-center gap-[90px] rounded-full bg-light-neutral-subtle/10 p-2 pl-4">
                     <div className="flex flex-row items-center gap-2">
                         <img src={Search} alt="search_logo" />
                         <input type="text" placeholder="Search token name or symbol..." className="paragraph-s bg-transparent text-dark-neutral-primary outline-none" />
@@ -41,7 +41,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                             <img src={Slash} alt="slash_logo" />
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 <ButtonSecondary type="default" size="md">
                     Launch Risedle
