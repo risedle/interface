@@ -1,4 +1,5 @@
 import Image from "next/image";
+import BackgroundBox from "./BackgroundBox";
 import { FirstSectionImage } from "./FirstSectionImage";
 import { SecondSectionImage } from "./SecondSectionImage";
 import { SecondJumbotronSection } from "./Section";
@@ -6,7 +7,7 @@ import { ThirdSectionImage } from "./ThirdSectionImage";
 
 function SecondJumbotron() {
     return (
-        <div className="mx-auto max-w-7xl ">
+        <div className="mx-auto max-w-7xl pt-32">
             <SecondJumbotronSection>
                 <SecondJumbotronSection.Section>
                     <SecondJumbotronSection.SmallTitle>TRADER</SecondJumbotronSection.SmallTitle>
@@ -15,7 +16,9 @@ function SecondJumbotron() {
                     <SecondJumbotronSection.Button>Try Boost </SecondJumbotronSection.Button>
                 </SecondJumbotronSection.Section>
                 <SecondJumbotronSection.Section>
-                    <FirstSectionImage />
+                    <BackgroundBox>
+                        <img className="mt-14 max-w-[1000px]" src="/assets/images/homepage/section-1.svg" />
+                    </BackgroundBox>
                 </SecondJumbotronSection.Section>
             </SecondJumbotronSection>
             <SecondJumbotronSection>
@@ -26,7 +29,9 @@ function SecondJumbotron() {
                     <SecondJumbotronSection.Button>Try Fuel </SecondJumbotronSection.Button>
                 </SecondJumbotronSection.Section>
                 <SecondJumbotronSection.Section>
-                    <SecondSectionImage />
+                    <BackgroundBox>
+                        <img className="mt-14 max-w-[1000px]" src="/assets/images/homepage/section-2.svg" />
+                    </BackgroundBox>
                 </SecondJumbotronSection.Section>
             </SecondJumbotronSection>
             <SecondJumbotronSection>
@@ -37,7 +42,9 @@ function SecondJumbotron() {
                     <SecondJumbotronSection.Button>Try Boost Pro</SecondJumbotronSection.Button>
                 </SecondJumbotronSection.Section>
                 <SecondJumbotronSection.Section>
-                    <ThirdSectionImage />
+                    <BackgroundBox>
+                        <img className="mt-14 -ml-[86px] max-w-[1000px] md:ml-0" src="/assets/images/homepage/section-3.svg" />
+                    </BackgroundBox>
                 </SecondJumbotronSection.Section>
             </SecondJumbotronSection>
         </div>
