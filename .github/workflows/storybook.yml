@@ -23,7 +23,8 @@ jobs:
         with:
           node-version: "17.8.0"
           cache: "npm"
-        run: npm install && npm run build-storybook
+      - run: npm install
+      - run: npm run build-storybook
       - name: Publish
         uses: cloudflare/pages-action@1
         with:
