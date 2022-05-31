@@ -1,4 +1,14 @@
-on: [push]
+name: Risedle Interface Storybook
+on:
+  push:
+    branches:
+      - preview
+      - production
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches:
+      - preview
+      - production
 jobs:
   deploy:
     runs-on: ubuntu-latest
