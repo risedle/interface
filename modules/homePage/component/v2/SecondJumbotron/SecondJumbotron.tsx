@@ -30,7 +30,7 @@ function SecondJumbotron() {
                 </SecondJumbotronSection.Section>
                 <SecondJumbotronSection.Section>
                     <BackgroundBox>
-                        <img className="mt-14 max-w-[1000px]" src="/assets/images/homepage/section-2.svg" />
+                        <img className="mt-14 max-w-[1000px]" src="/assets/images/homepage/Section-2.svg" />
                     </BackgroundBox>
                 </SecondJumbotronSection.Section>
             </SecondJumbotronSection>
@@ -43,7 +43,7 @@ function SecondJumbotron() {
                 </SecondJumbotronSection.Section>
                 <SecondJumbotronSection.Section>
                     <BackgroundBox>
-                        <img className="mt-14 -ml-[86px] max-w-[1000px] md:ml-0" src="/assets/images/homepage/section-3.svg" />
+                        <img className="mt-14 -ml-[86px] max-w-[1000px] md:ml-0" src="/assets/images/homepage/Section-3.svg" />
                     </BackgroundBox>
                 </SecondJumbotronSection.Section>
             </SecondJumbotronSection>
