@@ -1,9 +1,6 @@
 import Image from "next/image";
 import BackgroundBox from "./BackgroundBox";
-import { FirstSectionImage } from "./FirstSectionImage";
-import { SecondSectionImage } from "./SecondSectionImage";
 import { SecondJumbotronSection } from "./Section";
-import { ThirdSectionImage } from "./ThirdSectionImage";
 
 function SecondJumbotron() {
     return (
@@ -17,7 +14,7 @@ function SecondJumbotron() {
                 </SecondJumbotronSection.Section>
                 <SecondJumbotronSection.Section>
                     <BackgroundBox>
-                        <img className="mt-14 max-w-[1000px]" src="/assets/images/homepage/section-1.svg" />
+                        <img className="absolute left-0 mt-14 max-w-[1000px] md:relative" src="/assets/images/homepage/section-1.svg" />
                     </BackgroundBox>
                 </SecondJumbotronSection.Section>
             </SecondJumbotronSection>
@@ -30,7 +27,7 @@ function SecondJumbotron() {
                 </SecondJumbotronSection.Section>
                 <SecondJumbotronSection.Section>
                     <BackgroundBox>
-                        <img className="mt-14 max-w-[1000px]" src="/assets/images/homepage/Section-2.svg" />
+                        <img className="absolute left-0 mt-14 max-w-[1000px]" src="/assets/images/homepage/Section-2.svg" />
                     </BackgroundBox>
                 </SecondJumbotronSection.Section>
             </SecondJumbotronSection>
