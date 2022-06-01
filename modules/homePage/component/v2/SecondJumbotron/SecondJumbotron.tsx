@@ -40,7 +40,7 @@ function SecondJumbotron() {
                 </SecondJumbotronSection.Section>
                 <SecondJumbotronSection.Section>
                     <BackgroundBox>
-                        <img className="mt-14 -ml-[86px] max-w-[1000px] md:ml-0" src="/assets/images/homepage/Section-3.svg" />
+                        <img className="mt-14 ml-0 max-w-[400px] sm:-ml-[86px] sm:max-w-[1000px]  md:max-w-[600px]" src="/assets/images/homepage/Section-3.svg" />
                     </BackgroundBox>
                 </SecondJumbotronSection.Section>
             </SecondJumbotronSection>

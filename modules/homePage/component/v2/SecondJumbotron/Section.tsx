@@ -6,7 +6,7 @@ function SecondJumbotronSection({ children }: { children: React.ReactNode }) {
 }
 
 function SecondJumbotronTitle({ children }: { children: React.ReactNode }) {
-    return <h2 className="heading-h3 md:heading-h2">{children}</h2>;
+    return <h2 className="heading-h3 md:heading-h2 mt-4 md:mt-10">{children}</h2>;
 }
 
 function Section({ children, className }: { children?: React.ReactNode; className?: string }) {
@@ -18,7 +18,7 @@ function SmallTitle({ children }: { children: React.ReactNode }) {
 }
 
 function JumbotronExplanation({ children }: { children: React.ReactNode }) {
-    return <p className="paragraph-l mt-4 text-dark-neutral-soft">{children}</p>;
+    return <p className="paragraph-l mt-4 mt-6 text-dark-neutral-soft">{children}</p>;
 }
 
 function JumbotronButton({ children }: { children: React.ReactNode }) {
