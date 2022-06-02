@@ -57,7 +57,7 @@ const MintDialogContent: FunctionComponent<MintDialogContentProps> = ({ address 
             {showMintFormOrMaxCap && (
                 <div>
                     {/* Show max cap is reached */}
-                    {true && (
+                    {showMaxCap && (
                         <div className="mt-4 flex flex-col space-y-4">
                             <div className="flex flex-row items-center space-x-2 rounded-[8px] border border-yellow-light-5 bg-yellow-light-2 p-4 dark:border-yellow-dark-5 dark:bg-yellow-dark-2">
                                 <svg className="fill-yellow-light-12 dark:fill-yellow-dark-12" width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg">
