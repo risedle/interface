@@ -181,14 +181,19 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address }) => {
                         </div>
 
                         {/* Exhange rate */}
-                        <div className="text-center">
-                            <p className="text-xs leading-4 text-gray-light-10 dark:text-gray-dark-10">
-                                You will get{" "}
-                                <span className="font-semibold text-gray-light-12 dark:text-gray-dark-12">
+                        <div className="space-y-2 text-xs text-gray-light-10 dark:text-gray-dark-10">
+                            <div className="flex flex-row justify-between">
+                                <p>Minimum received amount</p>
+                                <p>
                                     {tokenBalanceFormatter.format(minimalRedeemedValue)} {metadata.collateralSymbol}
-                                </span>{" "}
-                                at minimum
-                            </p>
+                                </p>
+                            </div>
+                            <div className="flex flex-row justify-between">
+                                <p>Expected amount</p>
+                                <p className="text-gray-light-12 dark:text-gray-dark-12">
+                                    {tokenBalanceFormatter.format(redeemedValue)} {metadata.collateralSymbol}
+                                </p>
+                            </div>
                         </div>
 
                         {/* Buttons */}
@@ -270,7 +275,7 @@ const RedeemForm: FunctionComponent<RedeemFormProps> = ({ address }) => {
                         {redeemState.hash && (
                             <div className="text-center">
                                 <Link href={getExplorerLink(chain.chain, redeemState.hash)}>
-                                    <a target="_blank" rel="noreferrer" className="text-gray-text-center py-4 text-sm text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">
+                                    <a target="_blank" rel="noreferrer" className="text-gray-text-center py-4 text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">
                                         <span className="hover:underline">Transaction is submitted</span> &#8599;
                                     </a>
                                 </Link>

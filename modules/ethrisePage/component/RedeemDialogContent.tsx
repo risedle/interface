@@ -120,7 +120,7 @@ const Redeem: FunctionComponent<RedeemProps> = ({ address }) => {
                             {approval.hash && (
                                 <div className="pt-4 text-center">
                                     <Link href={getExplorerLink(chain.chain, approval.hash)}>
-                                        <a target="_blank" rel="noreferrer" className="text-gray-text-center py-4 text-sm text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">
+                                        <a target="_blank" rel="noreferrer" className="text-gray-text-center py-4 text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">
                                             <span className="hover:underline">Transaction is submitted</span> &#8599;
                                         </a>
                                     </Link>
