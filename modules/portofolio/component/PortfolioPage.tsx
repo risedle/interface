@@ -1,23 +1,24 @@
 import { FunctionComponent, useMemo } from "react";
 import Head from "next/head";
 import PortofolioPageMeta from "./PortfolioPageMeta";
-import Favicon from "../../../uikit/layout/Favicon";
-import ButtonConnectWalletMobile from "../Buttons/ConnectWalletMobile";
-import BackgroundGradient from "./BackgroundGradient";
-import { chain as Chains, useProvider } from "wagmi";
-import { useWalletContext, DEFAULT_CHAIN } from "../Wallet";
-import { Metadata } from "../MarketMetadata";
-import PortofolioChart from "./PortfolioChart";
-import { useTransactionHistory } from "../swr/useTransactionHistory";
-import { useTokenBalance } from "../swr/useTokenBalance";
-import { tokenBalanceFormatter, dollarFormatter } from "../../../utils/formatters";
 import { ethers } from "ethers";
-import { useLeveragedTokenNAV } from "../swr/useLeveragedTokenNAV";
-import { useLeveragedTokenDailyData } from "../swr/useLeveragedTokenDailyData";
+import { tokenBalanceFormatter, dollarFormatter } from "../../../utils/formatters";
 import Footer from "../../../uikit/layout/Footer";
 import { NoPortfolioWarn } from "./NoPortfolioWarn";
-import Navigation from "../Navigation";
-import { useVaultExchangeRate } from "../swr/useVaultExchangeRate";
+
+import Favicon from "../../../uikit/layout/Favicon";
+import { chain as Chains, useProvider } from "wagmi";
+import { useVaultExchangeRate } from "../../../components/v1/swr/useVaultExchangeRate";
+import { DEFAULT_CHAIN, useWalletContext } from "../../../components/v1/Wallet";
+import { useTokenBalance } from "../../../components/v1/swr/useTokenBalance";
+import { useLeveragedTokenNAV } from "../../../components/v1/swr/useLeveragedTokenNAV";
+import { useLeveragedTokenDailyData } from "../../../components/v1/swr/useLeveragedTokenDailyData";
+import { useTransactionHistory } from "../../../components/v1/swr/useTransactionHistory";
+import Navigation from "../../../components/v1/Navigation";
+import ButtonConnectWalletMobile from "../../../components/v1/Buttons/ConnectWalletMobile";
+import BackgroundGradient from "../../ethrisePage/component/BackgroundGradient";
+import PortofolioChart from "./PortfolioChart";
+import { Metadata } from "../../../components/v1/MarketMetadata";
 
 // ETHRISE Token ids
 const ETHRISEAddresses = {

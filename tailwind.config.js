@@ -15,6 +15,33 @@ module.exports = {
                 ibm: ["'IBM Plex Mono'", "monospace"],
             },
             colors: {
+                dark: {
+                    neutral: "#FCFDFF",
+                    primary: "#EC38BC",
+                    secondary: "#7303C0",
+                    background: {
+                        default: "#03050D",
+                        elevated: "#13151F",
+                    },
+                    neutral: {
+                        primary: "#FCFDFF",
+                        medium: "#ECEDF2",
+                        soft: "#8E93AF",
+                        subtle: "#2B2E3F",
+                    },
+                },
+                light: {
+                    background: "#FCFDFF",
+                    neutral: "#070D2D",
+                    primary: "#7303C0",
+                    secondary: "#EC38BC",
+                    neutral: {
+                        primary: "#070D2D",
+                        medium: "#535978",
+                        soft: "#9198BD",
+                        subtle: "#EEF0FC",
+                    },
+                },
                 blue: {
                     DEFAULT: "#2D81FF",
                 },
@@ -158,6 +185,19 @@ module.exports = {
                 15: ".15",
                 95: ".95",
             },
+            boxShadow: {
+                strong: "0px -4px 44px rgba(0, 0, 0, 0.25), 0px 52px 45px rgba(0, 0, 0, 0.4), 0px 12px 29px rgba(0, 0, 0, 0.2)",
+                medium: "0px 25px 50px 4px rgba(0, 0, 0, 0.45)",
+                float: "0px 25px 50px 4px rgba(0, 0, 0, 0.45)",
+            },
+        },
+        screens: {
+            sm: "640px",
+            md: "768px",
+            lg: "1024px",
+            xl: "1280px",
+            "2xl": "1440px",
+            "3xl": "1536px",
         },
     },
     variants: {

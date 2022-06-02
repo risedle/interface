@@ -12,6 +12,48 @@
     .hero-text {
         @apply m-0 max-w-2xl text-center text-5xl font-bold tracking-tight text-gray-light-12 dark:text-gray-dark-12 sm:text-6xl md:text-7xl;
     }
+    .heading-h0 {
+        @apply font-inter text-[148px] font-extrabold leading-[136px] tracking-[-0.02em];
+    }
+    .heading-h1 {
+        @apply font-inter text-[67px] font-extrabold leading-[72px] tracking-[-0.02em];
+    }
+    .heading-h2 {
+        @apply font-inter text-[50px] font-extrabold leading-[56px] tracking-[-0.02em];
+    }
+    .heading-h3 {
+        @apply font-inter text-4xl font-bold tracking-[-0.02em];
+    }
+    .heading-h4 {
+        @apply font-inter text-[28px] font-bold leading-8 tracking-[-0.02em];
+    }
+    .heading-h5 {
+        @apply font-inter text-[21px] font-bold leading-6 tracking-[-0.02em];
+    }
+    .heading-h6 {
+        @apply font-inter text-base font-bold leading-4 tracking-[-0.02em];
+    }
+    .heading-h7 {
+        @apply font-inter text-sm font-semibold leading-4 tracking-[-0.02em];
+    }
+    .heading-h8 {
+        @apply font-inter text-xs font-semibold tracking-[-0.02em];
+    }
+    .paragraph-xl {
+        @apply font-inter text-xl font-normal leading-8 tracking-[-0.03em];
+    }
+    .paragraph-l {
+        @apply font-inter text-lg font-normal leading-6 tracking-[-0.03em];
+    }
+    .paragraph-m {
+        @apply font-inter text-base font-normal tracking-[-0.03em];
+    }
+    .paragraph-s {
+        @apply font-inter text-sm font-normal leading-6 tracking-[-0.03em];
+    }
+    .paragraph-xs {
+        @apply font-inter text-xs font-normal tracking-[-0.03em];
+    }
 }
 
 html.dark {
@@ -32,6 +74,10 @@ html {
     );
 }
 
+.overflow-wrap {
+    overflow-wrap: normal;
+}
+
 .gradient {
     background-image: radial-gradient(
         91.36% 358.74% at 12.29% 100%,
@@ -40,6 +86,72 @@ html {
         #f554e5 60.28%,
         #e7cf55 100%
     );
+}
+
+.color-brand-eth {
+    background: linear-gradient(
+            180deg,
+            rgba(29, 29, 29, 0) 0%,
+            rgba(29, 29, 29, 0.4) 100%
+        ),
+        linear-gradient(0deg, rgba(220, 44, 128, 0.6), rgba(220, 44, 128, 0.6)),
+        radial-gradient(
+                139.04% 139.04% at 3.93% 2.25%,
+                rgba(0, 0, 0, 0) 22.95%,
+                rgba(0, 0, 0, 0.8) 62.72%
+            )
+            /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+        radial-gradient(
+                98.85% 98.53% at 20.91% 26.36%,
+                #fa55ae 0%,
+                #cab2ff 79.17%
+            )
+            /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    background-blend-mode: multiply, overlay, overlay, normal;
+}
+
+.color-brand-avax {
+    background: linear-gradient(
+            180deg,
+            rgba(29, 29, 29, 0) 0%,
+            rgba(29, 29, 29, 0.4) 100%
+        ),
+        linear-gradient(0deg, rgba(211, 37, 37, 0.6), rgba(211, 37, 37, 0.6)),
+        radial-gradient(
+                139.04% 139.04% at 3.93% 2.25%,
+                rgba(0, 0, 0, 0) 22.95%,
+                #000000 62.72%
+            )
+            /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+        radial-gradient(
+                121.58% 154.55% at 15% 38.86%,
+                #f56e6e 0%,
+                #ffeab3 93.24%
+            )
+            /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    background-blend-mode: multiply, overlay, overlay, normal;
+}
+
+.color-brand-dpx {
+    background: linear-gradient(
+            180deg,
+            rgba(29, 29, 29, 0) 0%,
+            rgba(29, 29, 29, 0.4) 100%
+        ),
+        linear-gradient(0deg, rgba(67, 84, 239, 0.6), rgba(67, 84, 239, 0.6)),
+        radial-gradient(
+                139.04% 139.04% at 3.93% 2.25%,
+                rgba(0, 0, 0, 0) 22.95%,
+                rgba(0, 0, 0, 0.8) 62.72%
+            )
+            /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+        radial-gradient(
+                133.02% 113.64% at 19.09% 25.45%,
+                #4354ef 0%,
+                #23a9f5 84.38%
+            )
+            /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    background-blend-mode: multiply, overlay, overlay, normal;
 }
 
 .move-gradient {

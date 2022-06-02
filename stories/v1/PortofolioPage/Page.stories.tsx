@@ -1,7 +1,7 @@
 import { Meta, Story } from "@storybook/react";
 
-import PortofolioPage from "../../../components/v1/PortfolioPage/PortfolioPage";
 import { Wallet } from "../../../components/v1/Wallet";
+import PortofolioPage from "../../../modules/portofolio/component/PortfolioPage";
 
 export default {
     component: PortofolioPage,
