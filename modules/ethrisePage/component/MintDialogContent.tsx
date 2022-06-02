@@ -69,14 +69,14 @@ const MintDialogContent: FunctionComponent<MintDialogContentProps> = ({ address 
                                 </svg>
                                 <p className="text-xs text-yellow-light-12 dark:text-yellow-dark-12">Max cap is reached</p>
                             </div>
-                            <div className="border-b border-dashed border-gray-light-3 pb-4 dark:border-gray-dark-3">
+                            {/* <div className="border-b border-dashed border-gray-light-3 pb-4 dark:border-gray-dark-3">
                                 <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">Buy {metadata.title} directly from Uniswap</p>
                             </div>
                             <Link href={metadata.uniswapSwapURL}>
                                 <a className="rounded-full border border-blue-light-11 bg-blue-light-10 py-[9px] text-center text-sm font-semibold tracking-tighter text-gray-light-1 dark:border-blue-dark-11 dark:bg-blue-dark-10 dark:text-blue-light-1" target="_blank" rel="noreferrer">
                                     Buy on Uniswap
                                 </a>
-                            </Link>
+                            </Link> */}
                         </div>
                     )}
 
