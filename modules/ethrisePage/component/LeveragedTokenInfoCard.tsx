@@ -90,11 +90,11 @@ const LeveragedTokenInfoCard: FunctionComponent<LeveragedTokenInfoCardProps> = (
                     </a>
                 </div>
                 {/* Link to buy on uniswap */}
-                <div className="flex flex-row justify-between">
+                {/* <div className="flex flex-row justify-between">
                     <ButtonLinkBasic href={metadata.uniswapSwapURL} full>
                         Buy on Uniswap &#8599;
                     </ButtonLinkBasic>
-                </div>
+                </div> */}
             </div>
         </InformationCard>
     );

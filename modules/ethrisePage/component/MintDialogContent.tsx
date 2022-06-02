@@ -57,7 +57,7 @@ const MintDialogContent: FunctionComponent<MintDialogContentProps> = ({ address 
             {showMintFormOrMaxCap && (
                 <div>
                     {/* Show max cap is reached */}
-                    {showMaxCap && (
+                    {true && (
                         <div className="mt-4 flex flex-col space-y-4">
                             <div className="flex flex-row items-center space-x-2 rounded-[8px] border border-yellow-light-5 bg-yellow-light-2 p-4 dark:border-yellow-dark-5 dark:bg-yellow-dark-2">
                                 <svg className="fill-yellow-light-12 dark:fill-yellow-dark-12" width="15" height="16" viewBox="0 0 15 16" xmlns="http://www.w3.org/2000/svg">
@@ -69,14 +69,14 @@ const MintDialogContent: FunctionComponent<MintDialogContentProps> = ({ address 
                                 </svg>
                                 <p className="text-xs text-yellow-light-12 dark:text-yellow-dark-12">Max cap is reached</p>
                             </div>
-                            <div className="border-b border-dashed border-gray-light-3 pb-4 dark:border-gray-dark-3">
+                            {/* <div className="border-b border-dashed border-gray-light-3 pb-4 dark:border-gray-dark-3">
                                 <p className="text-sm text-gray-light-10 dark:text-gray-dark-10">Buy {metadata.title} directly from Uniswap</p>
                             </div>
                             <Link href={metadata.uniswapSwapURL}>
                                 <a className="rounded-full border border-blue-light-11 bg-blue-light-10 py-[9px] text-center text-sm font-semibold tracking-tighter text-gray-light-1 dark:border-blue-dark-11 dark:bg-blue-dark-10 dark:text-blue-light-1" target="_blank" rel="noreferrer">
                                     Buy on Uniswap
                                 </a>
-                            </Link>
+                            </Link> */}
                         </div>
                     )}
 
