@@ -2,7 +2,7 @@ import React from "react";
 import ButtonSecondary from "../../../../../uikit/buttonV2/ButtonSecondary";
 
 function SecondJumbotronSection({ children }: { children: React.ReactNode }) {
-    return <div className="grid grid-cols-1 text-center text-white md:grid-cols-2 md:text-left ">{children}</div>;
+    return <div className="grid grid-cols-1  text-center text-white md:grid-cols-2 md:text-left ">{children}</div>;
 }
 
 function SecondJumbotronTitle({ children }: { children: React.ReactNode }) {
@@ -10,7 +10,7 @@ function SecondJumbotronTitle({ children }: { children: React.ReactNode }) {
 }
 
 function Section({ children, className }: { children?: React.ReactNode; className?: string }) {
-    return <div className={`flex flex-col items-center justify-center py-4  px-6 md:items-baseline md:py-24 ${className || ""}`}>{children}</div>;
+    return <div className={`flex flex-col items-center justify-center  py-4  px-6 md:items-baseline md:py-24 ${className || ""}`}>{children}</div>;
 }
 
 function SmallTitle({ children }: { children: React.ReactNode }) {
