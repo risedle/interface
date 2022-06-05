@@ -5,14 +5,14 @@ export default function Footer() {
     return (
         <div className="mt-24 border-t border-dark-neutral-subtle	bg-dark-background-default	">
             <div className="mx-auto flex max-w-7xl flex-col-reverse justify-between px-6 pt-9 pb-12  sm:flex-row">
-                <div className="mt-4 sm:mt-0">
+                <div className="mt-16 sm:mt-0">
                     <LogoV2 variant="gray" />
                     <p className="paragraph-xs pt-2 text-dark-neutral-soft sm:pt-16">© 2022 Risedle Labs, Inc. All rights reserved.</p>
                 </div>
                 <div className="w-[300px]">
                     <table className="w-full text-left">
                         <thead className="text-dark-neutral-primary">
-                            <tr>
+                            <tr className="text-xs font-semibold">
                                 <th>Product</th>
                                 <th>Community</th>
                                 <th>Resource</th>
