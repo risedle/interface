@@ -1,4 +1,5 @@
 import LogoV2 from "../../../../uikit/layout/LogoV2";
+import links from "../../../../utils/links";
 
 export default function Footer() {
     return (
@@ -20,17 +21,37 @@ export default function Footer() {
                         <tbody className="paragraph-xs text-dark-neutral-soft">
                             <tr>
                                 <td className="pt-4">Leverage</td>
-                                <td className="pt-4">Discord</td>
-                                <td className="pt-4">Documentation</td>
+                                <td className="pt-4">
+                                    <a href={links.discord} target="_blank" rel="noreferrer noopener">
+                                        Discord
+                                    </a>
+                                </td>
+                                <td className="pt-4">
+                                    <a href={links.docs} target="_blank" rel="noreferrer noopener">
+                                        Documentation
+                                    </a>
+                                </td>
                             </tr>
                             <tr>
                                 <td className="pt-4">Margin</td>
-                                <td className="pt-4">Twitter</td>
-                                <td className="pt-4">Github</td>
+                                <td className="pt-4">
+                                    <a href={links.twitter} target="_blank" rel="noreferrer noopener">
+                                        Twitter
+                                    </a>
+                                </td>
+                                <td className="pt-4">
+                                    <a href={links.github} target="_blank" rel="noreferrer noopener">
+                                        Github
+                                    </a>
+                                </td>
                             </tr>
                             <tr>
                                 <td className="pt-4">Boost</td>
-                                <td className="pt-4">Mirror</td>
+                                <td className="pt-4">
+                                    <a href={links.blog} target="_blank" rel="noreferrer noopener">
+                                        Mirror
+                                    </a>
+                                </td>
                                 <td className="pt-4">Press</td>
                             </tr>
                         </tbody>
