@@ -4,16 +4,16 @@ import ButtonPrimary from "../../../../uikit/buttonV2/ButtonPrimary";
 import ButtonSecondary from "../../../../uikit/buttonV2/ButtonSecondary";
 
 /**
- * Jumbotron1Props is a React Component properties that passed to React Component Jumbotron1
+ * FirstJumbotronProps is a React Component properties that passed to React Component FirstJumbotron
  */
-type Jumbotron1Props = {};
+type FirstJumbotronProps = {};
 
 /**
- * Jumbotron1 is just yet another react component
+ * FirstJumbotron is just yet another react component
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const Jumbotron1: FunctionComponent<Jumbotron1Props> = ({}) => {
+const FirstJumbotron: FunctionComponent<FirstJumbotronProps> = ({}) => {
     return (
         <>
             {/* overflow hidden (x axis) can be handled in homepage container later */}
@@ -25,8 +25,11 @@ const Jumbotron1: FunctionComponent<Jumbotron1Props> = ({}) => {
                         <ButtonPrimary size="lg" type="default">
                             Explore Risedle
                         </ButtonPrimary>
-                        <ButtonSecondary size="lg" type="default">
+                        <ButtonSecondary size="lg" type="default" className="hidden lg:flex">
                             Documentation <span>&rarr;</span>
+                        </ButtonSecondary>
+                        <ButtonSecondary size="lg" type="default" className="lg:hidden">
+                            Docs <span>&rarr;</span>
                         </ButtonSecondary>
                     </div>
                     <div className="hidden flex-row space-x-2.5 xl:flex">
@@ -46,4 +49,4 @@ const Jumbotron1: FunctionComponent<Jumbotron1Props> = ({}) => {
     );
 };
 
-export default Jumbotron1;
+export default FirstJumbotron;
