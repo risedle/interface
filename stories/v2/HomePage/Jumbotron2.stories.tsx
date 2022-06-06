@@ -8,4 +8,8 @@ const StoriesObject = {
 
 export default StoriesObject;
 
-export const Jumbotron1 = () => <SecondJumbotron />;
+export const Jumbotron2 = () => (
+    <div className="bg-dark-background-default">
+        <SecondJumbotron />
+    </div>
+);

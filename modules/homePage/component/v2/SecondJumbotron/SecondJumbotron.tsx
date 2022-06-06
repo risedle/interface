@@ -4,7 +4,7 @@ import { SecondJumbotronSection } from "./Section";
 
 function SecondJumbotron() {
     return (
-        <div className="mx-auto max-w-7xl pt-32">
+        <div className="mx-auto max-w-7xl pt-32 ">
             <SecondJumbotronSection>
                 <SecondJumbotronSection.Section>
                     <SecondJumbotronSection.SmallTitle>TRADER</SecondJumbotronSection.SmallTitle>
