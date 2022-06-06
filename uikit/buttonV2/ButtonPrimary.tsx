@@ -29,7 +29,7 @@ const ButtonPrimary: FunctionComponent<ButtonPrimaryProps> = ({ onClick, size = 
             break;
     }
     return (
-        <button className={`flex flex-row items-center justify-center gap-2 active:scale-90 ${className}  ${extraClass} bg-dark-neutral-primary text-dark-background-default transition ease-out ${type == "square" ? "rounded-lg" : "rounded-full"} ${restProps.disabled ? "bg-dark-neutral-primary opacity-40" : "hover:bg-dark-neutral-soft"}`} onClick={onClick} {...restProps}>
+        <button className={`flex flex-row items-center justify-center gap-2 active:scale-90 ${extraClass} bg-dark-neutral-primary text-dark-background-default transition ease-out ${type == "square" ? "rounded-lg" : "rounded-full"} ${restProps.disabled ? "bg-dark-neutral-primary opacity-40" : "hover:bg-dark-neutral-soft"} ${className || ""}`} onClick={onClick} {...restProps}>
             {children}
         </button>
     );
