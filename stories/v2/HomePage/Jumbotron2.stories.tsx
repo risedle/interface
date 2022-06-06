@@ -8,4 +8,4 @@ const StoriesObject = {
 
 export default StoriesObject;
 
-export const Jumbotron1 = () => <SecondJumbotron />;
+export const Jumbotron2 = () => <SecondJumbotron />;

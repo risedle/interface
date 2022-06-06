@@ -5,7 +5,7 @@ import { ThirdJumbotron } from "../../stories/v2/HomePage/ThirdJumbotron.stories
 
 export default function HomeV2() {
     return (
-        <div className="h-full w-full overflow-clip bg-gray-light-1 font-inter dark:bg-gray-dark-1">
+        <div className="h-full w-full overflow-clip bg-dark-background-default font-inter">
             <Navigation />
             <Jumbotron1 />
             <SecondJumbotron />
