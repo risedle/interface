@@ -13,7 +13,7 @@ type ThridJumbotronProps = {};
  */
 const ThridJumbotron: FunctionComponent<ThridJumbotronProps> = ({}) => {
     return (
-        <div className="mx-auto flex max-w-[343px] flex-col items-center justify-between gap-[72px] sm:max-w-[552px] sm:gap-16 lg:max-w-[936px] lg:flex-row lg:gap-8 xl:max-w-[1128px]">
+        <div className="mx-auto flex max-w-[343px] flex-col items-center justify-between gap-[72px] py-32 sm:max-w-[552px] sm:gap-16 lg:max-w-[936px] lg:flex-row lg:gap-8 xl:max-w-[1128px]">
             <div className="flex flex-col items-center gap-16 lg:items-start">
                 <div className="flex flex-col items-center gap-6 lg:items-start">
                     <p className="xl:heading-h0 heading-h1 text-center text-dark-neutral-primary drop-shadow-sm lg:text-left">Reliable & Trusted</p>
