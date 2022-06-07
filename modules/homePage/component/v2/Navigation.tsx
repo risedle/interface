@@ -1,4 +1,5 @@
 import type { FunctionComponent } from "react";
+import links from "../../../../utils/links";
 import ButtonSecondary from "../../../../uikit/buttonV2/ButtonSecondary";
 import LogoV2 from "../../../../uikit/layout/LogoV2";
 import Command from "../../../../public/assets/icon/homepage/command.svg";
@@ -22,8 +23,15 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                 {/* Left Side */}
                 <div className="flex flex-row gap-11">
                     <LogoV2 />
-                    <a className="paragraph-s hidden text-dark-neutral-medium lg:inline-block">Docs</a>
-                    <a className="paragraph-s hidden text-dark-neutral-medium lg:inline-block">Community</a>
+                    <a href={links.docs} target="_blank" rel="noreferrer noopener" className="paragraph-s hidden text-dark-neutral-medium sm:inline-block">
+                        Docs
+                    </a>
+                    <a href={links.discord} target="_blank" rel="noreferrer noopener" className="paragraph-s hidden text-dark-neutral-medium sm:inline-block">
+                        Discord
+                    </a>
+                    <a href={links.twitter} target="_blank" rel="noreferrer noopener" className="paragraph-s hidden text-dark-neutral-medium sm:inline-block">
+                        Twitter
+                    </a>
                 </div>
 
                 {/* Right Side */}
@@ -43,17 +51,15 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                             </div>
                         </div>
                     </div> */}
+
                     {/* Button for desktop */}
-                    <ButtonSecondary type="default" size="md" className="hidden lg:flex">
+                    <ButtonSecondary type="default" size="md" className="hidden sm:flex">
                         Launch Risedle
                     </ButtonSecondary>
 
                     {/* Button for mobile */}
-                    <ButtonSecondary type="default" size="md" className="lg:hidden">
+                    <ButtonSecondary type="default" size="md" className="sm:hidden">
                         Launch
-                    </ButtonSecondary>
-                    <ButtonSecondary type="fab" size="md" className="lg:hidden">
-                        <img src="/assets/icon/homepage/hamburger.svg" alt="" />
                     </ButtonSecondary>
                 </div>
             </div>
