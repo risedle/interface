@@ -1,5 +1,5 @@
 import type { FunctionComponent } from "react";
-import ButtonPrimary from "../../../../uikit/buttonV2/ButtonPrimary";
+import ButtonPrimary from "../../../../../uikit/buttonV2/ButtonPrimary";
 
 /**
  * ThridJumbotronProps is a React Component properties that passed to React Component ThridJumbotron

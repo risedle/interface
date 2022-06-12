@@ -1,5 +1,5 @@
 import React from "react";
-import ThridJumbotronComponent from "../../../modules/homePage/component/v2/ThridJumbotron";
+import ThridJumbotronComponent from "../../../modules/homePage/component/v2/ThridJumbotron/ThridJumbotron";
 
 export default {
     component: ThridJumbotronComponent,
