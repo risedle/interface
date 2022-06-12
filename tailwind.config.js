@@ -13,6 +13,7 @@ module.exports = {
             fontFamily: {
                 inter: ["'Inter'", "sans-serif"],
                 ibm: ["'IBM Plex Mono'", "monospace"],
+                space: ["'Space Mono'", "monospace"],
             },
             colors: {
                 dark: {

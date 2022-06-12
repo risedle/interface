@@ -54,6 +54,30 @@
     .paragraph-xs {
         @apply font-inter text-xs font-normal tracking-[-0.03em];
     }
+    .display-d1 {
+        @apply font-space text-[67px] font-bold leading-[72px] tracking-[-0.02em];
+    }
+    .display-d2 {
+        @apply font-space text-[50px] font-bold leading-[56px] tracking-[-0.02em];
+    }
+    .display-d3 {
+        @apply font-space text-4xl font-bold tracking-[-0.02em];
+    }
+    .display-d4 {
+        @apply font-space text-[28px] font-bold leading-8 tracking-[-0.02em];
+    }
+    .display-d5 {
+        @apply font-space text-[21px] font-bold leading-6 tracking-[-0.02em];
+    }
+    .display-d6 {
+        @apply font-space text-base font-bold leading-4 tracking-[-0.02em];
+    }
+    .display-d7 {
+        @apply font-space text-sm font-bold leading-4 tracking-[-0.02em];
+    }
+    .display-d8 {
+        @apply font-space text-xs font-bold tracking-[-0.02em];
+    }
 }
 
 html.dark {
