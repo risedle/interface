@@ -1,5 +1,5 @@
 import React from "react";
-import GradientsComponent from "../../../modules/homePage/component/v2/Gradients";
+import GradientsComponent from "../../../modules/homePage/component/v2/ThridJumbotron/Gradients";
 
 const StoriesObject = {
     component: GradientsComponent,
