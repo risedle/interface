@@ -1,4 +1,5 @@
 import type { FunctionComponent } from "react";
+import links from "../../../../utils/links";
 import ButtonSecondary from "../../../../uikit/buttonV2/ButtonSecondary";
 import LogoV2 from "../../../../uikit/layout/LogoV2";
 import Command from "../../../../public/assets/icon/homepage/command.svg";
@@ -17,35 +18,50 @@ type NavigationProps = {};
  */
 const Navigation: FunctionComponent<NavigationProps> = ({}) => {
     return (
-        <div className="flex-column fixed inset-x-0 z-40 flex w-full items-center gap-11 bg-dark-background-default/90 py-4 px-4 sm:px-11 xl:px-[76px] 2xl:px-48">
-            <LogoV2 />
-            <a className="paragraph-s text-dark-neutral-medium">Docs</a>
-            <a className="paragraph-s text-dark-neutral-medium">Community</a>
+        <div className="fixed inset-x-0 z-40 bg-dark-background-default/90 py-4">
+            <div className="mx-auto flex max-w-[343px] flex-row items-center justify-between sm:max-w-[552px] lg:max-w-[936px] xl:max-w-[1128px]">
+                {/* Left Side */}
+                <div className="flex flex-row gap-11">
+                    <LogoV2 />
+                    <a href={links.docs} target="_blank" rel="noreferrer noopener" className="paragraph-s hidden text-dark-neutral-medium sm:inline-block">
+                        Docs
+                    </a>
+                    <a href={links.discord} target="_blank" rel="noreferrer noopener" className="paragraph-s hidden text-dark-neutral-medium sm:inline-block">
+                        Discord
+                    </a>
+                    <a href={links.twitter} target="_blank" rel="noreferrer noopener" className="paragraph-s hidden text-dark-neutral-medium sm:inline-block">
+                        Twitter
+                    </a>
+                </div>
 
-            {/* Gap Filler */}
-            <div className="grow" />
-
-            {/* Action Wrapper */}
-            <div className="flex flex-row items-start gap-2">
-                {/* Search Bar */}
-                {/* <div className="flex flex-row items-center gap-[90px] rounded-full bg-light-neutral-subtle/10 p-2 pl-4">
-                    <div className="flex flex-row items-center gap-2">
-                        <img src={Search} alt="search_logo" />
-                        <input type="text" placeholder="Search token name or symbol..." className="paragraph-s bg-transparent text-dark-neutral-primary outline-none" />
-                    </div>
-                    <div className="flex flex-row items-start gap-1">
-                        <div className="flex h-6 w-6 items-center justify-center gap-2.5 rounded-lg bg-dark-background-elevated p-2">
-                            <img src={Command} alt="command_logo" />
+                {/* Right Side */}
+                <div className="flex flex-row items-start gap-2">
+                    {/* Search Bar */}
+                    {/* <div className="flex flex-row items-center gap-[90px] rounded-full bg-light-neutral-subtle/10 p-2 pl-4">
+                        <div className="flex flex-row items-center gap-2">
+                            <img src={Search} alt="search_logo" />
+                            <input type="text" placeholder="Search token name or symbol..." className="paragraph-s bg-transparent text-dark-neutral-primary outline-none" />
                         </div>
-                        <div className="flex h-6 w-6 items-center justify-center gap-2.5 rounded-lg bg-dark-background-elevated p-2">
-                            <img src={Slash} alt="slash_logo" />
+                        <div className="flex flex-row items-start gap-1">
+                            <div className="flex h-6 w-6 items-center justify-center gap-2.5 rounded-lg bg-dark-background-elevated p-2">
+                                <img src={Command} alt="command_logo" />
+                            </div>
+                            <div className="flex h-6 w-6 items-center justify-center gap-2.5 rounded-lg bg-dark-background-elevated p-2">
+                                <img src={Slash} alt="slash_logo" />
+                            </div>
                         </div>
-                    </div>
-                </div> */}
+                    </div> */}
 
-                <ButtonSecondary type="default" size="md">
-                    Launch Risedle
-                </ButtonSecondary>
+                    {/* Button for desktop */}
+                    <ButtonSecondary type="default" size="md" className="hidden sm:flex">
+                        Launch Risedle
+                    </ButtonSecondary>
+
+                    {/* Button for mobile */}
+                    <ButtonSecondary type="default" size="md" className="sm:hidden">
+                        Launch
+                    </ButtonSecondary>
+                </div>
             </div>
         </div>
     );
