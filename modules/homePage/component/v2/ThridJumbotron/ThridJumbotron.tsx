@@ -41,9 +41,10 @@ const ThridJumbotron: FunctionComponent<ThridJumbotronProps> = ({}) => {
             <ButtonPrimary size="lg" type="default" className="z-20 lg:hidden">
                 Open Position
             </ButtonPrimary>
-            <EthriseGradients className="absolute top-48 -right-[730px] sm:top-0 sm:-right-[670px] lg:-right-[1100px] xl:-right-[820px] xl:block 2xl:-right-[775px]" />
-            <GohmriseGradients className="absolute top-28 -left-[1100px] sm:bottom-24 sm:-left-[1000px] lg:-bottom-28 lg:-left-[750px] xl:-bottom-8 xl:-left-[800px] 2xl:-left-[850px]" />
-            <AvaxriseGradients className="absolute -left-[600px] bottom-80 sm:-left-[620px] sm:bottom-36 lg:bottom-0 lg:-left-[320px] xl:bottom-24 xl:-left-[420px] 2xl:-left-[500px]" />
+            <EthriseGradients className="absolute top-48 -right-[730px] z-10 sm:top-0 sm:-right-[670px] lg:-right-[1100px] xl:-right-[820px] xl:block 2xl:-right-[775px]" />
+            <GohmriseGradients className="absolute top-28 -left-[1100px] z-10 sm:bottom-24 sm:-left-[1000px] lg:-bottom-28 lg:-left-[750px] xl:-bottom-8 xl:-left-[800px] 2xl:-left-[850px]" />
+            <AvaxriseGradients className="absolute -left-[600px] bottom-80 z-10 sm:-left-[620px] sm:bottom-36 lg:bottom-0 lg:-left-[320px] xl:bottom-24 xl:-left-[420px] 2xl:-left-[500px]" />
+            <img src="/assets/images/homepage/grid.png" className="absolute top-[570px] scale-[250%] sm:top-96 sm:scale-150 lg:top-[290px] lg:-right-20 lg:h-[600px] lg:scale-100 xl:top-48 xl:-right-[630px] xl:h-[720px] 2xl:-right-[335px] 2xl:h-[750px]" alt="grid" />
         </div>
     );
 };
