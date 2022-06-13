@@ -15,7 +15,7 @@ type ThridJumbotronProps = {};
 const ThridJumbotron: FunctionComponent<ThridJumbotronProps> = ({}) => {
     return (
         <div className="relative">
-            <div className="mx-auto flex max-w-[343px] flex-col items-center justify-between gap-[72px] py-32 sm:max-w-[552px] lg:max-w-[936px] lg:flex-row lg:items-start xl:max-w-[1128px]">
+            <div className="mx-auto flex max-w-[343px] flex-col items-center justify-between gap-[72px] py-32 sm:max-w-[552px] lg:max-w-[936px] lg:flex-row lg:items-start lg:gap-[120px] xl:max-w-[1128px]">
                 <div className="z-20 flex flex-col items-center gap-16 lg:items-start">
                     <div className="flex flex-col items-center gap-6 lg:items-start">
                         <p className="xl:heading-h0 heading-h1 text-center text-dark-neutral-primary drop-shadow-sm sm:whitespace-nowrap lg:whitespace-normal lg:text-left">Reliable & Trusted</p>
@@ -26,15 +26,15 @@ const ThridJumbotron: FunctionComponent<ThridJumbotronProps> = ({}) => {
                     </ButtonPrimary>
                 </div>
                 <div className="z-20 flex flex-row flex-wrap justify-center gap-[72px] lg:flex-col">
-                    <div className="flex flex-col items-center lg:items-start">
+                    <div className="flex flex-col items-center gap-4 lg:items-start">
                         <p className="text-xs uppercase tracking-widest text-dark-neutral-soft">Trading Volume 24H</p>
                         <p className="lg:display-d2 display-d3 text-dark-neutral-primary">$2,234,234</p>
                     </div>
-                    <div className="flex flex-col items-center lg:items-start">
+                    <div className="flex flex-col items-center gap-4 lg:items-start">
                         <p className="text-xs uppercase tracking-widest text-dark-neutral-soft">Transaction 24H</p>
                         <p className="lg:display-d2 display-d3 text-dark-neutral-primary">$2,234,234</p>
                     </div>
-                    <div className="flex flex-col items-center lg:items-start">
+                    <div className="flex flex-col items-center gap-4 lg:items-start">
                         <p className="text-xs uppercase tracking-widest text-dark-neutral-soft">Total AUM 24H</p>
                         <p className="lg:display-d2 display-d3 text-dark-neutral-primary">$22,234,234</p>
                     </div>
