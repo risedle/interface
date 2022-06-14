@@ -1,6 +1,6 @@
 /*
 Strict-Transport-Security: max-age=31536000; includeSubDomains
-Content-Security-Policy: default-src 'self' *.risedle.com arb-mainnet.g.alchemy.com;
+Content-Security-Policy: default-src 'self' risedle.com *.risedle.com arb-mainnet.g.alchemy.com;
 img-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src : fonts.gstatic.com
 X-Frame-Options: SAMEORIGIN
 Permissions-Policy: 'self'
