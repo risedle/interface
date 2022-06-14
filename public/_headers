@@ -1,6 +1,6 @@
 /*
 Strict-Transport-Security: max-age=31536000; includeSubDomains
-Content-Security-Policy: default-src 'unsafe-inline' 'self' *.walletconnect.org risedle.com *.risedle.com arb-mainnet.g.alchemy.com;img-src 'self'; script-src 'self'; style-src 'unsafe-inline' 'self' ;  font-src  fonts.gstatic.com
+Content-Security-Policy: default-src 'unsafe-inline' 'self' e.bridge.walletconnect.org risedle.com *.risedle.com arb-mainnet.g.alchemy.com;img-src 'self' risedle.com; script-src 'self'; style-src 'unsafe-inline' 'self' ;  font-src  fonts.gstatic.com
 X-Frame-Options: SAMEORIGIN
 Permissions-Policy: 'self'
 
