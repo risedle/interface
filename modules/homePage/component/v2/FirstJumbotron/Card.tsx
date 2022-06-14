@@ -44,12 +44,12 @@ const Card: FunctionComponent<CardProps> = ({ type, className }) => {
     };
 
     const delay: { [key: string]: number } = {
-        eth: 3,
-        avax: 1.5,
+        eth: 2,
+        avax: 1,
         dpx: 0,
     };
     return (
-        <motion.div initial={{ opacity: 0, rotate: options[type].rotate, translateX: options[type].translateX, translateY: options[type].from }} animate={{ opacity: 1, translateY: options[type].translateY }} transition={{ type: "spring", stiffness: 700, duration: 1, delay: delay[type] }} className={`${options[type].style} ${className} flex h-[408px] w-[296px] flex-col items-center rounded-3xl py-6 shadow-medium`}>
+        <motion.div initial={{ opacity: 0, rotate: options[type].rotate, translateX: options[type].translateX, translateY: options[type].from }} animate={{ opacity: 1, translateY: options[type].translateY }} transition={{ translateY: { type: "spring", stiffness: 700 }, opacity: { duration: 0.1 }, duration: 0.7, delay: delay[type] }} className={`${options[type].style} ${className} flex h-[408px] w-[296px] flex-col items-center rounded-3xl py-6 shadow-medium`}>
             <LogoV2 />
             <div className="flex grow flex-col justify-center">
                 <img src={`/assets/icon/homepage/${options[type].symbol}.svg`} width={175} height={175} />
