@@ -1,7 +1,7 @@
 import type { FunctionComponent } from "react";
 import ThreeCards from "./ThreeCards";
-import ButtonPrimary from "../../../../uikit/buttonV2/ButtonPrimary";
-import ButtonSecondary from "../../../../uikit/buttonV2/ButtonSecondary";
+import ButtonPrimary from "../../../../../uikit/buttonV2/ButtonPrimary";
+import ButtonSecondary from "../../../../../uikit/buttonV2/ButtonSecondary";
 
 /**
  * FirstJumbotronProps is a React Component properties that passed to React Component FirstJumbotron

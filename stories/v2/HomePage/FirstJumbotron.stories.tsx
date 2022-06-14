@@ -1,5 +1,5 @@
 import React from "react";
-import FirstJumbotronComponent from "../../../modules/homePage/component/v2/FirstJumbotron";
+import FirstJumbotronComponent from "../../../modules/homePage/component/v2/FirstJumbotron/FirstJumbotron";
 
 export default {
     component: FirstJumbotronComponent,
