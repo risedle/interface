@@ -44,7 +44,7 @@ const Card: FunctionComponent<CardProps> = ({ type, className }) => {
     };
 
     const delay: { [key: string]: number } = {
-        eth: 2.5,
+        eth: 3,
         avax: 1.5,
         dpx: 0,
     };
