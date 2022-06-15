@@ -1,6 +1,6 @@
 /*
 Strict-Transport-Security: max-age=31536000; includeSubDomains
-Content-Security-Policy: default-src 'self' risedle.com ;img-src 'self' risedle.com data: blob: https://registry.walletconnect.org; script-src 'self' ; style-src 'unsafe-inline' 'self' ;  font-src 'self' fonts.gstatic.com; connect-src  'self' https://arb-mainnet.g.alchemy.com https://snapshot-arbitrum.risedle.com wss://*.bridge.walletconnect.org https://walletconnect.org https://*.walletconnect.org; worker-src 'none'; object-src 'none' ;
+Content-Security-Policy: default-src 'self' risedle.com ;img-src 'self' risedle.com data: blob: https://registry.walletconnect.org https://imagedelivery.net; script-src 'self' ; style-src 'unsafe-inline' 'self' ;  font-src 'self' fonts.gstatic.com; connect-src  'self' https://arb-mainnet.g.alchemy.com https://snapshot-arbitrum.risedle.com wss://*.bridge.walletconnect.org https://walletconnect.org https://*.walletconnect.org; worker-src 'none'; object-src 'none' ;
 X-Frame-Options: SAMEORIGIN
 Permissions-Policy: 'self'
 
