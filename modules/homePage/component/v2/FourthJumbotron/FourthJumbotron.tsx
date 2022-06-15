@@ -7,11 +7,11 @@ export default function FourthJumbotron() {
             <h1 className="mb-6 text-center text-[64px] font-extrabold leading-[72px] tracking-[-0.02em] text-dark-neutral-primary md:text-left lg:text-[148px]	lg:leading-[136px]">
                 Dive Deeper <br /> Into Risedle
             </h1>
-            <h3 className="paragraph-xl mb-8 text-dark-neutral-soft">
+            <h3 className="paragraph-xl mb-20 text-dark-neutral-soft">
                 Read our docs, join our Discord, or jump into our <br />
                 Twitter account to get more learning resources!
             </h3>
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-8 px-6 md:grid-cols-2 lg:grid-cols-3">
                 <ForthJumobtronBox className="col-span-1">
                     <ForthJumobtronTitle>Documentation</ForthJumobtronTitle>
                     <Image src="/assets/images/homepage/doc.png" alt="docs" />

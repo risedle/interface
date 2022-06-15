@@ -12,7 +12,7 @@ function Image({ src, alt }: { src: string; alt: string }) {
     return (
         <>
             <img src={src} alt={alt} className="absolute left-[32px] bottom-[-80px] h-full w-full  rounded-lg rounded-br-[36px] sm:bottom-0 sm:h-[210px]  " />
-            <div style={{ background: "linear-gradient(0deg, #0E1018 0%, rgba(14, 16, 24, 0) 100%);" }} className=" absolute bottom-0 left-0 h-full w-full rounded-[36px]"></div>
+            <div style={{ background: "linear-gradient(0deg, #0E1018 0%, rgba(14, 16, 24, 0) 100%)" }} className="absolute bottom-0 left-0 h-full w-full rounded-[36px]"></div>
         </>
     );
 }
