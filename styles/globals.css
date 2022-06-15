@@ -178,6 +178,64 @@ html {
     background-blend-mode: multiply, overlay, overlay, normal;
 }
 
+.color-product-ethrise-gradient {
+    background: radial-gradient(
+                139.04% 139.04% at 3.93% 2.25%,
+                rgba(0, 0, 0, 0) 22.95%,
+                rgba(0, 0, 0, 0.8) 62.72%
+            )
+            /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+        conic-gradient(
+            from 128.1deg at 20.91% 26.36%,
+            #fa55ae 0deg,
+            #cab2ff 228.21deg,
+            #fa55ae 360deg
+        );
+    background-blend-mode: overlay, normal;
+}
+
+.color-product-avaxrise-gradient {
+    background: radial-gradient(
+                139.04% 139.04% at 3.93% 2.25%,
+                rgba(0, 0, 0, 0) 22.95%,
+                #000000 62.72%
+            )
+            /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+        conic-gradient(
+            from 144.97deg at 0% 8.86%,
+            #f56e6e 0deg,
+            #ffeab3 226.65deg,
+            #f56e6e 360deg
+        );
+    background-blend-mode: overlay, normal;
+}
+
+.color-product-gohmrise-gradient {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+        radial-gradient(
+                73.56% 87.27% at 18.18% 26.36%,
+                #ffa439 16.01%,
+                #f34040 81.12%
+            )
+            /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    background-blend-mode: overlay, normal;
+}
+
+.color-product-gohmrise-gradient {
+    background: radial-gradient(
+                139.04% 139.04% at 3.93% 2.25%,
+                rgba(0, 0, 0, 0) 22.95%,
+                #000000 62.72%
+            )
+            /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+        conic-gradient(
+            from 144.97deg at 0% 8.86%,
+            #f56e6e 0deg,
+            #ffeab3 226.65deg,
+            #f56e6e 360deg
+        );
+    background-blend-mode: overlay, normal;
+}
 .move-gradient {
     animation: gradient 5s ease-in-out infinite;
 }
