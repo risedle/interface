@@ -1,5 +1,5 @@
 import BackgroundBox from "../SecondJumbotron/BackgroundBox";
-import { ForthJumobtronBox, ForthJumobtronTitle, Image, Button } from "./FourthJumbotronComponent";
+import { FourthJumbotronBox, FourthJumbotronTitle, Image, Button } from "./FourthJumbotronComponent";
 
 export default function FourthJumbotron() {
     return (
@@ -11,22 +11,22 @@ export default function FourthJumbotron() {
                 Read our docs, join our Discord, or jump into our <br />
                 Twitter account to get more learning resources!
             </h3>
-            <div className="grid gap-8 px-6 md:grid-cols-2 lg:grid-cols-3">
-                <ForthJumobtronBox className="col-span-1">
-                    <ForthJumobtronTitle>Documentation</ForthJumobtronTitle>
-                    <Image src="/assets/images/homepage/doc.png" alt="docs" />
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <FourthJumbotronBox className="col-span-1">
+                    <FourthJumbotronTitle>Documentation</FourthJumbotronTitle>
+                    <Image className="min-w-[642px]" src="/assets/images/homepage/doc.png" alt="docs" />
                     <Button className="bg-dark-primary ">Read Docs</Button>
-                </ForthJumobtronBox>
-                <ForthJumobtronBox className="col-span-1 ">
-                    <ForthJumobtronTitle>Discord Server</ForthJumobtronTitle>
-                    <Image src="/assets/images/homepage/discord.png" alt="discord" />
+                </FourthJumbotronBox>
+                <FourthJumbotronBox className="col-span-1 ">
+                    <FourthJumbotronTitle>Discord Server</FourthJumbotronTitle>
+                    <Image className="min-w-[641px]" src="/assets/images/homepage/discord.png" alt="discord" />
                     <Button className="bg-[#5B64EA]">Join Discord</Button>
-                </ForthJumobtronBox>
-                <ForthJumobtronBox className="md:col-span-2 lg:col-span-1">
-                    <ForthJumobtronTitle>Twitter</ForthJumobtronTitle>
-                    <Image src="/assets/images/homepage/Twitter.png" alt="twitter" />
+                </FourthJumbotronBox>
+                <FourthJumbotronBox className="sm:col-span-2 lg:col-span-1">
+                    <FourthJumbotronTitle>Twitter</FourthJumbotronTitle>
+                    <Image className="min-w-[591px]" src="/assets/images/homepage/Twitter.png" alt="twitter" />
                     <Button className="bg-[#3292D8]">Follow @risedle</Button>
-                </ForthJumobtronBox>
+                </FourthJumbotronBox>
             </div>
         </div>
     );
