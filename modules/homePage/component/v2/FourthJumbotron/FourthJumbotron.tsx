@@ -14,12 +14,12 @@ export default function FourthJumbotron() {
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <FourthJumbotronBox className="col-span-1">
                     <FourthJumbotronTitle>Documentation</FourthJumbotronTitle>
-                    <Image className="min-w-[642px]" src="/assets/images/homepage/doc.png" alt="docs" />
+                    <Image className="min-w-[714px]" src="/assets/images/homepage/doc.png" alt="docs" />
                     <Button className="bg-dark-primary ">Read Docs</Button>
                 </FourthJumbotronBox>
                 <FourthJumbotronBox className="col-span-1 ">
                     <FourthJumbotronTitle>Discord Server</FourthJumbotronTitle>
-                    <Image className="min-w-[641px]" src="/assets/images/homepage/discord.png" alt="discord" />
+                    <Image className="min-w-[642px]" src="/assets/images/homepage/discord.png" alt="discord" />
                     <Button className="bg-[#5B64EA]">Join Discord</Button>
                 </FourthJumbotronBox>
                 <FourthJumbotronBox className="sm:col-span-2 lg:col-span-1">
