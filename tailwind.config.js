@@ -180,6 +180,15 @@ module.exports = {
                         12: "#FFFAD1",
                     },
                 },
+                discord: {
+                    dark: "#5B64EA",
+                    light: "#7289DA",
+                },
+                twitter: {
+                    dark: "#3292D8",
+                    light: "#1DA1F2",
+
+                }
             },
             opacity: {
                 8: ".08",
