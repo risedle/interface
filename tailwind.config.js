@@ -187,8 +187,7 @@ module.exports = {
                 twitter: {
                     dark: "#3292D8",
                     light: "#1DA1F2",
-
-                }
+                },
             },
             opacity: {
                 8: ".08",
