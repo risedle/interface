@@ -3,11 +3,11 @@ import { FourthJumbotronBox, FourthJumbotronTitle, Image, Button } from "./Fourt
 
 export default function FourthJumbotron() {
     return (
-        <div className="mx-auto max-w-[450px] px-4 text-center sm:max-w-[552px] sm:text-left md:max-w-[700px] lg:max-w-[936px] xl:max-w-[1128px]">
-            <h1 className="mb-6 text-center text-[64px] font-extrabold leading-[72px] tracking-[-0.02em] text-dark-neutral-primary md:text-left lg:text-[148px]	lg:leading-[136px]">
+        <div className="mx-auto max-w-[343px] text-center sm:max-w-[552px] sm:text-left md:max-w-[700px] lg:max-w-[936px] xl:max-w-[1128px]">
+            <h1 className="xl:heading-h0 heading-h1 mb-6 text-center font-extrabold text-dark-neutral-primary lg:text-left">
                 Dive Deeper <br /> Into Risedle
             </h1>
-            <h3 className="paragraph-xl mb-20 text-dark-neutral-soft">
+            <h3 className="xl:paragraph-xl lg:paragraph-l paragraph-m mb-20 text-center text-dark-neutral-soft lg:text-left">
                 Read our docs, join our Discord, or jump into our <br />
                 Twitter account to get more learning resources!
             </h3>
