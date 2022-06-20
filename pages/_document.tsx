@@ -15,8 +15,6 @@ class RisedleDocument extends Document {
                     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
                     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600&display=swap" rel="stylesheet" />
                     <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet" />
-                    <link href="/assets/fonts/InterDisplay-Regular.woff" rel="stylesheet" />
-                    <link href="/assets/fonts/InterDisplay-Regular.woff2" rel="stylesheet" />
                 </Head>
                 <body className="h-full bg-gray-light-1 dark:bg-gray-dark-1">
                     <Main />
