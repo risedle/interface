@@ -218,27 +218,35 @@
         @apply text-[148px] font-extrabold leading-[136px] tracking-[-0.02em];
     }
     .heading-h1 {
+        font-family: "InterDisplay", "sans-serif";
         @apply text-[67px] font-extrabold leading-[72px] tracking-[-0.02em];
     }
     .heading-h2 {
+        font-family: "InterDisplay", "sans-serif";
         @apply text-[50px] font-extrabold leading-[56px] tracking-[-0.02em];
     }
     .heading-h3 {
+        font-family: "InterDisplay", "sans-serif";
         @apply text-4xl font-bold tracking-[-0.02em];
     }
     .heading-h4 {
+        font-family: "InterDisplay", "sans-serif";
         @apply text-[28px] font-bold leading-8 tracking-[-0.02em];
     }
     .heading-h5 {
+        font-family: "InterDisplay", "sans-serif";
         @apply text-[21px] font-bold leading-6 tracking-[-0.02em];
     }
     .heading-h6 {
+        font-family: "InterDisplay", "sans-serif";
         @apply text-base font-bold leading-4 tracking-[-0.02em];
     }
     .heading-h7 {
+        font-family: "InterDisplay", "sans-serif";
         @apply text-sm font-semibold leading-4 tracking-[-0.02em];
     }
     .heading-h8 {
+        font-family: "InterDisplay", "sans-serif";
         @apply text-xs font-semibold tracking-[-0.02em];
     }
     .paragraph-xl {
