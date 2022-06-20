@@ -5,7 +5,7 @@ import ButtonPrimary from "./ButtonPrimary";
 type ButtonPrimaryProps = {
     size?: "md" | "lg" | "xl";
     type?: "fab" | "default" | "square";
-    variant?: "primary" | "secondary" | "discord" | "twitter";
+    variant?: "primary" | "secondary" | "discord" | "twitter" | "alternate";
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "size" | "type">;
 
 const buttonClasses = {
@@ -36,6 +36,7 @@ const buttonClasses = {
     variant: {
         primary: "bg-dark-neutral-primary text-dark-background-default hover:bg-dark-neutral-soft",
         secondary: "bg-light-neutral-subtle/10 text-dark-neutral-primary hover:bg-light-neutral-subtle/20",
+        alternate: "bg-dark-primary text-white hover:bg-dark-primary-soft",
         discord: "bg-discord-dark text-white hover:bg-discord-light",
         twitter: "bg-twitter-dark text-white hover:bg-twitter-light",
     },
