@@ -13,31 +13,31 @@
         @apply m-0 max-w-2xl text-center text-5xl font-bold tracking-tight text-gray-light-12 dark:text-gray-dark-12 sm:text-6xl md:text-7xl;
     }
     .heading-h0 {
-        @apply font-inter text-[148px] font-extrabold leading-[136px] tracking-[-0.05em];
+        @apply font-interDisplay text-[148px] font-extrabold leading-[136px] tracking-[-0.05em];
     }
     .heading-h1 {
-        @apply font-inter text-[67px] font-extrabold leading-[72px] tracking-[-0.05em];
+        @apply font-interDisplay text-[67px] font-extrabold leading-[72px] tracking-[-0.05em];
     }
     .heading-h2 {
-        @apply font-inter text-[50px] font-extrabold leading-[56px] tracking-[-0.05em];
+        @apply font-interDisplay text-[50px] font-extrabold leading-[56px] tracking-[-0.05em];
     }
     .heading-h3 {
-        @apply font-inter text-4xl font-bold tracking-[-0.05em];
+        @apply font-interDisplay text-4xl font-bold tracking-[-0.05em];
     }
     .heading-h4 {
-        @apply font-inter text-[28px] font-bold leading-8 tracking-[-0.05em];
+        @apply font-interDisplay text-[28px] font-bold leading-8 tracking-[-0.05em];
     }
     .heading-h5 {
-        @apply font-inter text-[21px] font-bold leading-6 tracking-[-0.05em];
+        @apply font-interDisplay text-[21px] font-bold leading-6 tracking-[-0.05em];
     }
     .heading-h6 {
-        @apply font-inter text-base font-bold leading-4 tracking-[-0.05em];
+        @apply font-interDisplay text-base font-bold leading-4 tracking-[-0.05em];
     }
     .heading-h7 {
-        @apply font-inter text-sm font-semibold leading-4 tracking-[-0.05em];
+        @apply font-interDisplay text-sm font-semibold leading-4 tracking-[-0.05em];
     }
     .heading-h8 {
-        @apply font-inter text-xs font-semibold tracking-[-0.05em];
+        @apply font-interDisplay text-xs font-semibold tracking-[-0.05em];
     }
     .paragraph-xl {
         @apply font-inter text-xl font-normal leading-8 tracking-[-0.03em];

@@ -12,6 +12,7 @@ module.exports = {
         extend: {
             fontFamily: {
                 inter: ["'Inter'", "sans-serif"],
+                interDisplay: ["'Inter Display'", "sans-serif"],
                 ibm: ["'IBM Plex Mono'", "monospace"],
                 space: ["'Space Mono'", "monospace"],
             },
