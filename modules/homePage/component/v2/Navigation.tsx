@@ -18,7 +18,7 @@ type NavigationProps = {};
  */
 const Navigation: FunctionComponent<NavigationProps> = ({}) => {
     return (
-        <div className="fixed inset-x-0 z-40 bg-dark-background-default/90 py-4">
+        <div className="fixed inset-x-0 z-40 bg-dark-background-default/90 py-4 backdrop-blur-lg">
             <div className="mx-auto flex max-w-[343px] flex-row items-center justify-between sm:max-w-[552px] lg:max-w-[936px] xl:max-w-[1128px]">
                 {/* Left Side */}
                 <div className="flex flex-row gap-11">
