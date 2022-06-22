@@ -20,7 +20,7 @@ function Image({ src, alt, className }: { src: string; alt: string; className?: 
 
 function ButtonJumbotron({ children, className, variant = "primary" }: { variant?: ButtonVariant; children?: React.ReactNode; className?: string }) {
     return (
-        <Button variant={variant} className={`absolute bottom-[24px] left-[24px] text-gray-100 ${className || ""}`}>
+        <Button size="md" variant={variant} className={`absolute bottom-[24px] left-[24px] text-gray-100 ${className || ""}`}>
             {children}
         </Button>
     );
