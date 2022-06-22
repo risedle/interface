@@ -40,8 +40,8 @@ const buttonClasses = {
         primary: "bg-dark-neutral-primary text-dark-background-default hover:bg-dark-neutral-soft",
         secondary: "bg-light-neutral-subtle/10 text-dark-neutral-primary hover:bg-light-neutral-subtle/20",
         alternate: "bg-dark-primary text-white hover:bg-light-darker",
-        discord: "bg-discord-dark text-white hover:bg-discord-light",
-        twitter: "bg-twitter-dark text-white hover:bg-twitter-light",
+        discord: "bg-discord-light text-white hover:bg-discord-dark",
+        twitter: "bg-twitter-light text-white hover:bg-twitter-dark",
     },
 };
 
