@@ -1,3 +1,4 @@
+import Button, { ButtonVariant } from "../../../../../uikit/buttonV2/Button";
 import ButtonPrimary from "../../../../../uikit/buttonV2/ButtonPrimary";
 
 function FourthJumbotronBox({ children, className }: { className?: string; children?: React.ReactNode }) {
@@ -17,8 +18,12 @@ function Image({ src, alt, className }: { src: string; alt: string; className?: 
     );
 }
 
-function Button({ children, className }: { children?: React.ReactNode; className?: string }) {
-    return <ButtonPrimary className={`absolute bottom-[24px] left-[24px] text-gray-100 ${className || ""}`}>{children}</ButtonPrimary>;
+function ButtonJumbotron({ children, className, variant = "primary" }: { variant?: ButtonVariant; children?: React.ReactNode; className?: string }) {
+    return (
+        <Button variant={variant} className={`absolute bottom-[24px] left-[24px] text-gray-100 ${className || ""}`}>
+            {children}
+        </Button>
+    );
 }
 
-export { FourthJumbotronBox, FourthJumbotronTitle, Image, Button };
+export { FourthJumbotronBox, FourthJumbotronTitle, Image, ButtonJumbotron };

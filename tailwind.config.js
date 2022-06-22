@@ -36,6 +36,7 @@ module.exports = {
                     neutral: "#070D2D",
                     primary: "#7303C0",
                     secondary: "#EC38BC",
+                    darker: "#B21287",
                     neutral: {
                         primary: "#070D2D",
                         medium: "#535978",
@@ -181,12 +182,12 @@ module.exports = {
                     },
                 },
                 discord: {
-                    dark: "#5B64EA",
-                    light: "#7289DA",
+                    light: "#5B64EA",
+                    dark: "#2F37B0",
                 },
                 twitter: {
-                    dark: "#3292D8",
-                    light: "#1DA1F2",
+                    light: "#3292D8",
+                    dark: "#2F6F9D",
                 },
             },
             opacity: {
