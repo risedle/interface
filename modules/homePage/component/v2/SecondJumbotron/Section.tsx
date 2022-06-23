@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../../../../../uikit/buttonV2/Button";
 import ButtonSecondary from "../../../../../uikit/buttonV2/ButtonSecondary";
 
 function SecondJumbotronSection({ children }: { children: React.ReactNode }) {
@@ -22,7 +23,11 @@ function JumbotronExplanation({ children }: { children: React.ReactNode }) {
 }
 
 function JumbotronButton({ children }: { children: React.ReactNode }) {
-    return <ButtonSecondary className="mx-auto mt-10 md:mx-0">{children} &rarr;</ButtonSecondary>;
+    return (
+        <Button variant="secondary" className="mx-auto mt-10 md:mx-0">
+            {children} &rarr;
+        </Button>
+    );
 }
 
 SecondJumbotronSection.Title = SecondJumbotronTitle;

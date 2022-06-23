@@ -1,6 +1,7 @@
 import type { FunctionComponent } from "react";
 import { EthriseGradients, AvaxriseGradients, GohmriseGradients } from "./Gradients";
 import ButtonPrimary from "../../../../../uikit/buttonV2/ButtonPrimary";
+import Button from "../../../../../uikit/buttonV2/Button";
 
 /**
  * ThridJumbotronProps is a React Component properties that passed to React Component ThridJumbotron
@@ -20,9 +21,9 @@ const ThridJumbotron: FunctionComponent<ThridJumbotronProps> = ({}) => {
                     <p className="xl:heading-h0 heading-h1 text-center text-dark-neutral-primary drop-shadow-sm sm:whitespace-nowrap lg:whitespace-normal lg:text-left">Reliable & Trusted</p>
                     <p className="xl:paragraph-xl lg:paragraph-l paragraph-m text-center text-dark-neutral-soft lg:text-left">Risedle protocol working smooth as a butter in the markets. Running like a porsche.</p>
                 </div>
-                <ButtonPrimary size="xl" type="default" className="hidden w-fit lg:flex">
+                <Button size="xl" type="default" className="hidden w-fit lg:flex">
                     Open Position
-                </ButtonPrimary>
+                </Button>
             </div>
             <div className="z-20 flex flex-row flex-wrap justify-center gap-[72px] lg:flex-col">
                 <div className="flex flex-col items-center gap-4 lg:items-start">
@@ -38,9 +39,9 @@ const ThridJumbotron: FunctionComponent<ThridJumbotronProps> = ({}) => {
                     <p className="lg:display-d2 display-d3 text-dark-neutral-primary">$22,234,234</p>
                 </div>
             </div>
-            <ButtonPrimary size="lg" type="default" className="z-20 lg:hidden">
+            <Button size="lg" type="default" className="z-20 lg:hidden">
                 Open Position
-            </ButtonPrimary>
+            </Button>
             <EthriseGradients className="absolute top-48 -right-[730px] z-10 sm:top-0 sm:-right-[670px] lg:-right-[1100px] xl:-right-[820px] xl:block 2xl:-right-[775px]" />
             <GohmriseGradients className="absolute top-28 -left-[1100px] z-10 sm:bottom-24 sm:-left-[1000px] lg:-bottom-28 lg:-left-[750px] xl:-bottom-8 xl:-left-[800px] 2xl:-left-[850px]" />
             <AvaxriseGradients className="absolute -left-[600px] bottom-80 z-10 sm:-left-[620px] sm:bottom-36 lg:bottom-0 lg:-left-[320px] xl:bottom-24 xl:-left-[420px] 2xl:-left-[500px]" />

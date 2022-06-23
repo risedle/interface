@@ -1,10 +1,7 @@
 import type { FunctionComponent } from "react";
 import links from "../../../../utils/links";
-import ButtonSecondary from "../../../../uikit/buttonV2/ButtonSecondary";
 import LogoV2 from "../../../../uikit/layout/LogoV2";
-import Command from "../../../../public/assets/icon/homepage/command.svg";
-import Slash from "../../../../public/assets/icon/homepage/slash.svg";
-import Search from "../../../../public/assets/icon/homepage/search.svg";
+import Button from "../../../../uikit/buttonV2/Button";
 
 /**
  * NavigationProps is a React Component properties that passed to React Component Navigation
@@ -53,14 +50,14 @@ const Navigation: FunctionComponent<NavigationProps> = ({}) => {
                     </div> */}
 
                     {/* Button for desktop */}
-                    <ButtonSecondary type="default" size="md" className="hidden sm:flex">
+                    <Button variant="secondary" type="default" size="md" className="hidden sm:flex">
                         Launch Risedle
-                    </ButtonSecondary>
+                    </Button>
 
                     {/* Button for mobile */}
-                    <ButtonSecondary type="default" size="md" className="sm:hidden">
+                    <Button variant="secondary" type="default" size="md" className="sm:hidden">
                         Launch
-                    </ButtonSecondary>
+                    </Button>
                 </div>
             </div>
         </div>

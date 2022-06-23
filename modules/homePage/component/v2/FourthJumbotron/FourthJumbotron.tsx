@@ -1,5 +1,5 @@
 import BackgroundBox from "../SecondJumbotron/BackgroundBox";
-import { FourthJumbotronBox, FourthJumbotronTitle, Image, Button } from "./FourthJumbotronComponent";
+import { FourthJumbotronBox, FourthJumbotronTitle, Image, ButtonJumbotron } from "./FourthJumbotronComponent";
 
 export default function FourthJumbotron() {
     return (
@@ -15,17 +15,17 @@ export default function FourthJumbotron() {
                 <FourthJumbotronBox className="col-span-1">
                     <FourthJumbotronTitle>Documentation</FourthJumbotronTitle>
                     <Image className="min-w-[714px]" src="/assets/images/homepage/doc.png" alt="docs" />
-                    <Button className="bg-dark-primary ">Read Docs</Button>
+                    <ButtonJumbotron variant="alternate">Read Docs</ButtonJumbotron>
                 </FourthJumbotronBox>
                 <FourthJumbotronBox className="col-span-1 ">
                     <FourthJumbotronTitle>Discord Server</FourthJumbotronTitle>
                     <Image className="min-w-[642px]" src="/assets/images/homepage/discord.png" alt="discord" />
-                    <Button className="bg-[#5B64EA]">Join Discord</Button>
+                    <ButtonJumbotron variant="discord">Join Discord</ButtonJumbotron>
                 </FourthJumbotronBox>
                 <FourthJumbotronBox className="sm:col-span-2 lg:col-span-1">
                     <FourthJumbotronTitle>Twitter</FourthJumbotronTitle>
                     <Image className="min-w-[591px]" src="/assets/images/homepage/Twitter.png" alt="twitter" />
-                    <Button className="bg-[#3292D8]">Follow @risedle</Button>
+                    <ButtonJumbotron variant="twitter">Follow @risedle</ButtonJumbotron>
                 </FourthJumbotronBox>
             </div>
         </div>

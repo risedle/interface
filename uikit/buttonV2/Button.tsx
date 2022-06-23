@@ -1,8 +1,11 @@
 import { FunctionComponent, ButtonHTMLAttributes } from "react";
 import { cls } from "../../utils/classTrim";
-import ButtonPrimary from "./ButtonPrimary";
 
-type ButtonPrimaryProps = {
+export type ButtonVariant = "primary" | "secondary" | "discord" | "twitter" | "alternate";
+export type ButtonType = "fab" | "default" | "square";
+export type ButtonSize = "md" | "lg" | "xl";
+
+type ButtonProps = {
     size?: "md" | "lg" | "xl";
     type?: "fab" | "default" | "square";
     variant?: "primary" | "secondary" | "discord" | "twitter" | "alternate";
@@ -36,13 +39,13 @@ const buttonClasses = {
     variant: {
         primary: "bg-dark-neutral-primary text-dark-background-default hover:bg-dark-neutral-soft",
         secondary: "bg-light-neutral-subtle/10 text-dark-neutral-primary hover:bg-light-neutral-subtle/20",
-        alternate: "bg-dark-primary text-white hover:bg-dark-primary-soft",
-        discord: "bg-discord-dark text-white hover:bg-discord-light",
-        twitter: "bg-twitter-dark text-white hover:bg-twitter-light",
+        alternate: "bg-dark-primary text-white hover:bg-light-darker",
+        discord: "bg-discord-light text-white hover:bg-discord-dark",
+        twitter: "bg-twitter-light text-white hover:bg-twitter-dark",
     },
 };
 
-const Button: FunctionComponent<ButtonPrimaryProps> = ({ variant = "primary", size = "lg", type = "default", disabled = false, children, className, ...restProps }) => {
+const Button: FunctionComponent<ButtonProps> = ({ variant = "primary", size = "lg", type = "default", disabled = false, children, className, ...restProps }) => {
     return (
         <button
             className={cls(`${buttonClasses.base}
