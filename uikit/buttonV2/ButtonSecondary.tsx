@@ -29,7 +29,7 @@ const ButtonSecondary: FunctionComponent<ButtonSecondaryProps> = ({ onClick, siz
             break;
     }
     return (
-        <button className={`flex flex-row items-center justify-center gap-2 active:scale-90 ${extraClass} bg-light-neutral-subtle/10 py-3 text-dark-neutral-primary transition ease-out ${type == "square" ? "rounded-lg" : "rounded-full"} ${restProps.disabled ? "opacity-40" : "hover:bg-light-neutral-subtle/20"}`} onClick={onClick} {...restProps}>
+        <button className={`flex flex-row items-center justify-center gap-2 active:scale-90 ${extraClass} bg-light-neutral-subtle/10 py-3 text-dark-neutral-primary transition ease-out ${type == "square" ? "rounded-lg" : "rounded-full"} ${restProps.disabled ? "opacity-40" : "hover:bg-light-neutral-subtle/20"} ${className || ""}`} onClick={onClick} {...restProps}>
             {children}
         </button>
     );

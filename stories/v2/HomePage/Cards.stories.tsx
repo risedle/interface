@@ -1,5 +1,5 @@
 import React from "react";
-import ThreeCards from "../../../modules/homePage/component/v2/ThreeCards";
+import ThreeCards from "../../../modules/homePage/component/v2/FirstJumbotron/ThreeCards";
 
 export default {
     component: ThreeCards,

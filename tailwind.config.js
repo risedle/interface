@@ -13,6 +13,7 @@ module.exports = {
             fontFamily: {
                 inter: ["'Inter'", "sans-serif"],
                 ibm: ["'IBM Plex Mono'", "monospace"],
+                space: ["'Space Mono'", "monospace"],
             },
             colors: {
                 dark: {
@@ -35,6 +36,7 @@ module.exports = {
                     neutral: "#070D2D",
                     primary: "#7303C0",
                     secondary: "#EC38BC",
+                    darker: "#B21287",
                     neutral: {
                         primary: "#070D2D",
                         medium: "#535978",
@@ -179,6 +181,14 @@ module.exports = {
                         12: "#FFFAD1",
                     },
                 },
+                discord: {
+                    light: "#5B64EA",
+                    dark: "#2F37B0",
+                },
+                twitter: {
+                    light: "#3292D8",
+                    dark: "#2F6F9D",
+                },
             },
             opacity: {
                 8: ".08",
@@ -189,6 +199,7 @@ module.exports = {
                 strong: "0px -4px 44px rgba(0, 0, 0, 0.25), 0px 52px 45px rgba(0, 0, 0, 0.4), 0px 12px 29px rgba(0, 0, 0, 0.2)",
                 medium: "0px 25px 50px 4px rgba(0, 0, 0, 0.45)",
                 float: "0px 25px 50px 4px rgba(0, 0, 0, 0.45)",
+                cardJumbotron: "10px 12px 141px rgba(93, 93, 93, 0.2)",
             },
         },
         screens: {
