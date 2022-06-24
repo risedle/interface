@@ -57,15 +57,17 @@ const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({}) 
                     {showLoading && <MarketCardLoading />}
                     {/* Cards display state */}
                     {showData && (
-                        <div className="grid max-w-[400px] grid-cols-1 gap-4 lg:max-w-full lg:grid-cols-3">
-                            {marketsResponse.data?.markets.map((market) => {
-                                return (
-                                    <div key={market.leveraged_token_address}>
-                                        <MarketCard address={market.leveraged_token_address} initialNAV={market.nav_last} initialNAVChange={market.leveraged_token_price_change_percent} totalSupply={market.leveraged_token_total_supply} />{" "}
-                                    </div>
-                                );
-                            })}
-                        </div>
+                        <>
+                            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                                {marketsResponse.data?.markets.map((market) => {
+                                    return (
+                                        <div key={market.leveraged_token_address}>
+                                            <MarketCard address={market.leveraged_token_address} initialNAV={market.nav_last} initialNAVChange={market.leveraged_token_price_change_percent} totalSupply={market.leveraged_token_total_supply} />{" "}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </>
                     )}
                 </div>
             </div>

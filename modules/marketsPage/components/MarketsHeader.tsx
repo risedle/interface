@@ -38,7 +38,7 @@ const MarketsHeader: FunctionComponent<MarketsHeaderProps> = ({ data, showLoadin
                     </div>
                 </div>
             </div> */}
-            <div className="flex w-full max-w-[400px] flex-col gap-6 border-b border-dashed border-gray-light-9/30 pb-8 dark:border-gray-dark-9/30 lg:w-full lg:max-w-[1104px] lg:flex-row lg:justify-between lg:gap-0">
+            <div className="flex w-full max-w-[490px] flex-col gap-6 border-b border-dashed border-gray-light-9/30 pb-8 dark:border-gray-dark-9/30 lg:w-full lg:max-w-[1104px] lg:flex-row lg:justify-between lg:gap-0">
                 <h1 className="text-center text-2xl font-bold leading-8 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12 sm:text-[32px] lg:text-left">
                     Leveraged Token <br /> Market
                 </h1>
