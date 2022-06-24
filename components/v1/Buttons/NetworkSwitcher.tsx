@@ -2,9 +2,9 @@ import type { FunctionComponent } from "react";
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 
-import { chain as Chains, Chain } from "wagmi";
-
+import type { Chain } from "wagmi";
 import { supportedChains, useWalletContext } from "../Wallet";
+import { getChainIconPath } from "../../../utils/getChainIconPath";
 
 import RisedleLinks from "../../../utils/links";
 import ButtonClose from "./Close";
@@ -29,14 +29,6 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
     // Local state
     const [isOpen, setIsOpen] = useState(false);
 
-    const getChainIconPath = (c: Chain): string => {
-        switch (c.id) {
-            case Chains.arbitrumOne.id:
-                return "/networks/Arbitrum.svg";
-        }
-        return "/networks/Arbitrum.svg";
-    };
-
     const switchToNetwork = async (c: Chain) => {
         if (switchNetwork) {
             const result = await switchNetwork(c.id);
@@ -58,20 +50,18 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
     return (
         <>
             <Dialog.Root open={isOpen}>
-                <Dialog.Trigger>
-                    <button
-                        className="button basic p-0"
-                        onClick={() => {
-                            if (!account) {
-                                toast.remove();
-                                toast.custom((t) => <ToastError>Please connect your wallet first</ToastError>);
-                                return;
-                            }
-                            setIsOpen(true);
-                        }}
-                    >
-                        <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="m-[11px] h-[16px] w-[16px]" />
-                    </button>
+                <Dialog.Trigger
+                    className="button basic p-0"
+                    onClick={() => {
+                        if (!account) {
+                            toast.remove();
+                            toast.custom((t) => <ToastError>Please connect your wallet first</ToastError>);
+                            return;
+                        }
+                        setIsOpen(true);
+                    }}
+                >
+                    <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="m-[11px] h-[16px] w-[16px]" />
                 </Dialog.Trigger>
 
                 <Dialog.Overlay className="fixed inset-0 bg-gray-dark-1/60 backdrop-blur dark:bg-black/60" />
