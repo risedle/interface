@@ -3,10 +3,11 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { FunctionComponent } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { usePopper } from "react-popper";
 import { InjectedConnector } from "wagmi";
+import { getButtonType } from "../../../utils/getButtonType";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import * as Popover from "@radix-ui/react-popover";
+import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
 
 // Toasts
 import ToastError from "../../../uikit/toasts/Error";
@@ -70,9 +71,9 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
             <Dialog.Root onOpenChange={(open) => setIsOpen(open)} open={isOpen}>
                 {/* If account is not connected then display the connect wallet button */}
                 {showConnectWallet && (
-                    <button className="button gradient inline-block rounded-full bg-[length:300%_300%] bg-center py-3 px-4 text-sm font-semibold leading-4 tracking-tight text-gray-light-1 hover:bg-left hover:shadow-xl hover:shadow-blue-400/20 dark:text-gray-dark-1" onClick={() => setIsOpen(true)}>
+                    <ButtonConnectWallet type={getButtonType(chain.chain)} onClick={() => setIsOpen(true)}>
                         Connect Wallet
-                    </button>
+                    </ButtonConnectWallet>
                 )}
                 <Dialog.Overlay className="fixed inset-0 bg-gray-dark-1/60 backdrop-blur dark:bg-black/60" />
                 <Dialog.Content className="translate() fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
@@ -145,7 +146,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
             {/* If account is connected and connected chain is not the same as current chain then display the switch network button */}
             {showSwitchToDefaultNetwork && (
                 <button
-                    className="inline-block rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1"
+                    className="inline-block rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1"
                     onClick={() => {
                         if (switchNetwork) {
                             switchNetwork(DEFAULT_CHAIN.id);

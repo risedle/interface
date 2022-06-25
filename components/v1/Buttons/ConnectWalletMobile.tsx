@@ -13,6 +13,8 @@ import ToastSuccess from "../../../uikit/toasts/Success";
 
 import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
 import { MenuMobile } from "./MenuMobile";
+import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
+import { getButtonType } from "../../../utils/getButtonType";
 
 /**
  * ButtonConnectWalletMobileProps is a React Component properties that passed to React Component ButtonConnectWalletMobile
@@ -270,18 +272,13 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                     <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="m-[11px] h-4 w-4" />
                 </button>
                 {showConnectWallet && (
-                    <button
-                        className={`${isOpen === "connect-wallet" ? "z-10" : ""} button gradient mx-2 inline-block w-full grow rounded-full bg-[length:300%_300%] bg-center py-3 px-4 text-sm font-semibold leading-4 tracking-tight text-gray-light-1 outline-0 hover:bg-left hover:shadow-xl hover:shadow-blue-400/20 dark:text-gray-dark-1`}
-                        onClick={() => {
-                            setIsOpen("connect-wallet");
-                        }}
-                    >
+                    <ButtonConnectWallet className="mx-2 w-full" type={getButtonType(chain.chain)} onClick={() => setIsOpen("connect-wallet")}>
                         Connect Wallet
-                    </button>
+                    </ButtonConnectWallet>
                 )}
                 {showSwitchToDefaultNetwork && (
                     <button
-                        className={`${isOpen === "connect-wallet" ? "z-10" : ""} mx-2 inline-block  w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1`}
+                        className={`${isOpen === "connect-wallet" ? "z-10" : ""} mx-2 inline-block  w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1`}
                         onClick={() => {
                             if (switchNetwork) {
                                 switchNetwork(DEFAULT_CHAIN.id);

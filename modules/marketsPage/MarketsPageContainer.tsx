@@ -12,6 +12,7 @@ import MarketsPageMeta from "./components/MarketsPageMeta";
 import { DEFAULT_CHAIN, useWalletContext } from "../../components/v1/Wallet";
 import { useMarkets } from "../../components/v1/swr/useMarkets";
 import Navigation from "../../components/v1/Navigation";
+import WarningHeader from "./components/WarningHeader";
 
 /**
  * MarketsPageContainerProps is a React Component properties that passed to React Component MarketsPageContainer
@@ -45,28 +46,38 @@ const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({}) 
             </Head>
             <Favicon />
 
+            <WarningHeader />
+
             <Navigation marketsActive />
 
-            <div className="z-10 flex min-h-screen flex-col">
+            <div className="z-10 mt-8 flex min-h-screen flex-col items-center px-4 lg:mt-24">
                 {/* Headers */}
                 <MarketsHeader data={marketsResponse.data} showData={showData} showLoading={showLoading} />
 
                 {/* Cards */}
-                <div className="container mx-auto mt-6 max-w-[400px] px-4 sm:mt-8">
-                    {/* Cards loading state */}
-                    {showLoading && <MarketCardLoading />}
-                    {/* Cards display state */}
-                    {showData && (
-                        <div className="grid grid-cols-1 gap-4">
-                            {marketsResponse.data?.markets.map((market) => {
-                                return (
-                                    <div key={market.leveraged_token_address}>
-                                        <MarketCard address={market.leveraged_token_address} initialNAV={market.nav_last} initialNAVChange={market.leveraged_token_price_change_percent} totalSupply={market.leveraged_token_total_supply} />{" "}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
+                <div className="mx-auto mt-6 w-full max-w-[490px] sm:mt-8 lg:min-w-[992px] lg:max-w-[1104px]">
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                        {/* Cards loading state */}
+                        {showLoading && (
+                            <>
+                                <MarketCardLoading />
+                                <MarketCardLoading />
+                                <MarketCardLoading />
+                            </>
+                        )}
+                        {/* Cards display state */}
+                        {showData && (
+                            <>
+                                {marketsResponse.data?.markets.map((market) => {
+                                    return (
+                                        <div key={market.leveraged_token_address}>
+                                            <MarketCard address={market.leveraged_token_address} initialNAV={market.nav_last} initialNAVChange={market.leveraged_token_price_change_percent} totalSupply={market.leveraged_token_total_supply} />{" "}
+                                        </div>
+                                    );
+                                })}
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
 
