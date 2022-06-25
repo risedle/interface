@@ -12,6 +12,7 @@ import MarketsPageMeta from "./components/MarketsPageMeta";
 import { DEFAULT_CHAIN, useWalletContext } from "../../components/v1/Wallet";
 import { useMarkets } from "../../components/v1/swr/useMarkets";
 import Navigation from "../../components/v1/Navigation";
+import WarningHeader from "./components/WarningHeader";
 
 /**
  * MarketsPageContainerProps is a React Component properties that passed to React Component MarketsPageContainer
@@ -44,6 +45,8 @@ const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({}) 
                 <MarketsPageMeta />
             </Head>
             <Favicon />
+
+            <WarningHeader />
 
             <Navigation marketsActive />
 
