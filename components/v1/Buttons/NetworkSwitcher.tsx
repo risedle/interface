@@ -24,27 +24,32 @@ type ButtonNetworkSwitcherProps = {};
  */
 const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}) => {
     // Read global states
-    const { account, chain, switchNetwork } = useWalletContext();
+    const { account, selectNetwork, chain, switchNetwork } = useWalletContext();
 
     // Local state
     const [isOpen, setIsOpen] = useState(false);
 
-    const switchToNetwork = async (c: Chain) => {
-        if (switchNetwork) {
-            const result = await switchNetwork(c.id);
-            if (result.error) {
+    const handleSelectNetwork = async (c: Chain) => {
+        if (account) {
+            if (switchNetwork) {
+                const result = await switchNetwork(c.id);
+                if (result.error) {
+                    toast.remove();
+                    toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
+                    return;
+                }
                 toast.remove();
-                toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
+                toast.custom((t) => <ToastSuccess>Switched to {c.name}</ToastSuccess>);
+            } else {
+                toast.remove();
+                toast.custom((t) => <ToastError>Cannot switch network automatically in WalletConnect. Please change network directly from your wallet.</ToastError>);
                 return;
             }
+        } else {
+            selectNetwork(c);
             toast.remove();
             toast.custom((t) => <ToastSuccess>Switched to {c.name}</ToastSuccess>);
-        } else {
-            toast.remove();
-            toast.custom((t) => <ToastError>Cannot switch network automatically in WalletConnect. Please change network directly from your wallet.</ToastError>);
-            return;
         }
-        return;
     };
 
     return (
@@ -53,11 +58,6 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                 <Dialog.Trigger
                     className="button basic p-0"
                     onClick={() => {
-                        if (!account) {
-                            toast.remove();
-                            toast.custom((t) => <ToastError>Please connect your wallet first</ToastError>);
-                            return;
-                        }
                         setIsOpen(true);
                     }}
                 >
@@ -81,8 +81,8 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                                         return (
                                             <button
                                                 className="m-0 flex w-full flex-row items-center space-x-4 rounded-[12px] border border-gray-light-5 bg-gray-light-2 py-[11px] px-[11px] text-left dark:border-gray-dark-5 dark:bg-gray-dark-2"
-                                                onClick={async () => {
-                                                    await switchToNetwork(c);
+                                                onClick={() => {
+                                                    handleSelectNetwork(c);
                                                     setIsOpen(false);
                                                 }}
                                                 key={c.id}

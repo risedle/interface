@@ -14,7 +14,7 @@ type BackgroundGradientProps = {};
  */
 
 const BackgroundGradient: FunctionComponent<BackgroundGradientProps> = ({}) => {
-    const { chain } = useWalletContext();
+    const { selectedNetwork } = useWalletContext();
     return (
         <>
             <div className="absolute -top-[56%] left-1/2 -translate-x-1/2 sm:-top-1/2">
@@ -27,13 +27,13 @@ const BackgroundGradient: FunctionComponent<BackgroundGradientProps> = ({}) => {
                     </g>
                 </svg>
             </div>
-            {chain.chain.id === customChains.bsc.id && (
+            {selectedNetwork.id === customChains.bsc.id && (
                 <div className="absolute -top-3/4 left-1/2 h-max w-max -translate-x-1/2 sm:-top-2/3">
                     <img src="/assets/images/marketspage/gradient-bsc-dark.svg" className="hidden dark:block" />
                     <img src="/assets/images/marketspage/gradient-bsc-light.svg" className="dark:hidden" />
                 </div>
             )}
-            {chain.chain.id === Chains.arbitrumOne.id && (
+            {selectedNetwork.id === Chains.arbitrumOne.id && (
                 <div className="absolute -top-3/4 left-1/2 h-max w-max -translate-x-1/2 sm:-top-2/3">
                     <img src="/assets/images/marketspage/gradient-arb-dark.svg" className="hidden dark:block" />
                     <img src="/assets/images/marketspage/gradient-arb-light.svg" className="dark:hidden" />

@@ -1,65 +1,23 @@
-import { chain } from "wagmi";
+import { Chain, chain } from "wagmi";
+import { customChains } from "../components/v1/Wallet";
 
-// Get the Arbitrum URL from .env file
-let arbitrumURL = "";
-if (process.env.NEXT_PUBLIC_ARBITRUM_URL) {
-    arbitrumURL = process.env.NEXT_PUBLIC_ARBITRUM_URL;
-}
-
-// Get the Kovan URL from .env file
-let kovanURL = "";
-if (process.env.NEXT_PUBLIC_KOVAN_URL) {
-    kovanURL = process.env.NEXT_PUBLIC_KOVAN_URL;
-}
-
-export const changeToArbitrum = async () => {
-    const metamask = window.ethereum;
-    try {
-        await metamask?.request({
-            method: "wallet_addEthereumChain",
-            params: [
-                {
-                    chainId: `0x${chain.arbitrumOne.id.toString(16)}`,
-                    chainName: "Arbitrum Mainnet",
-                    nativeCurrency: {
-                        name: "AETH",
-                        symbol: "aeth",
-                        decimals: 18,
-                    },
-                    rpcUrls: [arbitrumURL],
-                    blockExplorerUrls: ["https://arbiscan.io/"],
-                },
-            ],
-        });
-    } catch (error) {
-        console.log(error);
-        await metamask?.request({
-            method: "wallet_switchEthereumChain",
-            params: [
-                {
-                    chainId: `0x${chain.arbitrumOne.id.toString(16)}`,
-                },
-            ],
-        });
-    }
+const networkInfo: Record<number, Chain> = {
+    [customChains.bsc.id]: customChains.bsc,
+    [chain.arbitrumOne.id]: chain.arbitrumOne,
 };
 
-export const changeToKovan = async () => {
+export const manualSwitchNetwork = async (chain: number) => {
     const metamask = window.ethereum;
     try {
         await metamask?.request({
             method: "wallet_addEthereumChain",
             params: [
                 {
-                    chainId: `0x${chain.kovan.id.toString(16)}`,
-                    chainName: "Kovan Test Network",
-                    nativeCurrency: {
-                        name: "ETH",
-                        symbol: "eth",
-                        decimals: 18,
-                    },
-                    rpcUrls: [kovanURL],
-                    blockExplorerUrls: ["https://kovan.etherscan.io/"],
+                    chainId: `0x${networkInfo[chain].id.toString(16)}`,
+                    chainName: networkInfo[chain].name,
+                    nativeCurrency: networkInfo[chain].nativeCurrency,
+                    rpcUrls: networkInfo[chain].rpcUrls,
+                    blockExplorerUrls: networkInfo[chain].blockExplorers?.map((item) => item.url),
                 },
             ],
         });
@@ -69,7 +27,7 @@ export const changeToKovan = async () => {
             method: "wallet_switchEthereumChain",
             params: [
                 {
-                    chainId: `0x${chain.kovan.id.toString(16)}`,
+                    chainId: `0x${networkInfo[chain].id.toString(16)}`,
                 },
             ],
         });

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { FunctionComponent } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { InjectedConnector } from "wagmi";
+import { InjectedConnector, Chain } from "wagmi";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { getChainIconPath } from "../../../utils/getChainIconPath";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -15,6 +15,7 @@ import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector
 import { MenuMobile } from "./MenuMobile";
 import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
 import { getButtonType } from "../../../utils/getButtonType";
+import { manualSwitchNetwork } from "../../../utils/changeNetwork";
 
 /**
  * ButtonConnectWalletMobileProps is a React Component properties that passed to React Component ButtonConnectWalletMobile
@@ -29,7 +30,7 @@ type OpenedMenu = "change-chain" | "connect-wallet" | "menu" | "none";
  */
 const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProps> = ({}) => {
     // Read global states
-    const { chain, account, connectWallet, disconnectWallet, switchNetwork } = useWalletContext();
+    const { chain, account, connectWallet, disconnectWallet, switchNetwork, selectNetwork, selectedNetwork } = useWalletContext();
 
     // Local states
     const [isConnecting, setIsConnecting] = useState(false);
@@ -41,6 +42,30 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
     const showConnectWallet = account ? false : true;
     const showSwitchToDefaultNetwork = !showConnectWallet && chain.unsupported ? true : false;
     const showAccountData = !showConnectWallet && !showSwitchToDefaultNetwork;
+
+    // Select Network
+    const handleSelectNetwork = async (c: Chain) => {
+        if (account) {
+            if (switchNetwork) {
+                const result = await switchNetwork(c.id);
+                if (result.error) {
+                    toast.remove();
+                    toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
+                    return;
+                }
+                toast.remove();
+                toast.custom((t) => <ToastSuccess>Switched to {c.name}</ToastSuccess>);
+            } else {
+                toast.remove();
+                toast.custom((t) => <ToastError>Cannot switch network automatically in WalletConnect. Please change network directly from your wallet.</ToastError>);
+                return;
+            }
+        } else {
+            selectNetwork(c);
+            toast.remove();
+            toast.custom((t) => <ToastSuccess>Switched to {c.name}</ToastSuccess>);
+        }
+    };
 
     // Connect wallet
     const connect = async function (c: InjectedConnector | WalletConnectConnector) {
@@ -79,32 +104,12 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                     <button
                                         className="m-0 flex w-full flex-row items-center justify-between text-left"
                                         onClick={async () => {
-                                            if (!account) {
-                                                toast.remove();
-                                                toast.custom((t) => <ToastError>Please connect your wallet first</ToastError>);
-                                                return;
-                                            }
-
-                                            if (switchNetwork) {
-                                                const result = await switchNetwork(c.id);
-                                                if (result.error) {
-                                                    toast.remove();
-                                                    toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
-                                                    return;
-                                                }
-                                                toast.remove();
-                                                toast.custom((t) => <ToastSuccess>Switched to {c.name}</ToastSuccess>);
-                                                return;
-                                            } else {
-                                                toast.remove();
-                                                toast.custom((t) => <ToastError>Cannot switch network automatically in WalletConnect. Please change network directly from your wallet.</ToastError>);
-                                                return;
-                                            }
+                                            handleSelectNetwork(c);
+                                            setIsOpen("none");
                                         }}
                                         key={c.id}
                                     >
                                         <span className="m-0 text-sm font-normal leading-none text-gray-light-12 dark:text-gray-dark-12">{c.name}</span>
-
                                         <img src={getChainIconPath(c)} alt={c.name} className="inline-block self-center" />
                                     </button>
                                 );
@@ -136,7 +141,8 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                         disabled={isConnecting && connectorName ? true : false}
                                         onClick={async () => {
                                             await connect(MetaMaskConnector);
-                                            close();
+                                            setIsOpen("none");
+                                            await manualSwitchNetwork(selectedNetwork.id);
                                         }}
                                     >
                                         <div>
@@ -158,7 +164,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                         disabled={isConnecting && connectorName ? true : false}
                                         onClick={async () => {
                                             await connect(WCConnector);
-                                            close();
+                                            setIsOpen("none");
                                         }}
                                     >
                                         <div>
@@ -261,11 +267,6 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                 <button
                     className={`button basic w-10 flex-none p-2 outline-0 ${isOpen === "change-chain" ? "z-10" : ""}`}
                     onClick={() => {
-                        if (!account) {
-                            toast.remove();
-                            toast.custom((t) => <ToastError>Please connect your wallet first</ToastError>);
-                            return;
-                        }
                         setIsOpen("change-chain");
                     }}
                 >

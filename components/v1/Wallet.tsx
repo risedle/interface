@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactNode } from "react";
+import { FunctionComponent, ReactNode, useState } from "react";
 import createPersistedState from "use-persisted-state";
 import { Chain, Provider, chain as Chains, useAccount, useNetwork, useConnect, useSigner } from "wagmi";
 import { createContext, useContext } from "react";
@@ -23,7 +23,7 @@ export const customChains: Record<CustomChainName, Chain> = {
         blockExplorers: [
             {
                 name: "BscScan",
-                url: "https://bscscan.com/",
+                url: "https://bscscan.com",
             },
         ],
     },
@@ -56,6 +56,8 @@ export type WalletStates = {
     chain: { unsupported: Boolean; chain: Chain };
     connectWallet: (c: InjectedConnector | WalletConnectConnector) => Promise<any>;
     disconnectWallet: () => void;
+    selectNetwork: (c: Chain) => void;
+    selectedNetwork: Chain;
     switchNetwork: ((chaindID: number) => Promise<any>) | undefined;
     signer: ethers.Signer | undefined;
     provider: ethers.providers.JsonRpcProvider;
@@ -65,6 +67,8 @@ const WalletContext = createContext<WalletStates>({
     account: undefined,
     chain: { unsupported: false, chain: DEFAULT_CHAIN },
     connectWallet: async (c: InjectedConnector | WalletConnectConnector) => {},
+    selectNetwork: () => {},
+    selectedNetwork: DEFAULT_CHAIN,
     disconnectWallet: () => {},
     switchNetwork: undefined,
     signer: undefined,
@@ -99,6 +103,7 @@ const WalletGlobalState: FunctionComponent<WalletGlobalStateProps> = ({ children
     const [, connect] = useConnect();
     const [networkData, switchNetwork] = useNetwork();
     const [signerData] = useSigner();
+    const [selectedChain, setSelectedChain] = useState<Chain>(DEFAULT_CHAIN);
 
     // Metamask state, to persist the connect/disconnect status on metamask wallet
     const [metamaskState, setMetamaskState] = useMatamaskState(MetamaskState.NotConnected);
@@ -145,8 +150,12 @@ const WalletGlobalState: FunctionComponent<WalletGlobalStateProps> = ({ children
         disconnect();
     };
 
+    const selectNetwork = (c: Chain) => {
+        setSelectedChain(c);
+    };
+
     // Create derivatives states based on the global states
-    const chain = accountData.data && networkData.data ? (networkData.data.chain as Chain) : DEFAULT_CHAIN;
+    const chain = accountData.data && networkData.data ? (networkData.data.chain as Chain) : selectedChain;
     const provider = getProvider({ chainId: chain.id });
     const signer = signerData.data ? signerData.data : provider.getSigner();
     const isChainSupported = supportedChains.map((c) => c.id).includes(chain.id);
@@ -157,11 +166,13 @@ const WalletGlobalState: FunctionComponent<WalletGlobalStateProps> = ({ children
     const isMetamask = accountData.data && accountData.data.connector?.name === "MetaMask" ? true : false;
     const account = (accountData.data && isMetamask && metamaskState === MetamaskState.Connected) || (accountData.data && !isMetamask) ? accountData.data.address : undefined;
 
-    const sharedStates = {
+    const sharedStates: WalletStates = {
         account: account,
         chain: { unsupported: !isChainSupported, chain: chain },
         connectWallet,
         disconnectWallet,
+        selectNetwork,
+        selectedNetwork: selectedChain,
         switchNetwork,
         signer,
         provider,

@@ -14,7 +14,7 @@ type WarningHeaderProps = {};
  */
 
 const WarningHeader: FunctionComponent<WarningHeaderProps> = ({}) => {
-    const { chain } = useWalletContext();
+    const { selectedNetwork } = useWalletContext();
 
     const getBscLogo = (type: "normal" | "gray") => {
         return (
@@ -25,7 +25,7 @@ const WarningHeader: FunctionComponent<WarningHeaderProps> = ({}) => {
     };
 
     return (
-        <div className={`${chain.chain.id !== customChains.bsc.id && "hidden"} z-10 flex w-max min-w-full flex-row gap-8 border-b border-gray-light-4 bg-[#FFF9ED]/40 px-4 py-3 backdrop-blur-[102px] dark:border-gray-dark-4 dark:bg-gray-dark-1/40`}>
+        <div className={`${selectedNetwork.id !== customChains.bsc.id && "hidden"} z-10 flex w-max min-w-full flex-row gap-8 border-b border-gray-light-4 bg-[#FFF9ED]/40 px-4 py-3 backdrop-blur-[102px] dark:border-gray-dark-4 dark:bg-gray-dark-1/40`}>
             {[...Array(10)].map(() => {
                 return (
                     <>

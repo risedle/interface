@@ -9,7 +9,7 @@ import Footer from "../../uikit/layout/Footer";
 import MarketCard from "./components/MarketCard";
 import ButtonConnectWalletMobile from "../../components/v1/Buttons/ConnectWalletMobile";
 import MarketsPageMeta from "./components/MarketsPageMeta";
-import { DEFAULT_CHAIN, useWalletContext } from "../../components/v1/Wallet";
+import { useWalletContext } from "../../components/v1/Wallet";
 import { useMarkets } from "../../components/v1/swr/useMarkets";
 import Navigation from "../../components/v1/Navigation";
 import WarningHeader from "./components/WarningHeader";
@@ -26,10 +26,10 @@ type MarketsPageContainerProps = {};
  */
 const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({}) => {
     // Read global states
-    const { chain } = useWalletContext();
+    const { chain, selectedNetwork } = useWalletContext();
 
     // Read data from Snapshot API
-    const marketsResponse = useMarkets(chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id);
+    const marketsResponse = useMarkets(chain.unsupported ? selectedNetwork.id : chain.chain.id);
 
     // UI states
     const showLoading = marketsResponse.isLoading;

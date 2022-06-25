@@ -1,12 +1,13 @@
 import Link from "next/link";
 import * as Dialog from "@radix-ui/react-dialog";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { InjectedConnector } from "wagmi";
 import { getButtonType } from "../../../utils/getButtonType";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import * as Popover from "@radix-ui/react-popover";
+import { manualSwitchNetwork } from "../../../utils/changeNetwork";
 import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
 
 // Toasts
@@ -29,7 +30,7 @@ type ButtonConnectWalletDesktopProps = {};
  */
 const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopProps> = ({}) => {
     // Read global states
-    const { chain, account, connectWallet, disconnectWallet, switchNetwork } = useWalletContext();
+    const { chain, account, connectWallet, disconnectWallet, switchNetwork, selectedNetwork } = useWalletContext();
 
     // Local states
     const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +41,10 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
     const showConnectWallet = account ? false : true;
     const showSwitchToDefaultNetwork = !showConnectWallet && chain.unsupported ? true : false;
     const showAccountData = !showConnectWallet && !showSwitchToDefaultNetwork;
+
+    useEffect(() => {
+        console.log(switchNetwork);
+    }, [switchNetwork]);
 
     // Connect wallet
     const connect = async function (c: InjectedConnector | WalletConnectConnector) {
@@ -92,6 +97,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                 disabled={isConnecting && connectorName ? true : false}
                                 onClick={async () => {
                                     await connect(MetaMaskConnector);
+                                    await manualSwitchNetwork(selectedNetwork.id);
                                 }}
                             >
                                 <div>
