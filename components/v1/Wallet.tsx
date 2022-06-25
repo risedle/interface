@@ -8,7 +8,28 @@ import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 
 export const connectorStorageKey = "risedleConnectors.wallet";
 
-export const supportedChains = [Chains.arbitrumOne];
+type CustomChainName = "bsc";
+
+export const customChains: Record<CustomChainName, Chain> = {
+    bsc: {
+        id: 56,
+        name: "Binance Smart Chain",
+        nativeCurrency: {
+            decimals: 18,
+            name: "BNB",
+            symbol: "BNB",
+        },
+        rpcUrls: ["https://rpc.ankr.com/bsc"],
+        blockExplorers: [
+            {
+                name: "BscScan",
+                url: "https://bscscan.com/",
+            },
+        ],
+    },
+};
+
+export const supportedChains = [Chains.arbitrumOne, customChains.bsc];
 export const DEFAULT_CHAIN = Chains.arbitrumOne;
 
 // Wallet connectors
@@ -22,11 +43,13 @@ export const WCConnector = new WalletConnectConnector({
         qrcode: true,
         rpc: {
             [Chains.arbitrumOne.id]: "https://arb-mainnet.g.alchemy.com/v2/qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj",
+            [customChains.bsc.id]: "https://rpc.ankr.com/bsc",
         },
     },
 });
 
 export const ArbitrumOneProvider = new providers.JsonRpcProvider("https://arb-mainnet.g.alchemy.com/v2/qu4tZ0JUekqqwtcDowbfel-s4S8Z60Oj", Chains.arbitrumOne.id);
+export const BscProvider = new providers.JsonRpcProvider("https://rpc.ankr.com/bsc", customChains.bsc.id);
 
 export type WalletStates = {
     account: string | undefined;
@@ -63,6 +86,8 @@ const getProvider = (config: { chainId?: number }) => {
     switch (config.chainId) {
         case Chains.arbitrumOne.id:
             return ArbitrumOneProvider;
+        case customChains.bsc.id:
+            return BscProvider;
         default:
             return ArbitrumOneProvider;
     }

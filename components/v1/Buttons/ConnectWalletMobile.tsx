@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { FunctionComponent } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { Chain, chain as Chains, InjectedConnector } from "wagmi";
+import { InjectedConnector } from "wagmi";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-import RisedleLinks from "../../../utils/links";
+import { getChainIconPath } from "../../../utils/getChainIconPath";
 import * as Dialog from "@radix-ui/react-dialog";
 
 // Toasts
@@ -40,17 +40,6 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
     const showSwitchToDefaultNetwork = !showConnectWallet && chain.unsupported ? true : false;
     const showAccountData = !showConnectWallet && !showSwitchToDefaultNetwork;
 
-    // Utilities
-    const getChainIconPath = (c: Chain): string => {
-        switch (c.id) {
-            case Chains.arbitrumOne.id:
-                return "/networks/Arbitrum.svg";
-            case Chains.kovan.id:
-                return "/networks/Kovan.svg";
-        }
-        return "/networks/Arbitrum.svg";
-    };
-
     // Connect wallet
     const connect = async function (c: InjectedConnector | WalletConnectConnector) {
         setIsConnecting(true);
@@ -80,7 +69,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
         switch (isOpen) {
             case "change-chain":
                 return (
-                    <div className="fixed bottom-16 left-4 flex min-w-[161px] flex-col rounded-[16px] border border-gray-light-4 bg-gray-light-2 p-4 dark:border-gray-dark-4 dark:bg-gray-dark-2">
+                    <div className="fixed bottom-16 left-4 flex min-w-[241px] flex-col rounded-2xl border border-gray-light-4 bg-gray-light-2 p-4 dark:border-gray-dark-4 dark:bg-gray-dark-2">
                         <div className="border-b border-dashed border-gray-light-3 pb-2 text-xs text-gray-light-9 dark:border-gray-dark-3 dark:text-gray-dark-9">Switch network</div>
                         <div className="mt-2 flex flex-col space-y-4 text-left">
                             {supportedChains.map((c) => {
@@ -123,7 +112,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                 );
             case "connect-wallet":
                 return (
-                    <div className="fixed bottom-16 left-1/2 flex w-11/12 -translate-x-1/2 flex-col rounded-[16px] border border-gray-light-4 bg-gray-light-2 dark:border-gray-dark-4 dark:bg-gray-dark-2">
+                    <div className="fixed bottom-16 left-1/2 flex w-11/12 -translate-x-1/2 flex-col rounded-2xl border border-gray-light-4 bg-gray-light-2 dark:border-gray-dark-4 dark:bg-gray-dark-2">
                         {!account ? (
                             <>
                                 <div className="m-0 border-b border-dashed border-gray-light-3 py-2 pr-2 pl-[49px] text-center dark:border-gray-dark-3">
@@ -141,7 +130,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
 
                                 <div className="flex flex-col space-y-2 p-4">
                                     <button
-                                        className={`m-0 flex flex-row items-center justify-between rounded-[12px] border border-orange-light-5 bg-orange-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-orange-light-3 active:scale-95 dark:border-orange-dark-5 dark:bg-orange-dark-2 dark:hover:bg-orange-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
+                                        className={`m-0 flex flex-row items-center justify-between rounded-xl border border-orange-light-5 bg-orange-light-2 py-[11px] px-3 text-left transition duration-300 ease-in-out hover:bg-orange-light-3 active:scale-95 dark:border-orange-dark-5 dark:bg-orange-dark-2 dark:hover:bg-orange-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
                                         disabled={isConnecting && connectorName ? true : false}
                                         onClick={async () => {
                                             await connect(MetaMaskConnector);
@@ -163,7 +152,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                         )}
                                     </button>
                                     <button
-                                        className={`m-0 flex flex-row items-center justify-between rounded-[12px] border border-blue-light-5 bg-blue-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-blue-light-3 active:scale-95 dark:border-blue-dark-5 dark:bg-blue-dark-2 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
+                                        className={`m-0 flex flex-row items-center justify-between rounded-xl border border-blue-light-5 bg-blue-light-2 py-[11px] px-3 text-left transition duration-300 ease-in-out hover:bg-blue-light-3 active:scale-95 dark:border-blue-dark-5 dark:bg-blue-dark-2 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
                                         disabled={isConnecting && connectorName ? true : false}
                                         onClick={async () => {
                                             await connect(WCConnector);
@@ -265,10 +254,10 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
     };
 
     return (
-        <div className="fixed bottom-0 flex h-[64px] w-full flex-row border-t border-gray-light-3 bg-gray-light-1 px-4 py-3 dark:border-gray-dark-3 dark:bg-gray-dark-1">
+        <div className="fixed bottom-0 flex h-16 w-full flex-row border-t border-gray-light-3 bg-gray-light-1 px-4 py-3 dark:border-gray-dark-3 dark:bg-gray-dark-1">
             <Dialog.Root open={isOpen != "none"}>
                 <button
-                    className={`button basic w-[40px] flex-none p-2 outline-0 ${isOpen === "change-chain" ? "z-10" : ""}`}
+                    className={`button basic w-10 flex-none p-2 outline-0 ${isOpen === "change-chain" ? "z-10" : ""}`}
                     onClick={() => {
                         if (!account) {
                             toast.remove();
@@ -278,7 +267,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         setIsOpen("change-chain");
                     }}
                 >
-                    <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="m-[11px] h-[16px] w-[16px]" />
+                    <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="m-[11px] h-4 w-4" />
                 </button>
                 {showConnectWallet && (
                     <button
@@ -302,13 +291,13 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                             }
                         }}
                     >
-                        <span className="mr-2 inline-block h-[8px] w-[8px] rounded-full bg-red-light-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:bg-red-dark-10 dark:shadow-red-dark-10"></span>
+                        <span className="mr-2 inline-block h-2 w-2 rounded-full bg-red-light-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:bg-red-dark-10 dark:shadow-red-dark-10"></span>
                         Switch Network
                     </button>
                 )}
                 {showAccountData && account && (
                     <button onClick={() => setIsOpen("connect-wallet")} className={`${isOpen === "connect-wallet" ? "z-10" : ""} mx-2 inline-block w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1`}>
-                        <span className="mr-2 inline-block h-[8px] w-[8px] rounded-full bg-sky-light-10 shadow-[0px_0px_12px] shadow-sky-light-10 dark:bg-sky-dark-10"></span>
+                        <span className="mr-2 inline-block h-2 w-2 rounded-full bg-sky-light-10 shadow-[0px_0px_12px] shadow-sky-light-10 dark:bg-sky-dark-10"></span>
                         {formatAddress(account)}
                     </button>
                 )}
@@ -317,7 +306,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                     onClick={() => {
                         setIsOpen("menu");
                     }}
-                    className={`${isOpen === "menu" ? "z-10" : ""} button basic w-[40px] flex-none p-2 outline-0`}
+                    className={`${isOpen === "menu" ? "z-10" : ""} button basic w-10 flex-none p-2 outline-0`}
                 >
                     {isOpen === "menu" ? (
                         <svg className="flex-shrink-0 fill-gray-light-12 dark:fill-gray-dark-12" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
