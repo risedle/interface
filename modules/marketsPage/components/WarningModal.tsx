@@ -1,5 +1,6 @@
 import { FunctionComponent, useState, useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
+import createPersistedState from "use-persisted-state";
 import { useWalletContext, customChains } from "../../../components/v1/Wallet";
 import ButtonPrimary from "../../../uikit/button/ButtonPrimary";
 import links from "../../../utils/links";
@@ -20,8 +21,11 @@ const WarningModal: FunctionComponent<WarningModalProps> = ({}) => {
     const [isOpen, setIsOpen] = useState(false);
     const { chain } = useWalletContext();
 
+    const useShowBSCWarning = createPersistedState("risedle.showBSCWarning");
+    const [showBSCWarning, setShowBSCWarning] = useShowBSCWarning(true);
+
     useEffect(() => {
-        if (chain.chain.id === customChains.bsc.id) {
+        if (chain.chain.id === customChains.bsc.id && showBSCWarning) {
             setIsOpen(true);
         }
     }, [chain]);
@@ -42,7 +46,7 @@ const WarningModal: FunctionComponent<WarningModalProps> = ({}) => {
                     <h1 className="text-base font-bold leading-4 tracking-[-0.03em] text-amber-light-11 dark:text-amber-dark-11">Use at your own risk.</h1>
                     <p className="text-sm leading-6 text-gray-light-10">Risedle leveraged token is an experimental product and there's always a potential for bug or errors that occurs due to the chain stability</p>
                     <div className="flex flex-row gap-2.5">
-                        <input type="checkbox" className="bg-black" />
+                        <input type="checkbox" checked={!showBSCWarning} onChange={() => setShowBSCWarning(!showBSCWarning)} />
                         <label className="text-sm leading-6 text-gray-light-9 dark:text-gray-dark-8">Don't show this message again</label>
                     </div>
                 </div>
