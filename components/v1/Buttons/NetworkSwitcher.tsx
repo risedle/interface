@@ -38,6 +38,7 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                     toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
                     return;
                 }
+                selectNetwork(c);
                 toast.remove();
                 toast.custom((t) => <ToastSuccess>Switched to {c.name}</ToastSuccess>);
             } else {
