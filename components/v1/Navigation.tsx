@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import ButtonConnectWalletDesktop from "./Buttons/ConnectWalletDesktop";
 import ButtonNetworkSwitcher from "./Buttons/NetworkSwitcher";
 import ButtonThemeSwitcher from "./Buttons/ThemeSwitcher";
@@ -19,8 +19,16 @@ type NavigationProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfolioActive }) => {
+    const [scrollPosition, setScrollPosition] = useState(0);
+
+    useEffect(() => {
+        window.addEventListener("scroll", () => {
+            const position = window.pageYOffset;
+            setScrollPosition(position);
+        });
+    }, []);
     return (
-        <div className="container z-10 mx-auto max-w-full sm:z-20">
+        <div className={`container fixed z-10 mx-auto max-w-full transition ease-out sm:z-20 ${scrollPosition !== 0 && "bg-gray-light-1/80 backdrop-blur-[102px] dark:bg-gray-dark-1/80"}`}>
             <div className="flex flex-row items-center p-4 sm:space-x-12">
                 <div className="w-1/5 sm:w-fit">
                     <Link href="/">
@@ -38,7 +46,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfol
                         <a className={portfolioActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>Portfolio</a>
                     </Link>
                 </div>
-                <div className="inline-block flex w-1/5 flex-row justify-end space-x-2 sm:w-fit">
+                <div className="flex w-1/5 flex-row justify-end space-x-2 sm:w-fit">
                     <div className="hidden sm:inline-block">
                         <ButtonNetworkSwitcher />
                     </div>

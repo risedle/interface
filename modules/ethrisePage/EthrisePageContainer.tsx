@@ -38,8 +38,8 @@ function EthrisePageContainer() {
                 </Head>
                 <Favicon />
                 <Navigation marketsActive portfolioActive />
-                <div className="mb-20 flex flex-grow flex-col sm:z-10 sm:mb-0">
-                    <TabsRoot defaultValue="leverage" className="px-4 outline-0 sm:mx-auto sm:mt-10">
+                <div className="mb-20 mt-[76px] flex flex-grow flex-col sm:z-10 sm:mb-0 sm:mt-[120px]">
+                    <TabsRoot defaultValue="leverage" className="px-4 outline-0 sm:mx-auto">
                         <TabsList />
                         {/* Leverage Tab */}
                         <TabsContentGrid value="leverage">
