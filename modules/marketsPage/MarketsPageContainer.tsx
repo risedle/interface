@@ -13,6 +13,7 @@ import { DEFAULT_CHAIN, useWalletContext } from "../../components/v1/Wallet";
 import { useMarkets } from "../../components/v1/swr/useMarkets";
 import Navigation from "../../components/v1/Navigation";
 import WarningHeader from "./components/WarningHeader";
+import WarningModal from "./components/WarningModal";
 
 /**
  * MarketsPageContainerProps is a React Component properties that passed to React Component MarketsPageContainer
