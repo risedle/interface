@@ -37,10 +37,10 @@ const WarningModal: FunctionComponent<WarningModalProps> = ({ isOpen, setIsOpen,
                 </div>
                 <div className="space-y-4 border-b border-dashed border-gray-light-3 py-5 px-4 dark:border-gray-dark-3">
                     <h1 className="text-base font-bold leading-4 tracking-[-0.03em] text-amber-light-11 dark:text-amber-dark-11">Use at your own risk.</h1>
-                    <p className="text-sm leading-6 text-gray-light-10">Risedle leveraged token is an experimental product and there's always a potential for bug or errors that occurs due to the chain stability</p>
+                    <p className="text-sm leading-6 text-gray-light-10">Risedle leveraged token is an experimental product and there&apos;s always a potential for bug or errors that occurs due to the chain stability</p>
                     <div className="flex flex-row gap-2.5">
                         <input type="checkbox" checked={!showBSCWarning} onChange={() => setShowBSCWarning(!showBSCWarning)} />
-                        <label className="text-sm leading-6 text-gray-light-9 dark:text-gray-dark-8">Don't show this message again</label>
+                        <label className="text-sm leading-6 text-gray-light-9 dark:text-gray-dark-8">Don&apos;t show this message again</label>
                     </div>
                 </div>
                 <div className="flex flex-col items-center space-y-4 px-4 pt-4">
