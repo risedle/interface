@@ -1,10 +1,10 @@
 import { FunctionComponent, useState, useEffect, Dispatch, SetStateAction } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import createPersistedState from "use-persisted-state";
-import { useWalletContext, customChains } from "../../../components/v1/Wallet";
-import ButtonPrimary from "../../../uikit/button/ButtonPrimary";
-import links from "../../../utils/links";
-import ButtonClose from "../../../components/v1/Buttons/Close";
+import { useWalletContext, customChains } from "./Wallet";
+import ButtonPrimary from "../../uikit/button/ButtonPrimary";
+import links from "../../utils/links";
+import ButtonClose from "./Buttons/Close";
 
 /**
  * WarningModalProps is a React Component properties that passed to React Component WarningModal

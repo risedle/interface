@@ -64,7 +64,7 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                     <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="m-[11px] h-[16px] w-[16px]" />
                 </Dialog.Trigger>
 
-                <Dialog.Overlay className="fixed inset-0 bg-gray-dark-1/60 backdrop-blur dark:bg-black/60" />
+                <Dialog.Overlay className="fixed inset-0 z-10 bg-gray-dark-1/60 backdrop-blur dark:bg-black/60" />
 
                 <Dialog.Content className="fixed inset-0 z-20 overflow-y-auto" asChild onPointerDownOutside={() => setIsOpen(false)} onInteractOutside={() => setIsOpen(false)}>
                     <div className="flex min-h-screen items-center justify-center">
