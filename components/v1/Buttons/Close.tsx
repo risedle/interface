@@ -4,7 +4,7 @@ import type { FunctionComponent } from "react";
  * ButtonCloseProps is a React Component properties that passed to React Component ButtonClose
  */
 type ButtonCloseProps = {
-    onClick: () => void;
+    onClick?: () => void;
 };
 
 /**
