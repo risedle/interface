@@ -48,7 +48,6 @@ const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({}) 
             <Favicon />
 
             <WarningHeader />
-            <WarningModal />
 
             <Navigation marketsActive />
 

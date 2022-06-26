@@ -1,4 +1,4 @@
-import { FunctionComponent, useState, useEffect } from "react";
+import { FunctionComponent, useState, useEffect, Dispatch, SetStateAction } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import createPersistedState from "use-persisted-state";
 import { useWalletContext, customChains } from "../../../components/v1/Wallet";
@@ -9,7 +9,12 @@ import ButtonClose from "../../../components/v1/Buttons/Close";
 /**
  * WarningModalProps is a React Component properties that passed to React Component WarningModal
  */
-type WarningModalProps = {};
+type WarningModalProps = {
+    isOpen: boolean;
+    setIsOpen: Dispatch<SetStateAction<boolean>>;
+    showBSCWarning: boolean;
+    setShowBSCWarning: Dispatch<SetStateAction<boolean>>;
+};
 
 /**
  * WarningModal is just yet another react component
@@ -17,19 +22,7 @@ type WarningModalProps = {};
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 
-const WarningModal: FunctionComponent<WarningModalProps> = ({}) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const { chain } = useWalletContext();
-
-    const useShowBSCWarning = createPersistedState("risedle.showBSCWarning");
-    const [showBSCWarning, setShowBSCWarning] = useShowBSCWarning(true);
-
-    useEffect(() => {
-        if (chain.chain.id === customChains.bsc.id && showBSCWarning) {
-            setIsOpen(true);
-        }
-    }, [chain]);
-
+const WarningModal: FunctionComponent<WarningModalProps> = ({ isOpen, setIsOpen, showBSCWarning, setShowBSCWarning }) => {
     return (
         <Dialog.Root open={isOpen}>
             <Dialog.Overlay className="absolute z-30 h-screen w-screen bg-black/60 backdrop-blur-md" />
