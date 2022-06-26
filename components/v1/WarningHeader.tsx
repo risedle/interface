@@ -1,5 +1,5 @@
 import { FunctionComponent, useState } from "react";
-import { useWalletContext, customChains } from "../../../components/v1/Wallet";
+import { useWalletContext, customChains } from "./Wallet";
 import createPersistedState from "use-persisted-state";
 import WarningModal from "./WarningModal";
 
