@@ -11,6 +11,8 @@ import EthrisePageContainer from "../../../modules/ethrisePage/EthrisePageContai
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo } from "react";
 import { TokenContainer } from "../../../modules/tokenPage/tokenContainer";
+import Navigation from "../../../components/v1/Navigation";
+import { useTokenStore } from "../../../modules/tokenPage/tokenStore";
 
 type PagesData = {
     chainId: number;
@@ -24,34 +26,25 @@ type QueryPage = {
 function TokenPage() {
     const router = useRouter();
     const { token, chains } = router.query as QueryPage;
-    const { chain } = useWalletContext();
-    const [metadata, setMetadata] = React.useState<MetadataToken>();
-    const address = useMemo(() => {
-        return {
-            chainId: MapperNameToChainId[chains],
-            tokenId: MapperTokenToTokenId[token],
-        };
-    }, [token, chains]);
-
+    const { state, setToken } = useTokenStore();
     useEffect(() => {
-        if (address.chainId && address.tokenId) {
-            const currentData = Metadata[address.chainId][address.tokenId];
-            setMetadata(currentData);
+        if (token && chains) {
+            setToken(MapperNameToChainId[chains], MapperTokenToTokenId[token]);
         }
-    }, [address]);
-
-    if (!address.chainId || !address.tokenId) {
-        return "Loading...";
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [token, chains]);
 
     return (
         <div className="flex h-full min-h-screen w-full flex-col overflow-hidden bg-gray-light-1 font-inter dark:bg-gray-dark-1">
-            <Head>
-                <title>{metadata?.title} Market | Risedle Protocol</title>
-                <meta name="description" content="Leverage ETH or earn yield from your idle USDC" />
-                <MarketDetailPageMeta title={metadata?.title || ""} path={metadata?.path || ""} />
-            </Head>
-            <TokenContainer chainAddress={address.chainId} tokenAddress={address.tokenId} />;
+            {state.status === "loaded" && (
+                <Head>
+                    <title>{state.token.title} Market | Risedle Protocol</title>
+                    <meta name="description" content="Leverage ETH or earn yield from your idle USDC" />
+                    <MarketDetailPageMeta title={state.token.title || ""} path={state.token.path || ""} />
+                </Head>
+            )}
+            <Navigation marketsActive />
+            <TokenContainer />;
         </div>
     );
 }
