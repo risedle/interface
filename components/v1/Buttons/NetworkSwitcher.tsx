@@ -31,6 +31,7 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
 
     // Local state
     const [isOpen, setIsOpen] = useState(false);
+    const selectedChain = router.pathname.includes("binance") ? customChains.bsc : Chains.arbitrumOne;
 
     const switchToNetwork = async (c: Chain) => {
         if (switchNetwork) {
@@ -72,7 +73,7 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                         setIsOpen(true);
                     }}
                 >
-                    <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="m-[11px] h-[16px] w-[16px]" />
+                    <img src={getChainIconPath(selectedChain.id)} alt={selectedChain.name} className="m-[11px] h-[16px] w-[16px]" />
                 </Dialog.Trigger>
 
                 <Dialog.Overlay className="fixed inset-0 z-10 bg-gray-dark-1/60 backdrop-blur dark:bg-black/60" />
@@ -98,7 +99,7 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                                                 }}
                                                 key={c.id}
                                             >
-                                                <img src={getChainIconPath(c)} alt={c.name} className="h-[32px] w-[32px]" />
+                                                <img src={getChainIconPath(c.id)} alt={c.name} className="h-[32px] w-[32px]" />
                                                 <span className="text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12">{c.name}</span>
                                             </button>
                                         );

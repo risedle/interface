@@ -12,7 +12,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import ToastError from "../../../uikit/toasts/Error";
 import ToastSuccess from "../../../uikit/toasts/Success";
 
-import { customChains, DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
+import { customChains, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
 import { MenuMobile } from "./MenuMobile";
 import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
 
@@ -114,7 +114,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                     >
                                         <span className="m-0 text-sm font-normal leading-none text-gray-light-12 dark:text-gray-dark-12">{c.name}</span>
 
-                                        <img src={getChainIconPath(c)} alt={c.name} className="inline-block self-center" />
+                                        <img src={getChainIconPath(c.id)} alt={c.name} className="inline-block self-center" />
                                     </button>
                                 );
                             })}
@@ -200,7 +200,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                 <div className="mx-4 border-b border-dashed border-gray-light-5 pt-4 pb-2 text-xs leading-4 text-gray-light-9 dark:border-gray-dark-3 dark:text-gray-dark-9">Connected via {connectorName}</div>
                                 <div className="mt-2 flex flex-col space-y-4 pb-4">
                                     <div className="flex flex-row justify-between px-4 text-sm leading-4">
-                                        <Link href={getEtherscanAddressURL(chain.chain, account)}>
+                                        <Link href={getEtherscanAddressURL(selectedChain, account)}>
                                             <a className="text-gray-light-12 hover:underline dark:text-gray-dark-12" target="_blank" rel="noopener noreferrer">
                                                 View on Explorer <span className="text-gray-light-9 dark:text-gray-dark-9">&#8599;</span>
                                             </a>
@@ -278,7 +278,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         setIsOpen("change-chain");
                     }}
                 >
-                    <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="m-[11px] h-4 w-4" />
+                    <img src={getChainIconPath(selectedChain.id)} alt={selectedChain.name} className="m-[11px] h-4 w-4" />
                 </button>
                 {showConnectWallet && (
                     <ButtonConnectWallet className="mx-2 w-full" type={router.pathname.includes("binance") ? "bsc" : "arb"} onClick={() => setIsOpen("connect-wallet")}>
