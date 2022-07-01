@@ -1,10 +1,10 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import * as Dialog from "@radix-ui/react-dialog";
 import { FunctionComponent } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { InjectedConnector } from "wagmi";
-import { getButtonType } from "../../../utils/getButtonType";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import * as Popover from "@radix-ui/react-popover";
 import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
@@ -30,6 +30,7 @@ type ButtonConnectWalletDesktopProps = {};
 const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopProps> = ({}) => {
     // Read global states
     const { chain, account, connectWallet, disconnectWallet, switchNetwork } = useWalletContext();
+    const router = useRouter();
 
     // Local states
     const [isOpen, setIsOpen] = useState(false);
@@ -71,7 +72,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
             <Dialog.Root onOpenChange={(open) => setIsOpen(open)} open={isOpen}>
                 {/* If account is not connected then display the connect wallet button */}
                 {showConnectWallet && (
-                    <ButtonConnectWallet type={getButtonType(chain.chain)} onClick={() => setIsOpen(true)}>
+                    <ButtonConnectWallet type={router.pathname.includes("binance") ? "bsc" : "arb"} onClick={() => setIsOpen(true)}>
                         Connect Wallet
                     </ButtonConnectWallet>
                 )}

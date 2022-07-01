@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import type { FunctionComponent } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -14,7 +15,6 @@ import ToastSuccess from "../../../uikit/toasts/Success";
 import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
 import { MenuMobile } from "./MenuMobile";
 import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
-import { getButtonType } from "../../../utils/getButtonType";
 
 /**
  * ButtonConnectWalletMobileProps is a React Component properties that passed to React Component ButtonConnectWalletMobile
@@ -30,6 +30,7 @@ type OpenedMenu = "change-chain" | "connect-wallet" | "menu" | "none";
 const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProps> = ({}) => {
     // Read global states
     const { chain, account, connectWallet, disconnectWallet, switchNetwork } = useWalletContext();
+    const router = useRouter();
 
     // Local states
     const [isConnecting, setIsConnecting] = useState(false);
@@ -272,7 +273,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                     <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="m-[11px] h-4 w-4" />
                 </button>
                 {showConnectWallet && (
-                    <ButtonConnectWallet className="mx-2 w-full" type={getButtonType(chain.chain)} onClick={() => setIsOpen("connect-wallet")}>
+                    <ButtonConnectWallet className="mx-2 w-full" type={router.pathname.includes("binance") ? "bsc" : "arb"} onClick={() => setIsOpen("connect-wallet")}>
                         Connect Wallet
                     </ButtonConnectWallet>
                 )}
