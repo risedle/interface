@@ -16,19 +16,21 @@ import Navigation from "../../components/v1/Navigation";
 /**
  * MarketsPageContainerProps is a React Component properties that passed to React Component MarketsPageContainer
  */
-type MarketsPageContainerProps = {};
+type MarketsPageContainerProps = {
+    chainID: number;
+};
 
 /**
  * MarketsPageContainer is just yet another react component
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({}) => {
+const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({ chainID }) => {
     // Read global states
     const { chain } = useWalletContext();
 
     // Read data from Snapshot API
-    const marketsResponse = useMarkets(chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id);
+    const marketsResponse = useMarkets(chainID);
 
     // UI states
     const showLoading = marketsResponse.isLoading;

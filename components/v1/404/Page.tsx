@@ -28,7 +28,7 @@ const PageNotFound: FunctionComponent<PageNotFoundProps> = ({}) => {
             </Head>
             <Favicon />
             <Navigation />
-            <div className="relative w-full justify-center overflow-hidden">
+            <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
                 <div className="relative z-10 m-auto flex max-w-screen-md flex-col items-center gap-8 px-4 py-32 text-center align-middle">
                     <div>
                         <p className="text-center text-xs font-semibold uppercase tracking-widest text-gray-light-10 dark:text-gray-dark-10">Page not Found</p>
