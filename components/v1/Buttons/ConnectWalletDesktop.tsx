@@ -4,7 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { FunctionComponent } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { InjectedConnector } from "wagmi";
+import { InjectedConnector, chain as Chains } from "wagmi";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import * as Popover from "@radix-ui/react-popover";
 import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
@@ -14,7 +14,7 @@ import ToastError from "../../../uikit/toasts/Error";
 import ToastSuccess from "../../../uikit/toasts/Success";
 
 // States
-import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, useWalletContext, WCConnector } from "../Wallet";
+import { customChains, DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, useWalletContext, WCConnector } from "../Wallet";
 import ButtonClose from "./Close";
 
 /**
@@ -38,9 +38,10 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
     const [connectorName, setConnectorName] = useState<string | undefined>(undefined);
 
     // UI States
+    const selectedChain = router.pathname.includes("binance") ? customChains.bsc : Chains.arbitrumOne;
     const showConnectWallet = account ? false : true;
-    const showSwitchToDefaultNetwork = !showConnectWallet && chain.unsupported ? true : false;
-    const showAccountData = !showConnectWallet && !showSwitchToDefaultNetwork;
+    const showSwitchToSelectedNetwork = !showConnectWallet && chain.chain.id !== selectedChain.id ? true : false;
+    const showAccountData = !showConnectWallet && !showSwitchToSelectedNetwork;
 
     // Connect wallet
     const connect = async function (c: InjectedConnector | WalletConnectConnector) {
@@ -145,12 +146,12 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
             </Dialog.Root>
 
             {/* If account is connected and connected chain is not the same as current chain then display the switch network button */}
-            {showSwitchToDefaultNetwork && (
+            {showSwitchToSelectedNetwork && (
                 <button
                     className="inline-block rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1"
                     onClick={() => {
                         if (switchNetwork) {
-                            switchNetwork(DEFAULT_CHAIN.id);
+                            switchNetwork(selectedChain.id);
                         } else {
                             toast.remove();
                             toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);

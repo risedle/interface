@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import type { FunctionComponent } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { InjectedConnector } from "wagmi";
+import { InjectedConnector, chain as Chains } from "wagmi";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { getChainIconPath } from "../../../utils/getChainIconPath";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -12,7 +12,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import ToastError from "../../../uikit/toasts/Error";
 import ToastSuccess from "../../../uikit/toasts/Success";
 
-import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
+import { customChains, DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
 import { MenuMobile } from "./MenuMobile";
 import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
 
@@ -39,9 +39,10 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
     const [isOpen, setIsOpen] = useState<OpenedMenu>("none");
 
     // UI States
+    const selectedChain = router.pathname.includes("binance") ? customChains.bsc : Chains.arbitrumOne;
     const showConnectWallet = account ? false : true;
-    const showSwitchToDefaultNetwork = !showConnectWallet && chain.unsupported ? true : false;
-    const showAccountData = !showConnectWallet && !showSwitchToDefaultNetwork;
+    const showSwitchToSelectedNetwork = !showConnectWallet && chain.chain.id !== selectedChain.id ? true : false;
+    const showAccountData = !showConnectWallet && !showSwitchToSelectedNetwork;
 
     // Connect wallet
     const connect = async function (c: InjectedConnector | WalletConnectConnector) {
@@ -277,7 +278,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         Connect Wallet
                     </ButtonConnectWallet>
                 )}
-                {showSwitchToDefaultNetwork && (
+                {showSwitchToSelectedNetwork && (
                     <button
                         className={`${isOpen === "connect-wallet" ? "z-10" : ""} mx-2 inline-block  w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1`}
                         onClick={() => {
