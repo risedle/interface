@@ -96,7 +96,14 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                 }
                                                 toast.remove();
                                                 toast.custom((t) => <ToastSuccess>Switched to {c.name}</ToastSuccess>);
-                                                return;
+                                                switch (c.id) {
+                                                    case Chains.arbitrumOne.id:
+                                                        router.push("/arbitrum/markets");
+                                                        break;
+                                                    case customChains.bsc.id:
+                                                        router.push("/binance/markets");
+                                                        break;
+                                                }
                                             } else {
                                                 toast.remove();
                                                 toast.custom((t) => <ToastError>Cannot switch network automatically in WalletConnect. Please change network directly from your wallet.</ToastError>);
@@ -283,7 +290,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         className={`${isOpen === "connect-wallet" ? "z-10" : ""} mx-2 inline-block  w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1`}
                         onClick={() => {
                             if (switchNetwork) {
-                                switchNetwork(DEFAULT_CHAIN.id);
+                                switchNetwork(selectedChain.id);
                             } else {
                                 toast.remove();
                                 toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);
