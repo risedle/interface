@@ -5,7 +5,9 @@ import { chain as Chains } from "wagmi";
 /**
  * BackgroundGradientProps is a React Component properties that passed to React Component BackgroundGradient
  */
-type BackgroundGradientProps = {};
+type BackgroundGradientProps = {
+    chainID: number;
+};
 
 /**
  * BackgroundGradient is just yet another react component
@@ -13,7 +15,7 @@ type BackgroundGradientProps = {};
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 
-const BackgroundGradient: FunctionComponent<BackgroundGradientProps> = ({}) => {
+const BackgroundGradient: FunctionComponent<BackgroundGradientProps> = ({ chainID }) => {
     const { chain } = useWalletContext();
     return (
         <>
@@ -27,13 +29,13 @@ const BackgroundGradient: FunctionComponent<BackgroundGradientProps> = ({}) => {
                     </g>
                 </svg>
             </div>
-            {chain.chain.id === customChains.bsc.id && (
+            {chainID === customChains.bsc.id && (
                 <div className="absolute -top-3/4 left-1/2 h-max w-max -translate-x-1/2 sm:-top-2/3">
                     <img src="/assets/images/marketspage/gradient-bsc-dark.svg" className="hidden dark:block" />
                     <img src="/assets/images/marketspage/gradient-bsc-light.svg" className="dark:hidden" />
                 </div>
             )}
-            {chain.chain.id === Chains.arbitrumOne.id && (
+            {chainID === Chains.arbitrumOne.id && (
                 <div className="absolute -top-3/4 left-1/2 h-max w-max -translate-x-1/2 sm:-top-2/3">
                     <img src="/assets/images/marketspage/gradient-arb-dark.svg" className="hidden dark:block" />
                     <img src="/assets/images/marketspage/gradient-arb-light.svg" className="dark:hidden" />

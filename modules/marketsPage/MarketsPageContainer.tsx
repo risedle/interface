@@ -84,7 +84,7 @@ const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({ ch
                 <Footer />
             </div>
 
-            <BackgroundGradient />
+            <BackgroundGradient chainID={chainID} />
 
             <div className="z-10 sm:hidden">
                 <ButtonConnectWalletMobile />

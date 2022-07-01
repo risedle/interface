@@ -1,4 +1,5 @@
 import { FunctionComponent, useState } from "react";
+import { useRouter } from "next/router";
 import { useWalletContext, customChains } from "./Wallet";
 import createPersistedState from "use-persisted-state";
 import WarningModal from "./WarningModal";
@@ -17,6 +18,7 @@ type WarningHeaderProps = {};
 const WarningHeader: FunctionComponent<WarningHeaderProps> = ({}) => {
     const [isOpen, setIsOpen] = useState(false);
     const { chain } = useWalletContext();
+    const router = useRouter();
 
     const getBscLogo = (type: "normal" | "gray") => {
         return (
@@ -31,7 +33,7 @@ const WarningHeader: FunctionComponent<WarningHeaderProps> = ({}) => {
 
     return (
         <>
-            <div className={`relative ${chain.chain.id !== customChains.bsc.id || !showBSCWarning ? "hidden" : "block"} z-10`}>
+            <div className={`relative ${!router.pathname.includes("binance") || !showBSCWarning ? "hidden" : "block"} z-10`}>
                 <div className="flex w-max min-w-full flex-row gap-8 border-b border-gray-light-4 bg-[#FFF9ED]/40 px-4 py-3 backdrop-blur-[102px] dark:border-gray-dark-4 dark:bg-gray-dark-1/40">
                     {[...Array(10)].map(() => {
                         return (
