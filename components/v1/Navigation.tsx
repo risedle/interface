@@ -5,6 +5,7 @@ import ButtonNetworkSwitcher from "./Buttons/NetworkSwitcher";
 import ButtonThemeSwitcher from "./Buttons/ThemeSwitcher";
 import WarningHeader from "./WarningHeader";
 import Logo from "../../uikit/layout/Logo";
+import { useRouter } from "next/router";
 
 /**
  * NavigationProps is a React Component properties that passed to React Component Navigation
@@ -21,6 +22,7 @@ type NavigationProps = {
  */
 const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfolioActive }) => {
     const [scrollPosition, setScrollPosition] = useState(0);
+    const router = useRouter();
 
     useEffect(() => {
         window.addEventListener("scroll", () => {
@@ -41,7 +43,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfol
                     </Link>
                 </div>
                 <div className="w-3/5 flex-grow justify-center space-x-4 text-center sm:w-fit sm:space-x-8 sm:text-left">
-                    <Link href="/arbitrum/markets">
+                    <Link href={`/${router.pathname.includes("binance") ? "binance" : "arbitrum"}/markets`}>
                         <a className={marketsActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>Markets</a>
                     </Link>
                     <Link href="/portfolio">
