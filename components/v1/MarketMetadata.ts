@@ -59,7 +59,7 @@ export const Metadata: MarketMetadataRecord = {
             vaultLogo: "/markets/usdc.png",
             vaultAddress: "0xf7EDB240DbF7BBED7D321776AFe87D1FBcFD0A94",
             vaultTitle: "rvETHUSDC",
-            path: "/markets/ethrise",
+            path: "/arbitrum/markets/ethrise",
             description: "Enjoy leveraged ETH without risk of liquidation or earn yield from your idle USDC",
             informationText:
                 "ETHRISE is a leveraged token that goes 2x long ETH. It generates 1.75x-2.5x leveraged gains when the price of ETH rises.",
