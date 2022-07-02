@@ -9,7 +9,7 @@ import Footer from "../../uikit/layout/Footer";
 import MarketCard from "./components/MarketCard";
 import ButtonConnectWalletMobile from "../../components/v1/Buttons/ConnectWalletMobile";
 import MarketsPageMeta from "./components/MarketsPageMeta";
-import { DEFAULT_CHAIN, useWalletContext } from "../../components/v1/Wallet";
+import { useWalletContext } from "../../components/v1/Wallet";
 import { useMarkets } from "../../components/v1/swr/useMarkets";
 import Navigation from "../../components/v1/Navigation";
 
@@ -49,7 +49,7 @@ const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({ ch
 
             <Navigation marketsActive />
 
-            <div className="mt-[88px] flex min-h-screen flex-col items-center px-4 lg:mt-40">
+            <div className="z-10 mt-[88px] flex min-h-screen flex-col items-center px-4 lg:mt-40">
                 {/* Headers */}
                 <MarketsHeader data={marketsResponse.data} showData={showData} showLoading={showLoading} />
 

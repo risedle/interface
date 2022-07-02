@@ -2,7 +2,7 @@ import React from "react";
 
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import Button from "../../../uikit/button/ButtonConnectWallet";
+import Button from "../../../uikit/button/ButtonAlternate";
 
 export default {
     title: "Risedle v1/Buttons/Button Connect Wallet",

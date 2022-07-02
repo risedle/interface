@@ -2,21 +2,21 @@ import { FunctionComponent } from "react";
 import { cls } from "../../utils/classTrim";
 
 /**
- * ButtonConnectWalletProps is a React Component properties that passed to React Component ButtonConnectWallet
+ * ButtonAlternateProps is a React Component properties that passed to React Component ButtonAlternate
  */
-type ButtonConnectWalletProps = {
+type ButtonAlternateProps = {
     onClick?: () => void;
     type: "arb" | "bsc";
     className?: string;
 };
 
 /**
- * ButtonConnectWallet is just yet another react component
+ * ButtonAlternate is just yet another react component
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 
-const ButtonConnectWallet: FunctionComponent<ButtonConnectWalletProps> = ({ onClick, type, className, children }) => {
+const ButtonAlternate: FunctionComponent<ButtonAlternateProps> = ({ onClick, type, className, children }) => {
     const buttonClasses = {
         base: "button flex flex-row gap-2 rounded-full px-6 h-10 items-center justify-center font-inter text-sm font-semibold leading-4 tracking-[-0.02em] transition ease-out active:scale-90",
         type: {
@@ -31,4 +31,4 @@ const ButtonConnectWallet: FunctionComponent<ButtonConnectWalletProps> = ({ onCl
     );
 };
 
-export default ButtonConnectWallet;
+export default ButtonAlternate;

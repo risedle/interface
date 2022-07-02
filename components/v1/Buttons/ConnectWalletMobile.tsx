@@ -14,7 +14,7 @@ import ToastSuccess from "../../../uikit/toasts/Success";
 
 import { customChains, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
 import { MenuMobile } from "./MenuMobile";
-import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
+import ButtonConnectWallet from "../../../uikit/button/ButtonAlternate";
 
 /**
  * ButtonConnectWalletMobileProps is a React Component properties that passed to React Component ButtonConnectWalletMobile

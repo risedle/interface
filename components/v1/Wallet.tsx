@@ -82,7 +82,7 @@ type WalletGlobalStateProps = {
     children: ReactNode;
 };
 
-const getProvider = (config: { chainId?: number }) => {
+export const getProvider = (config: { chainId?: number }) => {
     switch (config.chainId) {
         case Chains.arbitrumOne.id:
             return ArbitrumOneProvider;
