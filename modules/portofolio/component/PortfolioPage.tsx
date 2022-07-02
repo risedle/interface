@@ -16,7 +16,7 @@ import { useLeveragedTokenDailyData } from "../../../components/v1/swr/useLevera
 import { useTransactionHistory } from "../../../components/v1/swr/useTransactionHistory";
 import Navigation from "../../../components/v1/Navigation";
 import ButtonConnectWalletMobile from "../../../components/v1/Buttons/ConnectWalletMobile";
-import BackgroundGradient from "../../ethrisePage/component/BackgroundGradient";
+// import BackgroundGradient from "../../ethrisePage/component/BackgroundGradient";
 import PortofolioChart from "./PortfolioChart";
 import { Metadata } from "../../../components/v1/MarketMetadata";
 
@@ -254,7 +254,7 @@ const PortofolioPage: FunctionComponent<PortofolioPageProps> = ({}) => {
                 <div className="hidden sm:mt-20 sm:inline-block">
                     <Footer />
                 </div>
-                <BackgroundGradient />
+                {/* <BackgroundGradient /> */}
             </div>
             <div className="sm:hidden">
                 <ButtonConnectWalletMobile />
