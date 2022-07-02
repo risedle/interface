@@ -54,10 +54,10 @@ const MyAssetsCard: FunctionComponent<MyAssetsCardProps> = ({ address, isVault =
                     <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">My Asset</h2>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                    <AssetsItem title="Token Balance" image="/markets/tokenBalanceIcon.svg" value={`${tokenBalanceFormatter.format(balance)}`} showData={showData} showLoading={showLoading || showError} />
-                    <AssetsItem title="Value (USDC)" image="/markets/valueIcon.svg" value={`${tokenBalanceFormatter.format(value)}`} showData={showData} showLoading={showLoading || showError} />
-                    <AssetsItem title="Return" image="/markets/returnIcon.svg" value={`-`} showData={showData} showLoading={showLoading || showError} />
-                    <AssetsItem title="Return (USDC)" image="/markets/returnDollarIcon.svg" value={`-`} showData={showData} showLoading={showLoading || showError} />
+                    <AssetsItem icon="balance" title="Token Balance" value={`${tokenBalanceFormatter.format(balance)}`} showData={showData} showLoading={showLoading || showError} />
+                    <AssetsItem icon="value" title="Value (USDC)" value={`${tokenBalanceFormatter.format(value)}`} showData={showData} showLoading={showLoading || showError} />
+                    <AssetsItem icon="return" title="Return" value={`-`} showData={showData} showLoading={showLoading || showError} />
+                    <AssetsItem icon="returnUSD" title="Return (USDC)" value={`-`} showData={showData} showLoading={showLoading || showError} />
                 </div>
                 <ButtonTertiary full onClick={async () => await addTokenToMetamask({ token: tokenType.ETHRISE, chainID: chain.chain.id, isVaultToken: isVault })}>
                     Add {isVault ? metadata.vaultTitle : metadata.title} to Wallet
