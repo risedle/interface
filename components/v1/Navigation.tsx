@@ -5,6 +5,7 @@ import ButtonNetworkSwitcher from "./Buttons/NetworkSwitcher";
 import ButtonThemeSwitcher from "./Buttons/ThemeSwitcher";
 import WarningHeader from "./WarningHeader";
 import Logo from "../../uikit/layout/Logo";
+import { customChains, useWalletContext } from "./Wallet";
 import { useRouter } from "next/router";
 
 /**
@@ -21,6 +22,7 @@ type NavigationProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfolioActive }) => {
+    const { chain } = useWalletContext();
     const [scrollPosition, setScrollPosition] = useState(0);
     const router = useRouter();
 
@@ -48,7 +50,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfol
                     </Link>
                 </div>
                 <div className="w-3/5 flex-grow justify-center space-x-4 text-center sm:w-fit sm:space-x-8 sm:text-left">
-                    <Link href={router.pathname.includes("binance") ? "/markets/binance" : "/markets/arbitrum"}>
+                    <Link href={chain.chain.id === customChains.bsc.id ? "/markets/binance" : "markets/arbitrum"}>
                         <a className={marketsActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>Markets</a>
                     </Link>
                     <Link href="/portfolio">
