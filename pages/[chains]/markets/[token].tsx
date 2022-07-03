@@ -12,12 +12,8 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo } from "react";
 import { TokenContainer } from "../../../modules/tokenPage/tokenContainer";
 import Navigation from "../../../components/v1/Navigation";
-import { useTokenStore } from "../../../modules/tokenPage/tokenStore";
+import { useTokenStore } from "../../../modules/tokenPage/store/tokenStore";
 
-type PagesData = {
-    chainId: number;
-    tokenId: string;
-};
 type QueryPage = {
     token: string;
     chains: string;
@@ -27,6 +23,7 @@ function TokenPage() {
     const router = useRouter();
     const { token, chains } = router.query as QueryPage;
     const { state, setToken } = useTokenStore();
+
     useEffect(() => {
         if (token && chains) {
             setToken(MapperNameToChainId[chains], MapperTokenToTokenId[token]);

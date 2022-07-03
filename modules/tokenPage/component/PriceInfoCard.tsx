@@ -1,8 +1,8 @@
 import { FunctionComponent } from "react";
-import LeveragedTokenChart from "../ethrisePage/component/LeveragedTokenChart";
-import MainButton from "../ethrisePage/component/MainButton";
-import VaultChart from "../ethrisePage/component/VaultChart";
-import { useTokenStore } from "./tokenStore";
+import LeveragedTokenChart from "../../ethrisePage/component/LeveragedTokenChart";
+import MainButton from "../../ethrisePage/component/MainButton";
+import VaultChart from "../../ethrisePage/component/VaultChart";
+import { useTokenStore } from "../store/tokenStore";
 
 type PriceInfoCardProps = {
     isVault?: boolean;

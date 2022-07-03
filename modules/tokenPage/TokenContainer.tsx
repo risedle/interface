@@ -1,4 +1,3 @@
-import { TabsList } from "@radix-ui/react-tabs";
 import ButtonConnectWalletMobile from "../../components/v1/Buttons/ConnectWalletMobile";
 import Footer from "../../uikit/layout/Footer";
 import BackgroundGradient from "../ethrisePage/component/BackgroundGradient";
@@ -8,8 +7,10 @@ import MyAssetsCard from "../ethrisePage/component/MyAssetsCard";
 import TabsContentGrid from "../ethrisePage/component/TabsContentGrid";
 import VaultInfoCard from "../ethrisePage/component/VaultInfoCard";
 import { Root as TabsRoot } from "@radix-ui/react-tabs";
-import PriceInfoCard from "./PriceInfoCard";
-import { useTokenStore } from "./tokenStore";
+import PriceInfoCard from "./component/PriceInfoCard";
+import { useTokenStore } from "./store/tokenStore";
+import TabsList from "../ethrisePage/component/TabsList";
+import MyAssetsCardContainer from "./component/MyAssetCard";
 
 const MainContent = () => {
     const { state } = useTokenStore();
@@ -24,7 +25,7 @@ const MainContent = () => {
                     <PriceInfoCard />
                     {/* Right Column */}
                     <div className="flex max-w-[540px] flex-col space-y-6">
-                        <MyAssetsCard address={tokenAddress} />
+                        <MyAssetsCardContainer />
                         <LeveragedTokenInfoCard address={tokenAddress} />
                         <LeveragedTokenBackingCard address={tokenAddress} />
                     </div>

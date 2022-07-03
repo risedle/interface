@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import useSWR from "swr";
+import useSWR, { SWRConfiguration } from "swr";
 import { VaultABI } from "../../../abis/VaultABI";
 import { SWRCacheNamespace } from "./namespace";
 
@@ -20,14 +20,16 @@ const VaultExchangeRateFetcher = async (args: VaultExchangeRateFetcherArgs): Pro
 };
 
 // Get the latest rv/deposit token exchange rate
-export function useVaultExchangeRate(req: VaultExchangeRateRequest) {
-    const { data, error } = useSWR<ethers.BigNumber, Error>(
+export function useVaultExchangeRate(req: VaultExchangeRateRequest, options?: SWRConfiguration) {
+    const { data, error, mutate } = useSWR<ethers.BigNumber, Error>(
         { vault: req.vault, provider: req.provider, namespace: SWRCacheNamespace.VaultGetExchangeRate },
-        VaultExchangeRateFetcher
+        VaultExchangeRateFetcher,
+        options
     );
     return {
         data: data,
         isLoading: !data && !error,
         error: error,
+        mutate,
     };
 }

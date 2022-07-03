@@ -1,9 +1,8 @@
 import create from "zustand";
-import { MetadataToken } from "../../components/v1/MarketMetadata";
-import { Metadata } from "../ethrisePage/component/MarketMetadata";
-import shallow from "zustand/shallow";
+import { MetadataToken } from "../../../components/v1/MarketMetadata";
+import { Metadata } from "../../ethrisePage/component/MarketMetadata";
 
-type LoadedData = {
+export type LoadedData = {
     status: "loaded";
     token: MetadataToken;
     chainId: number;
@@ -22,6 +21,7 @@ type Error = {
 type TokenPageState = {
     state: LoadedData | Loading | Error;
     setToken: (chainId: number, tokenId: string) => void;
+    setError: (error: string) => void;
 };
 
 export const useTokenStore = create<TokenPageState>((set) => ({
@@ -35,6 +35,15 @@ export const useTokenStore = create<TokenPageState>((set) => ({
                 token: metaData,
                 chainId: chainId,
                 tokenId: tokenId,
+            },
+        }));
+    },
+    setError(error) {
+        set((oldState) => ({
+            ...oldState,
+            state: {
+                status: "error",
+                error: error,
             },
         }));
     },
