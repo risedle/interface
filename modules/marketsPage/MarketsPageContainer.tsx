@@ -46,7 +46,7 @@ const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({ ch
 
             <Navigation marketsActive />
 
-            <div className="z-10 mt-[88px] flex min-h-screen flex-col items-center px-4 lg:mt-40">
+            <div className="mt-[88px] flex min-h-screen flex-col items-center px-4 lg:mt-40">
                 {/* Headers */}
                 <MarketsHeader data={marketsResponse.data} showData={showData} showLoading={showLoading} />
 
