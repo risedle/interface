@@ -31,12 +31,12 @@ type PortfolioPageV2Props = {};
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const PortfolioPageV2: FunctionComponent<PortfolioPageV2Props> = ({}) => {
-    const { chain, account, switchNetwork } = useWalletContext();
-    const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
+    const { chain, account } = useWalletContext();
+    // const chainID = chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id;
 
     // Tokens
-    const ethriseAddress = ETHRISEAddresses[chainID];
-    const ethriseMetadata = Metadata[chainID][ethriseAddress];
+    const ethriseAddress = ETHRISEAddresses[DEFAULT_CHAIN.id];
+    const ethriseMetadata = Metadata[DEFAULT_CHAIN.id][ethriseAddress];
 
     // Get Provider
     const provider = useProvider();

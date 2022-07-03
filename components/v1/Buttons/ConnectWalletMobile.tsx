@@ -1,8 +1,9 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import type { FunctionComponent } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { InjectedConnector } from "wagmi";
+import { InjectedConnector, chain as Chains } from "wagmi";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { getChainIconPath } from "../../../utils/getChainIconPath";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -11,10 +12,9 @@ import * as Dialog from "@radix-ui/react-dialog";
 import ToastError from "../../../uikit/toasts/Error";
 import ToastSuccess from "../../../uikit/toasts/Success";
 
-import { DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
+import { customChains, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
 import { MenuMobile } from "./MenuMobile";
 import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
-import { getButtonType } from "../../../utils/getButtonType";
 
 /**
  * ButtonConnectWalletMobileProps is a React Component properties that passed to React Component ButtonConnectWalletMobile
@@ -30,6 +30,7 @@ type OpenedMenu = "change-chain" | "connect-wallet" | "menu" | "none";
 const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProps> = ({}) => {
     // Read global states
     const { chain, account, connectWallet, disconnectWallet, switchNetwork } = useWalletContext();
+    const router = useRouter();
 
     // Local states
     const [isConnecting, setIsConnecting] = useState(false);
@@ -38,9 +39,10 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
     const [isOpen, setIsOpen] = useState<OpenedMenu>("none");
 
     // UI States
+    const selectedChain = router.pathname.includes("binance") ? customChains.bsc : Chains.arbitrumOne;
     const showConnectWallet = account ? false : true;
-    const showSwitchToDefaultNetwork = !showConnectWallet && chain.unsupported ? true : false;
-    const showAccountData = !showConnectWallet && !showSwitchToDefaultNetwork;
+    const showSwitchToSelectedNetwork = !showConnectWallet && chain.chain.id !== selectedChain.id ? true : false;
+    const showAccountData = !showConnectWallet && !showSwitchToSelectedNetwork;
 
     // Connect wallet
     const connect = async function (c: InjectedConnector | WalletConnectConnector) {
@@ -94,7 +96,14 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                 }
                                                 toast.remove();
                                                 toast.custom((t) => <ToastSuccess>Switched to {c.name}</ToastSuccess>);
-                                                return;
+                                                switch (c.id) {
+                                                    case Chains.arbitrumOne.id:
+                                                        router.push("/arbitrum/markets");
+                                                        break;
+                                                    case customChains.bsc.id:
+                                                        router.push("/binance/markets");
+                                                        break;
+                                                }
                                             } else {
                                                 toast.remove();
                                                 toast.custom((t) => <ToastError>Cannot switch network automatically in WalletConnect. Please change network directly from your wallet.</ToastError>);
@@ -105,7 +114,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                     >
                                         <span className="m-0 text-sm font-normal leading-none text-gray-light-12 dark:text-gray-dark-12">{c.name}</span>
 
-                                        <img src={getChainIconPath(c)} alt={c.name} className="inline-block self-center" />
+                                        <img src={getChainIconPath(c.id)} alt={c.name} className="inline-block self-center" />
                                     </button>
                                 );
                             })}
@@ -191,7 +200,7 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                 <div className="mx-4 border-b border-dashed border-gray-light-5 pt-4 pb-2 text-xs leading-4 text-gray-light-9 dark:border-gray-dark-3 dark:text-gray-dark-9">Connected via {connectorName}</div>
                                 <div className="mt-2 flex flex-col space-y-4 pb-4">
                                     <div className="flex flex-row justify-between px-4 text-sm leading-4">
-                                        <Link href={getEtherscanAddressURL(chain.chain, account)}>
+                                        <Link href={getEtherscanAddressURL(selectedChain, account)}>
                                             <a className="text-gray-light-12 hover:underline dark:text-gray-dark-12" target="_blank" rel="noopener noreferrer">
                                                 View on Explorer <span className="text-gray-light-9 dark:text-gray-dark-9">&#8599;</span>
                                             </a>
@@ -269,19 +278,19 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                         setIsOpen("change-chain");
                     }}
                 >
-                    <img src={getChainIconPath(chain.chain)} alt={chain.chain.name} className="m-[11px] h-4 w-4" />
+                    <img src={getChainIconPath(selectedChain.id)} alt={selectedChain.name} className="m-[11px] h-4 w-4" />
                 </button>
                 {showConnectWallet && (
-                    <ButtonConnectWallet className="mx-2 w-full" type={getButtonType(chain.chain)} onClick={() => setIsOpen("connect-wallet")}>
+                    <ButtonConnectWallet className="mx-2 w-full" type={router.pathname.includes("binance") ? "bsc" : "arb"} onClick={() => setIsOpen("connect-wallet")}>
                         Connect Wallet
                     </ButtonConnectWallet>
                 )}
-                {showSwitchToDefaultNetwork && (
+                {showSwitchToSelectedNetwork && (
                     <button
                         className={`${isOpen === "connect-wallet" ? "z-10" : ""} mx-2 inline-block  w-full rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1`}
                         onClick={() => {
                             if (switchNetwork) {
-                                switchNetwork(DEFAULT_CHAIN.id);
+                                switchNetwork(selectedChain.id);
                             } else {
                                 toast.remove();
                                 toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);

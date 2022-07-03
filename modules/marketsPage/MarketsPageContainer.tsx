@@ -9,26 +9,25 @@ import Footer from "../../uikit/layout/Footer";
 import MarketCard from "./components/MarketCard";
 import ButtonConnectWalletMobile from "../../components/v1/Buttons/ConnectWalletMobile";
 import MarketsPageMeta from "./components/MarketsPageMeta";
-import { DEFAULT_CHAIN, useWalletContext } from "../../components/v1/Wallet";
+import BackgroundCircle from "./components/BackgroundCircle";
 import { useMarkets } from "../../components/v1/swr/useMarkets";
 import Navigation from "../../components/v1/Navigation";
 
 /**
  * MarketsPageContainerProps is a React Component properties that passed to React Component MarketsPageContainer
  */
-type MarketsPageContainerProps = {};
+type MarketsPageContainerProps = {
+    chainID: number;
+};
 
 /**
  * MarketsPageContainer is just yet another react component
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({}) => {
-    // Read global states
-    const { chain } = useWalletContext();
-
+const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({ chainID }) => {
     // Read data from Snapshot API
-    const marketsResponse = useMarkets(chain.unsupported ? DEFAULT_CHAIN.id : chain.chain.id);
+    const marketsResponse = useMarkets(chainID);
 
     // UI states
     const showLoading = marketsResponse.isLoading;
@@ -68,7 +67,7 @@ const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({}) 
                                 {marketsResponse.data?.markets.map((market) => {
                                     return (
                                         <div key={market.leveraged_token_address}>
-                                            <MarketCard address={market.leveraged_token_address} initialNAV={market.nav_last} initialNAVChange={market.leveraged_token_price_change_percent} totalSupply={market.leveraged_token_total_supply} />{" "}
+                                            <MarketCard chainID={chainID} address={market.leveraged_token_address} initialNAV={market.nav_last} initialNAVChange={market.leveraged_token_price_change_percent} totalSupply={market.leveraged_token_total_supply} />{" "}
                                         </div>
                                     );
                                 })}
@@ -82,7 +81,8 @@ const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({}) 
                 <Footer />
             </div>
 
-            <BackgroundGradient />
+            <BackgroundCircle />
+            <BackgroundGradient chainID={chainID} />
 
             <div className="z-10 sm:hidden">
                 <ButtonConnectWalletMobile />
