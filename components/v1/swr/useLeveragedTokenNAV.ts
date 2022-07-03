@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import useSWR from "swr";
+import useSWR, { SWRConfiguration } from "swr";
 import { VaultABI } from "../../../abis/VaultABI";
 import { SWRCacheNamespace } from "./namespace";
 
@@ -21,14 +21,16 @@ const LeveragedTokenNAVFetcher = async (args: LeveragedTokenNAVFetcherArgs): Pro
 };
 
 // Get the latest NAV of the leveraged token
-export function useLeveragedTokenNAV(req: LeveragedTokenNAVRequest) {
-    const { data, error } = useSWR<ethers.BigNumber, Error>(
+export function useLeveragedTokenNAV(req: LeveragedTokenNAVRequest, options?: SWRConfiguration) {
+    const { data, error, mutate } = useSWR<ethers.BigNumber, Error>(
         { token: req.token, vault: req.vault, provider: req.provider, namespace: SWRCacheNamespace.VaultGetLeveragedTokenNAV },
-        LeveragedTokenNAVFetcher
+        LeveragedTokenNAVFetcher,
+        options
     );
     return {
         data: data,
         isLoading: !data && !error,
         error: error,
+        mutate,
     };
 }

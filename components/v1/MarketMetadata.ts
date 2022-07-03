@@ -1,7 +1,7 @@
 import { chain as Chains } from "wagmi";
 
 // Markets Metadata
-export type Metadata = {
+export type MetadataToken = {
     logo: string;
     vaultLogo: string;
     vaultAddress: string;
@@ -22,8 +22,18 @@ export type Metadata = {
     uniswapSwapURL: string;
     isETH: boolean;
 };
-export type MarketMetadata = Record<string, Metadata>;
+export type MarketMetadata = Record<string, MetadataToken>;
 export type MarketMetadataRecord = Record<number, MarketMetadata>;
+type MapperNameToChainId = Record<string, number>;
+type MapperTokenToTokenId = Record<string, string>;
+
+export const MapperNameToChainId: MapperNameToChainId = {
+    arbitrum: Chains.arbitrumOne.id,
+};
+export const MapperTokenToTokenId: MapperTokenToTokenId = {
+    ethrise: "0x46D06cf8052eA6FdbF71736AF33eD23686eA1452",
+};
+
 export const Metadata: MarketMetadataRecord = {
     /* Kovan chain is no longer supported */
     // [Chains.kovan.id]: {
@@ -51,6 +61,7 @@ export const Metadata: MarketMetadataRecord = {
     //         isETH: true,
     //     },
     // },
+
     [Chains.arbitrumOne.id]: {
         ["0x46D06cf8052eA6FdbF71736AF33eD23686eA1452"]: {
             title: "ETHRISE",

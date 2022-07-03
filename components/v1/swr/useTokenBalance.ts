@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import useSWR from "swr";
+import useSWR, { SWRConfiguration } from "swr";
 import { erc20ABI } from "wagmi";
 import { SWRCacheNamespace } from "./namespace";
 
@@ -25,14 +25,16 @@ const TokenBalanceFetcher = async (args: TokenBalanceFetcherArgs): Promise<ether
 };
 
 // Fetch current balance of given acccount for specified token
-export function useTokenBalance(req: TokenBalanceRequest) {
-    const { data, error } = useSWR<ethers.BigNumber, Error>(
+export function useTokenBalance(req: TokenBalanceRequest, options?: SWRConfiguration) {
+    const { data, error, mutate } = useSWR<ethers.BigNumber, Error>(
         { account: req.account, token: req.token, provider: req.provider, namespace: SWRCacheNamespace.GetBalance },
-        TokenBalanceFetcher
+        TokenBalanceFetcher,
+        options
     );
     return {
         data: data,
         isLoading: !data && !error,
         error: error,
+        mutate,
     };
 }

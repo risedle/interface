@@ -35,9 +35,9 @@ const WarningHeader: FunctionComponent<WarningHeaderProps> = ({}) => {
         <>
             <div className={`relative ${!router.pathname.includes("binance") || !showBSCWarning ? "hidden" : "block"} z-10`}>
                 <div className="flex w-max min-w-full flex-row gap-8 border-b border-gray-light-4 bg-[#FFF9ED]/40 px-4 py-3 backdrop-blur-[102px] dark:border-gray-dark-4 dark:bg-gray-dark-1/40">
-                    {[...Array(10)].map(() => {
+                    {[...Array(10)].map((val, index) => {
                         return (
-                            <>
+                            <div key={`${val} ${index}`}>
                                 <div className="flex flex-row items-center gap-1.5 border-r border-amber-light-11/10 pr-8 dark:border-amber-dark-11/10">
                                     <p className="text-xs tracking-[-0.03em] text-amber-light-11 dark:text-amber-dark-11">Use at your own risk</p>
                                     {getBscLogo("normal")}
@@ -46,7 +46,7 @@ const WarningHeader: FunctionComponent<WarningHeaderProps> = ({}) => {
                                     <p className="text-xs tracking-[-0.03em] text-gray-light-11 dark:text-gray-dark-11">Binance Smart Chain</p>
                                     {getBscLogo("gray")}
                                 </div>
-                            </>
+                            </div>
                         );
                     })}
                 </div>
