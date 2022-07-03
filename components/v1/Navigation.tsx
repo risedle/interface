@@ -24,12 +24,11 @@ const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfol
     const [scrollPosition, setScrollPosition] = useState(0);
     const router = useRouter();
 
-    const handleScroll = () => {
-        const position = window.pageYOffset;
-        setScrollPosition(position);
-    };
-
     useEffect(() => {
+        const handleScroll = () => {
+            const position = window.pageYOffset;
+            setScrollPosition(position);
+        };
         window.addEventListener("scroll", () => handleScroll());
         return () => {
             window.removeEventListener("scroll", () => handleScroll());
