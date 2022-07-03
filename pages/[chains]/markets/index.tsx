@@ -1,5 +1,3 @@
-import MarketsPageContainer from "../../../modules/marketsPage/MarketsPageContainer";
-
 export default function MarketPages() {
-    return <MarketsPageContainer />;
+    return <div>coming soon</div>;
 }

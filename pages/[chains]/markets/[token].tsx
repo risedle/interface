@@ -10,7 +10,7 @@ import { chain as Chains } from "wagmi";
 import EthrisePageContainer from "../../../modules/ethrisePage/EthrisePageContainer";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo } from "react";
-import { TokenContainer } from "../../../modules/tokenPage/tokenContainer";
+import { TokenContainer } from "../../../modules/tokenPage/TokenContainer";
 import Navigation from "../../../components/v1/Navigation";
 import { useTokenStore } from "../../../modules/tokenPage/store/tokenStore";
 
