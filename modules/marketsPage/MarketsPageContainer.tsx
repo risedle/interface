@@ -9,7 +9,7 @@ import Footer from "../../uikit/layout/Footer";
 import MarketCard from "./components/MarketCard";
 import ButtonConnectWalletMobile from "../../components/v1/Buttons/ConnectWalletMobile";
 import MarketsPageMeta from "./components/MarketsPageMeta";
-import { useWalletContext } from "../../components/v1/Wallet";
+import BackgroundCircle from "./components/BackgroundCircle";
 import { useMarkets } from "../../components/v1/swr/useMarkets";
 import Navigation from "../../components/v1/Navigation";
 
@@ -26,9 +26,6 @@ type MarketsPageContainerProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({ chainID }) => {
-    // Read global states
-    const { chain } = useWalletContext();
-
     // Read data from Snapshot API
     const marketsResponse = useMarkets(chainID);
 
@@ -84,6 +81,7 @@ const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({ ch
                 <Footer />
             </div>
 
+            <BackgroundCircle />
             <BackgroundGradient chainID={chainID} />
 
             <div className="z-10 sm:hidden">
