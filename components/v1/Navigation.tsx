@@ -24,12 +24,18 @@ const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfol
     const [scrollPosition, setScrollPosition] = useState(0);
     const router = useRouter();
 
+    const handleScroll = () => {
+        const position = window.pageYOffset;
+        setScrollPosition(position);
+    };
+
     useEffect(() => {
-        window.addEventListener("scroll", () => {
-            const position = window.pageYOffset;
-            setScrollPosition(position);
-        });
+        window.addEventListener("scroll", () => handleScroll());
+        return () => {
+            window.removeEventListener("scroll", () => handleScroll());
+        };
     }, []);
+
     return (
         <div className={`container fixed z-10 mx-auto max-w-full transition ease-out sm:z-20 ${scrollPosition !== 0 && "bg-gray-light-1/80 backdrop-blur-[102px] dark:bg-gray-dark-1/80"}`}>
             <WarningHeader />
