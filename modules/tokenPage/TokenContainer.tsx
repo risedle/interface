@@ -3,7 +3,6 @@ import Footer from "../../uikit/layout/Footer";
 import BackgroundGradient from "../ethrisePage/component/BackgroundGradient";
 import LeveragedTokenBackingCard from "../ethrisePage/component/LeveragedTokenBackingCard";
 import LeveragedTokenInfoCard from "../ethrisePage/component/LeveragedTokenInfoCard";
-import MyAssetsCard from "../ethrisePage/component/MyAssetsCard";
 import TabsContentGrid from "../ethrisePage/component/TabsContentGrid";
 import VaultInfoCard from "../ethrisePage/component/VaultInfoCard";
 import { Root as TabsRoot } from "@radix-ui/react-tabs";
@@ -37,7 +36,7 @@ const MainContent = () => {
 
                     {/* RightColumn */}
                     <div className="max-w-[540px] flex-col space-y-6">
-                        <MyAssetsCard isVault address={tokenAddress} />
+                        <MyAssetsCardContainer isVault={true} />
                         <VaultInfoCard address={tokenAddress} />
                     </div>
                 </TabsContentGrid>
