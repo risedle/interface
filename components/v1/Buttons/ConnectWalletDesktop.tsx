@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { InjectedConnector, chain as Chains } from "wagmi";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import * as Popover from "@radix-ui/react-popover";
-import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
+import ButtonConnectWallet from "../../../uikit/button/ButtonAlternate";
 
 // Toasts
 import ToastError from "../../../uikit/toasts/Error";

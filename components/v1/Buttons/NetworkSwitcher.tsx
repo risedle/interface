@@ -45,10 +45,10 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
             toast.custom((t) => <ToastSuccess>Switched to {c.name}</ToastSuccess>);
             switch (c.id) {
                 case Chains.arbitrumOne.id:
-                    router.push("/arbitrum/markets");
+                    router.push("/markets/arbitrum");
                     break;
                 case customChains.bsc.id:
-                    router.push("/binance/markets");
+                    router.push("/markets/binance");
                     break;
             }
         } else {

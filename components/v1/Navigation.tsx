@@ -5,6 +5,8 @@ import ButtonNetworkSwitcher from "./Buttons/NetworkSwitcher";
 import ButtonThemeSwitcher from "./Buttons/ThemeSwitcher";
 import WarningHeader from "./WarningHeader";
 import Logo from "../../uikit/layout/Logo";
+import { customChains, useWalletContext } from "./Wallet";
+import { useRouter } from "next/router";
 
 /**
  * NavigationProps is a React Component properties that passed to React Component Navigation
@@ -20,14 +22,21 @@ type NavigationProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfolioActive }) => {
+    const { chain } = useWalletContext();
     const [scrollPosition, setScrollPosition] = useState(0);
+    const router = useRouter();
 
     useEffect(() => {
-        window.addEventListener("scroll", () => {
+        const handleScroll = () => {
             const position = window.pageYOffset;
             setScrollPosition(position);
-        });
+        };
+        window.addEventListener("scroll", () => handleScroll());
+        return () => {
+            window.removeEventListener("scroll", () => handleScroll());
+        };
     }, []);
+
     return (
         <div className={`container fixed z-10 mx-auto max-w-full transition ease-out sm:z-20 ${scrollPosition !== 0 && "bg-gray-light-1/80 backdrop-blur-[102px] dark:bg-gray-dark-1/80"}`}>
             <WarningHeader />
@@ -41,7 +50,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfol
                     </Link>
                 </div>
                 <div className="w-3/5 flex-grow justify-center space-x-4 text-center sm:w-fit sm:space-x-8 sm:text-left">
-                    <Link href="/arbitrum/markets">
+                    <Link href={chain.chain.id === customChains.bsc.id ? "/markets/binance" : "/markets/arbitrum"}>
                         <a className={marketsActive ? "text-sm text-gray-light-12 dark:text-gray-dark-12" : "text-sm text-gray-light-10 dark:text-gray-dark-10"}>Markets</a>
                     </Link>
                     <Link href="/portfolio">

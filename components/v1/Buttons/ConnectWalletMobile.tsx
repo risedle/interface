@@ -14,7 +14,7 @@ import ToastSuccess from "../../../uikit/toasts/Success";
 
 import { customChains, formatAddress, getEtherscanAddressURL, MetaMaskConnector, supportedChains, useWalletContext, WCConnector } from "../Wallet";
 import { MenuMobile } from "./MenuMobile";
-import ButtonConnectWallet from "../../../uikit/button/ButtonConnectWallet";
+import ButtonConnectWallet from "../../../uikit/button/ButtonAlternate";
 
 /**
  * ButtonConnectWalletMobileProps is a React Component properties that passed to React Component ButtonConnectWalletMobile
@@ -98,10 +98,10 @@ const ButtonConnectWalletMobile: FunctionComponent<ButtonConnectWalletMobileProp
                                                 toast.custom((t) => <ToastSuccess>Switched to {c.name}</ToastSuccess>);
                                                 switch (c.id) {
                                                     case Chains.arbitrumOne.id:
-                                                        router.push("/arbitrum/markets");
+                                                        router.push("/markets/arbitrum");
                                                         break;
                                                     case customChains.bsc.id:
-                                                        router.push("/binance/markets");
+                                                        router.push("/markets/binance");
                                                         break;
                                                 }
                                             } else {

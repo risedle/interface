@@ -2,10 +2,9 @@ import { FunctionComponent, useState } from "react";
 
 // Formatters
 import { dollarFormatter } from "../../../utils/formatters";
-import { Metadata } from "../../../components/v1/MarketMetadata";
+import { Metadata } from "../../tokenPage/component/MarketMetadata";
 import Link from "next/link";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
-import { DEFAULT_CHAIN, useWalletContext } from "../../../components/v1/Wallet";
 import { useLeveragedTokenHistoricalData } from "../../../components/v1/swr/useLeveragedTokenHistoricalData";
 import { Timeframe } from "../../../components/v1/swr/snapshot";
 
@@ -26,9 +25,6 @@ type MarketCardProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const MarketCard: FunctionComponent<MarketCardProps> = ({ chainID, address, initialNAV, initialNAVChange, totalSupply }) => {
-    // Global states
-    const { chain } = useWalletContext();
-
     const metadata = Metadata[chainID][address];
     const title = metadata.title;
     const subtitle = metadata.subtitle;
