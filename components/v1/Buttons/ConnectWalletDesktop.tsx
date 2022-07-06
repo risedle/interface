@@ -4,7 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { FunctionComponent } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { InjectedConnector, chain as Chains } from "wagmi";
+import { InjectedConnector, chain as Chains, useConnect, useAccount } from "wagmi";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import * as Popover from "@radix-ui/react-popover";
 import ButtonConnectWallet from "../../../uikit/button/ButtonAlternate";
@@ -14,7 +14,7 @@ import ToastError from "../../../uikit/toasts/Error";
 import ToastSuccess from "../../../uikit/toasts/Success";
 
 // States
-import { customChains, DEFAULT_CHAIN, formatAddress, getEtherscanAddressURL, MetaMaskConnector, useWalletContext, WCConnector } from "../Wallet";
+import { customChains, formatAddress, getEtherscanAddressURL, MetaMaskConnector, useWalletContext, WCConnector } from "../Wallet";
 import ButtonClose from "./Close";
 
 /**
@@ -28,14 +28,16 @@ type ButtonConnectWalletDesktopProps = {};
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopProps> = ({}) => {
-    // Read global states
-    const { chain, account, connectWallet, disconnectWallet, switchNetwork } = useWalletContext();
     const router = useRouter();
+    const [connectionData] = useConnect();
+    const [, disconnect] = useAccount();
+
+    // Read global states
+    const { chain, account, connectWallet, disconnectWallet } = useWalletContext();
 
     // Local states
     const [isOpen, setIsOpen] = useState(false);
     const [isConnecting, setIsConnecting] = useState(false);
-    const [connectorName, setConnectorName] = useState<string | undefined>(undefined);
 
     // UI States
     const selectedChain = router.pathname.includes("binance") ? customChains.bsc : Chains.arbitrumOne;
@@ -46,7 +48,6 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
     // Connect wallet
     const connect = async function (c: InjectedConnector | WalletConnectConnector) {
         setIsConnecting(true);
-        setConnectorName(c.name);
 
         const result = await connectWallet(c);
 
@@ -56,7 +57,15 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
             toast.remove();
             toast.custom((t) => <ToastError>{result.error.message}</ToastError>);
             setIsConnecting(false);
-            setConnectorName(undefined);
+            return;
+        }
+
+        // Handle WalletConnect connected to wrong network, but not unsupported (e.g. connect to BSC when in Arbtirum Markets)
+        if (c instanceof WalletConnectConnector && result.data.chain.id !== selectedChain.id) {
+            disconnect();
+            toast.remove();
+            toast.custom((t) => <ToastError>{`Please select ${selectedChain.name} from your wallet`}</ToastError>);
+            setIsConnecting(false);
             return;
         }
 
@@ -65,7 +74,6 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
         toast.custom((t) => <ToastSuccess>{c.name} connected</ToastSuccess>);
         setIsConnecting(false);
         setIsOpen(false);
-        setConnectorName(undefined);
     };
 
     return (
@@ -90,8 +98,8 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                         </div>
                         <div className="flex flex-col space-y-2 p-4">
                             <button
-                                className={`m-0 flex w-full flex-row items-center justify-between rounded-[12px] border border-orange-light-5 bg-orange-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-orange-light-3 active:scale-95 dark:border-orange-dark-5 dark:bg-orange-dark-2 dark:hover:bg-orange-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
-                                disabled={isConnecting && connectorName ? true : false}
+                                className={`m-0 flex w-full flex-row items-center justify-between rounded-[12px] border border-orange-light-5 bg-orange-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-orange-light-3 active:scale-95 dark:border-orange-dark-5 dark:bg-orange-dark-2 dark:hover:bg-orange-dark-3 ${isConnecting && connectionData.data.connector?.name ? "cursor-wait" : "cursor-pointer"}`}
+                                disabled={isConnecting && connectionData.data.connector?.name ? true : false}
                                 onClick={async () => {
                                     await connect(MetaMaskConnector);
                                 }}
@@ -100,7 +108,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                     <img src="/wallet/Metamask.svg" alt="MetaMask" className="mr-4 inline-block  self-center" />
                                     <span className="m-0 font-inter text-sm font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12">Metamask</span>
                                 </div>
-                                {isConnecting && connectorName === "MetaMask" && (
+                                {isConnecting && connectionData.data.connector?.name === "MetaMask" && (
                                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="float-right inline-block animate-spin">
                                         <path opacity="0.2" d="M28 16.0005C28 22.6279 22.6274 28.0005 16 28.0005C9.37258 28.0005 4 22.6279 4 16.0005C4 9.37307 9.37258 4.00049 16 4.00049C22.6274 4.00049 28 9.37307 28 16.0005ZM6.4 16.0005C6.4 21.3024 10.6981 25.6005 16 25.6005C21.3019 25.6005 25.6 21.3024 25.6 16.0005C25.6 10.6986 21.3019 6.40049 16 6.40049C10.6981 6.40049 6.4 10.6986 6.4 16.0005Z" className="fill-gray-light-12 dark:fill-gray-dark-12" />
                                         <path
@@ -111,8 +119,8 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                 )}
                             </button>
                             <button
-                                className={`m-0 flex w-full flex-row items-center justify-between rounded-[12px] border border-blue-light-5 bg-blue-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-blue-light-3 active:scale-95 dark:border-blue-dark-5 dark:bg-blue-dark-2 dark:hover:bg-blue-dark-3 ${isConnecting && connectorName ? "cursor-wait" : "cursor-pointer"}`}
-                                disabled={isConnecting && connectorName ? true : false}
+                                className={`m-0 flex w-full flex-row items-center justify-between rounded-[12px] border border-blue-light-5 bg-blue-light-2 py-[11px] px-[12px] text-left transition duration-300 ease-in-out hover:bg-blue-light-3 active:scale-95 dark:border-blue-dark-5 dark:bg-blue-dark-2 dark:hover:bg-blue-dark-3 ${isConnecting && connectionData.data.connector?.name ? "cursor-wait" : "cursor-pointer"}`}
+                                disabled={isConnecting && connectionData.data.connector?.name ? true : false}
                                 onClick={async () => {
                                     await connect(WCConnector);
                                 }}
@@ -121,7 +129,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                                     <img src="/wallet/WalletConnect.svg" alt="WalletConnect" className="mr-4 inline-block  self-center" />
                                     <span className="m-0 font-inter text-sm font-semibold leading-none text-gray-light-12 dark:text-gray-dark-12">Wallet Connect</span>
                                 </div>
-                                {isConnecting && connectorName === "WalletConnect" && (
+                                {isConnecting && connectionData.data.connector?.name === "WalletConnect" && (
                                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="float-right inline-block animate-spin">
                                         <path opacity="0.2" d="M28 16.0005C28 22.6279 22.6274 28.0005 16 28.0005C9.37258 28.0005 4 22.6279 4 16.0005C4 9.37307 9.37258 4.00049 16 4.00049C22.6274 4.00049 28 9.37307 28 16.0005ZM6.4 16.0005C6.4 21.3024 10.6981 25.6005 16 25.6005C21.3019 25.6005 25.6 21.3024 25.6 16.0005C25.6 10.6986 21.3019 6.40049 16 6.40049C10.6981 6.40049 6.4 10.6986 6.4 16.0005Z" className="fill-gray-light-12 dark:fill-gray-dark-12" />
                                         <path
@@ -145,24 +153,6 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                 </Dialog.Content>
             </Dialog.Root>
 
-            {/* If account is connected and connected chain is not the same as current chain then display the switch network button */}
-            {showSwitchToSelectedNetwork && (
-                <button
-                    className="inline-block rounded-full border border-gray-light-4 bg-gray-light-2 py-[11px] px-4 text-sm font-semibold leading-4 tracking-tighter text-blue-dark-1 dark:border-gray-dark-4 dark:bg-gray-dark-2 dark:text-blue-light-1"
-                    onClick={() => {
-                        if (switchNetwork) {
-                            switchNetwork(selectedChain.id);
-                        } else {
-                            toast.remove();
-                            toast.custom((t) => <ToastError>Cannot switch network automatically on WalletConnect</ToastError>);
-                        }
-                    }}
-                >
-                    <span className="mr-2 inline-block h-[8px] w-[8px] rounded-full bg-red-light-10 shadow-[0px_0px_12px] shadow-red-light-10 dark:bg-red-dark-10 dark:shadow-red-dark-10"></span>
-                    Switch Network
-                </button>
-            )}
-
             {/* If account is connected and connected chain is the same as current chain then display account information */}
             {showAccountData && account && (
                 <Popover.Root>
@@ -174,7 +164,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
 
                     <Popover.Content className="mt-2 flex w-[241px] flex-col rounded-[16px] border border-gray-light-4 bg-gray-light-2 dark:border-gray-dark-4 dark:bg-gray-dark-2">
                         <>
-                            <div className="mx-4 border-b border-dashed border-gray-light-5 pt-4 pb-2 text-xs leading-4 text-gray-light-9 dark:border-gray-dark-3 dark:text-gray-dark-9">Connected via {connectorName}</div>
+                            <div className="mx-4 border-b border-dashed border-gray-light-5 pt-4 pb-2 text-xs leading-4 text-gray-light-9 dark:border-gray-dark-3 dark:text-gray-dark-9">Connected via {connectionData.data.connector?.name}</div>
                             <div className="mt-2 flex flex-col space-y-4 pb-4">
                                 <div className="flex flex-row justify-between px-4 text-sm leading-4">
                                     <Link href={getEtherscanAddressURL(chain.chain, account)}>

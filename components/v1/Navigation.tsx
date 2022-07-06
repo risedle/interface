@@ -24,7 +24,6 @@ type NavigationProps = {
 const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfolioActive }) => {
     const { chain } = useWalletContext();
     const [scrollPosition, setScrollPosition] = useState(0);
-    const router = useRouter();
 
     useEffect(() => {
         const handleScroll = () => {
