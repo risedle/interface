@@ -13,7 +13,7 @@ type CustomChainName = "bsc";
 export const customChains: Record<CustomChainName, Chain> = {
     bsc: {
         id: 56,
-        name: "Binance Smart Chain",
+        name: "BSC",
         nativeCurrency: {
             decimals: 18,
             name: "BNB",

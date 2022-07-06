@@ -6,6 +6,7 @@ import { FunctionComponent, ReactNode } from "react";
  */
 type ButtonTertiaryProps = {
     onClick?: () => void;
+    className?: string;
     full?: boolean; // if full is true, then the button will have w-full class
 };
 
@@ -15,9 +16,9 @@ type ButtonTertiaryProps = {
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
 
-const ButtonTertiary: FunctionComponent<ButtonTertiaryProps> = ({ onClick, full, children }) => {
+const ButtonTertiary: FunctionComponent<ButtonTertiaryProps> = ({ onClick, full, children, className }) => {
     return (
-        <button className={`button basic px-[24px] py-[12px] ${full ? "w-full" : ""}`} onClick={onClick}>
+        <button className={`button basic px-[24px] py-[12px] ${full ? "w-full" : ""} ${className || ""}`} onClick={onClick}>
             {children}
         </button>
     );
