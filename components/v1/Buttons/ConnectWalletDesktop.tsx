@@ -162,7 +162,7 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
                     </Popover.Trigger>
                     <Popover.Anchor />
 
-                    <Popover.Content className="mt-2 flex w-[241px] flex-col rounded-[16px] border border-gray-light-4 bg-gray-light-2 dark:border-gray-dark-4 dark:bg-gray-dark-2">
+                    <Popover.Content side="bottom" sideOffset={12} align="end" className="flex w-[224px] flex-col rounded-lg border border-gray-light-4 bg-gray-light-2 dark:border-gray-dark-4 dark:bg-gray-dark-2">
                         <>
                             <div className="mx-4 border-b border-dashed border-gray-light-5 pt-4 pb-2 text-xs leading-4 text-gray-light-9 dark:border-gray-dark-3 dark:text-gray-dark-9">Connected via {connectionData.data.connector?.name}</div>
                             <div className="mt-2 flex flex-col space-y-4 pb-4">
