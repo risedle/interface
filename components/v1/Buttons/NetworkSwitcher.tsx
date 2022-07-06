@@ -1,6 +1,6 @@
 import type { FunctionComponent } from "react";
 import { useRouter } from "next/router";
-import * as Popover from "@radix-ui/react-popover";
+import * as HoverCard from "@radix-ui/react-hover-card";
 
 import type { Chain } from "wagmi";
 import { supportedChains, useWalletContext, customChains } from "../Wallet";
@@ -63,13 +63,13 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
         return;
     };
     return (
-        <Popover.Root>
-            <Popover.Trigger className="button basic flex items-center gap-2 px-6">
+        <HoverCard.Root openDelay={100} closeDelay={100}>
+            <HoverCard.Trigger className="button basic flex items-center gap-2 px-6">
                 {/* If account connected and connected network is wrong, show unknown network */}
                 {account && chain.chain.id !== selectedChain.id ? (
                     <>
                         <Indicator color="red" />
-                        <p>Wrong Network</p>
+                        <p>Unknown Network</p>
                     </>
                 ) : (
                     <>
@@ -78,10 +78,9 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                     </>
                 )}
                 <ChevronDownIcon />
-            </Popover.Trigger>
-            <Popover.Anchor />
+            </HoverCard.Trigger>
 
-            <Popover.Content side="bottom" sideOffset={12} align="end" className="flex w-[161px] flex-col items-start rounded-lg border border-gray-light-3/40 bg-gray-light-2 p-2 dark:border-gray-dark-3/40 dark:bg-gray-dark-2">
+            <HoverCard.Content side="bottom" sideOffset={12} align="end" className="flex w-[161px] flex-col items-start rounded-lg border border-gray-light-3/40 bg-gray-light-2 p-2 dark:border-gray-dark-3/40 dark:bg-gray-dark-2">
                 <p className="gap-2 p-2 text-[10px] font-normal leading-4 text-gray-light-9 dark:text-gray-dark-9">Select Network</p>
                 {supportedChains.map((c) => {
                     return (
@@ -103,8 +102,8 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                         </button>
                     );
                 })}
-            </Popover.Content>
-        </Popover.Root>
+            </HoverCard.Content>
+        </HoverCard.Root>
     );
 };
 
