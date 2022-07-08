@@ -6,6 +6,7 @@ import ButtonThemeSwitcher from "./Buttons/ThemeSwitcher";
 import WarningHeader from "./WarningHeader";
 import Logo from "../../uikit/layout/Logo";
 import { customChains, useWalletContext } from "./Wallet";
+import { chain as Chains, useNetwork } from "wagmi";
 import { useRouter } from "next/router";
 
 /**
@@ -24,7 +25,10 @@ type NavigationProps = {
 const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfolioActive }) => {
     const { chain } = useWalletContext();
     const [scrollPosition, setScrollPosition] = useState(0);
+    const [networkData] = useNetwork();
     const router = useRouter();
+
+    const selectedChain = router.pathname.includes("binance") ? customChains.bsc : Chains.arbitrumOne;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -36,6 +40,18 @@ const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfol
             window.removeEventListener("scroll", () => handleScroll());
         };
     }, []);
+
+    // Detect user's connected wallet network. If network is supported, redirect to it's market
+    useEffect(() => {
+        switch (networkData.data.chain?.id) {
+            case customChains.bsc.id:
+                router.push("/markets/binance");
+                break;
+            case Chains.arbitrumOne.id:
+                router.push("/markets/arbitrum");
+                break;
+        }
+    }, [networkData.data.chain?.id]);
 
     return (
         <div className={`container fixed z-10 mx-auto max-w-full transition ease-out sm:z-20 ${scrollPosition !== 0 && "bg-gray-light-1/80 backdrop-blur-[102px] dark:bg-gray-dark-1/80"}`}>
