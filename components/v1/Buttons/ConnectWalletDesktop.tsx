@@ -61,13 +61,13 @@ const ButtonConnectWalletDesktop: FunctionComponent<ButtonConnectWalletDesktopPr
         }
 
         // Handle WalletConnect connected to wrong network, but not unsupported (e.g. connect to BSC when in Arbtirum Markets)
-        if (c instanceof WalletConnectConnector && result.data.chain.id !== selectedChain.id) {
-            disconnect();
-            toast.remove();
-            toast.custom((t) => <ToastError>{`Please select ${selectedChain.name} from your wallet`}</ToastError>);
-            setIsConnecting(false);
-            return;
-        }
+        // if (c instanceof WalletConnectConnector && result.data.chain.id !== selectedChain.id) {
+        //     disconnect();
+        //     toast.remove();
+        //     toast.custom((t) => <ToastError>{`Please select ${selectedChain.name} from your wallet`}</ToastError>);
+        //     setIsConnecting(false);
+        //     return;
+        // }
 
         // Account connected
         toast.remove();
