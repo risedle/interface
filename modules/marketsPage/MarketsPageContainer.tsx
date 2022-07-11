@@ -1,4 +1,4 @@
-import type { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import Head from "next/head";
 
 import MarketsHeader from "./components/MarketsHeader";
@@ -12,6 +12,9 @@ import MarketsPageMeta from "./components/MarketsPageMeta";
 import BackgroundCircle from "./components/BackgroundCircle";
 import { useMarkets } from "../../components/v1/swr/useMarkets";
 import Navigation from "../../components/v1/Navigation";
+import { chain as Chains, useNetwork } from "wagmi";
+import { customChains } from "../../components/v1/Wallet";
+import { useRouter } from "next/router";
 
 /**
  * MarketsPageContainerProps is a React Component properties that passed to React Component MarketsPageContainer
@@ -28,11 +31,23 @@ type MarketsPageContainerProps = {
 const MarketsPageContainer: FunctionComponent<MarketsPageContainerProps> = ({ chainID }) => {
     // Read data from Snapshot API
     const marketsResponse = useMarkets(chainID);
-
+    const [networkData] = useNetwork();
+    const router = useRouter();
     // UI states
     const showLoading = marketsResponse.isLoading;
     const showError = !showLoading && marketsResponse.error;
     const showData = !showLoading && !showError && marketsResponse.data;
+
+    useEffect(() => {
+        switch (networkData.data.chain?.id) {
+            case customChains.bsc.id:
+                router.push("/markets/binance");
+                break;
+            case Chains.arbitrumOne.id:
+                router.push("/markets/arbitrum");
+                break;
+        }
+    }, [networkData.data.chain?.id]);
 
     return (
         <div className="relative flex h-full min-h-screen w-full flex-col overflow-hidden bg-gray-light-1 font-inter dark:bg-gray-dark-1">
