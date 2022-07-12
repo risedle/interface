@@ -50,18 +50,12 @@ const MyAssetsCard: FunctionComponent<MyAssetsCardProps> = ({ address, isVault =
     if (balance > 0) {
         return (
             <InformationCard>
-                <div className="pt-4">
-                    <h2 className="text-base font-bold leading-4 text-gray-light-12 dark:text-gray-dark-12">My Asset</h2>
-                </div>
                 <div className="grid grid-cols-2 gap-4">
                     <AssetsItem icon="balance" title="Token Balance" value={`${tokenBalanceFormatter.format(balance)}`} showData={showData} showLoading={showLoading || showError} />
-                    <AssetsItem icon="value" title="Value (USDC)" value={`${tokenBalanceFormatter.format(value)}`} showData={showData} showLoading={showLoading || showError} />
+                    <AssetsItem icon="value" title="Value" value={`${tokenBalanceFormatter.format(value)}`} showData={showData} showLoading={showLoading || showError} />
                     <AssetsItem icon="return" title="Return" value={`-`} showData={showData} showLoading={showLoading || showError} />
-                    <AssetsItem icon="returnUSD" title="Return (USDC)" value={`-`} showData={showData} showLoading={showLoading || showError} />
+                    <AssetsItem icon="returnUSD" title="Return" value={`-`} showData={showData} showLoading={showLoading || showError} />
                 </div>
-                <ButtonTertiary full onClick={async () => await addTokenToMetamask({ token: tokenType.ETHRISE, chainID: chain.chain.id, isVaultToken: isVault })}>
-                    Add {isVault ? metadata.vaultTitle : metadata.title} to Wallet
-                </ButtonTertiary>
             </InformationCard>
         );
     }

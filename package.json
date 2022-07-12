@@ -43,8 +43,10 @@
         "react-popper": "^2.2.5",
         "recharts": "2.1.8",
         "swr": "1.1.2",
+        "use-keyboard-shortcut": "^1.1.4",
         "use-persisted-state": "0.3.3",
-        "wagmi": "0.2.8"
+        "wagmi": "0.2.8",
+        "zustand": "^4.0.0-rc.1"
     },
     "devDependencies": {
         "@babel/core": "^7.15.5",

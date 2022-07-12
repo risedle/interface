@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 import LeveragedTokenChart from "./LeveragedTokenChart";
 import VaultChart from "./VaultChart";
 import MainButton from "./MainButton";
+import MyAssetsCard from "./MyAssetsCard";
 
 /**
  * PriceInfoCardProps is a React Component properties that passed to React Component PriceInfoCard
@@ -33,7 +34,12 @@ const PriceInfoCard: FunctionComponent<PriceInfoCardProps> = ({ chainID, title, 
                     <img className="h-12 w-12" src={logo} alt={title} />
                 </div>
                 {isVault && vaultAddress ? <VaultChart chainID={chainID} address={vaultAddress} /> : <LeveragedTokenChart chainID={chainID} address={tokenAddress} />}
-                <MainButton chainID={chainID} isVault={isVault} tokenAddress={tokenAddress} />
+
+                <div className="mx-4 mt-4 border-t-2 border-dashed border-t-gray-dark-5  pt-2">
+                    <MyAssetsCard chainID={chainID} address={tokenAddress} isVault={isVault} />
+
+                    <MainButton chainID={chainID} isVault={isVault} tokenAddress={tokenAddress} />
+                </div>
             </div>
         </div>
     );
