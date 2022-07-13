@@ -87,7 +87,7 @@ const LeveragedTokenBackingCard: FunctionComponent<LeveragedTokenBackingCardProp
                             <p className="text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.debtSymbol}</p>
                         </td>
                         <td>
-                            {uiData.status === "loading" && <p className="h-[16px] w-[100px] animate-pulse rounded-[8px] bg-gray-light-3 dark:bg-gray-dark-3"></p>}
+                            {uiData.status === "loading" && <p className="h-4 w-[100px] animate-pulse rounded-lg bg-gray-light-3 dark:bg-gray-dark-3"></p>}
                             {uiData.status === "loaded" && <p className="font-ibm text-sm font-semibold leading-4 tracking-[-.02em] text-gray-light-12 dark:text-gray-dark-12">-{tokenBalanceFormatter.format(uiData.data?.debtPerLeveragedToken || 0)}</p>}
                         </td>
                         <td className="pr-2">{0}%</td>

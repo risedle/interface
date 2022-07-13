@@ -20,7 +20,7 @@ const InformationCardSubTitle = ({ children }: { children: ReactNode }) => {
 
 const InformationCardExtra = ({ children, className }: { children: ReactNode; className?: string }) => {
     return (
-        <div style={{ marginBottom: "-1rem !important" }} className={`-m-4 rounded-b-[16px] py-2 px-4 text-sm leading-6 text-white dark:text-gray-dark-10 ${className || ""}`}>
+        <div style={{ marginBottom: "-1rem !important" }} className={`-m-4 rounded-b-2xl py-2 px-4 text-sm leading-6 text-white dark:text-gray-dark-10 ${className || ""}`}>
             {children}
         </div>
     );
