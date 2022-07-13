@@ -15,11 +15,15 @@ const InformationCardTitle = ({ children }: { children: ReactNode }) => {
 
 const InformationCardSubTitle = ({ children }: { children: ReactNode }) => {
     // TODO: elipsis on overflow
-    return <p className="text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">{children}</p>;
+    return <p className="text-sm leading-6  dark:text-gray-dark-10">{children}</p>;
 };
 
 const InformationCardExtra = ({ children, className }: { children: ReactNode; className?: string }) => {
-    return <div className={`text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10${className || ""}`}>{children}</div>;
+    return (
+        <div style={{ marginBottom: "-1rem !important" }} className={`-m-4 rounded-b-[16px] py-2 px-4 text-sm leading-6 text-white dark:text-gray-dark-10 ${className || ""}`}>
+            {children}
+        </div>
+    );
 };
 
 export { InformationCardTitle, InformationCardSubTitle, InformationCardExtra, InformationCard };

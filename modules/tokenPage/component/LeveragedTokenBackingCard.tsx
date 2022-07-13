@@ -94,7 +94,11 @@ const LeveragedTokenBackingCard: FunctionComponent<LeveragedTokenBackingCardProp
                     </tr>
                 </tbody>
             </table>
-            <InformationCardExtra className="bg-green-dark-2">Test</InformationCardExtra>
+            <InformationCardExtra className="bg-green-dark-2">
+                <p className=" font-inter text-xs text-white">
+                    &#10003; Last rebalanced at: <span className="font-semibold"> 13-01-2022 03:23AM </span>
+                </p>
+            </InformationCardExtra>
         </InformationCard>
     );
 };
