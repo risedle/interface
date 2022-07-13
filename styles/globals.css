@@ -461,3 +461,15 @@ html {
         background-position: 0% 50%;
     }
 }
+
+kbd {
+    color: #707070;
+    border-radius: 4px;
+    background-color: #232323;
+    display: inline-block;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1;
+    padding: 2px 4px;
+    white-space: nowrap;
+}
