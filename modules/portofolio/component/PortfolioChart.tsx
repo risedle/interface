@@ -248,6 +248,21 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address, isH
                     </div>
                     <div className="basis-1/5 text-center">
                         <button
+                            className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeWeekly ? activeTimeframeClasses : ""}`}
+                            onClick={() => {
+                                setCurrentTimeframe(Timeframe.ThreeWeekly);
+                                if (dailyData.threeMonthly) {
+                                    setCurrentData(dailyData.threeMonthly);
+                                    setNAV(latestNAV);
+                                    setNAVChange(((latestNAV - dailyData.threeMonthly.oldestNAV * formattedEthriseBalance) / (dailyData.threeMonthly.oldestNAV * formattedEthriseBalance)) * 100);
+                                }
+                            }}
+                        >
+                            3W
+                        </button>
+                    </div>
+                    <div className="basis-1/5 text-center">
+                        <button
                             className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
                             onClick={() => {
                                 setCurrentTimeframe(Timeframe.Monthly);
@@ -258,22 +273,7 @@ const PortofolioChart: FunctionComponent<PortofolioChartProps> = ({ address, isH
                                 }
                             }}
                         >
-                            1M
-                        </button>
-                    </div>
-                    <div className="basis-1/5 text-center">
-                        <button
-                            className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
-                            onClick={() => {
-                                setCurrentTimeframe(Timeframe.ThreeMonthly);
-                                if (dailyData.threeMonthly) {
-                                    setCurrentData(dailyData.threeMonthly);
-                                    setNAV(latestNAV);
-                                    setNAVChange(((latestNAV - dailyData.threeMonthly.oldestNAV * formattedEthriseBalance) / (dailyData.threeMonthly.oldestNAV * formattedEthriseBalance)) * 100);
-                                }
-                            }}
-                        >
-                            3M
+                            4W
                         </button>
                     </div>
                 </div>

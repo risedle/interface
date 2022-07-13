@@ -156,6 +156,21 @@ const VaultChart: FunctionComponent<VaultChartProps> = ({ chainID, address }) =>
                 </div>
                 <div className="basis-1/5 text-center">
                     <button
+                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeWeekly ? activeTimeframeClasses : ""}`}
+                        onClick={() => {
+                            setCurrentTimeframe(Timeframe.ThreeWeekly);
+                            if (data.threeWeekly) {
+                                setCurrentData(data.threeWeekly);
+                                setSupplyAPY(data.threeWeekly.latestSupplyAPY);
+                                setBorrowAPY(data.threeWeekly.latestBorrowAPY);
+                            }
+                        }}
+                    >
+                        3W
+                    </button>
+                </div>
+                <div className="basis-1/5 text-center">
+                    <button
                         className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
                         onClick={() => {
                             setCurrentTimeframe(Timeframe.Monthly);
@@ -166,22 +181,7 @@ const VaultChart: FunctionComponent<VaultChartProps> = ({ chainID, address }) =>
                             }
                         }}
                     >
-                        1M
-                    </button>
-                </div>
-                <div className="basis-1/5 text-center">
-                    <button
-                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
-                        onClick={() => {
-                            setCurrentTimeframe(Timeframe.ThreeMonthly);
-                            if (data.threeMonthly) {
-                                setCurrentData(data.threeMonthly);
-                                setSupplyAPY(data.threeMonthly.latestSupplyAPY);
-                                setBorrowAPY(data.threeMonthly.latestBorrowAPY);
-                            }
-                        }}
-                    >
-                        3M
+                        4W
                     </button>
                 </div>
             </div>

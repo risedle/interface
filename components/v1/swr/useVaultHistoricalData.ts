@@ -23,8 +23,8 @@ export function useVaultHistoricalData(chainID: number, vaultAddress: string) {
     let dailyData: VaultTimeframeData | undefined = undefined;
     let weeklyData: VaultTimeframeData | undefined = undefined;
     let twoWeeklyData: VaultTimeframeData | undefined = undefined;
+    let threeWeeklyData: VaultTimeframeData | undefined = undefined;
     let monthlyData: VaultTimeframeData | undefined = undefined;
-    let threeMonthlyData: VaultTimeframeData | undefined = undefined;
 
     if (data) {
         // Get daily data
@@ -60,6 +60,17 @@ export function useVaultHistoricalData(chainID: number, vaultAddress: string) {
             data: twoWeeklyTimeframeData,
         };
 
+        // Get three monthly data
+        const threeWeeklyTimeframeData = data.slice(-504); // 3 weeks = 504 hours
+        const threeWeeklyLatestData = threeWeeklyTimeframeData[threeWeeklyTimeframeData.length - 1];
+        const threeWeeklyLatestSupplyAPY = threeWeeklyLatestData.supply_apy;
+        const threeWeeklyLatestBorrowAPY = threeWeeklyLatestData.borrow_apy;
+        threeWeeklyData = {
+            latestSupplyAPY: threeWeeklyLatestSupplyAPY,
+            latestBorrowAPY: threeWeeklyLatestBorrowAPY,
+            data: threeWeeklyTimeframeData,
+        };
+
         // Get monthly data
         const monthlyTimeframeData = data.slice(-672); // 1 month = 672 hours
         const monthlyLatestData = monthlyTimeframeData[monthlyTimeframeData.length - 1];
@@ -70,17 +81,6 @@ export function useVaultHistoricalData(chainID: number, vaultAddress: string) {
             latestBorrowAPY: monthlyLatestBorrowAPY,
             data: monthlyTimeframeData,
         };
-
-        // Get three monthly data
-        const threeMonthlyTimeframeData = data.slice(-2016); // 3 months = 2016 hours
-        const threeMonthlyLatestData = threeMonthlyTimeframeData[threeMonthlyTimeframeData.length - 1];
-        const threeMonthlyLatestSupplyAPY = threeMonthlyLatestData.supply_apy;
-        const threeMonthlyLatestBorrowAPY = threeMonthlyLatestData.borrow_apy;
-        threeMonthlyData = {
-            latestSupplyAPY: threeMonthlyLatestSupplyAPY,
-            latestBorrowAPY: threeMonthlyLatestBorrowAPY,
-            data: threeMonthlyTimeframeData,
-        };
     }
 
     return {
@@ -88,7 +88,7 @@ export function useVaultHistoricalData(chainID: number, vaultAddress: string) {
         weekly: weeklyData,
         twoWeekly: twoWeeklyData,
         monthly: monthlyData,
-        threeMonthly: threeMonthlyData,
+        threeWeekly: threeWeeklyData,
         isLoading: !error && !data,
         error: error,
     };
