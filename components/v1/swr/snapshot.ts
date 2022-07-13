@@ -45,6 +45,6 @@ export enum Timeframe {
     Daily,
     Weekly,
     TwoWeekly,
+    ThreeWeekly,
     Monthly,
-    ThreeMonthly,
 }

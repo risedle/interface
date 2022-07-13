@@ -215,6 +215,24 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
                 </div>
                 <div className="basis-1/5 text-center">
                     <button
+                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeWeekly ? activeTimeframeClasses : ""}`}
+                        onClick={() => {
+                            setCurrentTimeframe(Timeframe.ThreeWeekly);
+                            if (data.threeWeekly) {
+                                setCurrentData(data.threeWeekly);
+                                setNAV(latestNAV);
+                                const change = latestNAV - data.threeWeekly.oldestNAV;
+                                const percentChange = ((latestNAV - data.threeWeekly.oldestNAV) / data.threeWeekly.oldestNAV) * 100;
+                                setNAVChange(change);
+                                setNAVPercentChange(percentChange);
+                            }
+                        }}
+                    >
+                        3W
+                    </button>
+                </div>
+                <div className="basis-1/5 text-center">
+                    <button
                         className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
                         onClick={() => {
                             setCurrentTimeframe(Timeframe.Monthly);
@@ -228,25 +246,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({ chai
                             }
                         }}
                     >
-                        1M
-                    </button>
-                </div>
-                <div className="basis-1/5 text-center">
-                    <button
-                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
-                        onClick={() => {
-                            setCurrentTimeframe(Timeframe.ThreeMonthly);
-                            if (data.threeMonthly) {
-                                setCurrentData(data.threeMonthly);
-                                setNAV(latestNAV);
-                                const change = latestNAV - data.threeMonthly.oldestNAV;
-                                const percentChange = ((latestNAV - data.threeMonthly.oldestNAV) / data.threeMonthly.oldestNAV) * 100;
-                                setNAVChange(change);
-                                setNAVPercentChange(percentChange);
-                            }
-                        }}
-                    >
-                        3M
+                        4W
                     </button>
                 </div>
             </div>

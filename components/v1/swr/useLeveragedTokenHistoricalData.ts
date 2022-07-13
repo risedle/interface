@@ -32,8 +32,8 @@ export function useLeveragedTokenHistoricalData(chainID: number, leveragedTokenA
     let dailyData: LeveragedTokenTimeframeData | undefined = undefined;
     let weeklyData: LeveragedTokenTimeframeData | undefined = undefined;
     let twoWeeklyData: LeveragedTokenTimeframeData | undefined = undefined;
+    let threeWeeklyData: LeveragedTokenTimeframeData | undefined = undefined;
     let monthlyData: LeveragedTokenTimeframeData | undefined = undefined;
-    let threeMonthlyData: LeveragedTokenTimeframeData | undefined = undefined;
 
     if (cleanedData) {
         // Get daily data
@@ -78,6 +78,20 @@ export function useLeveragedTokenHistoricalData(chainID: number, leveragedTokenA
             data: twoWeeklyTimeframeData,
         };
 
+        // Get three weekly data
+        const threeWeeklyTimeframeData = cleanedData.slice(-504); // 1 month = 504 hours
+        const threeWeeklyLatestData = threeWeeklyTimeframeData[threeWeeklyTimeframeData.length - 1];
+        const threeWeeklyOldestData = threeWeeklyTimeframeData[0];
+        const threeWeeklyLatestNAV = threeWeeklyLatestData.nav;
+        const threeWeeklyOldestNAV = threeWeeklyOldestData.nav;
+        const threeWeeklyChange = ((threeWeeklyLatestNAV - threeWeeklyOldestNAV) / threeWeeklyOldestNAV) * 100;
+        threeWeeklyData = {
+            latestNAV: threeWeeklyLatestNAV,
+            oldestNAV: threeWeeklyOldestNAV,
+            change: threeWeeklyChange,
+            data: threeWeeklyTimeframeData,
+        };
+
         // Get monthly data
         const monthlyTimeframeData = cleanedData.slice(-672); // 1 month = 672 hours
         const monthlyLatestData = monthlyTimeframeData[monthlyTimeframeData.length - 1];
@@ -91,20 +105,6 @@ export function useLeveragedTokenHistoricalData(chainID: number, leveragedTokenA
             change: monthlyChange,
             data: monthlyTimeframeData,
         };
-
-        // Get three monthly data
-        const threeMonthlyTimeframeData = cleanedData.slice(-2016); // 3 months = 2016 hours
-        const threeMonthlyLatestData = threeMonthlyTimeframeData[threeMonthlyTimeframeData.length - 1];
-        const threeMonthlyOldestData = threeMonthlyTimeframeData[0];
-        const threeMonthlyLatestNAV = threeMonthlyLatestData.nav;
-        const threeMonthlyOldestNAV = threeMonthlyOldestData.nav;
-        const threeMonthlyChange = ((threeMonthlyLatestNAV - threeMonthlyOldestNAV) / threeMonthlyOldestNAV) * 100;
-        threeMonthlyData = {
-            latestNAV: threeMonthlyLatestNAV,
-            oldestNAV: threeMonthlyOldestNAV,
-            change: threeMonthlyChange,
-            data: threeMonthlyTimeframeData,
-        };
     }
 
     return {
@@ -112,7 +112,7 @@ export function useLeveragedTokenHistoricalData(chainID: number, leveragedTokenA
         weekly: weeklyData,
         twoWeekly: twoWeeklyData,
         monthly: monthlyData,
-        threeMonthly: threeMonthlyData,
+        threeWeekly: threeWeeklyData,
         isLoading: !error && !data,
         error: error,
     };
