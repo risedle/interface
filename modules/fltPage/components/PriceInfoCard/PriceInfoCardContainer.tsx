@@ -56,19 +56,54 @@ const PriceInfoCardContainer: FunctionComponent<PriceInfoCardContainerProps> = (
     useEffect(() => {
         switch (activeTimeframe) {
             case Timeframe.Daily:
-                data.daily ? setSelectedData(data.daily) : null;
+                if (data.daily) {
+                    setSelectedData(data.daily);
+                    setCurrentNav(latestNav);
+                    const change = latestNav - data.daily.oldestNAV;
+                    const percentChange = ((latestNav - data.daily.oldestNAV) / data.daily.oldestNAV) * 100;
+                    setCurrentNavChange(change);
+                    setCurrentNavPercentChange(percentChange);
+                }
                 break;
             case Timeframe.Weekly:
-                data.weekly ? setSelectedData(data.weekly) : null;
+                if (data.weekly) {
+                    setSelectedData(data.weekly);
+                    setCurrentNav(latestNav);
+                    const change = latestNav - data.weekly.oldestNAV;
+                    const percentChange = ((latestNav - data.weekly.oldestNAV) / data.weekly.oldestNAV) * 100;
+                    setCurrentNavChange(change);
+                    setCurrentNavPercentChange(percentChange);
+                }
                 break;
             case Timeframe.TwoWeekly:
-                data.twoWeekly ? setSelectedData(data.twoWeekly) : null;
+                if (data.twoWeekly) {
+                    setSelectedData(data.twoWeekly);
+                    setCurrentNav(latestNav);
+                    const change = latestNav - data.twoWeekly.oldestNAV;
+                    const percentChange = ((latestNav - data.twoWeekly.oldestNAV) / data.twoWeekly.oldestNAV) * 100;
+                    setCurrentNavChange(change);
+                    setCurrentNavPercentChange(percentChange);
+                }
                 break;
             case Timeframe.ThreeWeekly:
-                data.threeWeekly ? setSelectedData(data.threeWeekly) : null;
+                if (data.threeWeekly) {
+                    setSelectedData(data.threeWeekly);
+                    setCurrentNav(latestNav);
+                    const change = latestNav - data.threeWeekly.oldestNAV;
+                    const percentChange = ((latestNav - data.threeWeekly.oldestNAV) / data.threeWeekly.oldestNAV) * 100;
+                    setCurrentNavChange(change);
+                    setCurrentNavPercentChange(percentChange);
+                }
                 break;
             case Timeframe.Monthly:
-                data.monthly ? setSelectedData(data.monthly) : null;
+                if (data.monthly) {
+                    setSelectedData(data.monthly);
+                    setCurrentNav(latestNav);
+                    const change = latestNav - data.monthly.oldestNAV;
+                    const percentChange = ((latestNav - data.monthly.oldestNAV) / data.monthly.oldestNAV) * 100;
+                    setCurrentNavChange(change);
+                    setCurrentNavPercentChange(percentChange);
+                }
                 break;
         }
     }, [activeTimeframe]);
