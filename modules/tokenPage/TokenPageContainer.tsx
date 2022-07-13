@@ -15,6 +15,7 @@ import LeveragedTokenInfoCard from "./component/TokenInformation/LeveragedTokenI
 import VaultInfoCard from "./component/VaultInfoCard";
 import { Root as TabsRoot } from "@radix-ui/react-tabs";
 import { FunctionComponent } from "react";
+import { Calculator } from "./component/Calculator";
 
 type TokenPageContainerProps = {
     chainID: number;
@@ -44,6 +45,7 @@ const TokenPageContainer: FunctionComponent<TokenPageContainerProps> = ({ chainI
                             {/* Right Column */}
                             <div className="flex max-w-[540px] flex-col space-y-6">
                                 <LeveragedTokenInfoCard chainID={chainID} address={tokenAddress} />
+                                <Calculator />
                                 <LeveragedTokenBackingCard chainID={chainID} address={tokenAddress} />
                             </div>
                         </TabsContentGrid>
