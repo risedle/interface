@@ -12,7 +12,6 @@ import TabsContentGrid from "./component/TabsContentGrid";
 import PriceInfoCard from "./component/PriceInfoCard";
 import LeveragedTokenBackingCard from "./component/LeveragedTokenBackingCard";
 import LeveragedTokenInfoCard from "./component/TokenInformation/LeveragedTokenInfoCard";
-import MyAssetsCard from "./component/MyAssetsCard";
 import VaultInfoCard from "./component/VaultInfoCard";
 import { Root as TabsRoot } from "@radix-ui/react-tabs";
 import { FunctionComponent } from "react";

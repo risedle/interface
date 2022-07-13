@@ -18,5 +18,8 @@ const InformationCardSubTitle = ({ children }: { children: ReactNode }) => {
     return <p className="text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10">{children}</p>;
 };
 
-export { InformationCardTitle, InformationCardSubTitle };
-export default InformationCard;
+const InformationCardExtra = ({ children, className }: { children: ReactNode; className?: string }) => {
+    return <div className={`text-sm leading-6 text-gray-light-10 dark:text-gray-dark-10${className || ""}`}>{children}</div>;
+};
+
+export { InformationCardTitle, InformationCardSubTitle, InformationCardExtra, InformationCard };

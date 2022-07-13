@@ -5,7 +5,7 @@ import { Metadata } from "../../../components/v1/MarketMetadata";
 import { useCollateralPerLeveragedToken } from "../../../components/v1/swr/useCollateralPerLeveragedToken";
 import { useDebtPerLeveragedToken } from "../../../components/v1/swr/useDebtPerLeveragedToken";
 import { getProvider } from "../../../components/v1/Wallet";
-import InformationCard, { InformationCardSubTitle, InformationCardTitle } from "../../../uikit/card/InformationCard";
+import { InformationCardExtra, InformationCardSubTitle, InformationCardTitle, InformationCard } from "../../../uikit/card/InformationCard";
 import { StatusEnum } from "./TokenInformation/TokenInfoStore";
 
 type LeveragedTokenBackingCardProps = {
@@ -94,6 +94,7 @@ const LeveragedTokenBackingCard: FunctionComponent<LeveragedTokenBackingCardProp
                     </tr>
                 </tbody>
             </table>
+            <InformationCardExtra className="bg-green-dark-2">Test</InformationCardExtra>
         </InformationCard>
     );
 };

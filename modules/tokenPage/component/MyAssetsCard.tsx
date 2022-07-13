@@ -9,7 +9,7 @@ import { useTokenBalance } from "../../../components/v1/swr/useTokenBalance";
 import { useVaultExchangeRate } from "../../../components/v1/swr/useVaultExchangeRate";
 import { useWalletContext, getProvider } from "../../../components/v1/Wallet";
 import { AssetsItem } from "./AssetsItem";
-import InformationCard from "../../../uikit/card/InformationCard";
+import { InformationCard } from "../../../uikit/card/InformationCard";
 
 /**
  * MyAssetsCardProps is a React Component properties that passed to React Component MyAssetsCard

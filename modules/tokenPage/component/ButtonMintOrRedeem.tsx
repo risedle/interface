@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useCallback, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Metadata } from "./MarketMetadata";
@@ -6,7 +6,7 @@ import MintDialogContent from "./MintDialogContent";
 import RedeemDialogContent from "./RedeemDialogContent";
 import ButtonAlternate from "../../../uikit/button/ButtonAlternate";
 import { customChains } from "../../../components/v1/Wallet";
-import useKeyboardShortcut from "use-keyboard-shortcut";
+import { useHotkeys } from "react-hotkeys-hook";
 
 /**
  * ButtonMintOrRedeemProps is a React Component properties that passed to React Component ButtonMintOrRedeem
@@ -21,28 +21,21 @@ type ButtonMintOrRedeemProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const ButtonMintOrRedeem: FunctionComponent<ButtonMintOrRedeemProps> = ({ chainID, address }) => {
+function ButtonMintOrRedeem({ chainID, address }: ButtonMintOrRedeemProps) {
     const metadata = Metadata[chainID][address];
     const [isOpen, setIsOpen] = useState(false);
 
-    const { flushHeldKeys } = useKeyboardShortcut(["Shift", "S"], (shortcutKeys) => setIsOpen(true), {
-        overrideSystem: false,
-        ignoreInputFields: false,
-        repeatOnHold: false,
-    });
-
-    useEffect(() => {
-        return () => flushHeldKeys();
-    }, [flushHeldKeys]);
+    useHotkeys("shift+s", () => setIsOpen(true));
+    useHotkeys("esc", () => setIsOpen(false));
 
     return (
         <Dialog.Root open={isOpen}>
-            <Dialog.Trigger asChild onClick={() => setIsOpen(true)}>
+            <Dialog.Trigger asChild>
                 <div className="flex align-middle">
-                    <ButtonAlternate className="mr-4 flex-1" type={chainID === customChains.bsc.id ? "bsc" : "arb"}>
+                    <ButtonAlternate onClick={() => setIsOpen(true)} className="mr-4 flex-1" type={chainID === customChains.bsc.id ? "bsc" : "arb"}>
                         Swap
                     </ButtonAlternate>
-                    <span className="self-center text-xs text-gray-dark-9">
+                    <span className="hidden self-center text-xs text-gray-dark-9 md:block">
                         Press <kbd>&#8593;</kbd> + <kbd>S</kbd> for quick shortcut
                     </span>
                 </div>
@@ -95,6 +88,6 @@ const ButtonMintOrRedeem: FunctionComponent<ButtonMintOrRedeemProps> = ({ chainI
             </Dialog.Content>
         </Dialog.Root>
     );
-};
+}
 
 export default ButtonMintOrRedeem;

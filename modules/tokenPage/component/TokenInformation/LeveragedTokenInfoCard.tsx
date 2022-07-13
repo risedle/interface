@@ -6,7 +6,7 @@ import { useMarket } from "../../../../components/v1/swr/useMarket";
 import ToastError from "../../../../uikit/toasts/Error";
 import { chain as Chains } from "wagmi";
 import { customChains, formatAddress, getEtherscanAddressURL } from "../../../../components/v1/Wallet";
-import InformationCard, { InformationCardSubTitle, InformationCardTitle } from "../../../../uikit/card/InformationCard";
+import { InformationCardSubTitle, InformationCardTitle, InformationCard } from "../../../../uikit/card/InformationCard";
 import { useTokenInfoStore } from "./TokenInfoStore";
 import { ContainerInfoItem, ItemInfo, ItemTitle } from "./InfoItem";
 
