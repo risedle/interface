@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import PriceInfoCardHeader from "./PriceInfoCardHeader";
+import PriceInfoCardHeader, { SupportedChainName } from "./PriceInfoCardHeader";
 import PriceInfoCardMetric from "./PriceInfoCardMetric";
 import FLTChart from "./Chart/FLTChart";
 import { useLeveragedTokenNAV } from "../../../../components/v1/swr/useLeveragedTokenNAV";
@@ -54,57 +54,59 @@ const PriceInfoCardContainer: FunctionComponent<PriceInfoCardContainerProps> = (
 
     // Listen to timeframe change (this is temporary & subject to changes until real data is ready)
     useEffect(() => {
-        switch (activeTimeframe) {
-            case Timeframe.Daily:
-                if (data.daily) {
-                    setSelectedData(data.daily);
-                    setCurrentNav(latestNav);
-                    const change = latestNav - data.daily.oldestNAV;
-                    const percentChange = ((latestNav - data.daily.oldestNAV) / data.daily.oldestNAV) * 100;
-                    setCurrentNavChange(change);
-                    setCurrentNavPercentChange(percentChange);
-                }
-                break;
-            case Timeframe.Weekly:
-                if (data.weekly) {
-                    setSelectedData(data.weekly);
-                    setCurrentNav(latestNav);
-                    const change = latestNav - data.weekly.oldestNAV;
-                    const percentChange = ((latestNav - data.weekly.oldestNAV) / data.weekly.oldestNAV) * 100;
-                    setCurrentNavChange(change);
-                    setCurrentNavPercentChange(percentChange);
-                }
-                break;
-            case Timeframe.TwoWeekly:
-                if (data.twoWeekly) {
-                    setSelectedData(data.twoWeekly);
-                    setCurrentNav(latestNav);
-                    const change = latestNav - data.twoWeekly.oldestNAV;
-                    const percentChange = ((latestNav - data.twoWeekly.oldestNAV) / data.twoWeekly.oldestNAV) * 100;
-                    setCurrentNavChange(change);
-                    setCurrentNavPercentChange(percentChange);
-                }
-                break;
-            case Timeframe.ThreeWeekly:
-                if (data.threeWeekly) {
-                    setSelectedData(data.threeWeekly);
-                    setCurrentNav(latestNav);
-                    const change = latestNav - data.threeWeekly.oldestNAV;
-                    const percentChange = ((latestNav - data.threeWeekly.oldestNAV) / data.threeWeekly.oldestNAV) * 100;
-                    setCurrentNavChange(change);
-                    setCurrentNavPercentChange(percentChange);
-                }
-                break;
-            case Timeframe.Monthly:
-                if (data.monthly) {
-                    setSelectedData(data.monthly);
-                    setCurrentNav(latestNav);
-                    const change = latestNav - data.monthly.oldestNAV;
-                    const percentChange = ((latestNav - data.monthly.oldestNAV) / data.monthly.oldestNAV) * 100;
-                    setCurrentNavChange(change);
-                    setCurrentNavPercentChange(percentChange);
-                }
-                break;
+        if (data) {
+            switch (activeTimeframe) {
+                case Timeframe.Daily:
+                    if (data.daily) {
+                        setSelectedData(data.daily);
+                        setCurrentNav(latestNav);
+                        const change = latestNav - data.daily.oldestNAV;
+                        const percentChange = ((latestNav - data.daily.oldestNAV) / data.daily.oldestNAV) * 100;
+                        setCurrentNavChange(change);
+                        setCurrentNavPercentChange(percentChange);
+                    }
+                    break;
+                case Timeframe.Weekly:
+                    if (data.weekly) {
+                        setSelectedData(data.weekly);
+                        setCurrentNav(latestNav);
+                        const change = latestNav - data.weekly.oldestNAV;
+                        const percentChange = ((latestNav - data.weekly.oldestNAV) / data.weekly.oldestNAV) * 100;
+                        setCurrentNavChange(change);
+                        setCurrentNavPercentChange(percentChange);
+                    }
+                    break;
+                case Timeframe.TwoWeekly:
+                    if (data.twoWeekly) {
+                        setSelectedData(data.twoWeekly);
+                        setCurrentNav(latestNav);
+                        const change = latestNav - data.twoWeekly.oldestNAV;
+                        const percentChange = ((latestNav - data.twoWeekly.oldestNAV) / data.twoWeekly.oldestNAV) * 100;
+                        setCurrentNavChange(change);
+                        setCurrentNavPercentChange(percentChange);
+                    }
+                    break;
+                case Timeframe.ThreeWeekly:
+                    if (data.threeWeekly) {
+                        setSelectedData(data.threeWeekly);
+                        setCurrentNav(latestNav);
+                        const change = latestNav - data.threeWeekly.oldestNAV;
+                        const percentChange = ((latestNav - data.threeWeekly.oldestNAV) / data.threeWeekly.oldestNAV) * 100;
+                        setCurrentNavChange(change);
+                        setCurrentNavPercentChange(percentChange);
+                    }
+                    break;
+                case Timeframe.Monthly:
+                    if (data.monthly) {
+                        setSelectedData(data.monthly);
+                        setCurrentNav(latestNav);
+                        const change = latestNav - data.monthly.oldestNAV;
+                        const percentChange = ((latestNav - data.monthly.oldestNAV) / data.monthly.oldestNAV) * 100;
+                        setCurrentNavChange(change);
+                        setCurrentNavPercentChange(percentChange);
+                    }
+                    break;
+            }
         }
     }, [activeTimeframe]);
 
@@ -115,7 +117,7 @@ const PriceInfoCardContainer: FunctionComponent<PriceInfoCardContainerProps> = (
                 {/* Metadata */}
                 <div className="space-y-4">
                     {/* Props here will be dynamic later */}
-                    <PriceInfoCardHeader subtitle="2x Long ETH" title="ETHRISE" chainName="arbitrum" />
+                    <PriceInfoCardHeader subtitle="2x Long ETH" title="ETHRISE" chainName={SupportedChainName.arbitrum} />
                     <PriceInfoCardMetric price={currentNav} priceChange={currentNavChange} priceChangePercentage={currentNavPercentChange} />
                     <span className="px-4 text-xs text-gray-light-10 dark:text-gray-dark-10">{currentDate}</span>
                 </div>

@@ -5,10 +5,15 @@ import BSCFlatIcon from "../../../../uikit/icon/network/BSCFlatIcon";
 /**
  * PriceInfoCardHeaderProps is a React Component properties that passed to React Component PriceInfoCardHeader
  */
+export enum SupportedChainName {
+    arbitrum,
+    binance,
+}
+
 type PriceInfoCardHeaderProps = {
     subtitle: string;
     title: string;
-    chainName: "arbitrum" | "binance";
+    chainName: SupportedChainName;
 };
 
 /**
@@ -19,9 +24,9 @@ type PriceInfoCardHeaderProps = {
 const PriceInfoCardHeader: FunctionComponent<PriceInfoCardHeaderProps> = ({ subtitle, title, chainName }) => {
     const renderChainIcon = () => {
         switch (chainName) {
-            case "arbitrum":
+            case SupportedChainName.arbitrum:
                 return <ArbitrumFlatIcon className="h-6 w-6 opacity-30" />;
-            case "binance":
+            case SupportedChainName.binance:
                 return <BSCFlatIcon className="h-6 w-6 opacity-30" />;
         }
     };
