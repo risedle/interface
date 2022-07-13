@@ -1,4 +1,4 @@
-import type { FunctionComponent } from "react";
+import { FunctionComponent, useCallback, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Metadata } from "./MarketMetadata";
@@ -6,6 +6,7 @@ import MintDialogContent from "./MintDialogContent";
 import RedeemDialogContent from "./RedeemDialogContent";
 import ButtonAlternate from "../../../uikit/button/ButtonAlternate";
 import { customChains } from "../../../components/v1/Wallet";
+import { useHotkeys } from "react-hotkeys-hook";
 
 /**
  * ButtonMintOrRedeemProps is a React Component properties that passed to React Component ButtonMintOrRedeem
@@ -20,15 +21,24 @@ type ButtonMintOrRedeemProps = {
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
-const ButtonMintOrRedeem: FunctionComponent<ButtonMintOrRedeemProps> = ({ chainID, address }) => {
+function ButtonMintOrRedeem({ chainID, address }: ButtonMintOrRedeemProps) {
     const metadata = Metadata[chainID][address];
+    const [isOpen, setIsOpen] = useState(false);
+
+    useHotkeys("shift+s", () => setIsOpen(true));
+    useHotkeys("esc", () => setIsOpen(false));
 
     return (
-        <Dialog.Root>
+        <Dialog.Root open={isOpen}>
             <Dialog.Trigger asChild>
-                <ButtonAlternate type={chainID === customChains.bsc.id ? "bsc" : "arb"} className="w-full">
-                    Mint or Redeem
-                </ButtonAlternate>
+                <div className="flex align-middle">
+                    <ButtonAlternate onClick={() => setIsOpen(true)} className="mr-4 flex-1" type={chainID === customChains.bsc.id ? "bsc" : "arb"}>
+                        Swap
+                    </ButtonAlternate>
+                    <span className="hidden self-center text-xs text-gray-dark-9 md:block">
+                        Press <kbd>&#8593;</kbd> + <kbd>S</kbd> for quick shortcut
+                    </span>
+                </div>
             </Dialog.Trigger>
             <Dialog.Overlay className="fixed inset-0 z-30 bg-gray-dark-1/60 backdrop-blur dark:bg-black/60" />
             <Dialog.Content className="fixed left-0 bottom-0 z-30 w-screen sm:flex sm:h-screen sm:items-center ">
@@ -44,7 +54,7 @@ const ButtonMintOrRedeem: FunctionComponent<ButtonMintOrRedeemProps> = ({ chainI
                                 <h1 className="m-0 text-base font-bold tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12">{metadata.title}</h1>
                             </div>
                         </div>
-                        <Dialog.Close asChild>
+                        <Dialog.Close asChild onClick={() => setIsOpen(false)}>
                             <button className="button basic h-8 p-0">
                                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="m-[9.5px] h-[11px] w-[11px] fill-gray-light-12 dark:fill-gray-dark-12">
                                     <path
@@ -78,6 +88,6 @@ const ButtonMintOrRedeem: FunctionComponent<ButtonMintOrRedeemProps> = ({ chainI
             </Dialog.Content>
         </Dialog.Root>
     );
-};
+}
 
 export default ButtonMintOrRedeem;
