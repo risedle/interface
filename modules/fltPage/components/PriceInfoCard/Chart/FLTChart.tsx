@@ -7,11 +7,12 @@ type FLTChartProps = {
     setCurrentNav: Dispatch<SetStateAction<number>>;
     setCurrentNavChange: Dispatch<SetStateAction<number>>;
     setCurrentNavPercentChange: Dispatch<SetStateAction<number>>;
+    currentNavPercentChange: number;
     setCurrentDate: Dispatch<SetStateAction<string>>;
     resetCurrentNav: () => void;
 };
 
-const FLTChart: FunctionComponent<FLTChartProps> = ({ data, setCurrentNav, setCurrentNavChange, setCurrentNavPercentChange, setCurrentDate, resetCurrentNav }) => {
+const FLTChart: FunctionComponent<FLTChartProps> = ({ data, setCurrentNav, setCurrentNavChange, setCurrentNavPercentChange, setCurrentDate, resetCurrentNav, currentNavPercentChange }) => {
     return (
         <div className="h-48">
             {data && (
@@ -53,7 +54,7 @@ const FLTChart: FunctionComponent<FLTChartProps> = ({ data, setCurrentNav, setCu
                             }}
                         />
                         <YAxis hide={true} type="number" domain={["dataMin - 5", "dataMax + 5"]} />
-                        <Area type="monotoneX" dataKey="nav" stroke={1 > 0 ? "#4CC38A" : "#CD2B31"} fill={1 > 0 ? "url(#upGradient)" : "url(#downGradient)"} strokeWidth={2} />
+                        <Area type="monotoneX" dataKey="nav" stroke={currentNavPercentChange > 0 ? "#4CC38A" : "#CD2B31"} fill={currentNavPercentChange > 0 ? "url(#upGradient)" : "url(#downGradient)"} strokeWidth={2} />
                     </AreaChart>
                 </ResponsiveContainer>
             )}

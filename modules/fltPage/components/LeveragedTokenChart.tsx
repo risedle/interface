@@ -86,7 +86,7 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({}) =>
                 </div>
                 {/* Chart */}
                 <div className="flex flex-col gap-2">
-                    <FLTChart data={selectedData} setCurrentNav={setCurrentNav} setCurrentNavChange={setCurrentNavChange} setCurrentNavPercentChange={setCurrentNavPercentChange} setCurrentDate={setCurrentDate} resetCurrentNav={resetCurrentNav} />
+                    <FLTChart data={selectedData} setCurrentNav={setCurrentNav} setCurrentNavChange={setCurrentNavChange} setCurrentNavPercentChange={setCurrentNavPercentChange} setCurrentDate={setCurrentDate} resetCurrentNav={resetCurrentNav} currentNavPercentChange={currentNavPercentChange} />
                     <ChartFilters active={activeTimeframe} setActive={setActiveTimeframe} />
                 </div>
             </div>
