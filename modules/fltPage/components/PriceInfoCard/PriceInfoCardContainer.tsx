@@ -1,18 +1,18 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import PriceInfoCardHeader from "./PriceInfoCard/PriceInfoCardHeader";
-import PriceInfoCardMetric from "./PriceInfoCard/PriceInfoCardMetric";
-import FLTChart from "./PriceInfoCard/Chart/FLTChart";
-import { useLeveragedTokenNAV } from "../../../components/v1/swr/useLeveragedTokenNAV";
-import { getProvider } from "../../../components/v1/Wallet";
+import PriceInfoCardHeader from "./PriceInfoCardHeader";
+import PriceInfoCardMetric from "./PriceInfoCardMetric";
+import FLTChart from "./Chart/FLTChart";
+import { useLeveragedTokenNAV } from "../../../../components/v1/swr/useLeveragedTokenNAV";
+import { getProvider } from "../../../../components/v1/Wallet";
 import { chain } from "wagmi";
 import { ethers } from "ethers";
-import { LeveragedTokenTimeframeData, useLeveragedTokenHistoricalData } from "../../../components/v1/swr/useLeveragedTokenHistoricalData";
-import ChartFilters from "./PriceInfoCard/Chart/ChartFilters";
-import { Timeframe } from "../../../components/v1/swr/snapshot";
+import { LeveragedTokenTimeframeData, useLeveragedTokenHistoricalData } from "../../../../components/v1/swr/useLeveragedTokenHistoricalData";
+import ChartFilters from "./Chart/ChartFilters";
+import { Timeframe } from "../../../../components/v1/swr/snapshot";
 
-type LeveragedTokenChartProps = {};
+type PriceInfoCardContainerProps = {};
 
-const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({}) => {
+const PriceInfoCardContainer: FunctionComponent<PriceInfoCardContainerProps> = ({}) => {
     const [activeTimeframe, setActiveTimeframe] = useState<Timeframe>(Timeframe.TwoWeekly);
 
     // Get data
@@ -94,4 +94,4 @@ const LeveragedTokenChart: FunctionComponent<LeveragedTokenChartProps> = ({}) =>
     );
 };
 
-export default LeveragedTokenChart;
+export default PriceInfoCardContainer;
