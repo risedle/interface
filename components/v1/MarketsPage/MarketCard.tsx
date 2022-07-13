@@ -172,6 +172,21 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ address, initialNAV, i
                 </div>
                 <div className="basis-1/5 text-center">
                     <button
+                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeWeekly ? activeTimeframeClasses : ""}`}
+                        onClick={() => {
+                            setCurrentTimeframe(Timeframe.ThreeWeekly);
+                            if (data.threeWeekly) {
+                                setCurrentData(data.threeWeekly);
+                                setNAV(data.threeWeekly.latestNAV);
+                                setNAVChange(data.threeWeekly.change);
+                            }
+                        }}
+                    >
+                        3W
+                    </button>
+                </div>
+                <div className="basis-1/5 text-center">
+                    <button
                         className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.Monthly ? activeTimeframeClasses : ""}`}
                         onClick={() => {
                             setCurrentTimeframe(Timeframe.Monthly);
@@ -182,22 +197,7 @@ const MarketCard: FunctionComponent<MarketCardProps> = ({ address, initialNAV, i
                             }
                         }}
                     >
-                        1M
-                    </button>
-                </div>
-                <div className="basis-1/5 text-center">
-                    <button
-                        className={`py-[7px] px-4 text-xs leading-4 text-gray-light-11 dark:text-gray-dark-11 ${currentTimeframe === Timeframe.ThreeMonthly ? activeTimeframeClasses : ""}`}
-                        onClick={() => {
-                            setCurrentTimeframe(Timeframe.ThreeMonthly);
-                            if (data.threeMonthly) {
-                                setCurrentData(data.threeMonthly);
-                                setNAV(data.threeMonthly.latestNAV);
-                                setNAVChange(data.threeMonthly.change);
-                            }
-                        }}
-                    >
-                        3M
+                        4W
                     </button>
                 </div>
             </div>
