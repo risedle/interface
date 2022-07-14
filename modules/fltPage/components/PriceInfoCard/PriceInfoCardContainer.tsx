@@ -10,7 +10,7 @@ import { LeveragedTokenTimeframeData, useLeveragedTokenHistoricalData } from "..
 import ChartFilters from "./Chart/ChartFilters";
 import { Timeframe } from "../../../../components/v1/swr/snapshot";
 import MyAssetsCard from "./MyAssetsCard";
-import ButtonMintOrRedeem from "./ButtonMintOrRedeem";
+import ButonSwap from "./ButtonSwap";
 
 type PriceInfoCardContainerProps = {
     chainID: number;
@@ -130,7 +130,7 @@ const PriceInfoCardContainer: FunctionComponent<PriceInfoCardContainerProps> = (
                 <ChartFilters active={activeTimeframe} setActive={setActiveTimeframe} />
             </div>
             <MyAssetsCard chainID={chainID} address={address} />
-            <ButtonMintOrRedeem chainID={chainID} address={address} />
+            <ButonSwap chainID={chainID} address={address} />
         </div>
     );
 };
