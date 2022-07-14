@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { InformationCardTitle, InformationCard, InformationCardSubTitle } from "../../../uikit/card/FLTInformationCard";
 import { Dash, TextLeftDash, TextRightDash } from "../../../uikit/Dash";
+import Slider from "../../../uikit/Slider";
 
 function Calculator() {
+    const [currentMarketPrice, setCurrent] = useState();
+    const [sliderValue, setSliderValue] = useState(0);
     return (
         <InformationCard>
             <InformationCardTitle>Calulate My Profit</InformationCardTitle>
@@ -21,15 +25,18 @@ function Calculator() {
                         <input type="number" className="max-h-[32px] max-w-[60px] self-center rounded-lg bg-gray-dark-2 text-right text-[16px] font-bold text-white"></input>
                         <p className="pt-2 text-right text-xs text-gray-dark-10">$2,800</p>
                     </div>
-                    {
-                        // TODO: add slider
-                    }
                 </div>
             </div>
             <Dash>
                 <TextLeftDash className="text-xs font-semibold text-white">Expected Market Price</TextLeftDash>
                 <TextRightDash className="text-sm font-bold text-gray-dark-12">$3,450.34</TextRightDash>
             </Dash>
+            <Slider color="bsc" min={-30} max={30} value={[sliderValue]} onValueChange={(val) => setSliderValue(val[0])} />
+            <p className="text-xs text-green-dark-11">
+                {sliderValue > 0 && "+"}
+                {sliderValue}% <span className="text-gray-dark-10">From current Mkt. Price</span>
+            </p>
+
             <Dash>
                 <TextLeftDash className="text-xs font-semibold text-white ">Est. Net Profit Gain</TextLeftDash>
                 <TextRightDash className="text-sm font-bold text-green-dark-11">+$2,800.00</TextRightDash>
