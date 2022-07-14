@@ -1,12 +1,13 @@
 import { FunctionComponent } from "react";
 
-import { getProvider } from "../../../../../components/v1/Wallet";
+import { getProvider, useWalletContext } from "../../../../../components/v1/Wallet";
 import { Metadata } from "../../../../tokenPage/component/MarketMetadata";
 import { ethers } from "ethers";
 import { useLeveragedTokenMetadata } from "../../../../../components/v1/swr/useLeveragedTokenMetadata";
 import FormLoading from "../Placeholder/FormLoading";
 import FormLoadingFailed from "../Placeholder/FormLoadingFailed";
 import BuyForm from "./BuyForm";
+import { useTokenAllowance } from "../../../../../components/v1/swr/useTokenAllowance";
 
 /**
  * BuyDialogContentProps is a React Component properties that passed to React Component BuyDialogContent
@@ -23,8 +24,10 @@ type BuyDialogContentProps = {
  */
 const BuyDialogContent: FunctionComponent<BuyDialogContentProps> = ({ chainID, address }) => {
     // Global states
+    const { account, chain, signer } = useWalletContext();
     const provider = getProvider({ chainId: chainID });
     const metadata = Metadata[chainID][address];
+    const allowanceResponse = useTokenAllowance({ account: account, token: address, spender: metadata.vaultAddress, provider: provider });
 
     // Read onchain data
     // TODO(bayu): If metada.isETH is false, then check allowance and show approval is needed
