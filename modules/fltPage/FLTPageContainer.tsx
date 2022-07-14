@@ -16,13 +16,14 @@ import BackgroundDots from "../tokenPage/component/BackgroundDots";
 import PriceInfoCard from "../tokenPage/component/PriceInfoCard";
 import VaultInfoCard from "../tokenPage/component/VaultInfoCard";
 import LeveragedTokenInfoCard from "./components/TokenInformationCard/LeveragedTokenInfoCard";
+import PriceInfoCardContainer from "./components/PriceInfoCard/PriceInfoCardContainer";
 
-type TokenPageContainerProps = {
+type FLTPageContainerProps = {
     chainID: number;
     tokenAddress: string;
 };
 
-const TokenPageContainer: FunctionComponent<TokenPageContainerProps> = ({ chainID, tokenAddress }) => {
+const FLTPageContainer: FunctionComponent<FLTPageContainerProps> = ({ chainID, tokenAddress }) => {
     const metadata = Metadata[chainID][tokenAddress];
     return (
         <>
@@ -40,6 +41,9 @@ const TokenPageContainer: FunctionComponent<TokenPageContainerProps> = ({ chainI
                         {/* Leverage Tab */}
                         <TabsContentGrid value="leverage">
                             {/* Left Column */}
+                            <div className="max-w-[540px] ">
+                                <PriceInfoCardContainer chainID={chainID} address={tokenAddress} />
+                            </div>
 
                             {/* Right Column */}
                             <div className="flex max-w-[540px] flex-col space-y-6">
@@ -74,4 +78,4 @@ const TokenPageContainer: FunctionComponent<TokenPageContainerProps> = ({ chainI
     );
 };
 
-export default TokenPageContainer;
+export default FLTPageContainer;

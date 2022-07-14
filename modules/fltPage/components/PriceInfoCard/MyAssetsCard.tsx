@@ -47,14 +47,14 @@ const MyAssetsCard: FunctionComponent<MyAssetsCardProps> = ({ address, isVault =
     const showData = !showLoading && !showError && navResponse.data && balanceResponse.data ? true : false;
     if (balance > 0) {
         return (
-            <InformationCard>
-                <div className="grid grid-cols-2 gap-4">
+            <div className="mx-4 border-t border-dashed border-gray-light-5 pt-6 dark:border-gray-dark-5">
+                <div className="grid grid-cols-2 gap-6">
                     <AssetsItem icon="balance" title="Token Balance" value={`${tokenBalanceFormatter.format(balance)}`} showData={showData} showLoading={showLoading || showError} />
                     <AssetsItem icon="value" title="Value" value={`${tokenBalanceFormatter.format(value)}`} showData={showData} showLoading={showLoading || showError} />
-                    <AssetsItem icon="return" title="Return" value={`-`} showData={showData} showLoading={showLoading || showError} />
+                    <AssetsItem icon="return" title="Open P/L" value={`-`} showData={showData} showLoading={showLoading || showError} />
                     <AssetsItem icon="returnUSD" title="Return" value={`-`} showData={showData} showLoading={showLoading || showError} />
                 </div>
-            </InformationCard>
+            </div>
         );
     }
     return null;

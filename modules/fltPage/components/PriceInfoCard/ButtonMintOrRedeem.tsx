@@ -1,12 +1,12 @@
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Tabs from "@radix-ui/react-tabs";
-import ButtonAlternate from "../../../uikit/button/ButtonAlternate";
-import { customChains } from "../../../components/v1/Wallet";
+import ButtonAlternate from "../../../../uikit/button/ButtonAlternate";
+import { customChains } from "../../../../components/v1/Wallet";
 import { useHotkeys } from "react-hotkeys-hook";
-import { Metadata } from "../../../components/v1/MarketMetadata";
-import MintDialogContent from "../../tokenPage/component/MintDialogContent";
-import RedeemDialogContent from "../../tokenPage/component/RedeemDialogContent";
+import { Metadata } from "../../../../components/v1/MarketMetadata";
+import MintDialogContent from "../../../tokenPage/component/MintDialogContent";
+import RedeemDialogContent from "../../../tokenPage/component/RedeemDialogContent";
 
 /**
  * ButtonMintOrRedeemProps is a React Component properties that passed to React Component ButtonMintOrRedeem
@@ -31,7 +31,7 @@ function ButtonMintOrRedeem({ chainID, address }: ButtonMintOrRedeemProps) {
     return (
         <Dialog.Root open={isOpen}>
             <Dialog.Trigger asChild>
-                <div className="flex align-middle">
+                <div className="flex items-center px-4">
                     <ButtonAlternate onClick={() => setIsOpen(true)} className="mr-4 flex-1" type={chainID === customChains.bsc.id ? "bsc" : "arb"}>
                         Swap
                     </ButtonAlternate>

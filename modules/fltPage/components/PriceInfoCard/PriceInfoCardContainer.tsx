@@ -9,10 +9,15 @@ import { ethers } from "ethers";
 import { LeveragedTokenTimeframeData, useLeveragedTokenHistoricalData } from "../../../../components/v1/swr/useLeveragedTokenHistoricalData";
 import ChartFilters from "./Chart/ChartFilters";
 import { Timeframe } from "../../../../components/v1/swr/snapshot";
+import MyAssetsCard from "./MyAssetsCard";
+import ButtonMintOrRedeem from "./ButtonMintOrRedeem";
 
-type PriceInfoCardContainerProps = {};
+type PriceInfoCardContainerProps = {
+    chainID: number;
+    address: string;
+};
 
-const PriceInfoCardContainer: FunctionComponent<PriceInfoCardContainerProps> = ({}) => {
+const PriceInfoCardContainer: FunctionComponent<PriceInfoCardContainerProps> = ({ chainID, address }) => {
     const [activeTimeframe, setActiveTimeframe] = useState<Timeframe>(Timeframe.TwoWeekly);
 
     // Get data
@@ -111,22 +116,21 @@ const PriceInfoCardContainer: FunctionComponent<PriceInfoCardContainerProps> = (
     }, [activeTimeframe]);
 
     return (
-        <div className="max-w-[540px] rounded-2xl bg-gray-light-2 py-4 dark:bg-gray-dark-2">
-            {/* Content */}
-            <div className="space-y-8">
-                {/* Metadata */}
-                <div className="space-y-4">
-                    {/* Props here will be dynamic later */}
-                    <PriceInfoCardHeader subtitle="2x Long ETH" title="ETHRISE" chainName={SupportedChainName.arbitrum} />
-                    <PriceInfoCardMetric price={currentNav} priceChange={currentNavChange} priceChangePercentage={currentNavPercentChange} />
-                    <span className="px-4 text-xs text-gray-light-10 dark:text-gray-dark-10">{currentDate}</span>
-                </div>
-                {/* Chart */}
-                <div className="flex flex-col gap-2">
-                    <FLTChart data={selectedData} setCurrentNav={setCurrentNav} setCurrentNavChange={setCurrentNavChange} setCurrentNavPercentChange={setCurrentNavPercentChange} setCurrentDate={setCurrentDate} resetCurrentNav={resetCurrentNav} currentNavPercentChange={currentNavPercentChange} />
-                    <ChartFilters active={activeTimeframe} setActive={setActiveTimeframe} />
-                </div>
+        <div className="space-y-6 rounded-2xl bg-gray-light-2 py-4 dark:bg-gray-dark-2">
+            {/* Metadata */}
+            <div className="space-y-4">
+                {/* Props here will be dynamic later */}
+                <PriceInfoCardHeader subtitle="2x Long ETH" title="ETHRISE" chainName={SupportedChainName.arbitrum} />
+                <PriceInfoCardMetric price={currentNav} priceChange={currentNavChange} priceChangePercentage={currentNavPercentChange} />
+                <span className="px-4 text-xs text-gray-light-10 dark:text-gray-dark-10">{currentDate}</span>
             </div>
+            {/* Chart */}
+            <div className="flex flex-col gap-2">
+                <FLTChart data={selectedData} setCurrentNav={setCurrentNav} setCurrentNavChange={setCurrentNavChange} setCurrentNavPercentChange={setCurrentNavPercentChange} setCurrentDate={setCurrentDate} resetCurrentNav={resetCurrentNav} currentNavPercentChange={currentNavPercentChange} />
+                <ChartFilters active={activeTimeframe} setActive={setActiveTimeframe} />
+            </div>
+            <MyAssetsCard chainID={chainID} address={address} />
+            <ButtonMintOrRedeem chainID={chainID} address={address} />
         </div>
     );
 };
