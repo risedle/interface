@@ -26,7 +26,7 @@ const TokenPageContainer: FunctionComponent<TokenPageContainerProps> = ({ chainI
     const metadata = Metadata[chainID][tokenAddress];
     return (
         <>
-            <div className="flex h-full min-h-screen w-full flex-col overflow-hidden bg-gray-light-1 font-inter dark:bg-gray-dark-1">
+            <div className="relative flex h-full min-h-screen w-full flex-col overflow-hidden bg-gray-light-1 font-inter dark:bg-gray-dark-1">
                 <Head>
                     <title>{metadata.title} Market | Risedle Protocol</title>
                     <meta name="description" content="Leverage ETH or earn yield from your idle USDC" />
