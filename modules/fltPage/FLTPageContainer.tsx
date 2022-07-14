@@ -11,7 +11,7 @@ import TabsContentGrid from "../tokenPage/component/TabsContentGrid";
 import { Calculator } from "./components/Calculator";
 import LeveragedTokenBackingCard from "./components/TokenInformationCard/LeveragedTokenBackingCard";
 import ButtonConnectWalletMobile from "../../components/v1/Buttons/ConnectWalletMobile";
-import BackgroundGradient from "../marketsPage/components/BackgroundGradient";
+import BackgroundGradient from "../tokenPage/component/BackgroundGradient";
 import BackgroundDots from "../tokenPage/component/BackgroundDots";
 import PriceInfoCard from "../tokenPage/component/PriceInfoCard";
 import VaultInfoCard from "../tokenPage/component/VaultInfoCard";
