@@ -3,26 +3,27 @@ import Favicon from "../../uikit/layout/Favicon";
 import Navigation from "../../components/v1/Navigation";
 import Footer from "../../uikit/layout/Footer";
 import { Metadata } from "../../components/v1/MarketMetadata";
-import MarketDetailPageMeta from "./component/MarketDetailPageMeta";
-import ButtonConnectWalletMobile from "../../components/v1/Buttons/ConnectWalletMobile";
-import BackgroundGradient from "./component/BackgroundGradient";
-import BackgroundDots from "./component/BackgroundDots";
-import TabsList from "./component/TabsList";
-import TabsContentGrid from "./component/TabsContentGrid";
-import PriceInfoCard from "./component/PriceInfoCard";
-import LeveragedTokenBackingCard from "./component/LeveragedTokenBackingCard";
-import LeveragedTokenInfoCard from "./component/LeveragedTokenInfoCard";
-import MyAssetsCard from "./component/MyAssetsCard";
-import VaultInfoCard from "./component/VaultInfoCard";
 import { Root as TabsRoot } from "@radix-ui/react-tabs";
 import { FunctionComponent } from "react";
+import MarketDetailPageMeta from "../tokenPage/component/MarketDetailPageMeta";
+import TabsList from "../tokenPage/component/TabsList";
+import TabsContentGrid from "../tokenPage/component/TabsContentGrid";
+import { Calculator } from "./components/Calculator";
+import LeveragedTokenBackingCard from "./components/TokenInformationCard/LeveragedTokenBackingCard";
+import ButtonConnectWalletMobile from "../../components/v1/Buttons/ConnectWalletMobile";
+import BackgroundGradient from "../tokenPage/component/BackgroundGradient";
+import BackgroundDots from "../tokenPage/component/BackgroundDots";
+import PriceInfoCard from "../tokenPage/component/PriceInfoCard";
+import VaultInfoCard from "../tokenPage/component/VaultInfoCard";
+import LeveragedTokenInfoCard from "./components/TokenInformationCard/LeveragedTokenInfoCard";
+import PriceInfoCardContainer from "./components/PriceInfoCard/PriceInfoCardContainer";
 
-type TokenPageContainerProps = {
+type FLTPageContainerProps = {
     chainID: number;
     tokenAddress: string;
 };
 
-const TokenPageContainer: FunctionComponent<TokenPageContainerProps> = ({ chainID, tokenAddress }) => {
+const FLTPageContainer: FunctionComponent<FLTPageContainerProps> = ({ chainID, tokenAddress }) => {
     const metadata = Metadata[chainID][tokenAddress];
     return (
         <>
@@ -40,12 +41,14 @@ const TokenPageContainer: FunctionComponent<TokenPageContainerProps> = ({ chainI
                         {/* Leverage Tab */}
                         <TabsContentGrid value="leverage">
                             {/* Left Column */}
-                            <PriceInfoCard chainID={chainID} title={metadata.title} subtitle={metadata.subtitle} logo={metadata.logo} tokenAddress={tokenAddress} />
+                            <div className="max-w-[540px] ">
+                                <PriceInfoCardContainer chainID={chainID} address={tokenAddress} />
+                            </div>
 
                             {/* Right Column */}
                             <div className="flex max-w-[540px] flex-col space-y-6">
-                                <MyAssetsCard chainID={chainID} address={tokenAddress} />
                                 <LeveragedTokenInfoCard chainID={chainID} address={tokenAddress} />
+                                <Calculator />
                                 <LeveragedTokenBackingCard chainID={chainID} address={tokenAddress} />
                             </div>
                         </TabsContentGrid>
@@ -57,7 +60,6 @@ const TokenPageContainer: FunctionComponent<TokenPageContainerProps> = ({ chainI
 
                             {/* RightColumn */}
                             <div className="max-w-[540px] flex-col space-y-6">
-                                <MyAssetsCard chainID={chainID} isVault address={tokenAddress} />
                                 <VaultInfoCard chainID={chainID} address={tokenAddress} />
                             </div>
                         </TabsContentGrid>
@@ -76,4 +78,4 @@ const TokenPageContainer: FunctionComponent<TokenPageContainerProps> = ({ chainI
     );
 };
 
-export default TokenPageContainer;
+export default FLTPageContainer;
