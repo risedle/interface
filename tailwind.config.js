@@ -16,6 +16,14 @@ module.exports = {
                 space: ["'Space Mono'", "monospace"],
             },
             colors: {
+                amber: {
+                    light: {
+                        11: "#AD5700",
+                    },
+                    dark: {
+                        11: "#F1A10D",
+                    },
+                },
                 dark: {
                     neutral: "#FCFDFF",
                     primary: "#EC38BC",
