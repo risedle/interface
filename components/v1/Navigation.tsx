@@ -4,6 +4,7 @@ import ButtonConnectWalletDesktop from "./Buttons/ConnectWalletDesktop";
 import ButtonNetworkSwitcher from "./Buttons/NetworkSwitcher";
 import ButtonThemeSwitcher from "./Buttons/ThemeSwitcher";
 import Logo from "../../uikit/layout/Logo";
+import { BannerBSC } from "../../uikit/Banner/BannerNewNetwork";
 
 /**
  * NavigationProps is a React Component properties that passed to React Component Navigation
@@ -21,6 +22,8 @@ type NavigationProps = {
 const Navigation: FunctionComponent<NavigationProps> = ({ marketsActive, portfolioActive }) => {
     return (
         <div className="container z-10 mx-auto max-w-full sm:z-20">
+            <BannerBSC />
+
             <div className="flex flex-row items-center p-4 sm:space-x-12">
                 <div className="w-1/5 sm:w-fit">
                     <Link href="/">
