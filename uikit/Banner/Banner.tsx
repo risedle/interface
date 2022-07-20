@@ -5,7 +5,7 @@ import BSCFlatIcon from "../icon/BSCFlatIcon";
 
 const styles = {
     textContainer: ["flex", "flex-row", "items-center", "px-8", "gap-1"].join(" "),
-    content: ["flex", "flex-row", "divide-x", "min-w-[375px]"].join(" "),
+    content: ["flex", "flex-row", "divide-x", "min-w-[375px]", "dark:divide-amber-dark-11/10"].join(" "),
     contentContainer: ["flex", "flex-row", "divide-x", "py-3", "border-b", "border-gray-light-4", "dark:border-gray-dark-4", "overflow-x-hidden"].join(" "),
     textBase: ["font-semibold", "text-xs", "leading-4", "tracking-tight", "shrink-0"].join(" "),
     textBaseColor: ["text-gray-light-11", "dark:text-gray-dark-11", "fill-gray-light-11", "dark:fill-gray-dark-11"].join(" "),
@@ -16,6 +16,8 @@ type BannerContentContainer = {
 } & HTMLProps<HTMLDivElement>;
 
 function BannerContentContainer({ children, ...props }: BannerContentContainer) {
+    const chainColors = getChainColors(56);
+
     return (
         <div {...props} className={styles.content}>
             {children}
