@@ -6,6 +6,7 @@ module.exports = {
         "./components/**/*.{js,ts,jsx,tsx}",
         "./modules/**/*.{js,ts,jsx,tsx}",
         "./uikit/**/*.{js,ts,jsx,tsx}",
+        "./utils/**/*.{js,ts,jsx,tsx}",
     ],
     darkMode: "class", // or 'media' or 'class'
     theme: {
@@ -16,6 +17,14 @@ module.exports = {
                 space: ["'Space Mono'", "monospace"],
             },
             colors: {
+                amber: {
+                    light: {
+                        11: "#AD5700",
+                    },
+                    dark: {
+                        11: "#F1A10D",
+                    },
+                },
                 dark: {
                     neutral: "#FCFDFF",
                     primary: "#EC38BC",
