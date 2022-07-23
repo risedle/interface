@@ -13,21 +13,23 @@ function BannerBSC() {
 
     if (isOpen) {
         return (
-            <Banner chainId={56}>
-                <a href="https://bsc.risedle.com" rel="noreferrer" target="_blank">
-                    <BannerContentContainer>
-                        <BannerContent>
-                            <BannerItem variant="base">Risedle New Network</BannerItem>
-                            <BannerItem variant="base" isIcon />
-                        </BannerContent>
-                        <BannerContent>
-                            <BannerItem chainId={56} variant="chain">
-                                Binance Smart Chain
-                            </BannerItem>
-                            <BannerItem chainId={56} variant="chain" isIcon />
-                        </BannerContent>
-                    </BannerContentContainer>
-                </a>
+            <>
+                <Banner chainId={56}>
+                    <a href="https://bsc.risedle.com" rel="noreferrer" target="_blank">
+                        <BannerContentContainer>
+                            <BannerContent>
+                                <BannerItem variant="base">Risedle New Network</BannerItem>
+                                <BannerItem variant="base" isIcon />
+                            </BannerContent>
+                            <BannerContent>
+                                <BannerItem chainId={56} variant="chain">
+                                    Binance Smart Chain
+                                </BannerItem>
+                                <BannerItem chainId={56} variant="chain" isIcon />
+                            </BannerContent>
+                        </BannerContentContainer>
+                    </a>
+                </Banner>
                 <CloseBannerButton
                     onClick={() => {
                         if (window) {
@@ -36,7 +38,7 @@ function BannerBSC() {
                         }
                     }}
                 />
-            </Banner>
+            </>
         );
     }
 
