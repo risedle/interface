@@ -22,6 +22,20 @@ type ButtonNetworkSwitcherProps = {};
  *
  * @link https://fettblog.eu/typescript-react/components/#functional-components
  */
+
+const SUPPORTED_CHAINS = [
+    {
+        chainName: "Arbitrum One",
+        logo: "/networks/Arbitrum.svg",
+        url: "https://risedle.com/markets",
+    },
+    {
+        chainName: "BNB Smart Chain",
+        logo: "/networks/BNB.svg",
+        url: "https://bsc.risedle.com/",
+    },
+];
+
 const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}) => {
     // Read global states
     const { account, chain, switchNetwork } = useWalletContext();
@@ -87,26 +101,17 @@ const ButtonNetworkSwitcher: FunctionComponent<ButtonNetworkSwitcherProps> = ({}
                             </Dialog.Title>
                             <Dialog.Description>
                                 <div className="flex max-w-[342px] flex-col space-y-2 p-4">
-                                    {supportedChains.map((c) => {
-                                        return (
-                                            <button
-                                                className="m-0 flex w-full flex-row items-center space-x-4 rounded-[12px] border border-gray-light-5 bg-gray-light-2 py-[11px] px-[11px] text-left dark:border-gray-dark-5 dark:bg-gray-dark-2"
-                                                onClick={async () => {
-                                                    await switchToNetwork(c);
-                                                    setIsOpen(false);
-                                                }}
-                                                key={c.id}
-                                            >
-                                                <img src={getChainIconPath(c)} alt={c.name} className="h-[32px] w-[32px]" />
-                                                <span className="text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12">{c.name}</span>
-                                            </button>
-                                        );
-                                    })}
+                                    {SUPPORTED_CHAINS.map((c, index) => (
+                                        <a className="m-0 flex w-full flex-row items-center space-x-4 rounded-[12px] border border-gray-light-5 bg-gray-light-2 py-[11px] px-[11px] text-left dark:border-gray-dark-5 dark:bg-gray-dark-2" key={`c.id${index} ${c.chainName}`} href={c.url} rel="noopener noreferrer">
+                                            <img src={c.logo} alt={c.chainName} className="h-[32px] w-[32px]" />
+                                            <span className="text-sm font-semibold leading-4 tracking-[-0.02em] text-gray-light-12 dark:text-gray-dark-12">{c.chainName}</span>
+                                        </a>
+                                    ))}
                                 </div>
 
                                 <div className="m-0 border-t border-dashed border-gray-light-3 p-4 text-center dark:border-gray-dark-3">
                                     <p className="leading-1 text-xs text-gray-light-11 dark:text-gray-dark-11">
-                                        Don&apos;t see you network? Chat us on{" "}
+                                        Don&apos;t see your network? Chat us on{" "}
                                         <a className="text-gray-light-12 underline dark:text-gray-dark-12" target="_blank" rel="noreferrer" href={RisedleLinks.discord}>
                                             discord
                                         </a>
