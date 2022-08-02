@@ -8,6 +8,7 @@ import SubHero from "./component/SubHero";
 import HomePageMeta from "./component/HomePageMeta";
 import Favicon from "../../uikit/layout/Favicon";
 import Footer from "../../uikit/layout/Footer";
+import { BannerBSC } from "../../uikit/Banner/BannerNewNetwork";
 
 function HomePageContainer() {
     // By default use dark theme
